@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, MapPin, Star, Globe } from "lucide-react";
+import { MainNav } from "@/components/MainNav";
 
 interface SearchResult {
   title: string;
@@ -29,8 +30,8 @@ export default function Search() {
   const { category } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [selectedState, setSelectedState] = useState<string>("");
-  const [selectedCity, setSelectedCity] = useState<string>("");
+  const [selectedState, setSelectedState] = useState<string>("Texas");
+  const [selectedCity, setSelectedCity] = useState<string>("Dallas");
   const [isSearching, setIsSearching] = useState(false);
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 
@@ -77,113 +78,129 @@ export default function Search() {
     }
   };
 
+  // Automatically search when the page loads with a category
+  useEffect(() => {
+    if (category && selectedState && selectedCity) {
+      handleSearch();
+    }
+  }, [category, selectedState, selectedCity]);
+
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8 text-wedding-text">
-        Find {category?.replace(/-/g, " ")}
-      </h1>
+    <div className="min-h-screen bg-white">
+      <MainNav />
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-3xl font-bold mb-8 text-wedding-text capitalize">
+          {category?.replace(/-/g, " ")}
+        </h1>
 
-      <div className="max-w-3xl mx-auto">
-        <Card>
-          <CardHeader>
-            <CardTitle>Select Location</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Select
-                value={selectedState}
-                onValueChange={(value) => {
-                  setSelectedState(value);
-                  setSelectedCity("");
-                }}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select state" />
-                </SelectTrigger>
-                <SelectContent>
-                  {Object.keys(locationCodes).map((state) => (
-                    <SelectItem key={state} value={state}>
-                      {state}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              <Select
-                value={selectedCity}
-                onValueChange={setSelectedCity}
-                disabled={!selectedState}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select city" />
-                </SelectTrigger>
-                <SelectContent>
-                  {selectedState &&
-                    Object.keys(locationCodes[selectedState].cities).map((city) => (
-                      <SelectItem key={city} value={city}>
-                        {city}
+        <div className="max-w-3xl mx-auto">
+          <Card>
+            <CardHeader>
+              <CardTitle>Select Location</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Select
+                  value={selectedState}
+                  onValueChange={(value) => {
+                    setSelectedState(value);
+                    setSelectedCity("");
+                  }}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select state" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.keys(locationCodes).map((state) => (
+                      <SelectItem key={state} value={state}>
+                        {state}
                       </SelectItem>
                     ))}
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <Button 
-              className="w-full"
-              onClick={handleSearch}
-              disabled={isSearching}
-            >
-              {isSearching ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Searching...
-                </>
-              ) : (
-                'Search Vendors'
-              )}
-            </Button>
-          </CardContent>
-        </Card>
+                  </SelectContent>
+                </Select>
 
-        {searchResults.length > 0 && (
-          <div className="mt-8 grid gap-6">
-            {searchResults.map((vendor, index) => (
-              <Card key={index} className="overflow-hidden hover:shadow-lg transition-shadow">
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-semibold mb-2 text-wedding-primary">{vendor.title}</h3>
-                  <p className="text-gray-600 mb-4 line-clamp-2">{vendor.description}</p>
-                  <div className="space-y-2">
-                    {vendor.rating?.rating_value && (
-                      <div className="flex items-center text-sm text-gray-500">
-                        <Star className="h-4 w-4 mr-2 text-yellow-400" />
-                        <span>{vendor.rating.rating_value} stars</span>
-                        {vendor.rating.rating_count && (
-                          <span className="ml-1">({vendor.rating.rating_count} reviews)</span>
-                        )}
-                      </div>
+                <Select
+                  value={selectedCity}
+                  onValueChange={setSelectedCity}
+                  disabled={!selectedState}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select city" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {selectedState &&
+                      Object.keys(locationCodes[selectedState].cities).map((city) => (
+                        <SelectItem key={city} value={city}>
+                          {city}
+                        </SelectItem>
+                      ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <Button 
+                className="w-full bg-wedding-primary hover:bg-wedding-accent"
+                onClick={handleSearch}
+                disabled={isSearching}
+              >
+                {isSearching ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Searching...
+                  </>
+                ) : (
+                  'Search Vendors'
+                )}
+              </Button>
+            </CardContent>
+          </Card>
+
+          {searchResults.length > 0 ? (
+            <div className="mt-8 grid gap-6">
+              {searchResults.map((vendor, index) => (
+                <Card key={index} className="overflow-hidden hover:shadow-lg transition-shadow">
+                  <CardContent className="p-6">
+                    <h3 className="text-xl font-semibold mb-2 text-wedding-primary">{vendor.title}</h3>
+                    <p className="text-gray-600 mb-4 line-clamp-2">{vendor.description}</p>
+                    <div className="space-y-2">
+                      {vendor.rating?.rating_value && (
+                        <div className="flex items-center text-sm text-gray-500">
+                          <Star className="h-4 w-4 mr-2 text-yellow-400" />
+                          <span>{vendor.rating.rating_value} stars</span>
+                          {vendor.rating.rating_count && (
+                            <span className="ml-1">({vendor.rating.rating_count} reviews)</span>
+                          )}
+                        </div>
+                      )}
+                      {vendor.address && (
+                        <div className="flex items-center text-sm text-gray-500">
+                          <MapPin className="h-4 w-4 mr-2" />
+                          {vendor.address}
+                        </div>
+                      )}
+                    </div>
+                    {vendor.url && (
+                      <Button
+                        variant="outline"
+                        className="mt-4"
+                        onClick={() => window.open(vendor.url, '_blank')}
+                      >
+                        <Globe className="h-4 w-4 mr-2" />
+                        Visit Website
+                      </Button>
                     )}
-                    {vendor.address && (
-                      <div className="flex items-center text-sm text-gray-500">
-                        <MapPin className="h-4 w-4 mr-2" />
-                        {vendor.address}
-                      </div>
-                    )}
-                  </div>
-                  {vendor.url && (
-                    <Button
-                      variant="outline"
-                      className="mt-4"
-                      onClick={() => window.open(vendor.url, '_blank')}
-                    >
-                      <Globe className="h-4 w-4 mr-2" />
-                      Visit Website
-                    </Button>
-                  )}
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        )}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            !isSearching && (
+              <div className="mt-8 text-center text-gray-500">
+                No vendors found. Try adjusting your search criteria.
+              </div>
+            )
+          )}
+        </div>
       </div>
     </div>
   );
