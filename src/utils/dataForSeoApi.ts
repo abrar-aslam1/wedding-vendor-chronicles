@@ -50,6 +50,7 @@ export const searchVendors = async (keyword: string, locationCode: number) => {
     }
 
     console.log('User is authenticated, proceeding with search...');
+    console.log('Searching for:', keyword, 'in location:', locationCode);
     
     // Get the secrets for DataForSEO
     const { data: { DATAFORSEO_LOGIN, DATAFORSEO_PASSWORD }, error: secretsError } = await supabase
@@ -73,12 +74,12 @@ export const searchVendors = async (keyword: string, locationCode: number) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify([{
-        keyword,
+        keyword: `${keyword} near me`,
         location_code: locationCode,
         language_code: "en",
         device: "desktop",
         os: "windows",
-        depth: 10
+        depth: 20
       }])
     });
 

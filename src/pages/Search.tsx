@@ -11,7 +11,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2 } from "lucide-react";
+import { Loader2, MapPin, Star, Globe } from "lucide-react";
+
+interface SearchResult {
+  title: string;
+  description: string;
+  rating?: {
+    rating_value?: number;
+    rating_count?: number;
+  };
+  address?: string;
+  url?: string;
+  place_id?: string;
+}
 
 export default function Search() {
   const { category } = useParams();
@@ -20,7 +32,7 @@ export default function Search() {
   const [selectedState, setSelectedState] = useState<string>("");
   const [selectedCity, setSelectedCity] = useState<string>("");
   const [isSearching, setIsSearching] = useState(false);
-  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 
   const handleSearch = async () => {
     if (!selectedState || !selectedCity) {
@@ -36,13 +48,22 @@ export default function Search() {
       const cityCode = locationCodes[selectedState].cities[selectedCity];
       const results = await searchVendors(category?.replace(/-/g, " ") || "", cityCode);
       
-      // Extract the results from the API response
+      // Extract and process the results from the API response
       const items = results?.tasks?.[0]?.result?.[0]?.items || [];
-      setSearchResults(items);
+      const processedResults = items.map((item: any) => ({
+        title: item.title,
+        description: item.snippet,
+        rating: item.rating,
+        address: item.address,
+        url: item.url,
+        place_id: item.place_id
+      }));
+      
+      setSearchResults(processedResults);
       
       toast({
         title: "Search completed",
-        description: `Found ${items.length} vendors`,
+        description: `Found ${processedResults.length} vendors`,
       });
     } catch (error: any) {
       console.error('Search error:', error);
@@ -127,22 +148,34 @@ export default function Search() {
         {searchResults.length > 0 && (
           <div className="mt-8 grid gap-6">
             {searchResults.map((vendor, index) => (
-              <Card key={index}>
+              <Card key={index} className="overflow-hidden hover:shadow-lg transition-shadow">
                 <CardContent className="p-6">
-                  <h3 className="text-xl font-semibold mb-2">{vendor.title}</h3>
-                  <p className="text-gray-600 mb-4">{vendor.description}</p>
-                  {vendor.rating && (
-                    <p className="text-sm text-gray-500">Rating: {vendor.rating}</p>
-                  )}
-                  {vendor.address && (
-                    <p className="text-sm text-gray-500">{vendor.address}</p>
-                  )}
+                  <h3 className="text-xl font-semibold mb-2 text-wedding-primary">{vendor.title}</h3>
+                  <p className="text-gray-600 mb-4 line-clamp-2">{vendor.description}</p>
+                  <div className="space-y-2">
+                    {vendor.rating?.rating_value && (
+                      <div className="flex items-center text-sm text-gray-500">
+                        <Star className="h-4 w-4 mr-2 text-yellow-400" />
+                        <span>{vendor.rating.rating_value} stars</span>
+                        {vendor.rating.rating_count && (
+                          <span className="ml-1">({vendor.rating.rating_count} reviews)</span>
+                        )}
+                      </div>
+                    )}
+                    {vendor.address && (
+                      <div className="flex items-center text-sm text-gray-500">
+                        <MapPin className="h-4 w-4 mr-2" />
+                        {vendor.address}
+                      </div>
+                    )}
+                  </div>
                   {vendor.url && (
                     <Button
                       variant="outline"
                       className="mt-4"
                       onClick={() => window.open(vendor.url, '_blank')}
                     >
+                      <Globe className="h-4 w-4 mr-2" />
                       Visit Website
                     </Button>
                   )}
