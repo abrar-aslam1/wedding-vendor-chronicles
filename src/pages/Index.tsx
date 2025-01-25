@@ -67,41 +67,62 @@ const Index = () => {
     <div className="min-h-screen bg-white">
       <MainNav />
       
-      {/* Hero Section */}
-      <section className="relative h-[500px] bg-gradient-to-r from-wedding-primary to-wedding-secondary">
-        <div className="container mx-auto px-4 h-full flex items-center">
-          <div className="max-w-2xl text-white">
-            <h1 className="text-5xl font-bold mb-4">
-              Find Your Perfect Wedding Vendors
+      {/* Enhanced Hero Section */}
+      <section className="relative h-[600px] bg-gradient-to-br from-wedding-primary via-wedding-accent to-wedding-secondary overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1519741497674-611481863552')] bg-cover bg-center opacity-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-wedding-primary/80 via-wedding-accent/80 to-wedding-secondary/80"></div>
+        
+        {/* Content */}
+        <div className="container mx-auto px-4 h-full flex items-center relative">
+          <div className="max-w-2xl">
+            <span className="inline-block px-4 py-2 rounded-full bg-white/20 text-white backdrop-blur-sm mb-4 text-sm font-medium">
+              Find Your Perfect Match
+            </span>
+            <h1 className="text-6xl font-bold mb-6 text-white leading-tight">
+              Discover Trusted Wedding Vendors
             </h1>
-            <p className="text-xl mb-8">
-              Connect with trusted wedding professionals in your area
+            <p className="text-xl mb-8 text-white/90 leading-relaxed">
+              Connect with the best wedding professionals in your area. From photographers to florists, 
+              we've got everything you need for your special day.
             </p>
             <div className="flex gap-4">
-              <Button size="lg" variant="default" className="bg-white text-wedding-primary hover:bg-wedding-light">
+              <Button 
+                size="lg" 
+                variant="default" 
+                className="bg-white text-wedding-primary hover:bg-wedding-light hover:text-wedding-primary/90 transition-all duration-300"
+              >
                 Browse Vendors
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-wedding-primary">
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="border-2 border-white text-white hover:bg-white/10 backdrop-blur-sm transition-all duration-300"
+              >
                 Get Started
               </Button>
             </div>
           </div>
         </div>
+
+        {/* Decorative shapes */}
+        <div className="absolute -bottom-16 -right-16 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+        <div className="absolute -top-8 -left-8 w-48 h-48 bg-white/10 rounded-full blur-2xl"></div>
       </section>
 
       {/* Search Section */}
-      <section className="py-16 bg-wedding-light">
+      <section className="py-16 bg-wedding-light relative -mt-10">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
-            <div className="flex gap-4 p-6 bg-white rounded-lg shadow-lg">
+            <div className="flex gap-4 p-6 bg-white rounded-xl shadow-lg">
               <div className="flex-1">
                 <input
                   type="text"
                   placeholder="Search vendors..."
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-wedding-primary"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-wedding-primary/50 transition-all duration-300"
                 />
               </div>
-              <Button className="bg-wedding-primary hover:bg-wedding-accent">
+              <Button className="bg-wedding-primary hover:bg-wedding-accent transition-all duration-300">
                 <Search className="mr-2 h-4 w-4" />
                 Search
               </Button>
