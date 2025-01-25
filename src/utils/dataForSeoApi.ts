@@ -41,17 +41,26 @@ export const locationCodes = {
 
 export const searchVendors = async (keyword: string, locationCode: number) => {
   try {
-    // Get the current user
-    const { data: { user } } = await supabase.auth.getUser();
+    // First, check if user is authenticated
+    const { data: { session }, error: authError } = await supabase.auth.getSession();
     
-    if (!user) {
-      throw new Error("User must be authenticated to perform searches");
+    if (authError || !session) {
+      console.error('Authentication error:', authError);
+      throw new Error("You must be logged in to perform searches");
     }
 
-    const { data: { DATAFORSEO_LOGIN, DATAFORSEO_PASSWORD } } = await supabase
+    console.log('User is authenticated, proceeding with search...');
+    
+    // Get the secrets for DataForSEO
+    const { data: { DATAFORSEO_LOGIN, DATAFORSEO_PASSWORD }, error: secretsError } = await supabase
       .functions.invoke('get-secrets', {
         body: { secrets: ['DATAFORSEO_LOGIN', 'DATAFORSEO_PASSWORD'] }
       });
+
+    if (secretsError || !DATAFORSEO_LOGIN || !DATAFORSEO_PASSWORD) {
+      console.error('Error getting secrets:', secretsError);
+      throw new Error("Failed to get API credentials");
+    }
 
     const credentials = btoa(`${DATAFORSEO_LOGIN}:${DATAFORSEO_PASSWORD}`);
     
@@ -73,27 +82,31 @@ export const searchVendors = async (keyword: string, locationCode: number) => {
       }])
     });
 
+    if (!response.ok) {
+      throw new Error(`DataForSEO API error: ${response.statusText}`);
+    }
+
     const data = await response.json();
     console.log('Received response from DataForSEO:', data);
     
     // Store the search results with the user_id
-    const { error } = await supabase
+    const { error: insertError } = await supabase
       .from('vendor_searches')
       .insert({
         keyword,
         location_code: locationCode,
         search_results: data,
-        user_id: user.id  // Add the user_id here
+        user_id: session.user.id  // Important: Set the user_id from the session
       });
 
-    if (error) {
-      console.error('Error saving search results:', error);
-      throw error;
+    if (insertError) {
+      console.error('Error saving search results:', insertError);
+      throw insertError;
     }
 
     return data;
   } catch (error) {
-    console.error('Error searching vendors:', error);
+    console.error('Error in searchVendors:', error);
     throw error;
   }
 };
