@@ -49,8 +49,11 @@ export const searchVendors = async (keyword: string, locationCode: number) => {
       throw new Error("You must be logged in to perform searches");
     }
 
-    console.log('User is authenticated, proceeding with search...');
-    console.log('Searching for:', keyword, 'in location:', locationCode);
+    console.log('Search parameters:', {
+      keyword,
+      locationCode,
+      formattedKeyword: `${keyword} in ${locationCode}`
+    });
     
     // Get the secrets for DataForSEO
     const { data: { DATAFORSEO_LOGIN, DATAFORSEO_PASSWORD }, error: secretsError } = await supabase
@@ -74,7 +77,7 @@ export const searchVendors = async (keyword: string, locationCode: number) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify([{
-        keyword: `${keyword} in ${locationCode}`,
+        keyword: keyword,
         location_code: 2840, // USA country code
         location_coordinate: locationCode, // City specific coordinate
         language_code: "en",
@@ -88,11 +91,25 @@ export const searchVendors = async (keyword: string, locationCode: number) => {
     });
 
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error('DataForSEO API error response:', errorText);
       throw new Error(`DataForSEO API error: ${response.statusText}`);
     }
 
     const data = await response.json();
-    console.log('Received response from DataForSEO:', data);
+    console.log('Raw DataForSEO response:', JSON.stringify(data, null, 2));
+    
+    // Check if we have results
+    if (!data.tasks?.[0]?.result?.[0]?.items?.length) {
+      console.log('No results found in response');
+      console.log('Response structure:', {
+        hasTasks: !!data.tasks,
+        firstTask: data.tasks?.[0],
+        hasResult: !!data.tasks?.[0]?.result,
+        firstResult: data.tasks?.[0]?.result?.[0],
+        items: data.tasks?.[0]?.result?.[0]?.items
+      });
+    }
     
     return data;
   } catch (error) {
