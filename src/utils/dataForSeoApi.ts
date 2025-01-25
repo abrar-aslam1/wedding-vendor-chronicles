@@ -49,10 +49,13 @@ export const searchVendors = async (keyword: string, locationCode: number) => {
       throw new Error("You must be logged in to perform searches");
     }
 
+    // Format the search keyword to include location context
+    const searchKeyword = `${keyword} in Dallas, TX`;
+    
     console.log('Search parameters:', {
-      keyword,
+      keyword: searchKeyword,
       locationCode,
-      formattedKeyword: `${keyword} in ${locationCode}`
+      formattedSearch: searchKeyword
     });
     
     // Get the secrets for DataForSEO
@@ -68,7 +71,12 @@ export const searchVendors = async (keyword: string, locationCode: number) => {
 
     const credentials = btoa(`${DATAFORSEO_LOGIN}:${DATAFORSEO_PASSWORD}`);
     
-    console.log('Making API request to DataForSEO...');
+    console.log('Making API request to DataForSEO with parameters:', {
+      keyword: searchKeyword,
+      location_code: 2840,
+      location_coordinate: locationCode,
+      language_code: "en"
+    });
     
     const response = await fetch('https://api.dataforseo.com/v3/serp/google/maps/live/advanced', {
       method: 'POST',
@@ -77,9 +85,9 @@ export const searchVendors = async (keyword: string, locationCode: number) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify([{
-        keyword: keyword,
-        location_code: 2840, // USA country code
-        location_coordinate: locationCode, // City specific coordinate
+        keyword: searchKeyword,
+        location_code: 2840,
+        location_coordinate: locationCode,
         language_code: "en",
         device: "desktop",
         os: "windows",
@@ -109,6 +117,20 @@ export const searchVendors = async (keyword: string, locationCode: number) => {
         firstResult: data.tasks?.[0]?.result?.[0],
         items: data.tasks?.[0]?.result?.[0]?.items
       });
+    }
+    
+    // Save search to database
+    const { error: insertError } = await supabase
+      .from('vendor_searches')
+      .insert({
+        keyword: searchKeyword,
+        location_code: locationCode,
+        search_results: data.tasks?.[0]?.result?.[0]?.items || [],
+        user_id: session.user.id
+      });
+
+    if (insertError) {
+      console.error('Error saving search:', insertError);
     }
     
     return data;
