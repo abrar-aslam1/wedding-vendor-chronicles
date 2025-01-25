@@ -74,12 +74,16 @@ export const searchVendors = async (keyword: string, locationCode: number) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify([{
-        keyword: `${keyword} near me`,
-        location_code: locationCode,
+        keyword: `${keyword} in ${locationCode}`,
+        location_code: 2840, // USA country code
+        location_coordinate: locationCode, // City specific coordinate
         language_code: "en",
         device: "desktop",
         os: "windows",
-        depth: 20
+        depth: 20,
+        search_type: "maps",
+        local_search: true,
+        use_device_location: false
       }])
     });
 
