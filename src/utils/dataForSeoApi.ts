@@ -89,21 +89,6 @@ export const searchVendors = async (keyword: string, locationCode: number) => {
     const data = await response.json();
     console.log('Received response from DataForSEO:', data);
     
-    // Store the search results with the user_id
-    const { error: insertError } = await supabase
-      .from('vendor_searches')
-      .insert({
-        keyword,
-        location_code: locationCode,
-        search_results: data,
-        user_id: session.user.id  // Important: Set the user_id from the session
-      });
-
-    if (insertError) {
-      console.error('Error saving search results:', insertError);
-      throw insertError;
-    }
-
     return data;
   } catch (error) {
     console.error('Error in searchVendors:', error);
