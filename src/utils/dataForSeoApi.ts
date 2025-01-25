@@ -41,12 +41,21 @@ export const locationCodes = {
 
 export const searchVendors = async (keyword: string, locationCode: number) => {
   try {
+    // Get the current user
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (!user) {
+      throw new Error("User must be authenticated to perform searches");
+    }
+
     const { data: { DATAFORSEO_LOGIN, DATAFORSEO_PASSWORD } } = await supabase
       .functions.invoke('get-secrets', {
         body: { secrets: ['DATAFORSEO_LOGIN', 'DATAFORSEO_PASSWORD'] }
       });
 
     const credentials = btoa(`${DATAFORSEO_LOGIN}:${DATAFORSEO_PASSWORD}`);
+    
+    console.log('Making API request to DataForSEO...');
     
     const response = await fetch('https://api.dataforseo.com/v3/serp/google/maps/live/advanced', {
       method: 'POST',
@@ -65,18 +74,22 @@ export const searchVendors = async (keyword: string, locationCode: number) => {
     });
 
     const data = await response.json();
+    console.log('Received response from DataForSEO:', data);
     
-    // Store the search results
+    // Store the search results with the user_id
     const { error } = await supabase
       .from('vendor_searches')
       .insert({
         keyword,
         location_code: locationCode,
         search_results: data,
-        user_id: (await supabase.auth.getUser()).data.user?.id
+        user_id: user.id  // Add the user_id here
       });
 
-    if (error) throw error;
+    if (error) {
+      console.error('Error saving search results:', error);
+      throw error;
+    }
 
     return data;
   } catch (error) {
