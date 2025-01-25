@@ -57,6 +57,19 @@ export function MainNav() {
     }
   };
 
+  const handleCategoryClick = (category: string) => {
+    if (!user) {
+      toast({
+        title: "Please sign in",
+        description: "You need to be signed in to search for vendors",
+        variant: "destructive",
+      });
+      navigate("/auth");
+      return;
+    }
+    navigate(`/search/${category.toLowerCase().replace(/\s+&?\s+/g, "-")}`);
+  };
+
   return (
     <nav className="bg-white border-b border-gray-200">
       <div className="container mx-auto px-4">
@@ -70,13 +83,13 @@ export function MainNav() {
           
           <div className="hidden md:flex items-center space-x-4">
             {categories.slice(0, 5).map((category) => (
-              <Link
+              <button
                 key={category}
-                to={`/${category.toLowerCase().replace(/\s+&?\s+/g, "-")}`}
+                onClick={() => handleCategoryClick(category)}
                 className="text-wedding-text hover:text-wedding-primary transition-colors"
               >
                 {category}
-              </Link>
+              </button>
             ))}
             {user ? (
               <>
