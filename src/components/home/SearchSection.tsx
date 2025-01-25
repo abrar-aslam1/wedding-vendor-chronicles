@@ -10,11 +10,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "@/components/ui/use-toast";
+import { SearchResults } from "@/components/search/SearchResults";
 
 export const SearchSection = () => {
   const [selectedState, setSelectedState] = useState<string>("");
   const [selectedCity, setSelectedCity] = useState<string>("");
   const [isSearching, setIsSearching] = useState(false);
+  const [searchResults, setSearchResults] = useState([]);
 
   const handleSearch = async () => {
     if (!selectedState || !selectedCity) {
@@ -30,11 +32,24 @@ export const SearchSection = () => {
       const cityCode = locationCodes[selectedState].cities[selectedCity];
       const results = await searchVendors("wedding planner", cityCode);
       
+      const items = results?.tasks?.[0]?.result?.[0]?.items || [];
+      const processedResults = items.map((item: any) => ({
+        title: item.title,
+        description: item.snippet,
+        rating: item.rating,
+        address: item.address,
+        url: item.url,
+        place_id: item.place_id
+      }));
+      
+      setSearchResults(processedResults);
+      
       toast({
         title: "Search completed",
-        description: "Results have been saved to your history",
+        description: `Found ${processedResults.length} vendors`,
       });
     } catch (error) {
+      console.error('Search error:', error);
       toast({
         title: "Error searching vendors",
         description: error.message,
@@ -97,6 +112,11 @@ export const SearchSection = () => {
               <Search className="mr-2 h-4 w-4" />
               {isSearching ? "Searching..." : "Search Vendors"}
             </Button>
+          </div>
+          
+          {/* Display search results */}
+          <div className="mt-8">
+            <SearchResults results={searchResults} isSearching={isSearching} />
           </div>
         </div>
       </div>
