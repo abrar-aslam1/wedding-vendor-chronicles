@@ -1,5 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
-import { DataForSEOResponse } from "@/types/search";
+import { DataForSEOResponse, SearchResult } from "@/types/search";
 
 const US_LOCATION_CODE = 2840;
 
@@ -33,16 +33,16 @@ async function checkCache(keyword: string, locationCode: number) {
     return null;
   }
 
-  return cachedData?.search_results;
+  return cachedData?.search_results as SearchResult[] | null;
 }
 
-async function saveToCache(keyword: string, locationCode: number, results: any) {
+async function saveToCache(keyword: string, locationCode: number, results: SearchResult[]) {
   const { error: upsertError } = await supabase
     .from('vendor_cache')
     .upsert({
       category: keyword,
       location_code: locationCode,
-      search_results: results,
+      search_results: results as any, // Type assertion needed due to Json type limitations
       created_at: new Date().toISOString(),
       expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() // 24 hours from now
     }, {
@@ -137,9 +137,11 @@ export async function searchVendors(keyword: string) {
         items: data.tasks?.[0]?.result?.[0]?.items
       });
     }
+
+    const searchResults = data.tasks?.[0]?.result?.[0]?.items || [];
     
     // Save results to cache
-    await saveToCache(searchKeyword, US_LOCATION_CODE, data.tasks?.[0]?.result?.[0]?.items || []);
+    await saveToCache(searchKeyword, US_LOCATION_CODE, searchResults);
     
     // Save search to user history
     const { error: saveError } = await supabase
@@ -147,7 +149,7 @@ export async function searchVendors(keyword: string) {
       .insert({
         keyword: searchKeyword,
         location_code: US_LOCATION_CODE,
-        search_results: data.tasks?.[0]?.result?.[0]?.items || [],
+        search_results: searchResults as any,
         user_id: session.user.id
       });
       

@@ -1,23 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
-import { locationCodes, searchVendors } from "@/utils/dataForSeoApi";
+import { searchVendors } from "@/utils/dataForSeoApi";
 import { MainNav } from "@/components/MainNav";
 import { SearchHeader } from "@/components/search/SearchHeader";
 import { LocationSearch } from "@/components/search/LocationSearch";
 import { SearchResults } from "@/components/search/SearchResults";
-
-interface SearchResult {
-  title: string;
-  description: string;
-  rating?: {
-    rating_value?: number;
-    rating_count?: number;
-  };
-  address?: string;
-  url?: string;
-  place_id?: string;
-}
+import { SearchResult } from "@/types/search";
 
 export default function Search() {
   const { category } = useParams();
@@ -38,8 +27,7 @@ export default function Search() {
 
     try {
       setIsSearching(true);
-      const cityCode = locationCodes[selectedState].cities[selectedCity];
-      const results = await searchVendors(category?.replace(/-/g, " ") || "", cityCode);
+      const results = await searchVendors(category?.replace(/-/g, " ") || "");
       
       const items = results?.tasks?.[0]?.result?.[0]?.items || [];
       const processedResults = items.map((item: any) => ({

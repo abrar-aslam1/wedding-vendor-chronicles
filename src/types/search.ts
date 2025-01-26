@@ -10,6 +10,7 @@ export interface LocationCodes {
 }
 
 export interface SearchResult {
+  [key: string]: any; // Add index signature to satisfy Json type
   title: string;
   description: string;
   rating?: {

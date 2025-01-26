@@ -13,13 +13,14 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import { SearchResults } from "@/components/search/SearchResults";
 import { supabase } from "@/integrations/supabase/client";
+import { SearchResult } from "@/types/search";
 
 export const SearchSection = () => {
   const navigate = useNavigate();
   const [selectedState, setSelectedState] = useState<string>("");
   const [selectedCity, setSelectedCity] = useState<string>("");
   const [isSearching, setIsSearching] = useState(false);
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 
   const handleSearch = async () => {
     if (!selectedState || !selectedCity) {
@@ -52,13 +53,10 @@ export const SearchSection = () => {
         return;
       }
 
-      const cityCode = locationCodes[selectedState].cities[selectedCity];
-      console.log('Starting search with params:', { selectedState, selectedCity, cityCode, userId: session.user.id });
-      
       // Navigate to search page with the category
       navigate(`/search/wedding-planners`);
       
-      const results = await searchVendors("wedding planners", cityCode);
+      const results = await searchVendors("wedding planners");
       console.log('Raw search results:', results);
       
       if (!results?.tasks?.[0]?.result?.[0]?.items) {
@@ -84,22 +82,6 @@ export const SearchSection = () => {
       }));
       
       console.log('Processed results:', processedResults);
-      
-      // Save search to Supabase
-      const { error: saveError } = await supabase
-        .from('vendor_searches')
-        .insert({
-          keyword: "wedding planners",
-          location_code: cityCode,
-          search_results: processedResults,
-          user_id: session.user.id
-        });
-        
-      if (saveError) {
-        console.error('Error saving search:', saveError);
-        throw new Error("Failed to save search results");
-      }
-      
       setSearchResults(processedResults);
       
       toast({
@@ -172,7 +154,6 @@ export const SearchSection = () => {
             </Button>
           </div>
           
-          {/* Display search results */}
           <div className="mt-8">
             <SearchResults results={searchResults} isSearching={isSearching} />
           </div>
