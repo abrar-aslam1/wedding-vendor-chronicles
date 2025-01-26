@@ -11,17 +11,17 @@ export const HeroSection = () => {
       {/* Content */}
       <div className="container mx-auto px-4 h-full flex items-center justify-between relative">
         <div className="max-w-2xl text-left">
-          <span className="inline-block px-4 py-2 rounded-full bg-white/20 text-[#1A1F2C] backdrop-blur-sm mb-4 text-sm font-medium">
+          <span className="inline-block px-4 py-2 rounded-full bg-[#1A1F2C]/90 text-white backdrop-blur-sm mb-4 text-sm font-medium">
             Find Your Perfect Match
           </span>
           <h1 className="text-6xl font-bold mb-4 text-[#1A1F2C] leading-tight">
             Discover Trusted Wedding Vendors
           </h1>
-          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 mb-8">
-            <p className="text-lg text-[#1A1F2C] font-medium">
+          <div className="bg-[#1A1F2C]/80 backdrop-blur-sm rounded-lg p-4 mb-8">
+            <p className="text-white font-medium">
               Let us guide you to find the perfect vendors for your special day. Our platform connects you with:
             </p>
-            <ul className="mt-2 space-y-2 text-[#333333]">
+            <ul className="mt-2 space-y-2 text-white/90">
               <li>✓ Pre-screened professional vendors</li>
               <li>✓ Real reviews from couples</li>
               <li>✓ Direct communication channels</li>
