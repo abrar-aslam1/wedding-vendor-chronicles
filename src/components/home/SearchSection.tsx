@@ -37,10 +37,6 @@ export const SearchSection = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 
-  const formatUrlSegment = (text: string) => {
-    return text.toLowerCase().replace(/\s+&?\s+/g, "_");
-  };
-
   const handleSearch = async () => {
     if (!selectedState || !selectedCity || !selectedCategory) {
       toast({
@@ -126,18 +122,22 @@ export const SearchSection = () => {
     }
   };
 
+  const formatUrlSegment = (text: string) => {
+    return text.toLowerCase().replace(/\s+&?\s+/g, "_");
+  };
+
   return (
-    <section className="py-8 md:py-16 bg-wedding-light relative -mt-10">
+    <section className="relative -mt-20 z-20">
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto">
-          <div className="flex flex-col gap-4 p-4 md:p-6 bg-white rounded-xl shadow-lg">
-            <div className="flex flex-col gap-4">
+          <div className="bg-white rounded-2xl shadow-xl p-6 space-y-4">
+            <div className="grid grid-cols-1 gap-4">
               <Select
                 value={selectedCategory}
                 onValueChange={setSelectedCategory}
               >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select category" />
+                <SelectTrigger className="w-full h-12 rounded-xl border-wedding-primary/20">
+                  <SelectValue placeholder="What vendor are you looking for?" />
                 </SelectTrigger>
                 <SelectContent className="max-h-[300px]">
                   {categories.map((category) => (
@@ -155,7 +155,7 @@ export const SearchSection = () => {
                   setSelectedCity("");
                 }}
               >
-                <SelectTrigger className="w-full">
+                <SelectTrigger className="w-full h-12 rounded-xl border-wedding-primary/20">
                   <SelectValue placeholder="Select state" />
                 </SelectTrigger>
                 <SelectContent className="max-h-[300px]">
@@ -172,7 +172,7 @@ export const SearchSection = () => {
                 onValueChange={setSelectedCity}
                 disabled={!selectedState}
               >
-                <SelectTrigger className="w-full">
+                <SelectTrigger className="w-full h-12 rounded-xl border-wedding-primary/20">
                   <SelectValue placeholder="Select city" />
                 </SelectTrigger>
                 <SelectContent className="max-h-[300px]">
@@ -187,16 +187,16 @@ export const SearchSection = () => {
             </div>
             
             <Button 
-              className="w-full bg-wedding-primary hover:bg-wedding-accent transition-all duration-300"
+              className="w-full h-12 bg-wedding-primary hover:bg-wedding-accent transition-all duration-300 rounded-xl"
               onClick={handleSearch}
               disabled={isSearching}
             >
-              <Search className="mr-2 h-4 w-4" />
-              {isSearching ? "Searching..." : "Search Vendors"}
+              <Search className="mr-2 h-5 w-5" />
+              {isSearching ? "Searching..." : "Find Vendors"}
             </Button>
           </div>
           
-          <div className="mt-4 md:mt-8">
+          <div className="mt-8">
             <SearchResults results={searchResults} isSearching={isSearching} />
           </div>
         </div>
