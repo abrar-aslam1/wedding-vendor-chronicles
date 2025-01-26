@@ -42,9 +42,9 @@ async function saveToCache(keyword: string, locationCode: number, results: Searc
     .upsert({
       category: keyword,
       location_code: locationCode,
-      search_results: results as any, // Type assertion needed due to Json type limitations
+      search_results: results as any,
       created_at: new Date().toISOString(),
-      expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() // 24 hours from now
+      expires_at: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString() // 14 days from now
     }, {
       onConflict: 'category,location_code'
     });
