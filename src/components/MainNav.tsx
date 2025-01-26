@@ -110,9 +110,9 @@ export function MainNav() {
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center">
             <img 
-              src="/lovable-uploads/b4aeab64-b429-496c-820e-47b074f4f4d4.png" 
+              src="/lovable-uploads/fc1186f3-9e97-4be6-910e-9851d1205033.png" 
               alt="My Wedding Logo" 
-              className="h-20" // Changed from h-16 to h-20 to make the logo bigger
+              className="h-8" 
             />
           </Link>
           
