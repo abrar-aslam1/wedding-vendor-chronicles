@@ -33,9 +33,15 @@ export const SearchSection = () => {
       
       // Check authentication status
       const { data: { session }, error: authError } = await supabase.auth.getSession();
-      console.log('Auth check:', { session: !!session, authError });
+      console.log('Auth check:', { session, authError });
       
-      if (!session) {
+      if (authError) {
+        console.error('Auth error:', authError);
+        throw new Error("Authentication error occurred");
+      }
+
+      if (!session?.user) {
+        console.log('No session or user found');
         toast({
           title: "Authentication required",
           description: "Please sign in to search for vendors",
@@ -45,12 +51,22 @@ export const SearchSection = () => {
       }
 
       const cityCode = locationCodes[selectedState].cities[selectedCity];
-      console.log('Starting search with params:', { selectedState, selectedCity, cityCode });
+      console.log('Starting search with params:', { selectedState, selectedCity, cityCode, userId: session.user.id });
       
       const results = await searchVendors("wedding planner", cityCode);
       console.log('Raw search results:', results);
       
-      const items = results?.tasks?.[0]?.result?.[0]?.items || [];
+      if (!results?.tasks?.[0]?.result?.[0]?.items) {
+        console.log('No items found in search results');
+        toast({
+          title: "No results found",
+          description: "Try searching in a different location",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const items = results.tasks[0].result[0].items;
       console.log('Extracted items:', items);
       
       const processedResults = items.map((item: any) => ({
@@ -63,13 +79,29 @@ export const SearchSection = () => {
       }));
       
       console.log('Processed results:', processedResults);
+      
+      // Save search to Supabase
+      const { error: saveError } = await supabase
+        .from('vendor_searches')
+        .insert({
+          keyword: "wedding planner",
+          location_code: cityCode,
+          search_results: processedResults,
+          user_id: session.user.id
+        });
+        
+      if (saveError) {
+        console.error('Error saving search:', saveError);
+        throw new Error("Failed to save search results");
+      }
+      
       setSearchResults(processedResults);
       
       toast({
         title: "Search completed",
         description: `Found ${processedResults.length} vendors`,
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Search error:', error);
       toast({
         title: "Error searching vendors",
