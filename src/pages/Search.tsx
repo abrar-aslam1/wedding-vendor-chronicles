@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import SearchHeader from "@/components/search/SearchHeader";
-import SearchResults from "@/components/search/SearchResults";
+import { SearchHeader } from "@/components/search/SearchHeader";
+import { SearchResults } from "@/components/search/SearchResults";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
@@ -71,7 +71,7 @@ const Search = ({ initialData }: { initialData?: any }) => {
   return (
     <div className="min-h-screen bg-background">
       <SearchHeader />
-      <SearchResults results={searchResults} />
+      <SearchResults results={searchResults || []} isSearching={!searchResults} />
     </div>
   );
 };

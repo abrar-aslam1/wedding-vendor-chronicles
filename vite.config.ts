@@ -9,9 +9,7 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
   },
   plugins: [
-    react({
-      fastRefresh: true,
-    }),
+    react(),
     mode === 'development' &&
     componentTagger(),
   ].filter(Boolean),
@@ -23,6 +21,6 @@ export default defineConfig(({ mode }) => ({
   build: {
     outDir: 'dist',
     sourcemap: true,
-    ssr: true,
+    ssr: mode === 'development' ? 'src/entry-server.ts' : false,
   }
 }));
