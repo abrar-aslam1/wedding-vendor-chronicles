@@ -14,6 +14,7 @@ import { toast } from "@/components/ui/use-toast";
 import { SearchResults } from "@/components/search/SearchResults";
 import { supabase } from "@/integrations/supabase/client";
 import { SearchResult } from "@/types/search";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const categories = [
   "Wedding Planners",
@@ -68,15 +69,36 @@ export const SearchSection = () => {
         return;
       }
 
-      // Format the URL segments
-      const formattedCategory = formatUrlSegment(selectedCategory);
-      const formattedCity = formatUrlSegment(selectedCity);
-      const formattedState = formatUrlSegment(selectedState);
-
-      // Navigate to the new URL format
-      navigate(`/top-20/${formattedCategory}/${formattedCity}/${formattedState}`);
-      
+      // Check cache first
       const locationString = `${selectedCity}, ${selectedState}`;
+      const cacheKey = `${selectedCategory.toLowerCase()}_${locationString.toLowerCase()}`;
+      
+      const { data: cachedResults } = await supabase
+        .from('vendor_cache')
+        .select('search_results')
+        .eq('category', selectedCategory.toLowerCase())
+        .eq('city', selectedCity.toLowerCase())
+        .eq('state', selectedState.toLowerCase())
+        .maybeSingle();
+
+      if (cachedResults?.search_results) {
+        console.log('Using cached results');
+        setSearchResults(cachedResults.search_results);
+        
+        // Format URL segments and navigate
+        const formattedCategory = formatUrlSegment(selectedCategory);
+        const formattedCity = formatUrlSegment(selectedCity);
+        const formattedState = formatUrlSegment(selectedState);
+        navigate(`/top-20/${formattedCategory}/${formattedCity}/${formattedState}`);
+        
+        toast({
+          title: "Results found",
+          description: `Found ${cachedResults.search_results.length} vendors in ${locationString}`,
+        });
+        return;
+      }
+
+      // If no cache, perform search
       const results = await searchVendors(selectedCategory.toLowerCase(), locationString);
       console.log('Raw search results:', results);
       
@@ -102,6 +124,12 @@ export const SearchSection = () => {
         url: item.url,
         place_id: item.place_id
       }));
+      
+      // Format URL segments and navigate
+      const formattedCategory = formatUrlSegment(selectedCategory);
+      const formattedCity = formatUrlSegment(selectedCity);
+      const formattedState = formatUrlSegment(selectedState);
+      navigate(`/top-20/${formattedCategory}/${formattedCity}/${formattedState}`);
       
       console.log('Processed results:', processedResults);
       setSearchResults(processedResults);
@@ -135,6 +163,7 @@ export const SearchSection = () => {
               <Select
                 value={selectedCategory}
                 onValueChange={setSelectedCategory}
+                disabled={isSearching}
               >
                 <SelectTrigger className="w-full h-12 rounded-xl border-wedding-primary/20">
                   <SelectValue placeholder="What vendor are you looking for?" />
@@ -154,6 +183,7 @@ export const SearchSection = () => {
                   setSelectedState(value);
                   setSelectedCity("");
                 }}
+                disabled={isSearching}
               >
                 <SelectTrigger className="w-full h-12 rounded-xl border-wedding-primary/20">
                   <SelectValue placeholder="Select state" />
@@ -170,7 +200,7 @@ export const SearchSection = () => {
               <Select
                 value={selectedCity}
                 onValueChange={setSelectedCity}
-                disabled={!selectedState}
+                disabled={!selectedState || isSearching}
               >
                 <SelectTrigger className="w-full h-12 rounded-xl border-wedding-primary/20">
                   <SelectValue placeholder="Select city" />
@@ -197,7 +227,20 @@ export const SearchSection = () => {
           </div>
           
           <div className="mt-8">
-            <SearchResults results={searchResults} isSearching={isSearching} />
+            {isSearching ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="bg-white rounded-lg p-4 space-y-4">
+                    <Skeleton className="h-6 w-3/4" />
+                    <Skeleton className="h-4 w-1/2" />
+                    <Skeleton className="h-20 w-full" />
+                    <Skeleton className="h-10 w-full" />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <SearchResults results={searchResults} isSearching={isSearching} />
+            )}
           </div>
         </div>
       </div>
