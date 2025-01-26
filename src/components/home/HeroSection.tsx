@@ -12,7 +12,7 @@ export const HeroSection = () => {
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/40" />
       
       {/* Main Content */}
-      <div className="relative z-10 container mx-auto px-4 pt-8 pb-16 md:pb-32">
+      <div className="relative z-10 container mx-auto px-4 pt-16 md:pt-24 pb-16 md:pb-32">
         <div className="max-w-3xl mx-auto text-center space-y-6">
           <h1 className="text-4xl md:text-6xl font-bold text-white leading-tight">
             Find Your Perfect
