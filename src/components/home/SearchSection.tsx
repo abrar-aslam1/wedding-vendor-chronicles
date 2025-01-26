@@ -52,10 +52,13 @@ export const SearchSection = () => {
         return;
       }
 
+      const cityCode = locationCodes[selectedState].cities[selectedCity];
+      console.log('Starting search with location:', { selectedState, selectedCity, cityCode });
+
       // Navigate to search page with the category
       navigate(`/search/wedding-planners`);
       
-      const results = await searchVendors("wedding planners");
+      const results = await searchVendors("wedding planners", cityCode);
       console.log('Raw search results:', results);
       
       if (!results?.tasks?.[0]?.result?.[0]?.items) {
@@ -87,7 +90,7 @@ export const SearchSection = () => {
         .from('vendor_searches')
         .insert({
           keyword: "wedding planners",
-          location_code: 2840, // Using fixed US location code
+          location_code: cityCode,
           search_results: processedResults,
           user_id: session.user.id
         });
