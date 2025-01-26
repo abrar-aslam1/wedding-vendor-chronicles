@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -21,12 +21,8 @@ export const SearchSection = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
 
-  const handleSearch = async () => {
+  const performSearch = async () => {
     if (!selectedState || !selectedCity) {
-      toast({
-        title: "Please select both state and city",
-        variant: "destructive",
-      });
       return;
     }
 
@@ -118,6 +114,13 @@ export const SearchSection = () => {
     }
   };
 
+  // Effect to trigger search when city changes
+  useEffect(() => {
+    if (selectedCity && selectedState) {
+      performSearch();
+    }
+  }, [selectedCity]);
+
   return (
     <section className="py-16 bg-wedding-light relative -mt-10">
       <div className="container mx-auto px-4">
@@ -164,7 +167,7 @@ export const SearchSection = () => {
             
             <Button 
               className="w-full bg-wedding-primary hover:bg-wedding-accent transition-all duration-300"
-              onClick={handleSearch}
+              onClick={performSearch}
               disabled={isSearching}
             >
               <Search className="mr-2 h-4 w-4" />
