@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
 interface SearchResult {
-  [key: string]: any; // Add index signature to satisfy Json type
+  [key: string]: any;
   title: string;
   description: string;
   rating?: {
@@ -155,7 +155,7 @@ export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
       <div className="flex items-center gap-2">
         <div className="flex">{stars}</div>
         <span className="text-sm text-gray-600">
-          {rating.rating_count ? `(${rating.rating_count})` : ''}
+          {rating.rating_count ? `${rating.rating_count} reviews` : 'No reviews yet'}
         </span>
       </div>
     );
