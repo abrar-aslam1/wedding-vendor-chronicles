@@ -56,7 +56,8 @@ export const SearchSection = () => {
       // Navigate to search page with the category
       navigate(`/search/wedding-planners`);
       
-      const results = await searchVendors("wedding planners");
+      const locationString = `${selectedCity}, ${selectedState}`;
+      const results = await searchVendors("wedding planners", locationString);
       console.log('Raw search results:', results);
       
       if (!results?.tasks?.[0]?.result?.[0]?.items) {
@@ -86,7 +87,7 @@ export const SearchSection = () => {
       
       toast({
         title: "Search completed",
-        description: `Found ${processedResults.length} vendors`,
+        description: `Found ${processedResults.length} vendors in ${locationString}`,
       });
     } catch (error: any) {
       console.error('Search error:', error);
