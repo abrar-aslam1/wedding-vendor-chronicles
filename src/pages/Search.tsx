@@ -16,6 +16,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { cn } from "@/lib/utils";
 
 export default function Search() {
   const { category } = useParams();
@@ -82,6 +83,8 @@ export default function Search() {
   );
 
   const totalPages = Math.ceil(searchResults.length / resultsPerPage);
+  const isFirstPage = currentPage === 1;
+  const isLastPage = currentPage === totalPages;
 
   return (
     <div className="min-h-screen bg-white">
@@ -104,9 +107,11 @@ export default function Search() {
               <Pagination>
                 <PaginationContent>
                   <PaginationItem>
-                    <PaginationPrevious 
-                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                      disabled={currentPage === 1}
+                    <PaginationPrevious
+                      onClick={() => !isFirstPage && setCurrentPage(p => p - 1)}
+                      className={cn(
+                        isFirstPage && "pointer-events-none opacity-50"
+                      )}
                     />
                   </PaginationItem>
                   
@@ -123,8 +128,10 @@ export default function Search() {
                   
                   <PaginationItem>
                     <PaginationNext
-                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                      disabled={currentPage === totalPages}
+                      onClick={() => !isLastPage && setCurrentPage(p => p + 1)}
+                      className={cn(
+                        isLastPage && "pointer-events-none opacity-50"
+                      )}
                     />
                   </PaginationItem>
                 </PaginationContent>
