@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/select";
 import { toast } from "@/components/ui/use-toast";
 import { SearchResults } from "@/components/search/SearchResults";
+import { supabase } from "@/integrations/supabase/client";
 
 export const SearchSection = () => {
   const [selectedState, setSelectedState] = useState<string>("");
@@ -29,10 +30,29 @@ export const SearchSection = () => {
 
     try {
       setIsSearching(true);
+      
+      // Check authentication status
+      const { data: { session }, error: authError } = await supabase.auth.getSession();
+      console.log('Auth check:', { session: !!session, authError });
+      
+      if (!session) {
+        toast({
+          title: "Authentication required",
+          description: "Please sign in to search for vendors",
+          variant: "destructive",
+        });
+        return;
+      }
+
       const cityCode = locationCodes[selectedState].cities[selectedCity];
+      console.log('Starting search with params:', { selectedState, selectedCity, cityCode });
+      
       const results = await searchVendors("wedding planner", cityCode);
+      console.log('Raw search results:', results);
       
       const items = results?.tasks?.[0]?.result?.[0]?.items || [];
+      console.log('Extracted items:', items);
+      
       const processedResults = items.map((item: any) => ({
         title: item.title,
         description: item.snippet,
@@ -42,6 +62,7 @@ export const SearchSection = () => {
         place_id: item.place_id
       }));
       
+      console.log('Processed results:', processedResults);
       setSearchResults(processedResults);
       
       toast({
@@ -52,7 +73,7 @@ export const SearchSection = () => {
       console.error('Search error:', error);
       toast({
         title: "Error searching vendors",
-        description: error.message,
+        description: error.message || "An error occurred while searching",
         variant: "destructive",
       });
     } finally {
