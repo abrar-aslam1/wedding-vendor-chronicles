@@ -71,7 +71,6 @@ export const SearchSection = () => {
 
       // Check cache first
       const locationString = `${selectedCity}, ${selectedState}`;
-      const cacheKey = `${selectedCategory.toLowerCase()}_${locationString.toLowerCase()}`;
       
       const { data: cachedResults } = await supabase
         .from('vendor_cache')
@@ -81,9 +80,9 @@ export const SearchSection = () => {
         .eq('state', selectedState.toLowerCase())
         .maybeSingle();
 
-      if (cachedResults?.search_results) {
+      if (cachedResults?.search_results && Array.isArray(cachedResults.search_results)) {
         console.log('Using cached results');
-        setSearchResults(cachedResults.search_results);
+        setSearchResults(cachedResults.search_results as SearchResult[]);
         
         // Format URL segments and navigate
         const formattedCategory = formatUrlSegment(selectedCategory);
@@ -93,7 +92,7 @@ export const SearchSection = () => {
         
         toast({
           title: "Results found",
-          description: `Found ${cachedResults.search_results.length} vendors in ${locationString}`,
+          description: `Found ${(cachedResults.search_results as SearchResult[]).length} vendors in ${locationString}`,
         });
         return;
       }
