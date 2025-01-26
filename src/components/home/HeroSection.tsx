@@ -10,13 +10,13 @@ export const HeroSection = () => {
       {/* Content */}
       <div className="container mx-auto px-4 h-full flex items-center relative">
         <div className="max-w-2xl">
-          <span className="inline-block px-4 py-2 rounded-full bg-white/20 text-white backdrop-blur-sm mb-4 text-sm font-medium">
+          <span className="inline-block px-4 py-2 rounded-full bg-white/20 text-[#1A1F2C] backdrop-blur-sm mb-4 text-sm font-medium">
             Find Your Perfect Match
           </span>
-          <h1 className="text-6xl font-bold mb-6 text-white leading-tight">
+          <h1 className="text-6xl font-bold mb-6 text-[#1A1F2C] leading-tight">
             Discover Trusted Wedding Vendors
           </h1>
-          <p className="text-xl mb-8 text-white/90 leading-relaxed">
+          <p className="text-xl mb-8 text-[#333333] leading-relaxed">
             Connect with the best wedding professionals in your area. From photographers to florists, 
             we've got everything you need for your special day.
           </p>
@@ -24,14 +24,14 @@ export const HeroSection = () => {
             <Button 
               size="lg" 
               variant="default" 
-              className="bg-white text-wedding-primary hover:bg-wedding-light hover:text-wedding-primary/90 transition-all duration-300"
+              className="bg-white text-[#1A1F2C] hover:bg-wedding-light hover:text-[#333333] transition-all duration-300"
             >
               Browse Vendors
             </Button>
             <Button 
               size="lg" 
               variant="outline" 
-              className="border-2 border-white text-white hover:bg-white/10 backdrop-blur-sm transition-all duration-300"
+              className="border-2 border-[#1A1F2C] text-[#1A1F2C] hover:bg-white/10 backdrop-blur-sm transition-all duration-300"
             >
               Get Started
             </Button>
