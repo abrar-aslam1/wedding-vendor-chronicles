@@ -131,7 +131,13 @@ export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
   }
 
   const renderRating = (rating: SearchResult['rating']) => {
-    if (!rating?.rating_value) return null;
+    if (!rating?.rating_value) {
+      return (
+        <div className="text-sm text-gray-600 mb-2">
+          No ratings available
+        </div>
+      );
+    }
 
     const stars = [];
     const ratingValue = Math.round(rating.rating_value * 2) / 2;
@@ -152,11 +158,18 @@ export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
     }
 
     return (
-      <div className="flex items-center gap-2">
-        <div className="flex">{stars}</div>
-        <span className="text-sm text-gray-600">
-          {rating.rating_count ? `${rating.rating_count} reviews` : 'No reviews yet'}
-        </span>
+      <div className="flex flex-col gap-1 mb-3">
+        <div className="flex items-center gap-2">
+          <div className="flex">{stars}</div>
+          <span className="font-medium text-wedding-primary">
+            {rating.rating_value.toFixed(1)}
+          </span>
+        </div>
+        <div className="text-sm text-gray-600">
+          {rating.rating_count 
+            ? <span className="font-medium">{rating.rating_count.toLocaleString()} reviews</span>
+            : 'No reviews yet'}
+        </div>
       </div>
     );
   };
