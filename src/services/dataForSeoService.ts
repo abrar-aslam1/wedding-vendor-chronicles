@@ -1,5 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import { DataForSEOResponse, SearchResult } from "@/types/search";
+import { locationCodes } from "@/config/locations";
 
 const US_LOCATION_CODE = 2840;
 
@@ -17,16 +18,21 @@ async function getApiCredentials() {
   return { DATAFORSEO_LOGIN, DATAFORSEO_PASSWORD };
 }
 
-async function checkCache(keyword: string, locationCode: number) {
+async function checkCache(keyword: string, locationCode: number, city?: string, state?: string) {
   const now = new Date().toISOString();
   
-  const { data: cachedData, error: cacheError } = await supabase
+  const query = supabase
     .from('vendor_cache')
     .select('*')
     .eq('category', keyword)
     .eq('location_code', locationCode)
-    .gt('expires_at', now)
-    .maybeSingle();
+    .gt('expires_at', now);
+
+  if (city && state) {
+    query.eq('city', city).eq('state', state);
+  }
+
+  const { data: cachedData, error: cacheError } = await query.maybeSingle();
 
   if (cacheError) {
     console.error('Cache check error:', cacheError);
@@ -36,7 +42,7 @@ async function checkCache(keyword: string, locationCode: number) {
   return cachedData?.search_results as SearchResult[] | null;
 }
 
-async function saveToCache(keyword: string, locationCode: number, results: SearchResult[]) {
+async function saveToCache(keyword: string, locationCode: number, results: SearchResult[], city?: string, state?: string) {
   const { error: upsertError } = await supabase
     .from('vendor_cache')
     .upsert({
@@ -44,9 +50,11 @@ async function saveToCache(keyword: string, locationCode: number, results: Searc
       location_code: locationCode,
       search_results: results as any,
       created_at: new Date().toISOString(),
-      expires_at: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString() // 14 days from now
+      expires_at: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(), // 14 days from now
+      city: city || null,
+      state: state || null
     }, {
-      onConflict: 'category,location_code'
+      onConflict: 'category,city,state'
     });
 
   if (upsertError) {
@@ -54,13 +62,13 @@ async function saveToCache(keyword: string, locationCode: number, results: Searc
   }
 }
 
-async function makeApiRequest(searchKeyword: string) {
+async function makeApiRequest(searchKeyword: string, locationCode: number) {
   const { DATAFORSEO_LOGIN, DATAFORSEO_PASSWORD } = await getApiCredentials();
   const credentials = btoa(`${DATAFORSEO_LOGIN}:${DATAFORSEO_PASSWORD}`);
 
   console.log('Making API request to DataForSEO with parameters:', {
     keyword: searchKeyword,
-    location_code: US_LOCATION_CODE,
+    location_code: locationCode,
     language_code: "en"
   });
 
@@ -72,7 +80,7 @@ async function makeApiRequest(searchKeyword: string) {
     },
     body: JSON.stringify([{
       keyword: searchKeyword,
-      location_code: US_LOCATION_CODE,
+      location_code: locationCode,
       language_code: "en",
       device: "desktop",
       os: "windows",
@@ -92,7 +100,7 @@ async function makeApiRequest(searchKeyword: string) {
   return await response.json() as DataForSEOResponse;
 }
 
-export async function searchVendors(keyword: string, location: string) {
+export async function searchVendors(keyword: string, location: string, city?: string, state?: string) {
   try {
     // Check authentication
     const { data: { session }, error: authError } = await supabase.auth.getSession();
@@ -107,13 +115,15 @@ export async function searchVendors(keyword: string, location: string) {
     
     console.log('Search parameters:', {
       keyword: searchKeyword,
-      formattedSearch: searchKeyword
+      formattedSearch: searchKeyword,
+      city,
+      state
     });
     
     // Check cache first
-    const cachedResults = await checkCache(searchKeyword, US_LOCATION_CODE);
+    const cachedResults = await checkCache(searchKeyword, US_LOCATION_CODE, city, state);
     if (cachedResults) {
-      console.log('Using cached results');
+      console.log('Using cached results for', city, state);
       return {
         tasks: [{
           result: [{
@@ -124,7 +134,7 @@ export async function searchVendors(keyword: string, location: string) {
     }
     
     // If not in cache, make API request
-    const data = await makeApiRequest(searchKeyword);
+    const data = await makeApiRequest(searchKeyword, US_LOCATION_CODE);
     console.log('Raw DataForSEO response:', JSON.stringify(data, null, 2));
     
     if (!data.tasks?.[0]?.result?.[0]?.items?.length) {
@@ -140,8 +150,8 @@ export async function searchVendors(keyword: string, location: string) {
 
     const searchResults = data.tasks?.[0]?.result?.[0]?.items || [];
     
-    // Save results to cache
-    await saveToCache(searchKeyword, US_LOCATION_CODE, searchResults);
+    // Save results to cache with city and state
+    await saveToCache(searchKeyword, US_LOCATION_CODE, searchResults, city, state);
     
     // Save search to user history
     const { error: saveError } = await supabase
@@ -161,5 +171,21 @@ export async function searchVendors(keyword: string, location: string) {
   } catch (error) {
     console.error('Error in searchVendors:', error);
     throw error;
+  }
+}
+
+// Function to pre-fetch data for all cities
+export async function prefetchAllCitiesData(category: string) {
+  for (const [state, stateData] of Object.entries(locationCodes)) {
+    for (const [city, cityCode] of Object.entries(stateData.cities)) {
+      try {
+        console.log(`Prefetching data for ${category} in ${city}, ${state}`);
+        await searchVendors(category, `${city}, ${state}`, city, state);
+        // Add a delay to avoid rate limiting
+        await new Promise(resolve => setTimeout(resolve, 2000));
+      } catch (error) {
+        console.error(`Error prefetching data for ${city}, ${state}:`, error);
+      }
+    }
   }
 }

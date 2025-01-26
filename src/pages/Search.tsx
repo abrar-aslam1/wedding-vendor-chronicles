@@ -5,18 +5,29 @@ import { SearchResults } from "@/components/search/SearchResults";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
-export async function getServerSideProps({ params }: { params: { category: string } }) {
+export async function getServerSideProps({ params }: { params: { category: string; city?: string; state?: string } }) {
   try {
-    const { data: cachedResults } = await supabase
+    const query = supabase
       .from('vendor_cache')
-      .select('search_results')
-      .eq('category', params.category)
-      .single();
+      .select('search_results');
+
+    if (params.city && params.state) {
+      query
+        .eq('category', params.category)
+        .eq('city', params.city.toLowerCase())
+        .eq('state', params.state.toLowerCase());
+    } else {
+      query.eq('category', params.category);
+    }
+
+    const { data: cachedResults } = await query.maybeSingle();
 
     return {
       props: {
         initialData: cachedResults?.search_results || null,
         category: params.category,
+        city: params.city,
+        state: params.state,
       },
     };
   } catch (error) {
@@ -25,13 +36,15 @@ export async function getServerSideProps({ params }: { params: { category: strin
       props: {
         initialData: null,
         category: params.category,
+        city: params.city,
+        state: params.state,
       },
     };
   }
 }
 
 const Search = ({ initialData }: { initialData?: any }) => {
-  const { category } = useParams<{ category: string }>();
+  const { category, city, state } = useParams<{ category: string; city?: string; state?: string }>();
   const [searchResults, setSearchResults] = useState(initialData || null);
   const { toast } = useToast();
 
@@ -39,15 +52,24 @@ const Search = ({ initialData }: { initialData?: any }) => {
     if (!initialData) {
       fetchResults();
     }
-  }, [category, initialData]);
+  }, [category, city, state, initialData]);
 
   const fetchResults = async () => {
     try {
-      const { data: cachedResults } = await supabase
+      const query = supabase
         .from('vendor_cache')
-        .select('search_results')
-        .eq('category', category)
-        .single();
+        .select('search_results');
+
+      if (city && state) {
+        query
+          .eq('category', category)
+          .eq('city', city.toLowerCase())
+          .eq('state', state.toLowerCase());
+      } else {
+        query.eq('category', category);
+      }
+
+      const { data: cachedResults } = await query.maybeSingle();
 
       if (cachedResults?.search_results) {
         setSearchResults(cachedResults.search_results);
