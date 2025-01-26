@@ -15,17 +15,33 @@ import { SearchResults } from "@/components/search/SearchResults";
 import { supabase } from "@/integrations/supabase/client";
 import { SearchResult } from "@/types/search";
 
+const categories = [
+  "Wedding Planners",
+  "Photographers",
+  "Videographers",
+  "Florists",
+  "Caterers",
+  "Venues",
+  "DJs & Bands",
+  "Cake Designers",
+  "Bridal Shops",
+  "Makeup Artists",
+  "Hair Stylists",
+];
+
 export const SearchSection = () => {
   const navigate = useNavigate();
   const [selectedState, setSelectedState] = useState<string>("");
   const [selectedCity, setSelectedCity] = useState<string>("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [isSearching, setIsSearching] = useState(false);
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 
   const handleSearch = async () => {
-    if (!selectedState || !selectedCity) {
+    if (!selectedState || !selectedCity || !selectedCategory) {
       toast({
-        title: "Please select both state and city",
+        title: "Please select all fields",
+        description: "Category, state and city are required",
         variant: "destructive",
       });
       return;
@@ -34,7 +50,6 @@ export const SearchSection = () => {
     try {
       setIsSearching(true);
       
-      // Check authentication status
       const { data: { session }, error: authError } = await supabase.auth.getSession();
       console.log('Auth check:', { session, authError });
       
@@ -53,11 +68,10 @@ export const SearchSection = () => {
         return;
       }
 
-      // Navigate to search page with the category
-      navigate(`/search/wedding-planners`);
+      navigate(`/search/${selectedCategory.toLowerCase().replace(/\s+&?\s+/g, "-")}`);
       
       const locationString = `${selectedCity}, ${selectedState}`;
-      const results = await searchVendors("wedding planners", locationString);
+      const results = await searchVendors(selectedCategory.toLowerCase(), locationString);
       console.log('Raw search results:', results);
       
       if (!results?.tasks?.[0]?.result?.[0]?.items) {
@@ -107,6 +121,22 @@ export const SearchSection = () => {
         <div className="max-w-3xl mx-auto">
           <div className="flex flex-col gap-4 p-4 md:p-6 bg-white rounded-xl shadow-lg">
             <div className="flex flex-col gap-4">
+              <Select
+                value={selectedCategory}
+                onValueChange={setSelectedCategory}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent className="max-h-[300px]">
+                  {categories.map((category) => (
+                    <SelectItem key={category} value={category}>
+                      {category}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
               <Select
                 value={selectedState}
                 onValueChange={(value) => {
