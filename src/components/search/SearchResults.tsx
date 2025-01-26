@@ -29,29 +29,52 @@ export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
     );
   }
 
+  const renderRating = (rating: SearchResult['rating']) => {
+    if (!rating?.rating_value) return null;
+
+    const stars = [];
+    const ratingValue = Math.round(rating.rating_value * 2) / 2; // Round to nearest 0.5
+    
+    for (let i = 1; i <= 5; i++) {
+      if (i <= ratingValue) {
+        stars.push(<Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />);
+      } else if (i - 0.5 === ratingValue) {
+        stars.push(
+          <div key={i} className="relative">
+            <Star className="h-4 w-4 text-yellow-400" />
+            <Star className="absolute top-0 left-0 h-4 w-4 fill-yellow-400 text-yellow-400" style={{ clipPath: 'inset(0 50% 0 0)' }} />
+          </div>
+        );
+      } else {
+        stars.push(<Star key={i} className="h-4 w-4 text-gray-300" />);
+      }
+    }
+
+    return (
+      <div className="flex items-center gap-2">
+        <div className="flex">{stars}</div>
+        <span className="text-sm text-gray-600">
+          {rating.rating_count ? `(${rating.rating_count})` : ''}
+        </span>
+      </div>
+    );
+  };
+
   return (
     <div className="mt-4 md:mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
       {results.map((vendor, index) => (
         <Card key={index} className="overflow-hidden hover:shadow-lg transition-shadow h-full">
           <CardContent className="p-4 md:p-6 flex flex-col h-full">
-            <div className="flex justify-between items-start mb-2">
-              <h3 className="text-lg font-semibold text-wedding-primary line-clamp-2">{vendor.title}</h3>
-              {vendor.rating?.rating_value && (
-                <div className="flex items-center bg-yellow-50 px-2 py-1 rounded-full ml-2 flex-shrink-0">
-                  <Star className="h-4 w-4 mr-1 text-yellow-400" />
-                  <span className="text-sm font-medium text-yellow-700">
-                    {vendor.rating.rating_value}
-                    {vendor.rating.rating_count && (
-                      <span className="text-yellow-600 ml-1">
-                        ({vendor.rating.rating_count})
-                      </span>
-                    )}
-                  </span>
-                </div>
-              )}
+            <div className="flex flex-col gap-2 mb-4">
+              <h3 className="text-lg font-semibold text-wedding-primary line-clamp-2">
+                {vendor.title}
+              </h3>
+              {vendor.rating && renderRating(vendor.rating)}
             </div>
             
-            <p className="text-sm text-gray-600 mb-4 line-clamp-2 flex-grow">{vendor.description}</p>
+            <p className="text-sm text-gray-600 mb-4 line-clamp-2 flex-grow">
+              {vendor.description}
+            </p>
             
             <div className="space-y-2 mt-auto">
               {vendor.phone && (
