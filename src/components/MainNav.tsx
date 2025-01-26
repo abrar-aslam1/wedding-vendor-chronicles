@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Heart, LogIn, LogOut, Menu } from "lucide-react";
+import { LogIn, LogOut, Menu } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
@@ -109,10 +109,11 @@ export function MainNav() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center">
-            <Heart className="h-6 w-6 text-wedding-primary" />
-            <span className="ml-2 text-xl font-semibold text-wedding-text">
-              FindMyWeddingVendor
-            </span>
+            <img 
+              src="/lovable-uploads/b4aeab64-b429-496c-820e-47b074f4f4d4.png" 
+              alt="My Wedding Logo" 
+              className="h-8"
+            />
           </Link>
           
           {/* Desktop Navigation */}

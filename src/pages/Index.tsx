@@ -2,6 +2,7 @@ import { MainNav } from "@/components/MainNav";
 import { HeroSection } from "@/components/home/HeroSection";
 import { SearchSection } from "@/components/home/SearchSection";
 import { CategoriesGrid } from "@/components/home/CategoriesGrid";
+import { Footer } from "@/components/Footer";
 
 const Index = () => {
   return (
@@ -10,6 +11,7 @@ const Index = () => {
       <HeroSection />
       <SearchSection />
       <CategoriesGrid />
+      <Footer />
     </div>
   );
 };
