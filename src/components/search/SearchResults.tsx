@@ -22,23 +22,23 @@ interface SearchResultsProps {
 export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
   if (results.length === 0 && !isSearching) {
     return (
-      <div className="mt-8 text-center text-gray-500">
+      <div className="mt-4 md:mt-8 text-center text-gray-500">
         No vendors found. Try adjusting your search criteria.
       </div>
     );
   }
 
   return (
-    <div className="mt-8 grid gap-6">
+    <div className="mt-4 md:mt-8 grid gap-4 md:gap-6">
       {results.map((vendor, index) => (
         <Card key={index} className="overflow-hidden hover:shadow-lg transition-shadow">
-          <CardContent className="p-6">
-            <h3 className="text-xl font-semibold mb-2 text-wedding-primary">{vendor.title}</h3>
-            <p className="text-gray-600 mb-4 line-clamp-2">{vendor.description}</p>
+          <CardContent className="p-4 md:p-6">
+            <h3 className="text-lg md:text-xl font-semibold mb-2 text-wedding-primary">{vendor.title}</h3>
+            <p className="text-sm md:text-base text-gray-600 mb-4 line-clamp-2">{vendor.description}</p>
             <div className="space-y-2">
               {vendor.rating?.rating_value && (
-                <div className="flex items-center text-sm text-gray-500">
-                  <Star className="h-4 w-4 mr-2 text-yellow-400" />
+                <div className="flex items-center text-xs md:text-sm text-gray-500">
+                  <Star className="h-4 w-4 mr-2 text-yellow-400 flex-shrink-0" />
                   <span>{vendor.rating.rating_value} stars</span>
                   {vendor.rating.rating_count && (
                     <span className="ml-1">({vendor.rating.rating_count} reviews)</span>
@@ -46,16 +46,16 @@ export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
                 </div>
               )}
               {vendor.address && (
-                <div className="flex items-center text-sm text-gray-500">
-                  <MapPin className="h-4 w-4 mr-2" />
-                  {vendor.address}
+                <div className="flex items-center text-xs md:text-sm text-gray-500">
+                  <MapPin className="h-4 w-4 mr-2 flex-shrink-0" />
+                  <span className="line-clamp-1">{vendor.address}</span>
                 </div>
               )}
             </div>
             {vendor.url && (
               <Button
                 variant="outline"
-                className="mt-4"
+                className="mt-4 w-full md:w-auto text-sm"
                 onClick={() => window.open(vendor.url, '_blank')}
               >
                 <Globe className="h-4 w-4 mr-2" />

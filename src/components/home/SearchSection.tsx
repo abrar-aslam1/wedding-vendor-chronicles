@@ -102,11 +102,11 @@ export const SearchSection = () => {
   };
 
   return (
-    <section className="py-16 bg-wedding-light relative -mt-10">
+    <section className="py-8 md:py-16 bg-wedding-light relative -mt-10">
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto">
-          <div className="flex flex-col gap-4 p-6 bg-white rounded-xl shadow-lg">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex flex-col gap-4 p-4 md:p-6 bg-white rounded-xl shadow-lg">
+            <div className="flex flex-col gap-4">
               <Select
                 value={selectedState}
                 onValueChange={(value) => {
@@ -114,10 +114,10 @@ export const SearchSection = () => {
                   setSelectedCity("");
                 }}
               >
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select state" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="max-h-[300px]">
                   {Object.keys(locationCodes).map((state) => (
                     <SelectItem key={state} value={state}>
                       {state}
@@ -131,10 +131,10 @@ export const SearchSection = () => {
                 onValueChange={setSelectedCity}
                 disabled={!selectedState}
               >
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select city" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="max-h-[300px]">
                   {selectedState &&
                     Object.keys(locationCodes[selectedState].cities).map((city) => (
                       <SelectItem key={city} value={city}>
@@ -155,7 +155,7 @@ export const SearchSection = () => {
             </Button>
           </div>
           
-          <div className="mt-8">
+          <div className="mt-4 md:mt-8">
             <SearchResults results={searchResults} isSearching={isSearching} />
           </div>
         </div>
