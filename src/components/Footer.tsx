@@ -9,9 +9,9 @@ export const Footer = () => {
           <div className="space-y-4">
             <div className="flex items-center">
               <img 
-                src="/lovable-uploads/b4aeab64-b429-496c-820e-47b074f4f4d4.png" 
+                src="/lovable-uploads/fc1186f3-9e97-4be6-910e-9851d1205033.png" 
                 alt="My Wedding Logo" 
-                className="h-8"
+                className="h-20"
               />
             </div>
             <p className="text-wedding-text text-sm">
