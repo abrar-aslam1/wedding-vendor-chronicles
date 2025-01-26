@@ -21,6 +21,6 @@ export default defineConfig(({ mode }) => ({
   build: {
     outDir: 'dist',
     sourcemap: true,
-    ssr: mode === 'development' ? 'src/entry-server.ts' : false,
+    ssr: mode === 'development' ? 'src/entry-server.tsx' : false,
   }
 }));
