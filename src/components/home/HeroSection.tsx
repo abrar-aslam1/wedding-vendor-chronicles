@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Search, Heart, Calendar, Users2 } from "lucide-react";
 
 export const HeroSection = () => {
   return (
@@ -44,16 +45,58 @@ export const HeroSection = () => {
           </div>
         </div>
 
-        {/* Decorative Image */}
-        <div className="hidden md:flex items-center justify-center mt-8 md:mt-0">
-          <div className="relative">
-            <div className="absolute inset-0 bg-white/10 rounded-full blur-xl"></div>
-            <img 
-              src="/lovable-uploads/9235bfb6-3b99-4583-9d5d-add471a451ec.png" 
-              alt="Wedding Vendor Search Illustration" 
-              className="w-48 h-48 lg:w-64 lg:h-64 object-contain relative z-10"
-            />
+        {/* Interactive Feature Display */}
+        <div className="hidden md:block relative mt-8 md:mt-0">
+          <div className="relative w-[320px] h-[400px] bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-r from-wedding-primary to-wedding-secondary"></div>
+            
+            {/* Feature Icons */}
+            <div className="relative z-10 p-6 mt-12 space-y-6">
+              <div className="flex items-center space-x-4 p-4 bg-white rounded-xl shadow-sm transition-transform hover:scale-105">
+                <div className="p-3 bg-wedding-primary/20 rounded-full">
+                  <Search className="w-6 h-6 text-wedding-primary" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-[#1A1F2C]">Smart Search</h3>
+                  <p className="text-sm text-gray-600">Find vendors instantly</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center space-x-4 p-4 bg-white rounded-xl shadow-sm transition-transform hover:scale-105">
+                <div className="p-3 bg-wedding-primary/20 rounded-full">
+                  <Heart className="w-6 h-6 text-wedding-primary" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-[#1A1F2C]">Save Favorites</h3>
+                  <p className="text-sm text-gray-600">Keep track of your picks</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center space-x-4 p-4 bg-white rounded-xl shadow-sm transition-transform hover:scale-105">
+                <div className="p-3 bg-wedding-primary/20 rounded-full">
+                  <Calendar className="w-6 h-6 text-wedding-primary" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-[#1A1F2C]">Easy Booking</h3>
+                  <p className="text-sm text-gray-600">Schedule appointments</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center space-x-4 p-4 bg-white rounded-xl shadow-sm transition-transform hover:scale-105">
+                <div className="p-3 bg-wedding-primary/20 rounded-full">
+                  <Users2 className="w-6 h-6 text-wedding-primary" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-[#1A1F2C]">Real Reviews</h3>
+                  <p className="text-sm text-gray-600">From verified couples</p>
+                </div>
+              </div>
+            </div>
           </div>
+          
+          {/* Decorative elements */}
+          <div className="absolute -top-4 -right-4 w-32 h-32 bg-wedding-primary/20 rounded-full blur-2xl"></div>
+          <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-wedding-secondary/20 rounded-full blur-2xl"></div>
         </div>
       </div>
 
