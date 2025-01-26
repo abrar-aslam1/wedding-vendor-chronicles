@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { LogIn, LogOut, Menu } from "lucide-react";
+import { LogIn, LogOut, Menu, Search } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
@@ -118,6 +118,14 @@ export function MainNav() {
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-4">
+            <Button
+              variant="ghost"
+              onClick={() => navigate("/")}
+              className="text-wedding-text hover:text-wedding-primary"
+            >
+              <Search className="h-4 w-4 mr-2" />
+              Search Vendors
+            </Button>
             {categories.slice(0, 5).map((category) => (
               <button
                 key={category}
@@ -143,6 +151,14 @@ export function MainNav() {
                   <SheetTitle>Menu</SheetTitle>
                 </SheetHeader>
                 <div className="flex flex-col gap-4 mt-6">
+                  <Button
+                    variant="ghost"
+                    onClick={() => navigate("/")}
+                    className="text-left text-wedding-text hover:text-wedding-primary"
+                  >
+                    <Search className="h-4 w-4 mr-2" />
+                    Search Vendors
+                  </Button>
                   {categories.map((category) => (
                     <button
                       key={category}
