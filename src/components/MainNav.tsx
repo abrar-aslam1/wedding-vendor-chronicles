@@ -12,20 +12,6 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-const categories = [
-  "Wedding Planners",
-  "Photographers",
-  "Videographers",
-  "Florists",
-  "Caterers",
-  "Venues",
-  "DJs & Bands",
-  "Cake Designers",
-  "Bridal Shops",
-  "Makeup Artists",
-  "Hair Stylists",
-];
-
 export function MainNav() {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
@@ -62,19 +48,6 @@ export function MainNav() {
         variant: "destructive",
       });
     }
-  };
-
-  const handleCategoryClick = (category: string) => {
-    if (!user) {
-      toast({
-        title: "Please sign in",
-        description: "You need to be signed in to search for vendors",
-        variant: "destructive",
-      });
-      navigate("/auth");
-      return;
-    }
-    navigate(`/search/${category.toLowerCase().replace(/\s+&?\s+/g, "-")}`);
   };
 
   const renderAuthButtons = () => (
@@ -126,15 +99,6 @@ export function MainNav() {
               <Search className="h-4 w-4 mr-2" />
               Search Vendors
             </Button>
-            {categories.slice(0, 5).map((category) => (
-              <button
-                key={category}
-                onClick={() => handleCategoryClick(category)}
-                className="text-wedding-text hover:text-wedding-primary transition-colors"
-              >
-                {category}
-              </button>
-            ))}
             {renderAuthButtons()}
           </div>
 
@@ -159,17 +123,6 @@ export function MainNav() {
                     <Search className="h-4 w-4 mr-2" />
                     Search Vendors
                   </Button>
-                  {categories.map((category) => (
-                    <button
-                      key={category}
-                      onClick={() => {
-                        handleCategoryClick(category);
-                      }}
-                      className="text-left text-wedding-text hover:text-wedding-primary transition-colors py-2"
-                    >
-                      {category}
-                    </button>
-                  ))}
                   <div className="flex flex-col gap-2 mt-4">
                     {renderAuthButtons()}
                   </div>
