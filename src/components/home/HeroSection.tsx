@@ -14,13 +14,19 @@ export const HeroSection = () => {
           <span className="inline-block px-4 py-2 rounded-full bg-white/20 text-[#1A1F2C] backdrop-blur-sm mb-4 text-sm font-medium">
             Find Your Perfect Match
           </span>
-          <h1 className="text-6xl font-bold mb-6 text-[#1A1F2C] leading-tight">
+          <h1 className="text-6xl font-bold mb-4 text-[#1A1F2C] leading-tight">
             Discover Trusted Wedding Vendors
           </h1>
-          <p className="text-xl mb-8 text-[#333333] leading-relaxed">
-            Connect with the best wedding professionals in your area. From photographers to florists, 
-            we've got everything you need for your special day.
-          </p>
+          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 mb-8">
+            <p className="text-lg text-[#1A1F2C] font-medium">
+              Let us guide you to find the perfect vendors for your special day. Our platform connects you with:
+            </p>
+            <ul className="mt-2 space-y-2 text-[#333333]">
+              <li>✓ Pre-screened professional vendors</li>
+              <li>✓ Real reviews from couples</li>
+              <li>✓ Direct communication channels</li>
+            </ul>
+          </div>
           <div className="flex gap-4">
             <Button 
               size="lg" 
