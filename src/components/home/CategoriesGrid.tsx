@@ -24,7 +24,7 @@ const categories = [
     id: 4,
     name: "Florists",
     description: "Beautiful floral arrangements for your special day",
-    image: "https://images.unsplash.com/photo-1561128290-005859246e06",
+    image: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07",
   },
   {
     id: 5,
@@ -36,7 +36,7 @@ const categories = [
     id: 6,
     name: "Venues",
     description: "Perfect locations for your ceremony and reception",
-    image: "https://images.unsplash.com/photo-1505944270255-72b8c68c6a70",
+    image: "https://images.unsplash.com/photo-1473177104440-ffee2f376098",
   },
   {
     id: 7,
