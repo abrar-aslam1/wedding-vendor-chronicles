@@ -112,7 +112,7 @@ export function MainNav() {
             <img 
               src="/lovable-uploads/fc1186f3-9e97-4be6-910e-9851d1205033.png" 
               alt="My Wedding Logo" 
-              className="h-8" 
+              className="h-20" 
             />
           </Link>
           
