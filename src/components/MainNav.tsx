@@ -78,14 +78,14 @@ export function MainNav() {
   );
 
   return (
-    <nav className="bg-white border-b border-gray-200">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center">
             <img 
               src="/lovable-uploads/fc1186f3-9e97-4be6-910e-9851d1205033.png" 
               alt="My Wedding Logo" 
-              className="h-20" 
+              className="h-12" 
             />
           </Link>
           
@@ -106,7 +106,7 @@ export function MainNav() {
           <div className="md:hidden">
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="icon" className="text-wedding-primary">
                   <Menu className="h-6 w-6" />
                 </Button>
               </SheetTrigger>
