@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Store } from "lucide-react";
 
 export const HeroSection = () => {
   return (
@@ -8,7 +9,7 @@ export const HeroSection = () => {
       <div className="absolute inset-0 bg-gradient-to-br from-[#ee9ca7]/80 via-[#ffdde1]/80 to-[#ffd1dc]/80"></div>
       
       {/* Content */}
-      <div className="container mx-auto px-4 h-full flex items-center relative">
+      <div className="container mx-auto px-4 h-full flex items-center justify-between relative">
         <div className="max-w-2xl text-left">
           <span className="inline-block px-4 py-2 rounded-full bg-white/20 text-[#1A1F2C] backdrop-blur-sm mb-4 text-sm font-medium">
             Find Your Perfect Match
@@ -35,6 +36,14 @@ export const HeroSection = () => {
             >
               Get Started
             </Button>
+          </div>
+        </div>
+
+        {/* Decorative Store Icon */}
+        <div className="hidden md:flex items-center justify-center">
+          <div className="relative">
+            <div className="absolute inset-0 bg-white/10 rounded-full blur-xl"></div>
+            <Store className="w-64 h-64 text-[#1A1F2C] opacity-80 relative z-10" />
           </div>
         </div>
       </div>
