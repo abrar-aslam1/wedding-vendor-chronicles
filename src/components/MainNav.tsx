@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { LogIn, LogOut, Menu, Search } from "lucide-react";
+import { LogIn, LogOut, Menu, Search, Heart } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
@@ -56,6 +56,14 @@ export function MainNav() {
       <>
         <Button variant="outline" className="w-full md:w-auto border-wedding-primary text-wedding-primary hover:bg-wedding-primary hover:text-white">
           List Your Business
+        </Button>
+        <Button
+          variant="ghost"
+          onClick={() => navigate("/favorites")}
+          className="w-full md:w-auto text-wedding-text hover:text-wedding-primary"
+        >
+          <Heart className="h-4 w-4 mr-2" />
+          My Favorites
         </Button>
         <Button
           variant="ghost"
