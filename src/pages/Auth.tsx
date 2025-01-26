@@ -65,7 +65,10 @@ const Auth = () => {
       
       console.log("Sign in response:", { data, error });
       
-      if (error) throw error;
+      if (error) {
+        console.error("Google sign in error:", error);
+        throw error;
+      }
       
       toast({
         title: "Redirecting to Google...",
