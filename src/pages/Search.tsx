@@ -13,24 +13,33 @@ const Search = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    if (category && city && state) {
-      fetchResults();
-      // Prefetch data for the current route
-      prefetchCurrentRouteData(category, city, state).catch(console.error);
+    if (category) {
+      // Clean up category, city, and state parameters
+      const cleanCategory = category.replace('top-20/', '').replace(/-/g, ' ');
+      const cleanCity = city?.toLowerCase();
+      const cleanState = state?.toLowerCase();
+
+      console.log('Cleaned search parameters:', { cleanCategory, cleanCity, cleanState });
+      
+      if (cleanCity && cleanState) {
+        fetchResults(cleanCategory, cleanCity, cleanState);
+        // Prefetch data for the current route
+        prefetchCurrentRouteData(cleanCategory, cleanCity, cleanState).catch(console.error);
+      }
     }
   }, [category, city, state]);
 
-  const fetchResults = async () => {
+  const fetchResults = async (searchCategory: string, searchCity: string, searchState: string) => {
     setIsSearching(true);
     try {
-      console.log('Fetching results for:', { category, city, state });
+      console.log('Fetching results for:', { searchCategory, searchCity, searchState });
       
       const query = supabase
         .from('vendor_cache')
         .select('search_results')
-        .eq('category', `${category} in ${city}, ${state}`)
-        .eq('city', city.toLowerCase())
-        .eq('state', state.toLowerCase());
+        .eq('category', `${searchCategory} in ${searchCity}, ${searchState}`)
+        .eq('city', searchCity)
+        .eq('state', searchState);
 
       const { data: cachedResults, error } = await query.maybeSingle();
       
@@ -43,6 +52,7 @@ const Search = () => {
           description: "Failed to fetch results. Please try again.",
           variant: "destructive",
         });
+        setSearchResults([]);
         return;
       }
 
@@ -69,6 +79,7 @@ const Search = () => {
         description: "Failed to fetch results. Please try again.",
         variant: "destructive",
       });
+      setSearchResults([]);
     } finally {
       setIsSearching(false);
     }
@@ -77,7 +88,9 @@ const Search = () => {
   return (
     <div className="min-h-screen bg-background">
       <SearchHeader />
-      <SearchResults results={searchResults} isSearching={isSearching} />
+      <div className="container mx-auto px-4 py-8">
+        <SearchResults results={searchResults} isSearching={isSearching} />
+      </div>
     </div>
   );
 };

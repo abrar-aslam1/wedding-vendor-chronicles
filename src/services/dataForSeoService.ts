@@ -114,7 +114,9 @@ export async function searchVendors(keyword: string, location: string, city?: st
       throw new Error("You must be logged in to perform searches");
     }
 
-    const searchKeyword = `${keyword} in ${location}`;
+    // Clean up the keyword by removing any "top-20/" prefix and replacing hyphens
+    const cleanKeyword = keyword.replace('top-20/', '').replace(/-/g, ' ');
+    const searchKeyword = `${cleanKeyword} in ${location}`;
     
     const cachedResults = await checkCache(searchKeyword, US_LOCATION_CODE, city, state);
     if (cachedResults) {
@@ -160,9 +162,11 @@ export async function searchVendors(keyword: string, location: string, city?: st
 }
 
 export async function prefetchCurrentRouteData(category: string, city: string, state: string) {
-  console.log('Prefetching data for current route:', { category, city, state });
+  // Clean up the category parameter
+  const cleanCategory = category.replace('top-20/', '').replace(/-/g, ' ');
+  console.log('Prefetching data for current route:', { cleanCategory, city, state });
   try {
-    await searchVendors(category, `${city}, ${state}`, city, state);
+    await searchVendors(cleanCategory, `${city}, ${state}`, city, state);
   } catch (error) {
     console.error('Error prefetching data:', error);
   }
