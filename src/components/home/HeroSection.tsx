@@ -9,7 +9,7 @@ export const HeroSection = () => {
       
       {/* Content */}
       <div className="container mx-auto px-4 h-full flex items-center relative">
-        <div className="max-w-2xl">
+        <div className="max-w-2xl text-left">
           <span className="inline-block px-4 py-2 rounded-full bg-white/20 text-[#1A1F2C] backdrop-blur-sm mb-4 text-sm font-medium">
             Find Your Perfect Match
           </span>
