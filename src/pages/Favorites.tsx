@@ -35,7 +35,18 @@ const Favorites = () => {
 
       if (error) throw error;
 
-      setFavorites(data?.map(item => item.vendor_data) || []);
+      // Transform the data to ensure it matches SearchResult type
+      const transformedFavorites: SearchResult[] = data?.map(item => ({
+        title: item.vendor_data.title,
+        description: item.vendor_data.description,
+        rating: item.vendor_data.rating,
+        phone: item.vendor_data.phone,
+        address: item.vendor_data.address,
+        url: item.vendor_data.url,
+        place_id: item.vendor_data.place_id
+      })) || [];
+
+      setFavorites(transformedFavorites);
     } catch (error: any) {
       toast({
         title: "Error loading favorites",
