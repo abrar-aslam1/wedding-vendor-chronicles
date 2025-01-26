@@ -92,7 +92,7 @@ async function makeApiRequest(searchKeyword: string) {
   return await response.json() as DataForSEOResponse;
 }
 
-export async function searchVendors(keyword: string) {
+export async function searchVendors(keyword: string, location: string) {
   try {
     // Check authentication
     const { data: { session }, error: authError } = await supabase.auth.getSession();
@@ -103,7 +103,7 @@ export async function searchVendors(keyword: string) {
     }
 
     // Format search keyword with location context
-    const searchKeyword = `${keyword} in Dallas, TX`;
+    const searchKeyword = `${keyword} in ${location}`;
     
     console.log('Search parameters:', {
       keyword: searchKeyword,

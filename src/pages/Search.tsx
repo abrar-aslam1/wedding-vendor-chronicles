@@ -7,6 +7,7 @@ import { SearchHeader } from "@/components/search/SearchHeader";
 import { LocationSearch } from "@/components/search/LocationSearch";
 import { SearchResults } from "@/components/search/SearchResults";
 import { SearchResult } from "@/types/search";
+import { locationCodes } from "@/config/locations";
 
 export default function Search() {
   const { category } = useParams();
@@ -27,7 +28,8 @@ export default function Search() {
 
     try {
       setIsSearching(true);
-      const results = await searchVendors(category?.replace(/-/g, " ") || "");
+      const locationString = `${selectedCity}, ${selectedState}`;
+      const results = await searchVendors(category?.replace(/-/g, " ") || "", locationString);
       
       const items = results?.tasks?.[0]?.result?.[0]?.items || [];
       const processedResults = items.map((item: any) => ({
@@ -43,7 +45,7 @@ export default function Search() {
       
       toast({
         title: "Search completed",
-        description: `Found ${processedResults.length} vendors`,
+        description: `Found ${processedResults.length} vendors in ${locationString}`,
       });
     } catch (error: any) {
       console.error('Search error:', error);
@@ -61,7 +63,7 @@ export default function Search() {
     if (category && selectedState && selectedCity) {
       handleSearch();
     }
-  }, [category]);
+  }, [category, selectedState, selectedCity]);
 
   return (
     <div className="min-h-screen bg-white">
