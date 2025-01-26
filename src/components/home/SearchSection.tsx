@@ -1,11 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { LocationSearch } from "@/components/search/LocationSearch";
 import { searchVendors } from "@/services/dataForSeoService";
 import { supabase } from "@/integrations/supabase/client";
-import { locationCodes } from "@/config/locations";
 
 // Fixed US location code
 const US_LOCATION_CODE = 2840;
@@ -24,6 +23,17 @@ export const SearchSection = () => {
 
   const handleCityChange = (city: string) => {
     setSelectedCity(city);
+  };
+
+  const handleSearch = async () => {
+    if (!selectedState || !selectedCity) {
+      toast({
+        title: "Location Required",
+        description: "Please select both state and city before searching.",
+        variant: "destructive",
+      });
+      return;
+    }
   };
 
   const handleSearch = async (category: string) => {
@@ -75,12 +85,12 @@ export const SearchSection = () => {
 
       console.log('Processed results:', processedResults);
 
-      // Save search results to Supabase
+      // Save search results to Supabase using fixed US location code
       const { error: saveError } = await supabase
         .from('vendor_searches')
         .insert({
           keyword: searchQuery,
-          location_code: US_LOCATION_CODE, // Use fixed US location code
+          location_code: US_LOCATION_CODE,
           search_results: processedResults,
           user_id: session.user.id
         });
@@ -112,6 +122,8 @@ export const SearchSection = () => {
             selectedCity={selectedCity}
             onStateChange={handleStateChange}
             onCityChange={handleCityChange}
+            isSearching={isSearching}
+            onSearch={() => {}}
           />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <Button
