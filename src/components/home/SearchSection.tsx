@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { locationCodes, searchVendors } from "@/utils/dataForSeoApi";
@@ -14,6 +15,7 @@ import { SearchResults } from "@/components/search/SearchResults";
 import { supabase } from "@/integrations/supabase/client";
 
 export const SearchSection = () => {
+  const navigate = useNavigate();
   const [selectedState, setSelectedState] = useState<string>("");
   const [selectedCity, setSelectedCity] = useState<string>("");
   const [isSearching, setIsSearching] = useState(false);
@@ -53,7 +55,10 @@ export const SearchSection = () => {
       const cityCode = locationCodes[selectedState].cities[selectedCity];
       console.log('Starting search with params:', { selectedState, selectedCity, cityCode, userId: session.user.id });
       
-      const results = await searchVendors("wedding planner", cityCode);
+      // Navigate to search page with the category
+      navigate(`/search/wedding-planners`);
+      
+      const results = await searchVendors("wedding planners", cityCode);
       console.log('Raw search results:', results);
       
       if (!results?.tasks?.[0]?.result?.[0]?.items) {
@@ -84,7 +89,7 @@ export const SearchSection = () => {
       const { error: saveError } = await supabase
         .from('vendor_searches')
         .insert({
-          keyword: "wedding planner",
+          keyword: "wedding planners",
           location_code: cityCode,
           search_results: processedResults,
           user_id: session.user.id
