@@ -1,99 +1,116 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "@/hooks/use-toast";
+import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { LocationSearch } from "@/components/search/LocationSearch";
-import { searchVendors } from "@/services/dataForSeoService";
+import { locationCodes, searchVendors } from "@/utils/dataForSeoApi";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { toast } from "@/components/ui/use-toast";
+import { SearchResults } from "@/components/search/SearchResults";
 import { supabase } from "@/integrations/supabase/client";
 
-// Fixed US location code
-const US_LOCATION_CODE = 2840;
-
 export const SearchSection = () => {
-  const [selectedState, setSelectedState] = useState("");
-  const [selectedCity, setSelectedCity] = useState("");
-  const [isSearching, setIsSearching] = useState(false);
   const navigate = useNavigate();
-  const { toast } = useToast();
+  const [selectedState, setSelectedState] = useState<string>("");
+  const [selectedCity, setSelectedCity] = useState<string>("");
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchResults, setSearchResults] = useState([]);
 
-  const handleStateChange = (state: string) => {
-    setSelectedState(state);
-    setSelectedCity("");
-  };
-
-  const handleCityChange = (city: string) => {
-    setSelectedCity(city);
-  };
-
-  const handleSearch = async (category: string) => {
+  const handleSearch = async () => {
     if (!selectedState || !selectedCity) {
       toast({
-        title: "Location Required",
-        description: "Please select both state and city before searching.",
+        title: "Please select both state and city",
         variant: "destructive",
       });
       return;
     }
 
-    setIsSearching(true);
-
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      setIsSearching(true);
       
-      if (!session) {
-        navigate("/auth");
+      // Check authentication status
+      const { data: { session }, error: authError } = await supabase.auth.getSession();
+      console.log('Auth check:', { session, authError });
+      
+      if (authError) {
+        console.error('Auth error:', authError);
+        throw new Error("Authentication error occurred");
+      }
+
+      if (!session?.user) {
+        console.log('No session or user found');
+        toast({
+          title: "Authentication required",
+          description: "Please sign in to search for vendors",
+          variant: "destructive",
+        });
         return;
       }
 
+      const cityCode = locationCodes[selectedState].cities[selectedCity];
+      console.log('Starting search with params:', { selectedState, selectedCity, cityCode, userId: session.user.id });
+      
       // Navigate to search page with the category
-      navigate(`/search/${category}`);
+      navigate(`/search/wedding-planners`);
       
-      // Include state and city in the search query
-      const searchQuery = `${category} in ${selectedCity}, ${selectedState}`;
-      console.log('Search query:', searchQuery);
-      
-      // Always use US location code (2840) for searches
-      const results = await searchVendors(searchQuery, US_LOCATION_CODE);
+      const results = await searchVendors("wedding planners", cityCode);
       console.log('Raw search results:', results);
       
       if (!results?.tasks?.[0]?.result?.[0]?.items) {
-        throw new Error("No results found");
+        console.log('No items found in search results');
+        toast({
+          title: "No results found",
+          description: "Try searching in a different location",
+          variant: "destructive",
+        });
+        return;
       }
 
-      const processedResults = results.tasks[0].result[0].items.map((item: any) => ({
+      const items = results.tasks[0].result[0].items;
+      console.log('Extracted items:', items);
+      
+      const processedResults = items.map((item: any) => ({
         title: item.title,
-        description: item.description,
-        rating: {
-          rating_value: item.rating?.rating_value,
-          rating_count: item.rating?.rating_count,
-        },
+        description: item.snippet,
+        rating: item.rating,
         address: item.address,
         url: item.url,
-        place_id: item.place_id,
+        place_id: item.place_id
       }));
-
+      
       console.log('Processed results:', processedResults);
-
-      // Save search results to Supabase using fixed US location code
+      
+      // Save search to Supabase
       const { error: saveError } = await supabase
         .from('vendor_searches')
         .insert({
-          keyword: searchQuery,
-          location_code: US_LOCATION_CODE,
+          keyword: "wedding planners",
+          location_code: cityCode,
           search_results: processedResults,
           user_id: session.user.id
         });
-
+        
       if (saveError) {
         console.error('Error saving search:', saveError);
-        throw saveError;
+        throw new Error("Failed to save search results");
       }
-
-    } catch (error) {
+      
+      setSearchResults(processedResults);
+      
+      toast({
+        title: "Search completed",
+        description: `Found ${processedResults.length} vendors`,
+      });
+    } catch (error: any) {
       console.error('Search error:', error);
       toast({
-        title: "Search Error",
-        description: "Failed to fetch search results. Please try again.",
+        title: "Error searching vendors",
+        description: error.message || "An error occurred while searching",
         variant: "destructive",
       });
     } finally {
@@ -102,43 +119,62 @@ export const SearchSection = () => {
   };
 
   return (
-    <section className="py-12 px-4 md:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-8">Find Local Wedding Vendors</h2>
-        <div className="space-y-6">
-          <LocationSearch
-            selectedState={selectedState}
-            selectedCity={selectedCity}
-            onStateChange={handleStateChange}
-            onCityChange={handleCityChange}
-            isSearching={isSearching}
-            onSearch={() => handleSearch("wedding-venues")}
-          />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <Button
-              variant="outline"
-              className="w-full"
-              onClick={() => handleSearch("wedding-planners")}
+    <section className="py-16 bg-wedding-light relative -mt-10">
+      <div className="container mx-auto px-4">
+        <div className="max-w-3xl mx-auto">
+          <div className="flex flex-col gap-4 p-6 bg-white rounded-xl shadow-lg">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Select
+                value={selectedState}
+                onValueChange={(value) => {
+                  setSelectedState(value);
+                  setSelectedCity("");
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select state" />
+                </SelectTrigger>
+                <SelectContent>
+                  {Object.keys(locationCodes).map((state) => (
+                    <SelectItem key={state} value={state}>
+                      {state}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <Select
+                value={selectedCity}
+                onValueChange={setSelectedCity}
+                disabled={!selectedState}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select city" />
+                </SelectTrigger>
+                <SelectContent>
+                  {selectedState &&
+                    Object.keys(locationCodes[selectedState].cities).map((city) => (
+                      <SelectItem key={city} value={city}>
+                        {city}
+                      </SelectItem>
+                    ))}
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <Button 
+              className="w-full bg-wedding-primary hover:bg-wedding-accent transition-all duration-300"
+              onClick={handleSearch}
               disabled={isSearching}
             >
-              Wedding Planners
+              <Search className="mr-2 h-4 w-4" />
+              {isSearching ? "Searching..." : "Search Vendors"}
             </Button>
-            <Button
-              variant="outline"
-              className="w-full"
-              onClick={() => handleSearch("wedding-photographers")}
-              disabled={isSearching}
-            >
-              Photographers
-            </Button>
-            <Button
-              variant="outline"
-              className="w-full"
-              onClick={() => handleSearch("wedding-venues")}
-              disabled={isSearching}
-            >
-              Venues
-            </Button>
+          </div>
+          
+          {/* Display search results */}
+          <div className="mt-8">
+            <SearchResults results={searchResults} isSearching={isSearching} />
           </div>
         </div>
       </div>

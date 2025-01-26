@@ -39,8 +39,6 @@ export default function Search() {
     try {
       setIsSearching(true);
       const cityCode = locationCodes[selectedState].cities[selectedCity];
-      console.log('Starting search with location:', { selectedState, selectedCity, cityCode });
-      
       const results = await searchVendors(category?.replace(/-/g, " ") || "", cityCode);
       
       const items = results?.tasks?.[0]?.result?.[0]?.items || [];

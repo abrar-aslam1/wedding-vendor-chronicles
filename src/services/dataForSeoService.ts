@@ -1,6 +1,8 @@
 import { supabase } from "@/integrations/supabase/client";
 import { DataForSEOResponse } from "@/types/search";
 
+const US_LOCATION_CODE = 2840;
+
 async function getApiCredentials() {
   const { data: { DATAFORSEO_LOGIN, DATAFORSEO_PASSWORD }, error: secretsError } = await supabase
     .functions.invoke('get-secrets', {
@@ -15,13 +17,13 @@ async function getApiCredentials() {
   return { DATAFORSEO_LOGIN, DATAFORSEO_PASSWORD };
 }
 
-async function makeApiRequest(searchKeyword: string, locationCode: number) {
+async function makeApiRequest(searchKeyword: string) {
   const { DATAFORSEO_LOGIN, DATAFORSEO_PASSWORD } = await getApiCredentials();
   const credentials = btoa(`${DATAFORSEO_LOGIN}:${DATAFORSEO_PASSWORD}`);
 
   console.log('Making API request to DataForSEO with parameters:', {
     keyword: searchKeyword,
-    location_code: locationCode,
+    location_code: US_LOCATION_CODE,
     language_code: "en"
   });
 
@@ -33,7 +35,7 @@ async function makeApiRequest(searchKeyword: string, locationCode: number) {
     },
     body: JSON.stringify([{
       keyword: searchKeyword,
-      location_code: locationCode,
+      location_code: US_LOCATION_CODE,
       language_code: "en",
       device: "desktop",
       os: "windows",
@@ -53,12 +55,12 @@ async function makeApiRequest(searchKeyword: string, locationCode: number) {
   return await response.json() as DataForSEOResponse;
 }
 
-async function saveSearchResults(keyword: string, locationCode: number, results: any, userId: string) {
+async function saveSearchResults(keyword: string, results: any, userId: string) {
   const { error: insertError } = await supabase
     .from('vendor_searches')
     .insert({
       keyword,
-      location_code: locationCode,
+      location_code: US_LOCATION_CODE,
       search_results: results,
       user_id: userId
     });
@@ -69,7 +71,7 @@ async function saveSearchResults(keyword: string, locationCode: number, results:
   }
 }
 
-export async function searchVendors(keyword: string, locationCode: number) {
+export async function searchVendors(keyword: string) {
   try {
     // Check authentication
     const { data: { session }, error: authError } = await supabase.auth.getSession();
@@ -79,12 +81,15 @@ export async function searchVendors(keyword: string, locationCode: number) {
       throw new Error("You must be logged in to perform searches");
     }
 
+    // Format search keyword with location context
+    const searchKeyword = `${keyword} in Dallas, TX`;
+    
     console.log('Search parameters:', {
-      keyword,
-      locationCode
+      keyword: searchKeyword,
+      formattedSearch: searchKeyword
     });
     
-    const data = await makeApiRequest(keyword, locationCode);
+    const data = await makeApiRequest(searchKeyword);
     console.log('Raw DataForSEO response:', JSON.stringify(data, null, 2));
     
     if (!data.tasks?.[0]?.result?.[0]?.items?.length) {
@@ -98,7 +103,7 @@ export async function searchVendors(keyword: string, locationCode: number) {
       });
     }
     
-    await saveSearchResults(keyword, locationCode, data.tasks?.[0]?.result?.[0]?.items || [], session.user.id);
+    await saveSearchResults(searchKeyword, data.tasks?.[0]?.result?.[0]?.items || [], session.user.id);
     
     return data;
   } catch (error) {
