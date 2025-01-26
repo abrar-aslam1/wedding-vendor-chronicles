@@ -112,7 +112,7 @@ export function MainNav() {
             <img 
               src="/lovable-uploads/b4aeab64-b429-496c-820e-47b074f4f4d4.png" 
               alt="My Wedding Logo" 
-              className="h-12" // Changed from h-8 to h-12 to make the logo bigger
+              className="h-16" // Changed from h-12 to h-16 to make the logo bigger
             />
           </Link>
           
