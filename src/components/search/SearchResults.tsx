@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { MapPin, Star, Globe } from "lucide-react";
+import { MapPin, Star, Globe, Phone } from "lucide-react";
 
 interface SearchResult {
   title: string;
@@ -9,6 +9,7 @@ interface SearchResult {
     rating_value?: number;
     rating_count?: number;
   };
+  phone?: string;
   address?: string;
   url?: string;
   place_id?: string;
@@ -33,16 +34,32 @@ export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
       {results.map((vendor, index) => (
         <Card key={index} className="overflow-hidden hover:shadow-lg transition-shadow">
           <CardContent className="p-4 md:p-6">
-            <h3 className="text-lg md:text-xl font-semibold mb-2 text-wedding-primary">{vendor.title}</h3>
-            <p className="text-sm md:text-base text-gray-600 mb-4 line-clamp-2">{vendor.description}</p>
-            <div className="space-y-2">
+            <div className="flex justify-between items-start mb-2">
+              <h3 className="text-lg md:text-xl font-semibold text-wedding-primary">{vendor.title}</h3>
               {vendor.rating?.rating_value && (
+                <div className="flex items-center bg-yellow-50 px-2 py-1 rounded-full">
+                  <Star className="h-4 w-4 mr-1 text-yellow-400 flex-shrink-0" />
+                  <span className="text-sm font-medium text-yellow-700">
+                    {vendor.rating.rating_value}
+                    {vendor.rating.rating_count && (
+                      <span className="text-yellow-600 ml-1">
+                        ({vendor.rating.rating_count})
+                      </span>
+                    )}
+                  </span>
+                </div>
+              )}
+            </div>
+            
+            <p className="text-sm md:text-base text-gray-600 mb-4 line-clamp-2">{vendor.description}</p>
+            
+            <div className="space-y-2">
+              {vendor.phone && (
                 <div className="flex items-center text-xs md:text-sm text-gray-500">
-                  <Star className="h-4 w-4 mr-2 text-yellow-400 flex-shrink-0" />
-                  <span>{vendor.rating.rating_value} stars</span>
-                  {vendor.rating.rating_count && (
-                    <span className="ml-1">({vendor.rating.rating_count} reviews)</span>
-                  )}
+                  <Phone className="h-4 w-4 mr-2 flex-shrink-0 text-wedding-primary" />
+                  <a href={`tel:${vendor.phone}`} className="hover:text-wedding-primary transition-colors">
+                    {vendor.phone}
+                  </a>
                 </div>
               )}
               {vendor.address && (
@@ -52,10 +69,11 @@ export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
                 </div>
               )}
             </div>
+            
             {vendor.url && (
               <Button
                 variant="outline"
-                className="mt-4 w-full md:w-auto text-sm"
+                className="mt-4 w-full md:w-auto text-sm hover:bg-wedding-primary hover:text-white transition-colors"
                 onClick={() => window.open(vendor.url, '_blank')}
               >
                 <Globe className="h-4 w-4 mr-2" />

@@ -101,6 +101,7 @@ export const SearchSection = () => {
         title: item.title,
         description: item.snippet,
         rating: item.rating,
+        phone: item.phone_number,
         address: item.address,
         url: item.url,
         place_id: item.place_id

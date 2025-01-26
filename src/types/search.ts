@@ -17,6 +17,7 @@ export interface SearchResult {
     rating_value?: number;
     rating_count?: number;
   };
+  phone?: string;
   address?: string;
   url?: string;
   place_id?: string;
