@@ -73,7 +73,7 @@ export const searchVendors = async (keyword: string, locationCode: number) => {
     
     console.log('Making API request to DataForSEO with parameters:', {
       keyword: searchKeyword,
-      location_code: locationCode,
+      location_code: 2840,
       language_code: "en"
     });
     
@@ -85,7 +85,7 @@ export const searchVendors = async (keyword: string, locationCode: number) => {
       },
       body: JSON.stringify([{
         keyword: searchKeyword,
-        location_code: locationCode,
+        location_code: 2840,
         language_code: "en",
         device: "desktop",
         os: "windows",
