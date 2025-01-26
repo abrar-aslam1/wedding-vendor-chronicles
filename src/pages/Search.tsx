@@ -108,7 +108,13 @@ export default function Search() {
                 <PaginationContent>
                   <PaginationItem>
                     <PaginationPrevious
-                      onClick={() => !isFirstPage && setCurrentPage(p => p - 1)}
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (!isFirstPage) {
+                          setCurrentPage(p => p - 1);
+                        }
+                      }}
                       className={cn(
                         isFirstPage && "pointer-events-none opacity-50"
                       )}
@@ -118,7 +124,11 @@ export default function Search() {
                   {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                     <PaginationItem key={page}>
                       <PaginationLink
-                        onClick={() => setCurrentPage(page)}
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setCurrentPage(page);
+                        }}
                         isActive={currentPage === page}
                       >
                         {page}
@@ -128,7 +138,13 @@ export default function Search() {
                   
                   <PaginationItem>
                     <PaginationNext
-                      onClick={() => !isLastPage && setCurrentPage(p => p + 1)}
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (!isLastPage) {
+                          setCurrentPage(p => p + 1);
+                        }
+                      }}
                       className={cn(
                         isLastPage && "pointer-events-none opacity-50"
                       )}
