@@ -38,8 +38,7 @@ export default function Search() {
 
     try {
       setIsSearching(true);
-      const cityCode = locationCodes[selectedState].cities[selectedCity];
-      const results = await searchVendors(category?.replace(/-/g, " ") || "", cityCode);
+      const results = await searchVendors(category?.replace(/-/g, " ") || "");
       
       const items = results?.tasks?.[0]?.result?.[0]?.items || [];
       const processedResults = items.map((item: any) => ({
