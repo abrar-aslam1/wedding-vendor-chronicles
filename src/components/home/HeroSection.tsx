@@ -11,18 +11,8 @@ export const HeroSection = () => {
       />
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/40" />
       
-      {/* Promo Banner */}
-      <div className="relative z-10 w-full bg-gradient-to-r from-wedding-primary/80 to-wedding-accent/80 backdrop-blur-sm p-4">
-        <div className="flex items-center justify-center space-x-2 text-white">
-          <span className="text-sm md:text-base">
-            Special offer: 20% off for new couples! Use code:
-            <span className="font-bold ml-1">WEDDING20</span>
-          </span>
-        </div>
-      </div>
-      
       {/* Main Content */}
-      <div className="relative z-10 container mx-auto px-4 pt-16 pb-32">
+      <div className="relative z-10 container mx-auto px-4 pt-8 pb-32">
         <div className="max-w-3xl mx-auto text-center space-y-6">
           <h1 className="text-4xl md:text-6xl font-bold text-white leading-tight">
             Find Your Perfect
