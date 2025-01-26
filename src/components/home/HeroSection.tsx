@@ -3,42 +3,42 @@ import { Search, Heart, Calendar, Users2 } from "lucide-react";
 
 export const HeroSection = () => {
   return (
-    <section className="relative min-h-[500px] md:h-[600px] bg-gradient-to-br from-[#ee9ca7] via-[#ffdde1] to-[#ffd1dc] overflow-hidden px-4">
+    <section className="relative min-h-[500px] md:h-[600px] bg-gradient-to-br from-[#ee9ca7] via-[#ffdde1] to-[#ffd1dc] overflow-hidden px-4 py-16 md:py-0">
       {/* Decorative elements */}
       <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1519741497674-611481863552')] bg-cover bg-center opacity-10"></div>
       <div className="absolute inset-0 bg-gradient-to-br from-[#ee9ca7]/80 via-[#ffdde1]/80 to-[#ffd1dc]/80"></div>
       
       {/* Content */}
-      <div className="container mx-auto h-full flex flex-col md:flex-row items-center justify-between relative py-12 md:py-0">
-        <div className="max-w-2xl w-full md:text-left text-center">
-          <span className="inline-block px-4 py-2 rounded-full bg-[#1A1F2C]/90 text-white backdrop-blur-sm mb-4 text-sm font-medium">
+      <div className="container mx-auto h-full flex flex-col md:flex-row items-center justify-between relative gap-12 md:gap-8">
+        <div className="max-w-2xl w-full space-y-8 md:text-left text-center">
+          <span className="inline-block px-6 py-2.5 rounded-full bg-[#1A1F2C]/90 text-white backdrop-blur-sm text-sm font-medium">
             Find Your Perfect Match
           </span>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-[#1A1F2C] leading-tight">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#1A1F2C] leading-tight">
             Discover Trusted Wedding Vendors
           </h1>
-          <div className="bg-[#1A1F2C]/80 backdrop-blur-sm rounded-lg p-4 mb-8">
+          <div className="bg-[#1A1F2C]/80 backdrop-blur-sm rounded-lg p-6 space-y-4">
             <p className="text-white font-medium text-base md:text-lg">
               Let us guide you to find the perfect vendors for your special day. Our platform connects you with:
             </p>
-            <ul className="mt-2 space-y-2 text-white/90 text-sm md:text-base">
+            <ul className="space-y-3 text-white/90 text-sm md:text-base">
               <li>✓ Pre-screened professional vendors</li>
               <li>✓ Real reviews from couples</li>
               <li>✓ Direct communication channels</li>
             </ul>
           </div>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-4">
             <Button 
               size="lg" 
               variant="default" 
-              className="bg-white text-[#1A1F2C] hover:bg-wedding-light hover:text-[#333333] transition-all duration-300 w-full sm:w-auto"
+              className="bg-white text-[#1A1F2C] hover:bg-wedding-light hover:text-[#333333] transition-all duration-300 w-full sm:w-auto px-8"
             >
               Browse Vendors
             </Button>
             <Button 
               size="lg" 
               variant="outline" 
-              className="border-2 border-[#1A1F2C] text-[#1A1F2C] hover:bg-white/10 backdrop-blur-sm transition-all duration-300 w-full sm:w-auto"
+              className="border-2 border-[#1A1F2C] text-[#1A1F2C] hover:bg-white/10 backdrop-blur-sm transition-all duration-300 w-full sm:w-auto px-8"
             >
               Get Started
             </Button>
@@ -46,12 +46,12 @@ export const HeroSection = () => {
         </div>
 
         {/* Interactive Feature Display */}
-        <div className="hidden md:block relative mt-8 md:mt-0">
+        <div className="hidden md:block relative">
           <div className="relative w-[320px] h-[400px] bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-r from-wedding-primary to-wedding-secondary"></div>
             
             {/* Feature Icons */}
-            <div className="relative z-10 p-6 mt-12 space-y-6">
+            <div className="relative z-10 p-8 mt-12 space-y-6">
               <div className="flex items-center space-x-4 p-4 bg-white rounded-xl shadow-sm transition-transform hover:scale-105">
                 <div className="p-3 bg-wedding-primary/20 rounded-full">
                   <Search className="w-6 h-6 text-wedding-primary" />
