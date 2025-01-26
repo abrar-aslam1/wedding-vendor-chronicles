@@ -3,13 +3,13 @@ import { Search, Heart, Calendar, Users2 } from "lucide-react";
 
 export const HeroSection = () => {
   return (
-    <section className="relative min-h-[500px] md:h-[600px] bg-gradient-to-br from-[#ee9ca7] via-[#ffdde1] to-[#ffd1dc] overflow-hidden px-4 py-16 md:py-0">
+    <section className="relative min-h-[500px] md:h-[600px] bg-gradient-to-br from-[#ee9ca7] via-[#ffdde1] to-[#ffd1dc] overflow-hidden px-4 py-16 md:py-24">
       {/* Decorative elements */}
       <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1519741497674-611481863552')] bg-cover bg-center opacity-10"></div>
       <div className="absolute inset-0 bg-gradient-to-br from-[#ee9ca7]/80 via-[#ffdde1]/80 to-[#ffd1dc]/80"></div>
       
       {/* Content */}
-      <div className="container mx-auto h-full flex flex-col md:flex-row items-center justify-between relative gap-12 md:gap-8">
+      <div className="container mx-auto h-full flex flex-col md:flex-row items-center justify-between relative gap-12 md:gap-8 pb-8">
         <div className="max-w-2xl w-full space-y-8 md:text-left text-center">
           <span className="inline-block px-6 py-2.5 rounded-full bg-[#1A1F2C]/90 text-white backdrop-blur-sm text-sm font-medium">
             Find Your Perfect Match
