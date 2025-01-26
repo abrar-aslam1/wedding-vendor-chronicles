@@ -4,6 +4,7 @@ import { SearchHeader } from "@/components/search/SearchHeader";
 import { SearchResults } from "@/components/search/SearchResults";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { prefetchCurrentRouteData } from "@/services/dataForSeoService";
 
 export async function getServerSideProps({ params }: { params: { category: string; city?: string; state?: string } }) {
   try {
@@ -49,8 +50,10 @@ const Search = ({ initialData }: { initialData?: any }) => {
   const { toast } = useToast();
 
   useEffect(() => {
-    if (!initialData) {
+    if (!initialData && category && city && state) {
       fetchResults();
+      // Prefetch data for the current route
+      prefetchCurrentRouteData(category, city, state).catch(console.error);
     }
   }, [category, city, state, initialData]);
 

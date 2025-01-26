@@ -1,6 +1,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import { DataForSEOResponse, SearchResult } from "@/types/search";
 import { locationCodes } from "@/config/locations";
+import { categories } from "@/config/categories";
 
 const US_LOCATION_CODE = 2840;
 
@@ -29,7 +30,7 @@ async function checkCache(keyword: string, locationCode: number, city?: string, 
     .gt('expires_at', now);
 
   if (city && state) {
-    query.eq('city', city).eq('state', state);
+    query.eq('city', city.toLowerCase()).eq('state', state.toLowerCase());
   }
 
   const { data: cachedData, error: cacheError } = await query.maybeSingle();
@@ -51,8 +52,8 @@ async function saveToCache(keyword: string, locationCode: number, results: Searc
       search_results: results as any,
       created_at: new Date().toISOString(),
       expires_at: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(), // 14 days from now
-      city: city || null,
-      state: state || null
+      city: city?.toLowerCase() || null,
+      state: state?.toLowerCase() || null
     }, {
       onConflict: 'category,city,state'
     });
@@ -102,7 +103,6 @@ async function makeApiRequest(searchKeyword: string, locationCode: number) {
 
 export async function searchVendors(keyword: string, location: string, city?: string, state?: string) {
   try {
-    // Check authentication
     const { data: { session }, error: authError } = await supabase.auth.getSession();
     
     if (authError || !session) {
@@ -110,7 +110,6 @@ export async function searchVendors(keyword: string, location: string, city?: st
       throw new Error("You must be logged in to perform searches");
     }
 
-    // Format search keyword with location context
     const searchKeyword = `${keyword} in ${location}`;
     
     console.log('Search parameters:', {
@@ -120,7 +119,6 @@ export async function searchVendors(keyword: string, location: string, city?: st
       state
     });
     
-    // Check cache first
     const cachedResults = await checkCache(searchKeyword, US_LOCATION_CODE, city, state);
     if (cachedResults) {
       console.log('Using cached results for', city, state);
@@ -133,9 +131,7 @@ export async function searchVendors(keyword: string, location: string, city?: st
       };
     }
     
-    // If not in cache, make API request
     const data = await makeApiRequest(searchKeyword, US_LOCATION_CODE);
-    console.log('Raw DataForSEO response:', JSON.stringify(data, null, 2));
     
     if (!data.tasks?.[0]?.result?.[0]?.items?.length) {
       console.log('No results found in response');
@@ -150,10 +146,8 @@ export async function searchVendors(keyword: string, location: string, city?: st
 
     const searchResults = data.tasks?.[0]?.result?.[0]?.items || [];
     
-    // Save results to cache with city and state
     await saveToCache(searchKeyword, US_LOCATION_CODE, searchResults, city, state);
     
-    // Save search to user history
     const { error: saveError } = await supabase
       .from('vendor_searches')
       .insert({
@@ -176,16 +170,38 @@ export async function searchVendors(keyword: string, location: string, city?: st
 
 // Function to pre-fetch data for all cities
 export async function prefetchAllCitiesData(category: string) {
+  const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+  
   for (const [state, stateData] of Object.entries(locationCodes)) {
-    for (const [city, cityCode] of Object.entries(stateData.cities)) {
+    for (const [city] of Object.entries(stateData.cities)) {
       try {
         console.log(`Prefetching data for ${category} in ${city}, ${state}`);
+        
+        // Check if we already have cached data
+        const cachedResults = await checkCache(category, US_LOCATION_CODE, city, state);
+        if (cachedResults) {
+          console.log(`Cache exists for ${category} in ${city}, ${state}`);
+          continue;
+        }
+        
+        // If no cache, fetch and store the data
         await searchVendors(category, `${city}, ${state}`, city, state);
+        
         // Add a delay to avoid rate limiting
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await delay(2000);
       } catch (error) {
         console.error(`Error prefetching data for ${city}, ${state}:`, error);
       }
     }
+  }
+}
+
+// Function to prefetch data for current route
+export async function prefetchCurrentRouteData(category: string, city: string, state: string) {
+  try {
+    console.log(`Prefetching data for ${category} in ${city}, ${state}`);
+    await searchVendors(category, `${city}, ${state}`, city, state);
+  } catch (error) {
+    console.error(`Error prefetching data for ${city}, ${state}:`, error);
   }
 }
