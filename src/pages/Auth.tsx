@@ -51,14 +51,28 @@ const Auth = () => {
 
   const handleGoogleSignIn = async () => {
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
+      console.log("Starting Google sign in...");
+      const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`
+          redirectTo: `${window.location.origin}/auth/callback`,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
         }
       });
+      
+      console.log("Sign in response:", { data, error });
+      
       if (error) throw error;
+      
+      toast({
+        title: "Redirecting to Google...",
+        description: "Please complete the authentication process.",
+      });
     } catch (error: any) {
+      console.error("Google sign in error:", error);
       toast({
         title: "Error",
         description: error.message,
