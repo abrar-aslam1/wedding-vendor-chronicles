@@ -17,6 +17,43 @@ async function getApiCredentials() {
   return { DATAFORSEO_LOGIN, DATAFORSEO_PASSWORD };
 }
 
+async function checkCache(keyword: string, locationCode: number) {
+  const now = new Date().toISOString();
+  
+  const { data: cachedData, error: cacheError } = await supabase
+    .from('vendor_cache')
+    .select('*')
+    .eq('category', keyword)
+    .eq('location_code', locationCode)
+    .gt('expires_at', now)
+    .maybeSingle();
+
+  if (cacheError) {
+    console.error('Cache check error:', cacheError);
+    return null;
+  }
+
+  return cachedData?.search_results;
+}
+
+async function saveToCache(keyword: string, locationCode: number, results: any) {
+  const { error: upsertError } = await supabase
+    .from('vendor_cache')
+    .upsert({
+      category: keyword,
+      location_code: locationCode,
+      search_results: results,
+      created_at: new Date().toISOString(),
+      expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() // 24 hours from now
+    }, {
+      onConflict: 'category,location_code'
+    });
+
+  if (upsertError) {
+    console.error('Cache save error:', upsertError);
+  }
+}
+
 async function makeApiRequest(searchKeyword: string) {
   const { DATAFORSEO_LOGIN, DATAFORSEO_PASSWORD } = await getApiCredentials();
   const credentials = btoa(`${DATAFORSEO_LOGIN}:${DATAFORSEO_PASSWORD}`);
@@ -55,22 +92,6 @@ async function makeApiRequest(searchKeyword: string) {
   return await response.json() as DataForSEOResponse;
 }
 
-async function saveSearchResults(keyword: string, results: any, userId: string) {
-  const { error: insertError } = await supabase
-    .from('vendor_searches')
-    .insert({
-      keyword,
-      location_code: US_LOCATION_CODE,
-      search_results: results,
-      user_id: userId
-    });
-
-  if (insertError) {
-    console.error('Error saving search:', insertError);
-    throw new Error("Failed to save search results");
-  }
-}
-
 export async function searchVendors(keyword: string) {
   try {
     // Check authentication
@@ -89,6 +110,20 @@ export async function searchVendors(keyword: string) {
       formattedSearch: searchKeyword
     });
     
+    // Check cache first
+    const cachedResults = await checkCache(searchKeyword, US_LOCATION_CODE);
+    if (cachedResults) {
+      console.log('Using cached results');
+      return {
+        tasks: [{
+          result: [{
+            items: cachedResults
+          }]
+        }]
+      };
+    }
+    
+    // If not in cache, make API request
     const data = await makeApiRequest(searchKeyword);
     console.log('Raw DataForSEO response:', JSON.stringify(data, null, 2));
     
@@ -103,7 +138,22 @@ export async function searchVendors(keyword: string) {
       });
     }
     
-    await saveSearchResults(searchKeyword, data.tasks?.[0]?.result?.[0]?.items || [], session.user.id);
+    // Save results to cache
+    await saveToCache(searchKeyword, US_LOCATION_CODE, data.tasks?.[0]?.result?.[0]?.items || []);
+    
+    // Save search to user history
+    const { error: saveError } = await supabase
+      .from('vendor_searches')
+      .insert({
+        keyword: searchKeyword,
+        location_code: US_LOCATION_CODE,
+        search_results: data.tasks?.[0]?.result?.[0]?.items || [],
+        user_id: session.user.id
+      });
+      
+    if (saveError) {
+      console.error('Error saving search:', saveError);
+    }
     
     return data;
   } catch (error) {

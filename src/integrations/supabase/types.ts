@@ -30,6 +30,33 @@ export type Database = {
         }
         Relationships: []
       }
+      vendor_cache: {
+        Row: {
+          category: string
+          created_at: string | null
+          expires_at: string | null
+          id: string
+          location_code: number
+          search_results: Json | null
+        }
+        Insert: {
+          category: string
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          location_code: number
+          search_results?: Json | null
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          location_code?: number
+          search_results?: Json | null
+        }
+        Relationships: []
+      }
       vendor_searches: {
         Row: {
           created_at: string | null
