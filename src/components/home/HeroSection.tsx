@@ -2,10 +2,10 @@ import { Button } from "@/components/ui/button";
 
 export const HeroSection = () => {
   return (
-    <section className="relative h-[600px] bg-gradient-to-br from-wedding-primary via-wedding-accent to-wedding-secondary overflow-hidden">
+    <section className="relative h-[600px] bg-gradient-to-br from-[#ee9ca7] via-[#ffdde1] to-[#ffd1dc] overflow-hidden">
       {/* Decorative elements */}
       <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1519741497674-611481863552')] bg-cover bg-center opacity-10"></div>
-      <div className="absolute inset-0 bg-gradient-to-br from-wedding-primary/80 via-wedding-accent/80 to-wedding-secondary/80"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-[#ee9ca7]/80 via-[#ffdde1]/80 to-[#ffd1dc]/80"></div>
       
       {/* Content */}
       <div className="container mx-auto px-4 h-full flex items-center relative">
