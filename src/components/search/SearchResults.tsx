@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
 interface SearchResult {
+  [key: string]: any; // Add index signature to satisfy Json type
   title: string;
   description: string;
   rating?: {
@@ -81,12 +82,21 @@ export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
         });
       } else {
         // Add favorite
+        const vendorData = {
+          ...vendor,
+          // Ensure all properties are serializable
+          rating: vendor.rating ? {
+            rating_value: vendor.rating.rating_value,
+            rating_count: vendor.rating.rating_count
+          } : null
+        };
+
         await supabase
           .from('vendor_favorites')
           .insert({
             user_id: session.session.user.id,
             vendor_id: vendor.place_id,
-            vendor_data: vendor,
+            vendor_data: vendorData as any, // Use type assertion since we know the structure is correct
           });
 
         setFavorites(prev => new Set([...prev, vendor.place_id!]));
@@ -97,6 +107,7 @@ export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
         });
       }
     } catch (error) {
+      console.error('Favorite error:', error);
       toast({
         title: "Error",
         description: "Failed to update favorites. Please try again.",
