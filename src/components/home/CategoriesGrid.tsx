@@ -6,7 +6,7 @@ const categories = [
     id: 1,
     name: "Wedding Planners",
     description: "Professional planners to orchestrate your perfect day",
-    image: "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6",
+    image: "https://images.unsplash.com/photo-1469371670807-013ccf25f16a",
   },
   {
     id: 2,
