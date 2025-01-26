@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { Store } from "lucide-react";
 
 export const HeroSection = () => {
   return (
@@ -45,11 +44,15 @@ export const HeroSection = () => {
           </div>
         </div>
 
-        {/* Decorative Store Icon */}
+        {/* Decorative Image */}
         <div className="hidden md:flex items-center justify-center mt-8 md:mt-0">
           <div className="relative">
             <div className="absolute inset-0 bg-white/10 rounded-full blur-xl"></div>
-            <Store className="w-48 h-48 lg:w-64 lg:h-64 text-[#1A1F2C] opacity-80 relative z-10" />
+            <img 
+              src="/lovable-uploads/9235bfb6-3b99-4583-9d5d-add471a451ec.png" 
+              alt="Wedding Vendor Search Illustration" 
+              className="w-48 h-48 lg:w-64 lg:h-64 object-contain relative z-10"
+            />
           </div>
         </div>
       </div>
