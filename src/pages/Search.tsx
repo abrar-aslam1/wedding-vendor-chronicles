@@ -47,8 +47,12 @@ const Search = () => {
       }
 
       if (cachedResults?.search_results) {
-        console.log('Setting search results:', cachedResults.search_results);
-        setSearchResults(cachedResults.search_results);
+        // Ensure we're setting an array
+        const results = Array.isArray(cachedResults.search_results) 
+          ? cachedResults.search_results 
+          : [];
+        console.log('Setting search results:', results);
+        setSearchResults(results);
       } else {
         console.log('No results found in cache');
         toast({
