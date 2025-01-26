@@ -6,97 +6,74 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { prefetchCurrentRouteData } from "@/services/dataForSeoService";
 
-export async function getServerSideProps({ params }: { params: { category: string; city?: string; state?: string } }) {
-  try {
-    const query = supabase
-      .from('vendor_cache')
-      .select('search_results');
-
-    if (params.city && params.state) {
-      query
-        .eq('category', params.category)
-        .eq('city', params.city.toLowerCase())
-        .eq('state', params.state.toLowerCase());
-    } else {
-      query.eq('category', params.category);
-    }
-
-    const { data: cachedResults } = await query.maybeSingle();
-
-    return {
-      props: {
-        initialData: cachedResults?.search_results || null,
-        category: params.category,
-        city: params.city,
-        state: params.state,
-      },
-    };
-  } catch (error) {
-    console.error('Error fetching SSR data:', error);
-    return {
-      props: {
-        initialData: null,
-        category: params.category,
-        city: params.city,
-        state: params.state,
-      },
-    };
-  }
-}
-
-const Search = ({ initialData }: { initialData?: any }) => {
+const Search = () => {
   const { category, city, state } = useParams<{ category: string; city?: string; state?: string }>();
-  const [searchResults, setSearchResults] = useState(initialData || null);
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [isSearching, setIsSearching] = useState(true);
   const { toast } = useToast();
 
   useEffect(() => {
-    if (!initialData && category && city && state) {
+    if (category && city && state) {
       fetchResults();
       // Prefetch data for the current route
       prefetchCurrentRouteData(category, city, state).catch(console.error);
     }
-  }, [category, city, state, initialData]);
+  }, [category, city, state]);
 
   const fetchResults = async () => {
+    setIsSearching(true);
     try {
+      console.log('Fetching results for:', { category, city, state });
+      
       const query = supabase
         .from('vendor_cache')
-        .select('search_results');
+        .select('search_results')
+        .eq('category', `${category} in ${city}, ${state}`)
+        .eq('city', city.toLowerCase())
+        .eq('state', state.toLowerCase());
 
-      if (city && state) {
-        query
-          .eq('category', category)
-          .eq('city', city.toLowerCase())
-          .eq('state', state.toLowerCase());
-      } else {
-        query.eq('category', category);
+      const { data: cachedResults, error } = await query.maybeSingle();
+      
+      console.log('Cache query result:', { cachedResults, error });
+
+      if (error) {
+        console.error('Error fetching results:', error);
+        toast({
+          title: "Error",
+          description: "Failed to fetch results. Please try again.",
+          variant: "destructive",
+        });
+        return;
       }
 
-      const { data: cachedResults } = await query.maybeSingle();
-
       if (cachedResults?.search_results) {
+        console.log('Setting search results:', cachedResults.search_results);
         setSearchResults(cachedResults.search_results);
       } else {
+        console.log('No results found in cache');
         toast({
           title: "No results found",
           description: "Please try a different search",
           variant: "destructive",
         });
+        setSearchResults([]);
       }
     } catch (error) {
-      console.error('Error fetching results:', error);
+      console.error('Error in fetchResults:', error);
       toast({
         title: "Error",
         description: "Failed to fetch results. Please try again.",
         variant: "destructive",
       });
+    } finally {
+      setIsSearching(false);
     }
   };
 
   return (
     <div className="min-h-screen bg-background">
       <SearchHeader />
-      <SearchResults results={searchResults || []} isSearching={!searchResults} />
+      <SearchResults results={searchResults} isSearching={isSearching} />
     </div>
   );
 };
