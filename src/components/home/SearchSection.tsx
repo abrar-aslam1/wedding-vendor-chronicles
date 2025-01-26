@@ -25,17 +25,6 @@ export const SearchSection = () => {
     setSelectedCity(city);
   };
 
-  const handleSearch = async () => {
-    if (!selectedState || !selectedCity) {
-      toast({
-        title: "Location Required",
-        description: "Please select both state and city before searching.",
-        variant: "destructive",
-      });
-      return;
-    }
-  };
-
   const handleSearch = async (category: string) => {
     if (!selectedState || !selectedCity) {
       toast({
@@ -123,7 +112,7 @@ export const SearchSection = () => {
             onStateChange={handleStateChange}
             onCityChange={handleCityChange}
             isSearching={isSearching}
-            onSearch={() => {}}
+            onSearch={() => handleSearch("wedding-venues")}
           />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <Button
