@@ -59,8 +59,12 @@ export const SearchSection = () => {
       // Navigate to search page with the category
       navigate(`/search/wedding-planners`);
       
+      // Include state and city in the search query
+      const searchQuery = `wedding planners in ${selectedCity}, ${selectedState}`;
+      console.log('Search query:', searchQuery);
+      
       // Always use US location code (2840) for searches
-      const results = await searchVendors("wedding planners", US_LOCATION_CODE);
+      const results = await searchVendors(searchQuery, US_LOCATION_CODE);
       console.log('Raw search results:', results);
       
       if (!results?.tasks?.[0]?.result?.[0]?.items) {
@@ -91,7 +95,7 @@ export const SearchSection = () => {
       const { error: saveError } = await supabase
         .from('vendor_searches')
         .insert({
-          keyword: "wedding planners",
+          keyword: searchQuery,
           location_code: US_LOCATION_CODE, // Use fixed US location code
           search_results: processedResults,
           user_id: session.user.id
