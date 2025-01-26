@@ -52,6 +52,9 @@ const Auth = () => {
   const handleGoogleSignIn = async () => {
     try {
       console.log("Starting Google sign in...");
+      console.log("Current URL:", window.location.href);
+      console.log("Redirect URL:", `${window.location.origin}/auth/callback`);
+      
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
@@ -66,8 +69,12 @@ const Auth = () => {
       console.log("Sign in response:", { data, error });
       
       if (error) {
-        console.error("Google sign in error:", error);
+        console.error("Google sign in error details:", error);
         throw error;
+      }
+      
+      if (data?.url) {
+        console.log("Redirect URL from Supabase:", data.url);
       }
       
       toast({
