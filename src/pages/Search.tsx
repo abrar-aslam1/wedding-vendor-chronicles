@@ -8,6 +8,14 @@ import { LocationSearch } from "@/components/search/LocationSearch";
 import { SearchResults } from "@/components/search/SearchResults";
 import { SearchResult } from "@/types/search";
 import { locationCodes } from "@/config/locations";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 export default function Search() {
   const { category } = useParams();
@@ -16,6 +24,8 @@ export default function Search() {
   const [selectedCity, setSelectedCity] = useState<string>("Dallas");
   const [isSearching, setIsSearching] = useState(false);
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const resultsPerPage = 20;
 
   const handleSearch = async () => {
     if (!selectedState || !selectedCity) {
@@ -42,6 +52,7 @@ export default function Search() {
       }));
       
       setSearchResults(processedResults);
+      setCurrentPage(1);
       
       toast({
         title: "Search completed",
@@ -65,12 +76,19 @@ export default function Search() {
     }
   }, [category, selectedState, selectedCity]);
 
+  const paginatedResults = searchResults.slice(
+    (currentPage - 1) * resultsPerPage,
+    currentPage * resultsPerPage
+  );
+
+  const totalPages = Math.ceil(searchResults.length / resultsPerPage);
+
   return (
     <div className="min-h-screen bg-white">
       <MainNav />
       <div className="container mx-auto px-4 py-8">
         <SearchHeader />
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <LocationSearch
             selectedState={selectedState}
             selectedCity={selectedCity}
@@ -79,7 +97,40 @@ export default function Search() {
             onCityChange={setSelectedCity}
             onSearch={handleSearch}
           />
-          <SearchResults results={searchResults} isSearching={isSearching} />
+          <SearchResults results={paginatedResults} isSearching={isSearching} />
+          
+          {totalPages > 1 && (
+            <div className="mt-8">
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious 
+                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                      disabled={currentPage === 1}
+                    />
+                  </PaginationItem>
+                  
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <PaginationItem key={page}>
+                      <PaginationLink
+                        onClick={() => setCurrentPage(page)}
+                        isActive={currentPage === page}
+                      >
+                        {page}
+                      </PaginationLink>
+                    </PaginationItem>
+                  ))}
+                  
+                  <PaginationItem>
+                    <PaginationNext
+                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                      disabled={currentPage === totalPages}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </div>
+          )}
         </div>
       </div>
     </div>
