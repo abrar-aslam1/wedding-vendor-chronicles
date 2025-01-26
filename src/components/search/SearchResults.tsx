@@ -1,6 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { MapPin, Star, Globe, Phone } from "lucide-react";
+import { MapPin, Star, Globe, Phone, Heart } from "lucide-react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface SearchResult {
   title: string;
@@ -21,6 +24,93 @@ interface SearchResultsProps {
 }
 
 export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
+  const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  const [loading, setLoading] = useState<Set<string>>(new Set());
+  const { toast } = useToast();
+
+  useEffect(() => {
+    fetchFavorites();
+  }, []);
+
+  const fetchFavorites = async () => {
+    const { data: session } = await supabase.auth.getSession();
+    if (!session?.session?.user) return;
+
+    const { data: favoritesData } = await supabase
+      .from('vendor_favorites')
+      .select('vendor_id');
+
+    if (favoritesData) {
+      setFavorites(new Set(favoritesData.map(f => f.vendor_id)));
+    }
+  };
+
+  const toggleFavorite = async (vendor: SearchResult) => {
+    const { data: session } = await supabase.auth.getSession();
+    if (!session?.session?.user) {
+      toast({
+        title: "Authentication required",
+        description: "Please sign in to favorite vendors",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!vendor.place_id) return;
+
+    setLoading(prev => new Set([...prev, vendor.place_id!]));
+
+    try {
+      if (favorites.has(vendor.place_id)) {
+        // Remove favorite
+        await supabase
+          .from('vendor_favorites')
+          .delete()
+          .eq('vendor_id', vendor.place_id)
+          .eq('user_id', session.session.user.id);
+
+        setFavorites(prev => {
+          const next = new Set(prev);
+          next.delete(vendor.place_id!);
+          return next;
+        });
+
+        toast({
+          title: "Removed from favorites",
+          description: "Vendor has been removed from your favorites",
+        });
+      } else {
+        // Add favorite
+        await supabase
+          .from('vendor_favorites')
+          .insert({
+            user_id: session.session.user.id,
+            vendor_id: vendor.place_id,
+            vendor_data: vendor,
+          });
+
+        setFavorites(prev => new Set([...prev, vendor.place_id!]));
+
+        toast({
+          title: "Added to favorites",
+          description: "Vendor has been added to your favorites",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to update favorites. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(prev => {
+        const next = new Set(prev);
+        next.delete(vendor.place_id!);
+        return next;
+      });
+    }
+  };
+
   if (results.length === 0 && !isSearching) {
     return (
       <div className="mt-4 md:mt-8 text-center text-gray-500">
@@ -33,7 +123,7 @@ export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
     if (!rating?.rating_value) return null;
 
     const stars = [];
-    const ratingValue = Math.round(rating.rating_value * 2) / 2; // Round to nearest 0.5
+    const ratingValue = Math.round(rating.rating_value * 2) / 2;
     
     for (let i = 1; i <= 5; i++) {
       if (i <= ratingValue) {
@@ -65,12 +155,22 @@ export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
       {results.map((vendor, index) => (
         <Card key={index} className="overflow-hidden hover:shadow-lg transition-shadow h-full">
           <CardContent className="p-4 md:p-6 flex flex-col h-full">
-            <div className="flex flex-col gap-2 mb-4">
+            <div className="flex justify-between items-start gap-2 mb-4">
               <h3 className="text-lg font-semibold text-wedding-primary line-clamp-2">
                 {vendor.title}
               </h3>
-              {vendor.rating && renderRating(vendor.rating)}
+              <button
+                onClick={() => toggleFavorite(vendor)}
+                disabled={loading.has(vendor.place_id || '')}
+                className="text-wedding-primary hover:scale-110 transition-transform disabled:opacity-50"
+              >
+                <Heart 
+                  className={`h-6 w-6 ${favorites.has(vendor.place_id || '') ? 'fill-wedding-primary' : ''}`}
+                />
+              </button>
             </div>
+            
+            {vendor.rating && renderRating(vendor.rating)}
             
             <p className="text-sm text-gray-600 mb-4 line-clamp-2 flex-grow">
               {vendor.description}
