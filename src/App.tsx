@@ -2,6 +2,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Search from "./pages/Search";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
 import { Toaster } from "./components/ui/toaster";
 import "./App.css";
 
@@ -13,6 +15,8 @@ function App() {
         <Route path="/auth" element={<Auth />} />
         <Route path="/search/:category" element={<Search />} />
         <Route path="/top-20/:category/:city/:state" element={<Search />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/terms" element={<Terms />} />
       </Routes>
       <Toaster />
     </Router>
