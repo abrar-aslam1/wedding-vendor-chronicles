@@ -12,6 +12,7 @@ function App() {
         <Route path="/" element={<Index />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/search/:category" element={<Search />} />
+        <Route path="/top-20/:category/:city/:state" element={<Search />} />
       </Routes>
       <Toaster />
     </Router>

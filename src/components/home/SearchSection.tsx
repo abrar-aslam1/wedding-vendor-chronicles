@@ -37,6 +37,10 @@ export const SearchSection = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 
+  const formatUrlSegment = (text: string) => {
+    return text.toLowerCase().replace(/\s+&?\s+/g, "_");
+  };
+
   const handleSearch = async () => {
     if (!selectedState || !selectedCity || !selectedCategory) {
       toast({
@@ -68,7 +72,13 @@ export const SearchSection = () => {
         return;
       }
 
-      navigate(`/search/${selectedCategory.toLowerCase().replace(/\s+&?\s+/g, "-")}`);
+      // Format the URL segments
+      const formattedCategory = formatUrlSegment(selectedCategory);
+      const formattedCity = formatUrlSegment(selectedCity);
+      const formattedState = formatUrlSegment(selectedState);
+
+      // Navigate to the new URL format
+      navigate(`/top-20/${formattedCategory}/${formattedCity}/${formattedState}`);
       
       const locationString = `${selectedCity}, ${selectedState}`;
       const results = await searchVendors(selectedCategory.toLowerCase(), locationString);
