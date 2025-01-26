@@ -85,7 +85,7 @@ export const searchVendors = async (keyword: string, locationCode: number) => {
       },
       body: JSON.stringify([{
         keyword: searchKeyword,
-        location_code: locationCode, // Changed from location_coordinate to just use location_code
+        location_code: locationCode,
         language_code: "en",
         device: "desktop",
         os: "windows",
