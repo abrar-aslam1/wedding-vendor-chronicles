@@ -11,6 +11,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function MainNav() {
   const [user, setUser] = useState(null);
@@ -103,7 +104,15 @@ export function MainNav() {
           </div>
 
           {/* Mobile Navigation */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center gap-2">
+            {user && (
+              <Avatar className="h-8 w-8">
+                <AvatarImage src={user.user_metadata?.avatar_url || user.user_metadata?.picture} />
+                <AvatarFallback>
+                  {user.email?.charAt(0).toUpperCase() || 'U'}
+                </AvatarFallback>
+              </Avatar>
+            )}
             <Sheet>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" className="text-wedding-primary">
