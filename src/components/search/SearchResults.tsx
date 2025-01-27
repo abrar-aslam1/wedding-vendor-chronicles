@@ -109,20 +109,12 @@ export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
     }
   };
 
-  if (results.length === 0 && !isSearching) {
-    return (
-      <div className="mt-4 md:mt-8 text-center text-gray-500">
-        No vendors found. Try adjusting your search criteria.
-      </div>
-    );
-  }
-
   const renderRating = (rating: SearchResult['rating']) => {
     console.log('Rating data for vendor:', rating);
     
     if (!rating?.value) {
       return (
-        <div className="text-sm text-gray-600 mb-2">
+        <div className="text-sm text-gray-500">
           No ratings available
         </div>
       );
@@ -136,7 +128,7 @@ export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
         stars.push(<Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />);
       } else if (i - 0.5 === ratingValue) {
         stars.push(
-          <div key={i} className="relative">
+          <div key={i} className="relative inline-block">
             <Star className="h-4 w-4 text-yellow-400" />
             <Star className="absolute top-0 left-0 h-4 w-4 fill-yellow-400 text-yellow-400" style={{ clipPath: 'inset(0 50% 0 0)' }} />
           </div>
@@ -147,21 +139,29 @@ export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
     }
 
     return (
-      <div className="flex flex-col gap-1 mb-3">
-        <div className="flex items-center gap-2">
+      <div className="flex items-center gap-3 mb-3">
+        <div className="flex items-center gap-1">
           <div className="flex">{stars}</div>
-          <span className="font-medium text-wedding-primary">
+          <span className="ml-1 font-medium text-wedding-primary">
             {rating.value.toFixed(1)}
           </span>
         </div>
-        <div className="text-sm text-gray-600">
+        <div className="text-sm text-gray-500">
           {rating.votes_count 
-            ? <span className="font-medium">{rating.votes_count.toLocaleString()} reviews</span>
+            ? <span>{rating.votes_count.toLocaleString()} reviews</span>
             : 'No reviews yet'}
         </div>
       </div>
     );
   };
+
+  if (results.length === 0 && !isSearching) {
+    return (
+      <div className="mt-4 md:mt-8 text-center text-gray-500">
+        No vendors found. Try adjusting your search criteria.
+      </div>
+    );
+  }
 
   return (
     <div className="mt-4 md:mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
