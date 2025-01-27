@@ -36,8 +36,9 @@ export const SearchForm = ({ onSearch, isSearching, preselectedCategory }: Searc
   const [selectedCategory, setSelectedCategory] = useState<string>(preselectedCategory || "");
 
   const handleSubmit = async () => {
+    // Use the preselected category if it exists, otherwise use the selected one
     const categoryToUse = preselectedCategory || selectedCategory;
-    console.log('Submitting search with:', { categoryToUse, selectedState, selectedCity });
+    console.log('SearchForm submitting:', { categoryToUse, selectedState, selectedCity });
     await onSearch(categoryToUse, selectedState, selectedCity);
   };
 

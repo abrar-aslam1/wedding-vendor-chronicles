@@ -17,26 +17,25 @@ const Search = () => {
 
   useEffect(() => {
     if (category && city && state) {
-      console.log('Search params:', { category, city, state });
+      console.log('Initial search params:', { category, city, state });
       const cleanCategory = category.replace('top-20/', '').replace(/-/g, ' ');
-      const cleanCity = city.toLowerCase();
-      const cleanState = state;
-      
-      fetchResults(cleanCategory, cleanCity, cleanState);
-      prefetchCurrentRouteData(cleanCategory, cleanCity, cleanState).catch(console.error);
+      fetchResults(cleanCategory, city, state);
+      prefetchCurrentRouteData(cleanCategory, city, state).catch(console.error);
     }
   }, [category, city, state]);
 
   const handleSearch = async (selectedCategory: string, selectedState: string, selectedCity: string) => {
-    // If we're on a category page, use that category, otherwise use the selected one
+    console.log('Handling search with:', { selectedCategory, selectedState, selectedCity });
+    
+    // Always use the current category from URL when on a category page
     const categoryToUse = category 
       ? category.replace('top-20/', '').replace(/-/g, ' ') 
       : selectedCategory;
-      
-    console.log('Handling search with:', { categoryToUse, selectedCity, selectedState });
     
-    // Construct the URL with proper formatting
+    // Format the category for the URL
     const formattedCategory = categoryToUse.toLowerCase().replace(/ /g, '-');
+    
+    // Navigate to the search results page
     navigate(`/top-20/${formattedCategory}/${selectedCity}/${selectedState}`);
   };
 
@@ -54,8 +53,6 @@ const Search = () => {
 
       const { data: cachedResults, error } = await query.maybeSingle();
       
-      console.log('Cache query result:', { cachedResults, error });
-
       if (error) {
         console.error('Error fetching results:', error);
         toast({
@@ -101,7 +98,6 @@ const Search = () => {
       <div className="container mx-auto px-4 py-8 mt-16">
         <SearchHeader />
         
-        {/* Only show search form if we're not displaying specific city/state results */}
         {(!city || !state) && (
           <div className="max-w-2xl mx-auto mb-8">
             <SearchForm 
