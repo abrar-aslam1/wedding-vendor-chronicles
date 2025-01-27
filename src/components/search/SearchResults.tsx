@@ -10,8 +10,10 @@ interface SearchResult {
   title: string;
   description: string;
   rating?: {
-    rating_value?: number;
-    rating_count?: number;
+    value?: number;
+    rating_max?: number | null;
+    rating_type?: string;
+    votes_count?: number;
   };
   phone?: string;
   address?: string;
@@ -30,7 +32,6 @@ export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
   const { toast } = useToast();
 
   useEffect(() => {
-    // Log the results when they change
     console.log('Search Results:', results);
     fetchFavorites();
   }, [results]);
@@ -133,10 +134,9 @@ export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
   }
 
   const renderRating = (rating: SearchResult['rating']) => {
-    // Add debug log to see what rating data we're receiving
     console.log('Rating data for vendor:', rating);
     
-    if (!rating?.rating_value) {
+    if (!rating?.value) {
       return (
         <div className="text-sm text-gray-600 mb-2">
           No ratings available
@@ -145,7 +145,7 @@ export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
     }
 
     const stars = [];
-    const ratingValue = Math.round(rating.rating_value * 2) / 2;
+    const ratingValue = Math.round(rating.value * 2) / 2;
     
     for (let i = 1; i <= 5; i++) {
       if (i <= ratingValue) {
@@ -167,12 +167,12 @@ export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
         <div className="flex items-center gap-2">
           <div className="flex">{stars}</div>
           <span className="font-medium text-wedding-primary">
-            {rating.rating_value.toFixed(1)}
+            {rating.value.toFixed(1)}
           </span>
         </div>
         <div className="text-sm text-gray-600">
-          {rating.rating_count 
-            ? <span className="font-medium">{rating.rating_count.toLocaleString()} reviews</span>
+          {rating.votes_count 
+            ? <span className="font-medium">{rating.votes_count.toLocaleString()} reviews</span>
             : 'No reviews yet'}
         </div>
       </div>
