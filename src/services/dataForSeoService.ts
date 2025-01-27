@@ -103,6 +103,22 @@ async function makeApiRequest(searchKeyword: string, locationCode: number) {
   return data;
 }
 
+export async function refreshExpiredCaches() {
+  try {
+    const { data, error } = await supabase.functions.invoke('refresh-vendor-cache')
+    
+    if (error) {
+      console.error('Error refreshing caches:', error)
+      throw error
+    }
+
+    return data
+  } catch (error) {
+    console.error('Failed to refresh caches:', error)
+    throw error
+  }
+}
+
 export async function searchVendors(keyword: string, location: string, city?: string, state?: string) {
   console.log('Searching vendors:', { keyword, location, city, state });
   
