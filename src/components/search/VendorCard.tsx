@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MapPin, Star, Globe, Phone, Heart } from "lucide-react";
 import { SearchResult } from "@/types/search";
+import { RatingDisplay } from "./RatingDisplay";
+import { VendorContactInfo } from "./VendorContactInfo";
 
 interface VendorCardProps {
   vendor: SearchResult;
