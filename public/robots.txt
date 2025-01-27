@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
 
+# Allow crawling of all content
+Disallow:
+
+# Sitemap location
 Sitemap: https://findmyweddingvendor.com/sitemap.xml

@@ -80,4 +80,19 @@
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
+
+  <!-- Legal Pages -->
+  <url>
+    <loc>https://findmyweddingvendor.com/privacy</loc>
+    <lastmod>2024-03-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://findmyweddingvendor.com/terms</loc>
+    <lastmod>2024-03-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
 </urlset>
