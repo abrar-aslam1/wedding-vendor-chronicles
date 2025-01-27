@@ -9,7 +9,7 @@ export const SearchHeader = () => {
   return (
     <div className="mb-8">
       <h1 className="text-3xl font-bold text-wedding-text capitalize">
-        {cleanCategory}{displayLocation}
+        Top 20 {cleanCategory}{displayLocation}
       </h1>
       <p className="text-gray-600 mt-2">
         Find the best wedding vendors in your area
