@@ -4,22 +4,7 @@ import { MapPin, Star, Globe, Phone, Heart } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-
-interface SearchResult {
-  [key: string]: any;
-  title: string;
-  description: string;
-  rating?: {
-    value?: number;
-    rating_max?: number | null;
-    rating_type?: string;
-    votes_count?: number;
-  };
-  phone?: string;
-  address?: string;
-  url?: string;
-  place_id?: string;
-}
+import { SearchResult, Rating } from "@/types/search";
 
 interface SearchResultsProps {
   results: SearchResult[];
@@ -87,10 +72,9 @@ export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
         // Add favorite
         const vendorData = {
           ...vendor,
-          // Ensure all properties are serializable
           rating: vendor.rating ? {
-            rating_value: vendor.rating.rating_value,
-            rating_count: vendor.rating.rating_count
+            value: vendor.rating.value,
+            votes_count: vendor.rating.votes_count
           } : null
         };
 
@@ -99,7 +83,7 @@ export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
           .insert({
             user_id: session.session.user.id,
             vendor_id: vendor.place_id,
-            vendor_data: vendorData as any, // Use type assertion since we know the structure is correct
+            vendor_data: vendorData,
           });
 
         setFavorites(prev => new Set([...prev, vendor.place_id!]));

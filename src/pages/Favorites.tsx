@@ -35,13 +35,17 @@ const Favorites = () => {
 
       if (error) throw error;
 
-      // Transform the data to ensure it matches SearchResult type
       const transformedFavorites: SearchResult[] = data?.map(item => {
         const vendorData = item.vendor_data as Record<string, any>;
         return {
           title: vendorData.title || '',
           description: vendorData.description || '',
-          rating: vendorData.rating || null,
+          rating: vendorData.rating ? {
+            value: vendorData.rating.value,
+            votes_count: vendorData.rating.votes_count,
+            rating_type: 'Max5',
+            rating_max: 5
+          } : undefined,
           phone: vendorData.phone || '',
           address: vendorData.address || '',
           url: vendorData.url || '',

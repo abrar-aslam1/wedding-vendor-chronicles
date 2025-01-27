@@ -9,14 +9,18 @@ export interface LocationCodes {
   [state: string]: LocationCode;
 }
 
+export interface Rating {
+  value?: number;
+  rating_max?: number | null;
+  rating_type?: string;
+  votes_count?: number;
+}
+
 export interface SearchResult {
-  [key: string]: any; // Add index signature to satisfy Json type
+  [key: string]: any;
   title: string;
   description: string;
-  rating?: {
-    rating_value?: number;
-    rating_count?: number;
-  };
+  rating?: Rating;
   phone?: string;
   address?: string;
   url?: string;
