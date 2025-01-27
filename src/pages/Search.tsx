@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { SearchHeader } from "@/components/search/SearchHeader";
 import { SearchResults } from "@/components/search/SearchResults";
+import { MainNav } from "@/components/MainNav";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { prefetchCurrentRouteData } from "@/services/dataForSeoService";
@@ -87,7 +88,8 @@ const Search = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
+      <MainNav />
+      <div className="container mx-auto px-4 py-8 mt-16">
         <SearchHeader />
         <SearchResults results={searchResults} isSearching={isSearching} />
       </div>
