@@ -30,8 +30,10 @@ export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
   const { toast } = useToast();
 
   useEffect(() => {
+    // Log the results when they change
+    console.log('Search Results:', results);
     fetchFavorites();
-  }, []);
+  }, [results]);
 
   const fetchFavorites = async () => {
     const { data: session } = await supabase.auth.getSession();
@@ -131,6 +133,9 @@ export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
   }
 
   const renderRating = (rating: SearchResult['rating']) => {
+    // Add debug log to see what rating data we're receiving
+    console.log('Rating data for vendor:', rating);
+    
     if (!rating?.rating_value) {
       return (
         <div className="text-sm text-gray-600 mb-2">
