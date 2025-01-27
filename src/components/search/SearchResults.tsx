@@ -180,21 +180,24 @@ export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
   };
 
   return (
-    <div className="mt-4 md:mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+    <div className="mt-4 md:mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {results.map((vendor, index) => (
-        <Card key={index} className="overflow-hidden hover:shadow-lg transition-shadow h-full">
-          <CardContent className="p-4 md:p-6 flex flex-col h-full">
-            <div className="flex justify-between items-start gap-2 mb-4">
-              <h3 className="text-lg font-semibold text-wedding-primary line-clamp-2">
+        <Card 
+          key={index} 
+          className="overflow-hidden hover:shadow-lg transition-all duration-300 h-full bg-white border-gray-100 hover:border-wedding-primary/20"
+        >
+          <CardContent className="p-5 md:p-6 flex flex-col h-full">
+            <div className="flex justify-between items-start gap-3 mb-4">
+              <h3 className="text-lg font-semibold text-wedding-primary hover:text-wedding-accent transition-colors duration-200 line-clamp-2">
                 {vendor.title}
               </h3>
               <button
                 onClick={() => toggleFavorite(vendor)}
                 disabled={loading.has(vendor.place_id || '')}
-                className="text-wedding-primary hover:scale-110 transition-transform disabled:opacity-50"
+                className="text-wedding-primary hover:scale-110 transition-transform disabled:opacity-50 p-1"
               >
                 <Heart 
-                  className={`h-6 w-6 ${favorites.has(vendor.place_id || '') ? 'fill-wedding-primary' : ''}`}
+                  className={`h-5 w-5 ${favorites.has(vendor.place_id || '') ? 'fill-wedding-primary' : ''}`}
                 />
               </button>
             </div>
@@ -205,18 +208,18 @@ export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
               {vendor.description}
             </p>
             
-            <div className="space-y-2 mt-auto">
+            <div className="space-y-3 mt-auto pt-4 border-t border-gray-100">
               {vendor.phone && (
-                <div className="flex items-center text-xs text-gray-500">
-                  <Phone className="h-4 w-4 mr-2 flex-shrink-0 text-wedding-primary" />
+                <div className="flex items-center text-sm text-gray-500 hover:text-wedding-primary transition-colors">
+                  <Phone className="h-4 w-4 mr-2 flex-shrink-0 text-wedding-primary/70" />
                   <a href={`tel:${vendor.phone}`} className="hover:text-wedding-primary transition-colors truncate">
                     {vendor.phone}
                   </a>
                 </div>
               )}
               {vendor.address && (
-                <div className="flex items-center text-xs text-gray-500">
-                  <MapPin className="h-4 w-4 mr-2 flex-shrink-0" />
+                <div className="flex items-center text-sm text-gray-500">
+                  <MapPin className="h-4 w-4 mr-2 flex-shrink-0 text-wedding-primary/70" />
                   <span className="line-clamp-1">{vendor.address}</span>
                 </div>
               )}
@@ -224,7 +227,7 @@ export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
               {vendor.url && (
                 <Button
                   variant="outline"
-                  className="mt-4 w-full text-sm hover:bg-wedding-primary hover:text-white transition-colors"
+                  className="mt-4 w-full text-sm bg-white hover:bg-wedding-primary hover:text-white border-wedding-primary/20 text-wedding-primary transition-all duration-200"
                   onClick={() => window.open(vendor.url, '_blank')}
                 >
                   <Globe className="h-4 w-4 mr-2" />
