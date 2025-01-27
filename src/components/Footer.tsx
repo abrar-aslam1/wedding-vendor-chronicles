@@ -32,6 +32,16 @@ export const Footer = () => {
                   Sign In
                 </Link>
               </li>
+              <li>
+                <Link to="/privacy" className="text-sm text-wedding-text hover:text-wedding-primary">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link to="/terms" className="text-sm text-wedding-text hover:text-wedding-primary">
+                  Terms of Service
+                </Link>
+              </li>
             </ul>
           </div>
           
