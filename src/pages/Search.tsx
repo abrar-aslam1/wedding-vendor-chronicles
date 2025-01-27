@@ -7,7 +7,6 @@ import { MainNav } from "@/components/MainNav";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { prefetchCurrentRouteData } from "@/services/dataForSeoService";
-import { locationCodes } from "@/utils/dataForSeoApi";
 
 const Search = () => {
   const { category, city, state } = useParams<{ category: string; city?: string; state?: string }>();
@@ -18,6 +17,7 @@ const Search = () => {
 
   useEffect(() => {
     if (category && city && state) {
+      console.log('Search params:', { category, city, state });
       const cleanCategory = category.replace('top-20/', '').replace(/-/g, ' ');
       const cleanCity = city.toLowerCase();
       const cleanState = state;
@@ -28,8 +28,16 @@ const Search = () => {
   }, [category, city, state]);
 
   const handleSearch = async (selectedCategory: string, selectedState: string, selectedCity: string) => {
-    const categoryToUse = category ? category.replace('top-20/', '').replace(/-/g, ' ') : selectedCategory;
-    navigate(`/top-20/${categoryToUse.toLowerCase().replace(/ /g, '-')}/${selectedCity}/${selectedState}`);
+    // If we're on a category page, use that category, otherwise use the selected one
+    const categoryToUse = category 
+      ? category.replace('top-20/', '').replace(/-/g, ' ') 
+      : selectedCategory;
+      
+    console.log('Handling search with:', { categoryToUse, selectedCity, selectedState });
+    
+    // Construct the URL with proper formatting
+    const formattedCategory = categoryToUse.toLowerCase().replace(/ /g, '-');
+    navigate(`/top-20/${formattedCategory}/${selectedCity}/${selectedState}`);
   };
 
   const fetchResults = async (searchCategory: string, searchCity: string, searchState: string) => {
@@ -83,7 +91,9 @@ const Search = () => {
   };
 
   // Get the clean category name for the preselected value
-  const preselectedCategory = category ? category.replace('top-20/', '').replace(/-/g, ' ') : undefined;
+  const preselectedCategory = category 
+    ? category.replace('top-20/', '').replace(/-/g, ' ') 
+    : undefined;
 
   return (
     <div className="min-h-screen bg-background">
