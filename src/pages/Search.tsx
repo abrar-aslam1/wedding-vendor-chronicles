@@ -1,34 +1,36 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { SearchHeader } from "@/components/search/SearchHeader";
 import { SearchResults } from "@/components/search/SearchResults";
+import { SearchForm } from "@/components/search/SearchForm";
 import { MainNav } from "@/components/MainNav";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { prefetchCurrentRouteData } from "@/services/dataForSeoService";
+import { locationCodes } from "@/utils/dataForSeoApi";
 
 const Search = () => {
   const { category, city, state } = useParams<{ category: string; city?: string; state?: string }>();
   const [searchResults, setSearchResults] = useState<any[]>([]);
-  const [isSearching, setIsSearching] = useState(true);
+  const [isSearching, setIsSearching] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (category) {
-      // Clean up category, city, and state parameters
+    if (category && city && state) {
       const cleanCategory = category.replace('top-20/', '').replace(/-/g, ' ');
-      const cleanCity = city?.toLowerCase();
-      const cleanState = state?.toLowerCase();
-
-      console.log('Cleaned search parameters:', { cleanCategory, cleanCity, cleanState });
+      const cleanCity = city.toLowerCase();
+      const cleanState = state;
       
-      if (cleanCity && cleanState) {
-        fetchResults(cleanCategory, cleanCity, cleanState);
-        // Prefetch data for the current route
-        prefetchCurrentRouteData(cleanCategory, cleanCity, cleanState).catch(console.error);
-      }
+      fetchResults(cleanCategory, cleanCity, cleanState);
+      prefetchCurrentRouteData(cleanCategory, cleanCity, cleanState).catch(console.error);
     }
   }, [category, city, state]);
+
+  const handleSearch = async (selectedCategory: string, selectedState: string, selectedCity: string) => {
+    // Navigate to the search results page with the selected parameters
+    navigate(`/top-20/${selectedCategory.toLowerCase().replace(/ /g, '-')}/${selectedCity}/${selectedState}`);
+  };
 
   const fetchResults = async (searchCategory: string, searchCity: string, searchState: string) => {
     setIsSearching(true);
@@ -58,7 +60,6 @@ const Search = () => {
       }
 
       if (cachedResults?.search_results) {
-        // Ensure we're setting an array
         const results = Array.isArray(cachedResults.search_results) 
           ? cachedResults.search_results 
           : [];
@@ -66,11 +67,6 @@ const Search = () => {
         setSearchResults(results);
       } else {
         console.log('No results found in cache');
-        toast({
-          title: "No results found",
-          description: "Please try a different search",
-          variant: "destructive",
-        });
         setSearchResults([]);
       }
     } catch (error) {
@@ -91,6 +87,14 @@ const Search = () => {
       <MainNav />
       <div className="container mx-auto px-4 py-8 mt-16">
         <SearchHeader />
+        
+        {/* Only show search form if we're not displaying specific city/state results */}
+        {(!city || !state) && (
+          <div className="max-w-2xl mx-auto mb-8">
+            <SearchForm onSearch={handleSearch} isSearching={isSearching} />
+          </div>
+        )}
+        
         <SearchResults results={searchResults} isSearching={isSearching} />
       </div>
     </div>
