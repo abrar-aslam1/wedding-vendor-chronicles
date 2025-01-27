@@ -12,12 +12,16 @@ interface SearchResultsProps {
 export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState<Set<string>>(new Set());
+  const [hasSearched, setHasSearched] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
     console.log('Search Results:', results);
     fetchFavorites();
-  }, [results]);
+    if (isSearching) {
+      setHasSearched(true);
+    }
+  }, [results, isSearching]);
 
   const fetchFavorites = async () => {
     const { data: session } = await supabase.auth.getSession();
@@ -105,7 +109,8 @@ export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
     }
   };
 
-  if (results.length === 0 && !isSearching) {
+  // Only show "No vendors found" if a search has been performed and there are no results
+  if (hasSearched && results.length === 0 && !isSearching) {
     return (
       <div className="mt-4 md:mt-8 text-center text-gray-500">
         No vendors found. Try adjusting your search criteria.
