@@ -1,19 +1,26 @@
+import { Heart, Mail, Phone, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export const Footer = () => {
   return (
-    <footer className="bg-white border-t">
+    <footer className="bg-white border-t border-gray-200 mt-16">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div>
-            <h3 className="font-semibold text-lg text-wedding-text mb-4">About Us</h3>
-            <p className="text-sm text-gray-600">
-              We help couples find the perfect wedding vendors for their special day. Our platform
-              connects you with top professionals in your area.
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="space-y-4">
+            <div className="flex items-center">
+              <img 
+                src="/lovable-uploads/fc1186f3-9e97-4be6-910e-9851d1205033.png" 
+                alt="My Wedding Logo" 
+                className="h-20"
+              />
+            </div>
+            <p className="text-wedding-text text-sm">
+              Your perfect wedding starts here. Find the best vendors for your special day.
             </p>
           </div>
+          
           <div>
-            <h3 className="font-semibold text-lg text-wedding-text mb-4">Quick Links</h3>
+            <h3 className="font-semibold text-wedding-text mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
                 <Link to="/" className="text-sm text-wedding-text hover:text-wedding-primary">
@@ -25,47 +32,57 @@ export const Footer = () => {
                   Sign In
                 </Link>
               </li>
+              <li>
+                <Link to="/privacy" className="text-sm text-wedding-text hover:text-wedding-primary">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link to="/terms" className="text-sm text-wedding-text hover:text-wedding-primary">
+                  Terms of Service
+                </Link>
+              </li>
             </ul>
           </div>
+          
           <div>
-            <h3 className="font-semibold text-lg text-wedding-text mb-4">Popular Categories</h3>
+            <h3 className="font-semibold text-wedding-text mb-4">Categories</h3>
             <ul className="space-y-2">
-              <li>
-                <Link to="/search/wedding-photographers" className="text-sm text-wedding-text hover:text-wedding-primary">
-                  Wedding Photographers
-                </Link>
+              <li className="text-sm text-wedding-text hover:text-wedding-primary cursor-pointer">
+                Wedding Planners
               </li>
-              <li>
-                <Link to="/search/wedding-venues" className="text-sm text-wedding-text hover:text-wedding-primary">
-                  Wedding Venues
-                </Link>
+              <li className="text-sm text-wedding-text hover:text-wedding-primary cursor-pointer">
+                Photographers
               </li>
-              <li>
-                <Link to="/search/wedding-planners" className="text-sm text-wedding-text hover:text-wedding-primary">
-                  Wedding Planners
-                </Link>
+              <li className="text-sm text-wedding-text hover:text-wedding-primary cursor-pointer">
+                Venues
               </li>
-              <li>
-                <Link to="/search/wedding-florists" className="text-sm text-wedding-text hover:text-wedding-primary">
-                  Wedding Florists
-                </Link>
+            </ul>
+          </div>
+          
+          <div>
+            <h3 className="font-semibold text-wedding-text mb-4">Contact</h3>
+            <ul className="space-y-2">
+              <li className="flex items-center text-sm text-wedding-text">
+                <Mail className="h-4 w-4 mr-2 text-wedding-primary" />
+                contact@mywedding.com
               </li>
-              <li>
-                <Link to="/search/wedding-dj" className="text-sm text-wedding-text hover:text-wedding-primary">
-                  Wedding DJs
-                </Link>
+              <li className="flex items-center text-sm text-wedding-text">
+                <Phone className="h-4 w-4 mr-2 text-wedding-primary" />
+                (555) 123-4567
               </li>
-              <li>
-                <Link to="/search/wedding-makeup-artists" className="text-sm text-wedding-text hover:text-wedding-primary">
-                  Makeup Artists
-                </Link>
+              <li className="flex items-center text-sm text-wedding-text">
+                <MapPin className="h-4 w-4 mr-2 text-wedding-primary" />
+                123 Wedding Street
               </li>
             </ul>
           </div>
         </div>
-        <div className="text-center mt-8 pt-8 border-t">
-          <p className="text-sm text-gray-600">
-            © {new Date().getFullYear()} Wedding Vendor Directory. All rights reserved.
+        
+        <div className="border-t border-gray-200 mt-8 pt-8 text-center">
+          <p className="text-sm text-wedding-text">
+            © {new Date().getFullYear()} My Wedding. Made with{" "}
+            <Heart className="h-4 w-4 inline-block text-wedding-primary" /> for happy couples
           </p>
         </div>
       </div>
