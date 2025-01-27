@@ -27,12 +27,13 @@ const categories = [
 interface SearchFormProps {
   onSearch: (category: string, state: string, city: string) => Promise<void>;
   isSearching: boolean;
+  preselectedCategory?: string;
 }
 
-export const SearchForm = ({ onSearch, isSearching }: SearchFormProps) => {
+export const SearchForm = ({ onSearch, isSearching, preselectedCategory }: SearchFormProps) => {
   const [selectedState, setSelectedState] = useState<string>("");
   const [selectedCity, setSelectedCity] = useState<string>("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [selectedCategory, setSelectedCategory] = useState<string>(preselectedCategory || "");
 
   const handleSubmit = async () => {
     await onSearch(selectedCategory, selectedState, selectedCity);
@@ -41,22 +42,24 @@ export const SearchForm = ({ onSearch, isSearching }: SearchFormProps) => {
   return (
     <div className="bg-white rounded-2xl shadow-xl p-6 space-y-4">
       <div className="grid grid-cols-1 gap-4">
-        <Select
-          value={selectedCategory}
-          onValueChange={setSelectedCategory}
-          disabled={isSearching}
-        >
-          <SelectTrigger className="w-full h-12 rounded-xl border-wedding-primary/20">
-            <SelectValue placeholder="What vendor are you looking for?" />
-          </SelectTrigger>
-          <SelectContent className="max-h-[300px]">
-            {categories.map((category) => (
-              <SelectItem key={category} value={category}>
-                {category}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        {!preselectedCategory && (
+          <Select
+            value={selectedCategory}
+            onValueChange={setSelectedCategory}
+            disabled={isSearching || !!preselectedCategory}
+          >
+            <SelectTrigger className="w-full h-12 rounded-xl border-wedding-primary/20">
+              <SelectValue placeholder="What vendor are you looking for?" />
+            </SelectTrigger>
+            <SelectContent className="max-h-[300px]">
+              {categories.map((category) => (
+                <SelectItem key={category} value={category}>
+                  {category}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
 
         <Select
           value={selectedState}
@@ -100,7 +103,7 @@ export const SearchForm = ({ onSearch, isSearching }: SearchFormProps) => {
       <Button 
         className="w-full h-12 bg-wedding-primary hover:bg-wedding-accent transition-all duration-300 rounded-xl"
         onClick={handleSubmit}
-        disabled={isSearching || !selectedCategory || !selectedState || !selectedCity}
+        disabled={isSearching || (!preselectedCategory && !selectedCategory) || !selectedState || !selectedCity}
       >
         <Search className="mr-2 h-5 w-5" />
         {isSearching ? "Searching..." : "Find Vendors"}

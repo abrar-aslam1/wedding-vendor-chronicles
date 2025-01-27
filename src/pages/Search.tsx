@@ -28,8 +28,8 @@ const Search = () => {
   }, [category, city, state]);
 
   const handleSearch = async (selectedCategory: string, selectedState: string, selectedCity: string) => {
-    // Navigate to the search results page with the selected parameters
-    navigate(`/top-20/${selectedCategory.toLowerCase().replace(/ /g, '-')}/${selectedCity}/${selectedState}`);
+    const categoryToUse = category ? category.replace('top-20/', '').replace(/-/g, ' ') : selectedCategory;
+    navigate(`/top-20/${categoryToUse.toLowerCase().replace(/ /g, '-')}/${selectedCity}/${selectedState}`);
   };
 
   const fetchResults = async (searchCategory: string, searchCity: string, searchState: string) => {
@@ -82,6 +82,9 @@ const Search = () => {
     }
   };
 
+  // Get the clean category name for the preselected value
+  const preselectedCategory = category ? category.replace('top-20/', '').replace(/-/g, ' ') : undefined;
+
   return (
     <div className="min-h-screen bg-background">
       <MainNav />
@@ -91,7 +94,11 @@ const Search = () => {
         {/* Only show search form if we're not displaying specific city/state results */}
         {(!city || !state) && (
           <div className="max-w-2xl mx-auto mb-8">
-            <SearchForm onSearch={handleSearch} isSearching={isSearching} />
+            <SearchForm 
+              onSearch={handleSearch} 
+              isSearching={isSearching} 
+              preselectedCategory={preselectedCategory} 
+            />
           </div>
         )}
         
