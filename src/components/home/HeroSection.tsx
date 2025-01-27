@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Search, Heart, Calendar, Users2 } from "lucide-react";
+import { SearchForm } from "@/components/search/SearchForm";
 
 export const HeroSection = () => {
   return (
@@ -25,6 +26,11 @@ export const HeroSection = () => {
             <br />
             with trusted professionals
           </p>
+
+          {/* Search Form */}
+          <div className="mt-8 max-w-2xl mx-auto">
+            <SearchForm />
+          </div>
 
           {/* Features Grid - Hidden on Mobile */}
           <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-4 mt-12">
