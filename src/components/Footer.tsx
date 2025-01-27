@@ -1,5 +1,6 @@
-import { Heart, Mail, Phone, MapPin } from "lucide-react";
+import { Heart } from "lucide-react";
 import { Link } from "react-router-dom";
+import { categories } from "@/config/categories";
 
 export const Footer = () => {
   return (
@@ -46,35 +47,34 @@ export const Footer = () => {
           </div>
           
           <div>
-            <h3 className="font-semibold text-wedding-text mb-4">Categories</h3>
+            <h3 className="font-semibold text-wedding-text mb-4">Popular Categories</h3>
             <ul className="space-y-2">
-              <li className="text-sm text-wedding-text hover:text-wedding-primary cursor-pointer">
-                Wedding Planners
-              </li>
-              <li className="text-sm text-wedding-text hover:text-wedding-primary cursor-pointer">
-                Photographers
-              </li>
-              <li className="text-sm text-wedding-text hover:text-wedding-primary cursor-pointer">
-                Venues
-              </li>
+              {categories.slice(0, 4).map((category) => (
+                <li key={category.slug}>
+                  <Link 
+                    to={`/search/${category.slug}`}
+                    className="text-sm text-wedding-text hover:text-wedding-primary"
+                  >
+                    {category.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
           
           <div>
-            <h3 className="font-semibold text-wedding-text mb-4">Contact</h3>
+            <h3 className="font-semibold text-wedding-text mb-4">More Categories</h3>
             <ul className="space-y-2">
-              <li className="flex items-center text-sm text-wedding-text">
-                <Mail className="h-4 w-4 mr-2 text-wedding-primary" />
-                contact@mywedding.com
-              </li>
-              <li className="flex items-center text-sm text-wedding-text">
-                <Phone className="h-4 w-4 mr-2 text-wedding-primary" />
-                (555) 123-4567
-              </li>
-              <li className="flex items-center text-sm text-wedding-text">
-                <MapPin className="h-4 w-4 mr-2 text-wedding-primary" />
-                123 Wedding Street
-              </li>
+              {categories.slice(4, 8).map((category) => (
+                <li key={category.slug}>
+                  <Link 
+                    to={`/search/${category.slug}`}
+                    className="text-sm text-wedding-text hover:text-wedding-primary"
+                  >
+                    {category.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
