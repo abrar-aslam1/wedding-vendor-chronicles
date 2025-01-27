@@ -13,7 +13,7 @@ export const HeroSection = () => {
       
       {/* Main Content */}
       <div className="relative z-10 container mx-auto px-4 pt-24 md:pt-32 pb-12 md:pb-24">
-        <div className="max-w-3xl mx-auto text-center space-y-4 md:space-y-6">
+        <div className="max-w-3xl mx-auto text-center space-y-2 md:space-y-6">
           <h1 className="text-4xl md:text-6xl font-bold text-white leading-tight">
             Find Your Perfect
             <br />
@@ -27,7 +27,7 @@ export const HeroSection = () => {
           </p>
 
           {/* Search Bar */}
-          <div className="mt-6 md:mt-8 relative max-w-2xl mx-auto">
+          <div className="mt-4 md:mt-8 relative max-w-2xl mx-auto">
             <div className="bg-white/90 backdrop-blur-sm rounded-full shadow-lg p-2 md:p-3">
               <div className="flex items-center">
                 <Search className="h-5 w-5 text-wedding-primary ml-4" />
