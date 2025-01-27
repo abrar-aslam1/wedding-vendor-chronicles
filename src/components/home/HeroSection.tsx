@@ -49,25 +49,6 @@ export const HeroSection = () => {
               description="From real couples"
             />
           </div>
-
-          {/* Search Bar - Positioned at bottom on mobile */}
-          <div className="fixed md:relative bottom-4 left-4 right-4 md:bottom-auto md:left-auto md:right-auto md:mt-8 max-w-2xl mx-auto">
-            <div className="bg-white/90 backdrop-blur-sm rounded-full shadow-lg p-2 md:p-3">
-              <div className="flex items-center">
-                <Search className="h-5 w-5 text-wedding-primary ml-4" />
-                <input
-                  type="text"
-                  placeholder="Search for vendors..."
-                  className="w-full bg-transparent border-none focus:outline-none px-4 py-2 text-wedding-text placeholder-wedding-text/60"
-                />
-                <Button 
-                  className="rounded-full bg-wedding-primary hover:bg-wedding-accent text-white px-6"
-                >
-                  Search
-                </Button>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 
