@@ -27,15 +27,12 @@ const Search = () => {
   const handleSearch = async (selectedCategory: string, selectedState: string, selectedCity: string) => {
     console.log('Handling search with:', { selectedCategory, selectedState, selectedCity });
     
-    // Always use the current category from URL when on a category page
     const categoryToUse = category 
       ? category.replace('top-20/', '').replace(/-/g, ' ') 
       : selectedCategory;
     
-    // Format the category for the URL
     const formattedCategory = categoryToUse.toLowerCase().replace(/ /g, '-');
     
-    // Navigate to the search results page
     navigate(`/top-20/${formattedCategory}/${selectedCity}/${selectedState}`);
   };
 
@@ -44,14 +41,14 @@ const Search = () => {
     try {
       console.log('Fetching results for:', { searchCategory, searchCity, searchState });
       
-      const query = supabase
+      // First try to get results from the public cache
+      const { data: cachedResults, error } = await supabase
         .from('vendor_cache')
         .select('search_results')
         .eq('category', `${searchCategory} in ${searchCity}, ${searchState}`)
         .eq('city', searchCity)
-        .eq('state', searchState);
-
-      const { data: cachedResults, error } = await query.maybeSingle();
+        .eq('state', searchState)
+        .maybeSingle();
       
       if (error) {
         console.error('Error fetching results:', error);
@@ -87,7 +84,6 @@ const Search = () => {
     }
   };
 
-  // Get the clean category name for the preselected value
   const preselectedCategory = category 
     ? category.replace('top-20/', '').replace(/-/g, ' ') 
     : undefined;
