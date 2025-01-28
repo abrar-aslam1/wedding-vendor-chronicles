@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
@@ -62,6 +63,25 @@ const Auth = () => {
     }
   };
 
+  const handleGoogleSignIn = async () => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`
+        }
+      });
+      
+      if (error) throw error;
+    } catch (error: any) {
+      toast({
+        title: "Error signing in with Google",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-wedding-light flex flex-col items-center justify-center p-4">
       <Button
@@ -79,7 +99,25 @@ const Auth = () => {
           <p className="mt-2 text-sm text-gray-600">Sign in or create an account</p>
         </div>
 
-        <form className="mt-8 space-y-6">
+        <Button
+          onClick={handleGoogleSignIn}
+          variant="outline"
+          className="w-full flex items-center justify-center gap-2"
+        >
+          <img src="/lovable-uploads/9235bfb6-3b99-4583-9d5d-add471a451ec.png" alt="Google" className="w-5 h-5" />
+          Continue with Google
+        </Button>
+
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <Separator className="w-full" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-white px-2 text-muted-foreground">Or continue with email</span>
+          </div>
+        </div>
+
+        <form className="space-y-6">
           <div className="space-y-4">
             <div>
               <Input
