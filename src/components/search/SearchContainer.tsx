@@ -81,24 +81,28 @@ export const SearchContainer = () => {
           console.log('Got fresh results:', freshResults);
           setSearchResults(freshResults as SearchResult[]);
 
-          // Cache the new results
-          const { error: cacheUpdateError } = await supabase
-            .from('vendor_cache')
-            .upsert({
-              category: searchCategory.toLowerCase(),
-              city: searchCity,
-              state: searchState,
-              location_code: locationCode,
-              search_results: freshResults,
-            });
+          try {
+            // Try to update cache, ignore if it fails due to duplicate
+            const { error: cacheUpdateError } = await supabase
+              .from('vendor_cache')
+              .upsert({
+                category: searchCategory.toLowerCase(),
+                city: searchCity,
+                state: searchState,
+                location_code: locationCode,
+                search_results: freshResults,
+              });
 
-          if (cacheUpdateError) {
-            console.error('Cache update error:', cacheUpdateError);
-            toast({
-              title: "Warning",
-              description: "Results were found but couldn't be cached. This won't affect your search.",
-              variant: "default",
-            });
+            if (cacheUpdateError && !cacheUpdateError.message.includes('duplicate key value')) {
+              console.error('Cache update error:', cacheUpdateError);
+              toast({
+                title: "Warning",
+                description: "Results were found but couldn't be cached. This won't affect your search.",
+                variant: "default",
+              });
+            }
+          } catch (cacheError) {
+            console.log('Cache update failed (likely duplicate):', cacheError);
           }
         } else {
           console.log('No results returned from search');

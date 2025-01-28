@@ -15,14 +15,27 @@ export const RatingDisplay = ({ rating, className = "" }: RatingDisplayProps) =>
     );
   }
 
+  // Ensure rating.value is a number and valid
+  const ratingValue = typeof rating.value === 'string' ? 
+    parseFloat(rating.value) : 
+    rating.value;
+
+  if (isNaN(ratingValue)) {
+    return (
+      <div className={`text-sm text-gray-500 ${className}`}>
+        Invalid rating
+      </div>
+    );
+  }
+
   const renderStars = () => {
     const stars = [];
-    const ratingValue = Math.round(rating.value * 2) / 2;
+    const roundedRating = Math.round(ratingValue * 2) / 2;
     
     for (let i = 1; i <= 5; i++) {
-      if (i <= ratingValue) {
+      if (i <= roundedRating) {
         stars.push(<Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />);
-      } else if (i - 0.5 === ratingValue) {
+      } else if (i - 0.5 === roundedRating) {
         stars.push(
           <div key={i} className="relative inline-block">
             <Star className="h-4 w-4 text-yellow-400" />
@@ -41,7 +54,7 @@ export const RatingDisplay = ({ rating, className = "" }: RatingDisplayProps) =>
       <div className="flex items-center gap-1">
         <div className="flex">{renderStars()}</div>
         <span className="ml-1 font-medium text-wedding-primary">
-          {rating.value.toFixed(1)}
+          {ratingValue.toFixed(1)}
         </span>
       </div>
       <div className="text-sm text-gray-500">
