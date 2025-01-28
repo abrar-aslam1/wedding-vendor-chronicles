@@ -15,15 +15,15 @@ export const RatingDisplay = ({ rating, className = "" }: RatingDisplayProps) =>
     );
   }
 
-  // Handle nested value structure
-  const ratingValue = typeof rating.value === 'object' ? 
+  // Handle nested value structure with null checks
+  const ratingValue = rating.value && typeof rating.value === 'object' ? 
     rating.value.value : 
     typeof rating.value === 'string' ? 
       parseFloat(rating.value) : 
       rating.value;
 
-  // Handle nested votes_count
-  const votesCount = typeof rating.value === 'object' ? 
+  // Handle nested votes_count with null checks
+  const votesCount = rating.value && typeof rating.value === 'object' ? 
     rating.value.votes_count : 
     rating.votes_count;
 
