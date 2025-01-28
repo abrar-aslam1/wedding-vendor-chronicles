@@ -41,7 +41,7 @@ export const SearchContainer = () => {
     try {
       console.log('Fetching results for:', { searchCategory, searchCity, searchState });
       
-      // Get location code from the mapping
+      // Validate location data
       const stateData = locationCodes[searchState];
       if (!stateData) {
         throw new Error(`Invalid state: ${searchState}`);
@@ -52,7 +52,9 @@ export const SearchContainer = () => {
         throw new Error(`Invalid city: ${searchCity} for state: ${searchState}`);
       }
 
-      // First try to get results from cache
+      console.log('Using location code:', locationCode);
+
+      // Check cache first
       const { data: cachedResults, error: cacheError } = await supabase
         .from('vendor_cache')
         .select('search_results')
@@ -102,7 +104,15 @@ export const SearchContainer = () => {
 
           if (cacheUpdateError) {
             console.error('Cache update error:', cacheUpdateError);
+            toast({
+              title: "Warning",
+              description: "Results were found but couldn't be cached. This won't affect your search.",
+              variant: "default",
+            });
           }
+        } else {
+          console.log('No results returned from search');
+          setSearchResults([]);
         }
       }
     } catch (error) {
