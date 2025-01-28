@@ -109,7 +109,6 @@ export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
     }
   };
 
-  // Only show "No vendors found" if a search has been performed and there are no results
   if (hasSearched && results.length === 0 && !isSearching) {
     return (
       <div className="mt-4 md:mt-8 text-center text-gray-500">
