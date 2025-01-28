@@ -1,20 +1,31 @@
 import { supabase } from "@/integrations/supabase/client";
 import { SearchResult } from "@/types/search";
-import { locationCodes } from "@/config/locations";
+import { locationCodes } from "@/utils/dataForSeoApi";
 
 const CACHE_DURATION = 14 * 24 * 60 * 60 * 1000; // 14 days in milliseconds
 
 export async function searchVendors(category: string, location: string): Promise<SearchResult[]> {
   try {
-    const [city, state] = location.split(',').map(part => part.trim().toLowerCase());
+    const [city, state] = location.split(',').map(part => part.trim());
     
+    // Get location code from the mapping
+    const stateData = locationCodes[state];
+    if (!stateData) {
+      throw new Error(`Invalid state: ${state}`);
+    }
+    
+    const locationCode = stateData.cities[city];
+    if (!locationCode) {
+      throw new Error(`Invalid city: ${city} for state: ${state}`);
+    }
+
     // Check cache first with more specific query
     const { data: cachedResults, error: cacheError } = await supabase
       .from('vendor_cache')
       .select('search_results, created_at')
       .eq('category', category.toLowerCase())
-      .eq('city', city)
-      .eq('state', state)
+      .eq('city', city.toLowerCase())
+      .eq('state', state.toLowerCase())
       .maybeSingle();
 
     // If we have valid cached results that aren't expired, return them
@@ -42,13 +53,14 @@ export async function searchVendors(category: string, location: string): Promise
       throw new Error('No results returned from search');
     }
 
-    // Cache the new results
+    // Cache the new results with location_code
     const { error: insertError } = await supabase
       .from('vendor_cache')
       .upsert({
         category: category.toLowerCase(),
-        city,
-        state,
+        city: city.toLowerCase(),
+        state: state.toLowerCase(),
+        location_code: locationCode,
         search_results: data,
         created_at: new Date().toISOString(),
         expires_at: new Date(Date.now() + CACHE_DURATION).toISOString()
@@ -62,14 +74,5 @@ export async function searchVendors(category: string, location: string): Promise
   } catch (error) {
     console.error("Search error:", error);
     throw error;
-  }
-}
-
-export async function prefetchCurrentRouteData(category: string, city: string, state: string): Promise<void> {
-  try {
-    const location = `${city}, ${state}`;
-    await searchVendors(category, location);
-  } catch (error) {
-    console.error("Prefetch error:", error);
   }
 }
