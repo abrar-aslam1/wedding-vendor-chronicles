@@ -1,27 +1,38 @@
-export interface LocationCodes {
-  [state: string]: {
-    code: number;
-    cities: {
-      [city: string]: number;
-    };
+export interface LocationCode {
+  code: number;
+  cities: {
+    [key: string]: number;
   };
+}
+
+export interface LocationCodes {
+  [state: string]: LocationCode;
 }
 
 export interface Rating {
   value: number;
-  rating_max: number | null;
+  rating_max?: number | null;
   rating_type?: string;
   votes_count?: number;
 }
 
 export interface SearchResult {
-  id: string;
+  [key: string]: any;
   title: string;
-  description?: string;
+  description: string;
   rating?: Rating;
-  url?: string;
-  address?: string;
   phone?: string;
-  category?: string;
+  address?: string;
+  url?: string;
+  place_id?: string;
+  main_image?: string;
   images?: string[];
+}
+
+export interface DataForSEOResponse {
+  tasks?: Array<{
+    result?: Array<{
+      items?: SearchResult[];
+    }>;
+  }>;
 }
