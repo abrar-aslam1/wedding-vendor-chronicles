@@ -21,6 +21,9 @@ export const HeroSection = () => {
       setIsSearching(true);
       const locationString = `${city}, ${state}`;
       
+      // Navigate to loading page immediately
+      navigate("/loading");
+
       const { data: cachedResults, error: cacheError } = await supabase
         .from('vendor_cache')
         .select('search_results')
@@ -53,6 +56,7 @@ export const HeroSection = () => {
       const results = await searchVendors(category, locationString);
       
       if (!results || results.length === 0) {
+        navigate("/"); // Navigate back to home if no results
         toast({
           title: "No results found",
           description: "Try searching in a different location",
@@ -73,6 +77,7 @@ export const HeroSection = () => {
       });
     } catch (error: any) {
       console.error('Search error:', error);
+      navigate("/"); // Navigate back to home on error
       toast({
         title: "Error searching vendors",
         description: error.message || "An error occurred while searching",
