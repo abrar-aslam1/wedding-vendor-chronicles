@@ -50,7 +50,7 @@ export const VendorCard = ({
         <RatingDisplay rating={vendor.rating} />
         
         <p className="text-sm text-gray-600 mb-4 line-clamp-2 flex-grow">
-          {vendor.description || 'No description available'}
+          {vendor.snippet || 'No description available'}
         </p>
         
         <VendorContactInfo 
