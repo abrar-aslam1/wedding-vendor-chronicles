@@ -7,7 +7,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { SearchResult } from "@/types/search";
 import { SearchHeader } from "./SearchHeader";
 import { LoadingState } from "./LoadingState";
-import { locationCodes } from "@/utils/dataForSeoApi";
 
 export const SearchContainer = () => {
   const { category, city, state } = useParams<{ category: string; city?: string; state?: string }>();
@@ -41,18 +40,9 @@ export const SearchContainer = () => {
     try {
       console.log('Fetching results for:', { searchCategory, searchCity, searchState });
       
-      // Validate location data
-      const stateData = locationCodes[searchState];
-      if (!stateData) {
-        throw new Error(`Invalid state: ${searchState}`);
-      }
-      
-      const locationCode = stateData.cities[searchCity];
-      if (!locationCode) {
-        throw new Error(`Invalid city: ${searchCity} for state: ${searchState}`);
-      }
-
-      console.log('Using location code:', locationCode);
+      // Always use location code 2840
+      const locationCode = 2840;
+      console.log('Using fixed location code:', locationCode);
 
       // Check cache first
       const { data: cachedResults, error: cacheError } = await supabase
