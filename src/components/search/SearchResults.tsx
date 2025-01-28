@@ -17,7 +17,7 @@ export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
   const { toast } = useToast();
 
   useEffect(() => {
-    console.log('Search Results:', results);
+    console.log('Search Results component received:', { results, isSearching });
     fetchFavorites();
     if (isSearching) {
       setHasSearched(true);
@@ -26,11 +26,18 @@ export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
 
   const fetchFavorites = async () => {
     const { data: session } = await supabase.auth.getSession();
-    if (!session?.session?.user) return;
+    console.log('Current session:', session);
 
-    const { data: favoritesData } = await supabase
+    if (!session?.session?.user) {
+      console.log('No authenticated user found');
+      return;
+    }
+
+    const { data: favoritesData, error } = await supabase
       .from('vendor_favorites')
       .select('vendor_id');
+
+    console.log('Favorites fetch response:', { favoritesData, error });
 
     if (favoritesData) {
       setFavorites(new Set(favoritesData.map(f => f.vendor_id)));
@@ -54,22 +61,26 @@ export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
 
     try {
       if (favorites.has(vendor.place_id)) {
-        await supabase
+        const { error: deleteError } = await supabase
           .from('vendor_favorites')
           .delete()
           .eq('vendor_id', vendor.place_id)
           .eq('user_id', session.session.user.id);
 
-        setFavorites(prev => {
-          const next = new Set(prev);
-          next.delete(vendor.place_id!);
-          return next;
-        });
+        console.log('Delete favorite response:', { deleteError });
 
-        toast({
-          title: "Removed from favorites",
-          description: "Vendor has been removed from your favorites",
-        });
+        if (!deleteError) {
+          setFavorites(prev => {
+            const next = new Set(prev);
+            next.delete(vendor.place_id!);
+            return next;
+          });
+
+          toast({
+            title: "Removed from favorites",
+            description: "Vendor has been removed from your favorites",
+          });
+        }
       } else {
         const vendorData = {
           ...vendor,
@@ -79,7 +90,7 @@ export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
           } : null
         };
 
-        await supabase
+        const { error: insertError } = await supabase
           .from('vendor_favorites')
           .insert({
             user_id: session.session.user.id,
@@ -87,12 +98,16 @@ export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
             vendor_data: vendorData,
           });
 
-        setFavorites(prev => new Set([...prev, vendor.place_id!]));
+        console.log('Insert favorite response:', { insertError });
 
-        toast({
-          title: "Added to favorites",
-          description: "Vendor has been added to your favorites",
-        });
+        if (!insertError) {
+          setFavorites(prev => new Set([...prev, vendor.place_id!]));
+
+          toast({
+            title: "Added to favorites",
+            description: "Vendor has been added to your favorites",
+          });
+        }
       }
     } catch (error) {
       console.error('Favorite error:', error);

@@ -54,6 +54,8 @@ export const SearchContainer = () => {
         .eq('location_code', locationCode)
         .maybeSingle();
 
+      console.log('Cache query response:', { cachedResults, cacheError });
+
       if (cacheError) {
         console.error('Cache fetch error:', cacheError);
         throw cacheError;
@@ -71,6 +73,8 @@ export const SearchContainer = () => {
             location: `${searchCity}, ${searchState}`
           }
         });
+
+        console.log('API search response:', { freshResults, searchError });
 
         if (searchError) {
           console.error('Search error:', searchError);
