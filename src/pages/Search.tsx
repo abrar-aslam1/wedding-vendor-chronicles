@@ -7,6 +7,7 @@ import { MainNav } from "@/components/MainNav";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { prefetchCurrentRouteData, searchVendors } from "@/services/dataForSeoService";
+import { Loader2 } from "lucide-react";
 
 const Search = () => {
   const { category, city, state } = useParams<{ category: string; city?: string; state?: string }>();
@@ -87,6 +88,23 @@ const Search = () => {
   const preselectedCategory = category 
     ? category.replace('top-20/', '').replace(/-/g, ' ') 
     : undefined;
+
+  if (isSearching) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-background">
+        <MainNav />
+        <div className="flex-1 flex flex-col items-center justify-center">
+          <Loader2 className="w-12 h-12 animate-spin text-wedding-primary" />
+          <h1 className="text-2xl md:text-3xl font-semibold text-wedding-text mt-4">
+            Finding the Perfect Vendors
+          </h1>
+          <p className="text-gray-600 mt-2">
+            We're searching for the best matches in your area...
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
