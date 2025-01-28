@@ -20,23 +20,6 @@ export const HeroSection = () => {
     try {
       setIsSearching(true);
       
-      const { data: { session }, error: authError } = await supabase.auth.getSession();
-      
-      if (authError) {
-        console.error('Auth error:', authError);
-        throw new Error("Authentication error occurred");
-      }
-
-      if (!session?.user) {
-        console.log('No session or user found');
-        toast({
-          title: "Authentication required",
-          description: "Please sign in to search for vendors",
-          variant: "destructive",
-        });
-        return;
-      }
-
       // Check cache first
       const locationString = `${city}, ${state}`;
       
@@ -85,7 +68,8 @@ export const HeroSection = () => {
         phone: item.phone_number,
         address: item.address,
         url: item.url,
-        place_id: item.place_id
+        place_id: item.place_id,
+        images: item.images || []
       }));
       
       // Format URL segments and navigate

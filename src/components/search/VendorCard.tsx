@@ -22,6 +22,15 @@ export const VendorCard = ({
     <Card 
       className="overflow-hidden hover:shadow-lg transition-all duration-300 h-full bg-white border-gray-100 hover:border-wedding-primary/20"
     >
+      {vendor.images && vendor.images.length > 0 && (
+        <div className="relative h-48 overflow-hidden">
+          <img
+            src={vendor.images[0]}
+            alt={vendor.title}
+            className="w-full h-full object-cover"
+          />
+        </div>
+      )}
       <CardContent className="p-5 md:p-6 flex flex-col h-full">
         <div className="flex justify-between items-start gap-3 mb-4">
           <h3 className="text-lg font-semibold text-wedding-primary hover:text-wedding-accent transition-colors duration-200 line-clamp-2">
