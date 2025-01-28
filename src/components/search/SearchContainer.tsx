@@ -61,8 +61,9 @@ export const SearchContainer = () => {
       }
 
       if (cachedResults?.search_results) {
+        // Explicitly cast the search_results to SearchResult[]
         const results = Array.isArray(cachedResults.search_results) 
-          ? cachedResults.search_results 
+          ? cachedResults.search_results as SearchResult[]
           : [];
         console.log('Setting search results:', results);
         setSearchResults(results);
