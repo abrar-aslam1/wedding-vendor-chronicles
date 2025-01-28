@@ -30,12 +30,12 @@ export const HeroSection = () => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center bg-gradient-to-br from-wedding-light to-wedding-secondary py-20 md:py-0">
+    <section className="relative min-h-screen flex items-center bg-gradient-to-br from-wedding-light to-wedding-secondary py-32 md:py-24">
       <div className="absolute inset-0 bg-white/30 backdrop-blur-[2px]" />
       
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid md:grid-cols-2 gap-8 lg:gap-16 items-center max-w-7xl mx-auto">
-          <div className="space-y-6 md:space-y-8 text-left">
+          <div className="space-y-6 md:space-y-8 text-left mt-16 md:mt-0">
             <div>
               <h2 className="text-wedding-primary font-semibold mb-4 tracking-wider">
                 BEST WEDDING VENDORS AROUND YOU
