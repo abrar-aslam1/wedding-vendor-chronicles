@@ -83,7 +83,7 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen bg-wedding-light flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-b from-wedding-secondary to-wedding-light flex flex-col items-center justify-center p-4">
       <Button
         variant="ghost"
         onClick={() => navigate("/")}
@@ -93,16 +93,16 @@ const Auth = () => {
         Back to Home
       </Button>
 
-      <div className="w-full max-w-md space-y-8 bg-white p-8 rounded-lg shadow-lg">
+      <div className="w-full max-w-md space-y-8 bg-white/80 backdrop-blur-sm p-8 rounded-lg shadow-xl border border-wedding-primary/20">
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-wedding-text">Welcome</h2>
-          <p className="mt-2 text-sm text-gray-600">Sign in or create an account</p>
+          <h2 className="text-3xl font-heading font-bold text-wedding-primary">Welcome Back</h2>
+          <p className="mt-2 text-sm text-gray-600 font-body">Sign in or create an account to continue</p>
         </div>
 
         <Button
           onClick={handleGoogleSignIn}
           variant="outline"
-          className="w-full flex items-center justify-center gap-2"
+          className="w-full flex items-center justify-center gap-2 bg-white hover:bg-gray-50 border-2 border-gray-200"
         >
           <img src="/lovable-uploads/9235bfb6-3b99-4583-9d5d-add471a451ec.png" alt="Google" className="w-5 h-5" />
           Continue with Google
@@ -125,7 +125,7 @@ const Auth = () => {
                 placeholder="Email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full"
+                className="w-full bg-white/90 border-2 border-gray-200 focus:border-wedding-primary"
               />
             </div>
             <div>
@@ -134,7 +134,7 @@ const Auth = () => {
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full"
+                className="w-full bg-white/90 border-2 border-gray-200 focus:border-wedding-primary"
               />
             </div>
           </div>
@@ -143,17 +143,17 @@ const Auth = () => {
             <Button
               onClick={handleLogin}
               disabled={loading}
-              className="w-full bg-wedding-primary hover:bg-wedding-primary/90"
+              className="w-full bg-wedding-primary hover:bg-wedding-primary/90 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200"
             >
-              {loading ? "Loading..." : "Sign In"}
+              {loading ? "Signing in..." : "Sign In"}
             </Button>
             <Button
               onClick={handleSignUp}
               disabled={loading}
               variant="outline"
-              className="w-full border-wedding-primary text-wedding-primary hover:bg-wedding-primary hover:text-white"
+              className="w-full border-2 border-wedding-primary text-wedding-primary hover:bg-wedding-primary hover:text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200"
             >
-              {loading ? "Loading..." : "Sign Up"}
+              {loading ? "Creating account..." : "Create Account"}
             </Button>
           </div>
         </form>
