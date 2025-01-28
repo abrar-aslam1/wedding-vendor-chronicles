@@ -22,10 +22,10 @@ export const VendorCard = ({
     <Card 
       className="overflow-hidden hover:shadow-lg transition-all duration-300 h-full bg-white border-gray-100 hover:border-wedding-primary/20"
     >
-      {vendor.images && vendor.images.length > 0 && (
+      {vendor.main_image && (
         <div className="relative h-48 overflow-hidden">
           <img
-            src={vendor.images[0]}
+            src={vendor.main_image}
             alt={vendor.title}
             className="w-full h-full object-cover"
           />

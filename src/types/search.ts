@@ -25,6 +25,7 @@ export interface SearchResult {
   address?: string;
   url?: string;
   place_id?: string;
+  main_image?: string;
   images?: string[];
 }
 
