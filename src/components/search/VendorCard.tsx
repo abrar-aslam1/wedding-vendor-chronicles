@@ -50,13 +50,13 @@ export const VendorCard = ({
         <RatingDisplay rating={vendor.rating} />
         
         <p className="text-sm text-gray-600 mb-4 line-clamp-2 flex-grow">
-          {vendor.description}
+          {vendor.description || 'No description available'}
         </p>
         
         <VendorContactInfo 
-          phone={vendor.phone}
+          phone={vendor.phone_number || vendor.phone}
           address={vendor.address}
-          url={vendor.url}
+          url={vendor.website || vendor.url}
         />
       </CardContent>
     </Card>

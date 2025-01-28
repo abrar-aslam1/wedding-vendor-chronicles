@@ -18,17 +18,18 @@ export const VendorContactInfo = ({ phone, address, url }: VendorContactInfoProp
           </a>
         </div>
       )}
+      
       {address && (
         <div className="flex items-center text-sm text-gray-500">
           <MapPin className="h-4 w-4 mr-2 flex-shrink-0 text-wedding-primary/70" />
-          <span className="line-clamp-1">{address}</span>
+          <span className="line-clamp-2">{address}</span>
         </div>
       )}
       
       {url && (
         <Button
           variant="outline"
-          className="mt-4 w-full text-sm bg-white hover:bg-wedding-primary hover:text-white border-wedding-primary/20 text-wedding-primary transition-all duration-200"
+          className="w-full text-sm bg-white hover:bg-wedding-primary hover:text-white border-wedding-primary/20 text-wedding-primary transition-all duration-200"
           onClick={() => window.open(url, '_blank')}
         >
           <Globe className="h-4 w-4 mr-2" />
