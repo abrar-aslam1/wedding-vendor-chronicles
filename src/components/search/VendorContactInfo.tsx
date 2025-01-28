@@ -11,7 +11,7 @@ export const VendorContactInfo = ({ phone, address, url }: VendorContactInfoProp
   return (
     <div className="space-y-3 mt-auto pt-4 border-t border-gray-100">
       {phone && (
-        <div className="flex items-center text-sm text-gray-500 hover:text-wedding-primary transition-colors">
+        <div className="flex items-center text-sm text-gray-500">
           <Phone className="h-4 w-4 mr-2 flex-shrink-0 text-wedding-primary/70" />
           <a href={`tel:${phone}`} className="hover:text-wedding-primary transition-colors truncate">
             {phone}

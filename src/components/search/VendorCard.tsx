@@ -18,6 +18,10 @@ export const VendorCard = ({
   isLoading, 
   onToggleFavorite 
 }: VendorCardProps) => {
+  // Extract contact info, checking both possible field names
+  const phoneNumber = vendor.phone_number || vendor.phone;
+  const websiteUrl = vendor.website || vendor.url;
+
   return (
     <Card 
       className="overflow-hidden hover:shadow-lg transition-all duration-300 h-full bg-white border-gray-100 hover:border-wedding-primary/20"
@@ -54,9 +58,9 @@ export const VendorCard = ({
         </p>
         
         <VendorContactInfo 
-          phone={vendor.phone_number || vendor.phone}
+          phone={phoneNumber}
           address={vendor.address}
-          url={vendor.website || vendor.url}
+          url={websiteUrl}
         />
       </CardContent>
     </Card>
