@@ -4,6 +4,7 @@ import { Heart } from "lucide-react";
 import { SearchResult } from "@/types/search";
 import { VendorContactInfo } from "./VendorContactInfo";
 import { RatingDisplay } from "./RatingDisplay";
+import { useNavigate } from "react-router-dom";
 
 interface VendorCardProps {
   vendor: SearchResult;
@@ -18,9 +19,21 @@ export const VendorCard = ({
   isLoading, 
   onToggleFavorite 
 }: VendorCardProps) => {
+  const navigate = useNavigate();
+
+  const handleCardClick = () => {
+    navigate(`/vendor/${encodeURIComponent(vendor.place_id)}`, { state: { vendor } });
+  };
+
+  const handleFavoriteClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent card click when clicking favorite button
+    onToggleFavorite(vendor);
+  };
+
   return (
     <Card 
-      className="overflow-hidden hover:shadow-lg transition-all duration-300 h-full bg-white border-gray-100 hover:border-wedding-primary/20"
+      className="overflow-hidden hover:shadow-lg transition-all duration-300 h-full bg-white border-gray-100 hover:border-wedding-primary/20 cursor-pointer"
+      onClick={handleCardClick}
     >
       {vendor.main_image && (
         <div className="relative h-48 overflow-hidden">
@@ -41,7 +54,7 @@ export const VendorCard = ({
             variant="ghost"
             size="icon"
             className={`${isFavorite ? 'text-red-500' : 'text-gray-400'} hover:text-red-500`}
-            onClick={() => onToggleFavorite(vendor)}
+            onClick={handleFavoriteClick}
             disabled={isLoading}
           >
             <Heart className={`h-5 w-5 ${isFavorite ? 'fill-current' : ''}`} />

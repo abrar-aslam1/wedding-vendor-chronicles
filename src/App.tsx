@@ -8,6 +8,7 @@ import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import Favorites from "./pages/Favorites";
 import NotFound from "./pages/NotFound";
+import VendorDetail from "./pages/VendorDetail";
 import { Toaster } from "./components/ui/toaster";
 import "./App.css";
 
@@ -21,6 +22,7 @@ function App() {
         <Route path="/search/:category" element={<Search />} />
         <Route path="/loading" element={<Loading />} />
         <Route path="/top-20/:category/:city/:state" element={<Search />} />
+        <Route path="/vendor/:vendorId" element={<VendorDetail />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/favorites" element={<Favorites />} />
