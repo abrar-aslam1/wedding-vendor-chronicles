@@ -44,3 +44,12 @@ export async function searchVendors(category: string, location: string): Promise
     throw error;
   }
 }
+
+export async function prefetchCurrentRouteData(category: string, city: string, state: string): Promise<void> {
+  try {
+    const location = `${city}, ${state}`;
+    await searchVendors(category, location);
+  } catch (error) {
+    console.error("Prefetch error:", error);
+  }
+}

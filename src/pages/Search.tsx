@@ -6,7 +6,7 @@ import { SearchForm } from "@/components/search/SearchForm";
 import { MainNav } from "@/components/MainNav";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { prefetchCurrentRouteData } from "@/services/dataForSeoService";
+import { prefetchCurrentRouteData, searchVendors } from "@/services/dataForSeoService";
 
 const Search = () => {
   const { category, city, state } = useParams<{ category: string; city?: string; state?: string }>();
