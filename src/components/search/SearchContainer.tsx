@@ -16,6 +16,7 @@ export const SearchContainer = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log('SearchContainer mounted with params:', { category, city, state });
     if (category && city && state) {
       const cleanCategory = category.replace('top-20/', '').replace(/-/g, ' ');
       console.log('Initiating search for:', { cleanCategory, city, state });
@@ -36,10 +37,10 @@ export const SearchContainer = () => {
   };
 
   const fetchResults = async (searchCategory: string, searchCity: string, searchState: string) => {
+    console.log('Starting fetchResults with:', { searchCategory, searchCity, searchState });
     setIsSearching(true);
+    
     try {
-      console.log('Fetching results for:', { searchCategory, searchCity, searchState });
-      
       // Always use location code 2840
       const locationCode = 2840;
       console.log('Using fixed location code:', locationCode);
@@ -47,7 +48,7 @@ export const SearchContainer = () => {
       // Check cache first
       const { data: cachedResults, error: cacheError } = await supabase
         .from('vendor_cache')
-        .select('search_results')
+        .select('*')  // Changed from 'search_results' to '*' to see full row data
         .eq('category', searchCategory.toLowerCase())
         .eq('city', searchCity)
         .eq('state', searchState)
@@ -64,59 +65,63 @@ export const SearchContainer = () => {
       if (cachedResults?.search_results) {
         console.log('Found cached results:', cachedResults.search_results);
         setSearchResults(cachedResults.search_results as SearchResult[]);
-      } else {
-        console.log('No cache found, fetching from API...');
-        // If no cache, invoke the edge function
-        const { data: freshResults, error: searchError } = await supabase.functions.invoke('search-vendors', {
-          body: { 
-            keyword: searchCategory,
-            location: `${searchCity}, ${searchState}`
-          }
-        });
+        setIsSearching(false);
+        return;
+      }
 
-        console.log('API search response:', { freshResults, searchError });
-
-        if (searchError) {
-          console.error('Search error:', searchError);
-          throw searchError;
+      console.log('No cache found, fetching from API...');
+      
+      // If no cache, invoke the edge function
+      const { data: freshResults, error: searchError } = await supabase.functions.invoke('search-vendors', {
+        body: { 
+          keyword: searchCategory,
+          location: `${searchCity}, ${searchState}`
         }
+      });
 
-        if (freshResults) {
-          console.log('Got fresh results:', freshResults);
-          setSearchResults(freshResults as SearchResult[]);
+      console.log('API search response:', { freshResults, searchError });
 
-          try {
-            // Use upsert with onConflict to handle duplicates
-            const { error: upsertError } = await supabase
-              .from('vendor_cache')
-              .upsert(
-                {
-                  category: searchCategory.toLowerCase(),
-                  city: searchCity,
-                  state: searchState,
-                  location_code: locationCode,
-                  search_results: freshResults,
-                },
-                {
-                  onConflict: 'category,city,state,location_code'
-                }
-              );
+      if (searchError) {
+        console.error('Search error:', searchError);
+        throw searchError;
+      }
 
-            if (upsertError) {
-              console.error('Cache upsert error:', upsertError);
-              toast({
-                title: "Warning",
-                description: "Results were found but couldn't be cached. This won't affect your search.",
-                variant: "default",
-              });
+      if (freshResults && Array.isArray(freshResults)) {
+        console.log('Got fresh results:', freshResults);
+        setSearchResults(freshResults as SearchResult[]);
+
+        // Cache the results
+        const { error: upsertError } = await supabase
+          .from('vendor_cache')
+          .upsert(
+            {
+              category: searchCategory.toLowerCase(),
+              city: searchCity,
+              state: searchState,
+              location_code: locationCode,
+              search_results: freshResults,
+            },
+            {
+              onConflict: 'category,city,state,location_code'
             }
-          } catch (cacheError) {
-            console.error('Cache update failed:', cacheError);
-          }
-        } else {
-          console.log('No results returned from search');
-          setSearchResults([]);
+          );
+
+        if (upsertError) {
+          console.error('Cache upsert error:', upsertError);
+          toast({
+            title: "Warning",
+            description: "Results were found but couldn't be cached. This won't affect your search.",
+            variant: "default",
+          });
         }
+      } else {
+        console.log('No results or invalid results format:', freshResults);
+        setSearchResults([]);
+        toast({
+          title: "No Results",
+          description: "No vendors found for your search criteria.",
+          variant: "default",
+        });
       }
     } catch (error) {
       console.error('Error in fetchResults:', error);
