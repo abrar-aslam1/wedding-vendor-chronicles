@@ -59,6 +59,7 @@ export const SearchContainer = () => {
         .eq('category', searchCategory.toLowerCase())
         .eq('city', searchCity)
         .eq('state', searchState)
+        .eq('location_code', locationCode)
         .maybeSingle();
 
       if (cacheError) {
@@ -88,7 +89,7 @@ export const SearchContainer = () => {
           console.log('Got fresh results:', freshResults);
           setSearchResults(freshResults as SearchResult[]);
 
-          // Cache the new results with location_code
+          // Cache the new results
           const { error: cacheUpdateError } = await supabase
             .from('vendor_cache')
             .upsert({
