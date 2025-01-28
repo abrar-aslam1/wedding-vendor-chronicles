@@ -19,14 +19,19 @@ export async function searchVendors(category: string, location: string): Promise
       throw new Error(`Invalid city: ${city} for state: ${state}`);
     }
 
-    // Check cache first with more specific query
+    // Check cache first
     const { data: cachedResults, error: cacheError } = await supabase
       .from('vendor_cache')
       .select('search_results, created_at')
       .eq('category', category.toLowerCase())
-      .eq('city', city.toLowerCase())
-      .eq('state', state.toLowerCase())
+      .eq('city', city)
+      .eq('state', state)
       .maybeSingle();
+
+    if (cacheError) {
+      console.error('Cache error:', cacheError);
+      throw cacheError;
+    }
 
     // If we have valid cached results that aren't expired, return them
     if (cachedResults?.search_results && Array.isArray(cachedResults.search_results)) {
@@ -37,31 +42,32 @@ export async function searchVendors(category: string, location: string): Promise
       }
     }
 
-    console.log('Calling edge function with:', { category, location });
-    
     // If no cache hit or cache expired, call the edge function
-    const { data, error } = await supabase.functions.invoke('search-vendors', {
-      body: { keyword: category, location },
+    const { data: freshResults, error: searchError } = await supabase.functions.invoke('search-vendors', {
+      body: { 
+        keyword: category,
+        location: `${city}, ${state}`
+      }
     });
 
-    if (error) {
-      console.error('Edge function error:', error);
-      throw new Error(error.message);
+    if (searchError) {
+      console.error('Search error:', searchError);
+      throw searchError;
     }
 
-    if (!data) {
+    if (!freshResults) {
       throw new Error('No results returned from search');
     }
 
-    // Cache the new results with location_code
+    // Cache the new results
     const { error: insertError } = await supabase
       .from('vendor_cache')
       .upsert({
         category: category.toLowerCase(),
-        city: city.toLowerCase(),
-        state: state.toLowerCase(),
+        city: city,
+        state: state,
         location_code: locationCode,
-        search_results: data,
+        search_results: freshResults,
         created_at: new Date().toISOString(),
         expires_at: new Date(Date.now() + CACHE_DURATION).toISOString()
       });
@@ -70,7 +76,7 @@ export async function searchVendors(category: string, location: string): Promise
       console.error('Cache update error:', insertError);
     }
 
-    return data as SearchResult[];
+    return freshResults as SearchResult[];
   } catch (error) {
     console.error("Search error:", error);
     throw error;
@@ -79,8 +85,7 @@ export async function searchVendors(category: string, location: string): Promise
 
 export async function prefetchCurrentRouteData(category: string, city: string, state: string): Promise<void> {
   try {
-    const location = `${city}, ${state}`;
-    await searchVendors(category, location);
+    await searchVendors(category, `${city}, ${state}`);
   } catch (error) {
     console.error("Prefetch error:", error);
   }

@@ -20,7 +20,6 @@ export const SearchContainer = () => {
     if (category && city && state) {
       const cleanCategory = category.replace('top-20/', '').replace(/-/g, ' ');
       fetchResults(cleanCategory, city, state);
-      prefetchCurrentRouteData(cleanCategory, city, state).catch(console.error);
     }
   }, [category, city, state]);
 
@@ -41,35 +40,42 @@ export const SearchContainer = () => {
     try {
       console.log('Fetching results for:', { searchCategory, searchCity, searchState });
       
-      const { data: cachedResults, error } = await supabase
+      // First try to get results from cache
+      const { data: cachedResults, error: cacheError } = await supabase
         .from('vendor_cache')
         .select('search_results')
-        .eq('category', `${searchCategory} in ${searchCity}, ${searchState}`)
+        .eq('category', searchCategory.toLowerCase())
         .eq('city', searchCity)
         .eq('state', searchState)
         .maybeSingle();
-      
-      if (error) {
-        console.error('Error fetching results:', error);
-        toast({
-          title: "Error",
-          description: "Failed to fetch results. Please try again.",
-          variant: "destructive",
-        });
-        setSearchResults([]);
-        return;
+
+      if (cacheError) {
+        console.error('Cache fetch error:', cacheError);
+        throw cacheError;
       }
 
       if (cachedResults?.search_results) {
-        // Explicitly cast the search_results to SearchResult[]
-        const results = Array.isArray(cachedResults.search_results) 
-          ? cachedResults.search_results as SearchResult[]
-          : [];
-        console.log('Setting search results:', results);
-        setSearchResults(results);
+        console.log('Found cached results:', cachedResults.search_results);
+        setSearchResults(cachedResults.search_results as SearchResult[]);
       } else {
-        console.log('No results found in cache');
-        setSearchResults([]);
+        console.log('No cache found, fetching from API...');
+        // If no cache, invoke the edge function
+        const { data: freshResults, error: searchError } = await supabase.functions.invoke('search-vendors', {
+          body: { 
+            keyword: searchCategory,
+            location: `${searchCity}, ${searchState}`
+          }
+        });
+
+        if (searchError) {
+          console.error('Search error:', searchError);
+          throw searchError;
+        }
+
+        if (freshResults) {
+          console.log('Got fresh results:', freshResults);
+          setSearchResults(freshResults as SearchResult[]);
+        }
       }
     } catch (error) {
       console.error('Error in fetchResults:', error);
