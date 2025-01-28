@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search } from "lucide-react";
+import { Search, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { locationCodes } from "@/utils/dataForSeoApi";
 import {
@@ -107,8 +107,17 @@ export const SearchForm = ({ onSearch, isSearching, preselectedCategory }: Searc
         onClick={handleSubmit}
         disabled={isSearching || (!preselectedCategory && !selectedCategory) || !selectedState || !selectedCity}
       >
-        <Search className="mr-2 h-5 w-5" />
-        {isSearching ? "Searching..." : "Find Vendors"}
+        {isSearching ? (
+          <>
+            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+            Searching...
+          </>
+        ) : (
+          <>
+            <Search className="mr-2 h-5 w-5" />
+            Find Vendors
+          </>
+        )}
       </Button>
     </div>
   );
