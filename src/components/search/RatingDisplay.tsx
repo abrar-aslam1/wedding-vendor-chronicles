@@ -15,10 +15,17 @@ export const RatingDisplay = ({ rating, className = "" }: RatingDisplayProps) =>
     );
   }
 
-  // Ensure rating.value is a number and valid
-  const ratingValue = typeof rating.value === 'string' ? 
-    parseFloat(rating.value) : 
-    rating.value;
+  // Handle nested value structure
+  const ratingValue = typeof rating.value === 'object' ? 
+    rating.value.value : 
+    typeof rating.value === 'string' ? 
+      parseFloat(rating.value) : 
+      rating.value;
+
+  // Handle nested votes_count
+  const votesCount = typeof rating.value === 'object' ? 
+    rating.value.votes_count : 
+    rating.votes_count;
 
   if (isNaN(ratingValue)) {
     return (
@@ -58,8 +65,8 @@ export const RatingDisplay = ({ rating, className = "" }: RatingDisplayProps) =>
         </span>
       </div>
       <div className="text-sm text-gray-500">
-        {rating.votes_count 
-          ? <span>{rating.votes_count.toLocaleString()} reviews</span>
+        {votesCount 
+          ? <span>{votesCount.toLocaleString()} reviews</span>
           : 'No reviews yet'}
       </div>
     </div>
