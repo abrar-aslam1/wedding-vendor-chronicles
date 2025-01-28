@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { SearchResult } from "@/types/search";
 import { VendorCard } from "./VendorCard";
+import { SearchSkeleton } from "./SearchSkeleton";
 
 interface SearchResultsProps {
   results: SearchResult[];
@@ -108,6 +109,10 @@ export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
       });
     }
   };
+
+  if (isSearching) {
+    return <SearchSkeleton />;
+  }
 
   if (hasSearched && results.length === 0 && !isSearching) {
     return (
