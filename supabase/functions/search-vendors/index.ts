@@ -1,5 +1,5 @@
-import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+import { locationCodes } from "../_shared/locationCodes.ts"
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -13,12 +13,28 @@ serve(async (req) => {
 
   try {
     const { keyword, location } = await req.json()
+    console.log('Search request:', { keyword, location })
     
     if (!keyword || !location) {
       throw new Error('Missing required parameters')
     }
 
-    const dataForSeoUrl = 'https://api.dataforseo.com/v3/serp/google/maps/live/advanced'
+    const [city, state] = location.split(',').map(part => part.trim())
+    console.log('Parsed location:', { city, state })
+
+    // Get location code from the mapping
+    const stateData = locationCodes[state]
+    if (!stateData) {
+      throw new Error(`Invalid state: ${state}`)
+    }
+    
+    const locationCode = stateData.cities[city]
+    if (!locationCode) {
+      throw new Error(`Invalid city: ${city} for state: ${state}`)
+    }
+
+    console.log('Location code:', locationCode)
+
     const dataForSeoLogin = Deno.env.get('DATAFORSEO_LOGIN')
     const dataForSeoPassword = Deno.env.get('DATAFORSEO_PASSWORD')
 
@@ -29,9 +45,9 @@ serve(async (req) => {
     const auth = btoa(`${dataForSeoLogin}:${dataForSeoPassword}`)
     const searchQuery = `${keyword} in ${location}`
     
-    console.log('Searching for:', searchQuery)
+    console.log('Making DataForSEO request for:', searchQuery)
 
-    const response = await fetch(dataForSeoUrl, {
+    const response = await fetch('https://api.dataforseo.com/v3/serp/google/maps/live/advanced', {
       method: 'POST',
       headers: {
         'Authorization': `Basic ${auth}`,
@@ -40,19 +56,26 @@ serve(async (req) => {
       body: JSON.stringify([{
         keyword: searchQuery,
         language_code: "en",
-        location_code: 2840,
+        location_code: locationCode,
         device: "desktop",
+        os: "windows",
+        depth: 20,
         search_type: "maps",
         local_search: true
       }])
     })
 
     if (!response.ok) {
+      const errorText = await response.text()
+      console.error('DataForSEO API error:', errorText)
       throw new Error(`DataForSEO API error: ${response.statusText}`)
     }
 
     const data = await response.json()
+    console.log('DataForSEO raw response:', JSON.stringify(data))
+
     const items = data?.tasks?.[0]?.result?.[0]?.items || []
+    console.log('Extracted items:', items.length)
     
     // Transform the results to match our SearchResult type
     const searchResults = items.map(item => ({
@@ -71,7 +94,7 @@ serve(async (req) => {
       snippet: item.snippet
     }))
 
-    console.log(`Found ${searchResults.length} results`)
+    console.log(`Transformed ${searchResults.length} results`)
 
     return new Response(
       JSON.stringify(searchResults),
@@ -84,7 +107,7 @@ serve(async (req) => {
       }
     )
   } catch (error) {
-    console.error('Error:', error)
+    console.error('Error in search-vendors function:', error)
     return new Response(
       JSON.stringify({ error: error.message }),
       { 
