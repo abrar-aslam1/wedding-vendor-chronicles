@@ -9,9 +9,10 @@ interface Rating {
 interface RatingDisplayProps {
   rating: Rating;
   showCount?: boolean;
+  className?: string;
 }
 
-export const RatingDisplay: React.FC<RatingDisplayProps> = ({ rating, showCount = true }) => {
+export const RatingDisplay: React.FC<RatingDisplayProps> = ({ rating, showCount = true, className = '' }) => {
   if (!rating || rating.value === null) {
     return null;
   }
@@ -21,7 +22,7 @@ export const RatingDisplay: React.FC<RatingDisplayProps> = ({ rating, showCount 
   const hasHalfStar = ratingValue % 1 >= 0.5;
 
   return (
-    <div className="flex items-center gap-1">
+    <div className={`flex items-center gap-1 ${className}`}>
       <div className="flex">
         {[...Array(fullStars)].map((_, i) => (
           <Star key={`full-${i}`} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
