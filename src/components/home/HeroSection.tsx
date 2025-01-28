@@ -34,17 +34,17 @@ export const HeroSection = () => {
   return (
     <section className="relative py-20 overflow-hidden min-h-[600px] flex items-center" 
       style={{
-        background: "linear-gradient(to right, #ee9ca7, #ffdde1)",
+        background: "linear-gradient(135deg, #f8bbd0, #fce4ec, #fff1f2)",
         backgroundSize: "cover",
         backgroundPosition: "center"
       }}>
       <div 
-        className="absolute inset-0 opacity-20"
+        className="absolute inset-0 opacity-10"
         style={{
-          backgroundImage: `url('/lovable-uploads/fc1186f3-9e97-4be6-910e-9851d1205033.png')`,
-          backgroundSize: "30%",
+          backgroundImage: "url('/lovable-uploads/fc1186f3-9e97-4be6-910e-9851d1205033.png')",
+          backgroundSize: "20%",
           backgroundRepeat: "repeat",
-          filter: "brightness(1.2)"
+          filter: "brightness(1.1)"
         }}
       />
       <div className="container mx-auto px-4 relative z-10">
@@ -57,7 +57,7 @@ export const HeroSection = () => {
           </p>
         </div>
 
-        <div className="max-w-2xl mx-auto backdrop-blur-sm bg-white/80 p-6 rounded-lg shadow-lg">
+        <div className="max-w-2xl mx-auto backdrop-blur-sm bg-white/90 p-6 rounded-lg shadow-lg">
           <SearchForm onSearch={handleSearch} isSearching={isSearching} />
         </div>
       </div>
