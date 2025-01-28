@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { SearchResult } from "@/types/search";
 import { SearchHeader } from "./SearchHeader";
 import { LoadingState } from "./LoadingState";
+import { locationCodes } from "@/utils/dataForSeoApi";
 
 export const SearchContainer = () => {
   const { category, city, state } = useParams<{ category: string; city?: string; state?: string }>();
@@ -40,6 +41,17 @@ export const SearchContainer = () => {
     try {
       console.log('Fetching results for:', { searchCategory, searchCity, searchState });
       
+      // Get location code from the mapping
+      const stateData = locationCodes[searchState];
+      if (!stateData) {
+        throw new Error(`Invalid state: ${searchState}`);
+      }
+      
+      const locationCode = stateData.cities[searchCity];
+      if (!locationCode) {
+        throw new Error(`Invalid city: ${searchCity} for state: ${searchState}`);
+      }
+
       // First try to get results from cache
       const { data: cachedResults, error: cacheError } = await supabase
         .from('vendor_cache')
@@ -76,13 +88,14 @@ export const SearchContainer = () => {
           console.log('Got fresh results:', freshResults);
           setSearchResults(freshResults as SearchResult[]);
 
-          // Cache the new results
+          // Cache the new results with location_code
           const { error: cacheUpdateError } = await supabase
             .from('vendor_cache')
             .upsert({
               category: searchCategory.toLowerCase(),
               city: searchCity,
               state: searchState,
+              location_code: locationCode,
               search_results: freshResults,
             });
 
