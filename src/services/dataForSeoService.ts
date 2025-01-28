@@ -2,17 +2,15 @@ import { supabase } from "@/integrations/supabase/client";
 import { SearchResult } from "@/types/search";
 import { locationCodes } from "@/config/locations";
 
-export const searchVendors = async (category: string, location: string): Promise<SearchResult[]> => {
+export async function searchVendors(category: string, location: string): Promise<SearchResult[]> {
   try {
     // Check cache first
-    const [city, state] = location.split(", ");
-    
     const { data: cachedResults } = await supabase
-      .from("vendor_cache")
-      .select("search_results")
-      .eq("category", category.toLowerCase())
-      .eq("city", city.toLowerCase())
-      .eq("state", state.toLowerCase())
+      .from('vendor_cache')
+      .select('search_results')
+      .eq('category', category.toLowerCase())
+      .eq('city', location.split(',')[0].trim().toLowerCase())
+      .eq('state', location.split(',')[1]?.trim().toLowerCase())
       .maybeSingle();
 
     if (cachedResults?.search_results) {
@@ -20,6 +18,8 @@ export const searchVendors = async (category: string, location: string): Promise
       return cachedResults.search_results as SearchResult[];
     }
 
+    console.log('Calling edge function with:', { category, location });
+    
     // If no cache hit, call the edge function
     const { data, error } = await supabase.functions.invoke('search-vendors', {
       body: {
@@ -37,20 +37,10 @@ export const searchVendors = async (category: string, location: string): Promise
       throw new Error('No results returned from search');
     }
 
+    console.log('Edge function response:', data);
     return data as SearchResult[];
   } catch (error) {
     console.error("Search error:", error);
     throw error;
   }
-};
-
-// This function is used to prefetch data for the current route
-export const prefetchCurrentRouteData = async (category: string, city: string, state: string) => {
-  try {
-    const location = `${city}, ${state}`;
-    return await searchVendors(category, location);
-  } catch (error) {
-    console.error("Prefetch error:", error);
-    return null;
-  }
-};
+}
