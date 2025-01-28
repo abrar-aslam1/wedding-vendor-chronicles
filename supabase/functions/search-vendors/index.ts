@@ -13,7 +13,7 @@ serve(async (req) => {
 
   try {
     const { keyword, location } = await req.json()
-    console.log('Search request:', { keyword, location })
+    console.log('Search request received:', { keyword, location })
     
     if (!keyword || !location) {
       throw new Error('Missing required parameters')
@@ -33,12 +33,13 @@ serve(async (req) => {
       throw new Error(`Invalid city: ${city} for state: ${state}`)
     }
 
-    console.log('Location code:', locationCode)
+    console.log('Using location code:', locationCode)
 
     const dataForSeoLogin = Deno.env.get('DATAFORSEO_LOGIN')
     const dataForSeoPassword = Deno.env.get('DATAFORSEO_PASSWORD')
 
     if (!dataForSeoLogin || !dataForSeoPassword) {
+      console.error('DataForSEO credentials missing')
       throw new Error('DataForSEO credentials not configured')
     }
 
@@ -67,15 +68,20 @@ serve(async (req) => {
 
     if (!response.ok) {
       const errorText = await response.text()
-      console.error('DataForSEO API error:', errorText)
+      console.error('DataForSEO API error response:', errorText)
       throw new Error(`DataForSEO API error: ${response.statusText}`)
     }
 
     const data = await response.json()
     console.log('DataForSEO raw response:', JSON.stringify(data))
 
-    const items = data?.tasks?.[0]?.result?.[0]?.items || []
-    console.log('Extracted items:', items.length)
+    if (!data?.tasks?.[0]?.result?.[0]?.items) {
+      console.error('Unexpected API response structure:', data)
+      throw new Error('Invalid API response structure')
+    }
+
+    const items = data.tasks[0].result[0].items || []
+    console.log('Extracted items count:', items.length)
     
     // Transform the results to match our SearchResult type
     const searchResults = items.map(item => ({
