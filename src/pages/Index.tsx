@@ -8,9 +8,15 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-white">
       <MainNav />
-      <HeroSection />
-      <SearchSection />
-      <CategoriesGrid />
+      <div className="flex flex-col lg:flex-row">
+        <div className="lg:w-1/2">
+          <HeroSection />
+        </div>
+        <div className="lg:w-1/2">
+          <SearchSection />
+          <CategoriesGrid />
+        </div>
+      </div>
       <Footer />
     </div>
   );
