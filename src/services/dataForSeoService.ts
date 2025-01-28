@@ -16,27 +16,28 @@ export const searchVendors = async (category: string, location: string): Promise
       .maybeSingle();
 
     if (cachedResults?.search_results) {
+      console.log('Using cached results');
       return cachedResults.search_results as SearchResult[];
     }
 
-    // If no cache hit, fetch from API
-    const response = await fetch("/api/search-vendors", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    // If no cache hit, call the edge function
+    const { data, error } = await supabase.functions.invoke('search-vendors', {
+      body: {
         keyword: category,
-        location,
-      }),
+        location: location,
+      },
     });
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch search results");
+    if (error) {
+      console.error('Edge function error:', error);
+      throw new Error(error.message);
     }
 
-    const results = await response.json();
-    return results;
+    if (!data) {
+      throw new Error('No results returned from search');
+    }
+
+    return data as SearchResult[];
   } catch (error) {
     console.error("Search error:", error);
     throw error;
