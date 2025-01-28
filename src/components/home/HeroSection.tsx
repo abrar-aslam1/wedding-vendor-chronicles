@@ -48,9 +48,9 @@ export const HeroSection = () => {
       }
 
       // If no cache, perform search
-      const results = await searchVendors(category.toLowerCase(), locationString);
+      const results = await searchVendors(category, locationString);
       
-      if (!results?.tasks?.[0]?.result?.[0]?.items) {
+      if (!results || results.length === 0) {
         toast({
           title: "No results found",
           description: "Try searching in a different location",
@@ -59,19 +59,6 @@ export const HeroSection = () => {
         return;
       }
 
-      const items = results.tasks[0].result[0].items;
-      
-      const processedResults = items.map((item: any) => ({
-        title: item.title,
-        description: item.snippet,
-        rating: item.rating,
-        phone: item.phone_number,
-        address: item.address,
-        url: item.url,
-        place_id: item.place_id,
-        images: item.images || []
-      }));
-      
       // Format URL segments and navigate
       const formattedCategory = formatUrlSegment(category);
       const formattedCity = formatUrlSegment(city);
@@ -80,7 +67,7 @@ export const HeroSection = () => {
       
       toast({
         title: "Search completed",
-        description: `Found ${processedResults.length} vendors in ${locationString}`,
+        description: `Found ${results.length} vendors in ${locationString}`,
       });
     } catch (error: any) {
       console.error('Search error:', error);
