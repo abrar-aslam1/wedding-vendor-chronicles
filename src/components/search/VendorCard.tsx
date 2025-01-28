@@ -49,12 +49,7 @@ export const VendorCard = ({
         </div>
 
         {vendor.rating && vendor.rating.value && (
-          <RatingDisplay rating={{
-            value: vendor.rating.value,
-            rating_max: vendor.rating.rating_max || 5,
-            rating_type: vendor.rating.rating_type || 'Max5',
-            votes_count: vendor.rating.votes_count || 0
-          }} className="mb-2" />
+          <RatingDisplay rating={vendor.rating} className="mb-2" />
         )}
 
         <p className="text-sm text-gray-600 mb-4 line-clamp-2">
