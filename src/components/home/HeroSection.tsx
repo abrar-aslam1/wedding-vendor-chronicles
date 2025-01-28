@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { searchVendors } from "@/services/dataForSeoService";
 import { SearchForm } from "@/components/search/SearchForm";
 
 export const HeroSection = () => {
@@ -32,24 +30,41 @@ export const HeroSection = () => {
   };
 
   return (
-    <section className="relative py-20 overflow-hidden min-h-[600px] flex items-center" 
-      style={{
-        background: "linear-gradient(135deg, #f8bbd0, #fce4ec, #fff1f2)",
-        backgroundSize: "cover",
-        backgroundPosition: "center"
-      }}>
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-3xl mx-auto text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold text-wedding-text mb-6 drop-shadow-sm">
-            Find Your Perfect Wedding Vendors
-          </h1>
-          <p className="text-lg text-gray-700 drop-shadow-sm">
-            Discover and connect with the best wedding professionals in your area
-          </p>
-        </div>
+    <section className="relative min-h-[90vh] flex items-center bg-gradient-to-br from-blue-50 to-pink-50">
+      <div className="absolute inset-0 bg-white/30 backdrop-blur-[2px]" />
+      
+      <div className="container mx-auto px-4 relative z-10 py-20">
+        <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="space-y-8">
+            <div>
+              <h2 className="text-blue-600 font-semibold mb-4">BEST WEDDING VENDORS AROUND YOU</h2>
+              <h1 className="text-4xl md:text-6xl font-bold text-slate-900 leading-tight">
+                It's your 
+                <br />
+                special day.
+                <br />
+                We'll help you
+                <br />
+                make it perfect.
+              </h1>
+            </div>
+            
+            <p className="text-lg text-slate-600 max-w-lg">
+              Dedicated to making wedding planning as simple as possible, 
+              we help each and every couple find the best vendors to create 
+              their dream wedding.
+            </p>
 
-        <div className="max-w-2xl mx-auto backdrop-blur-sm bg-white/90 p-6 rounded-lg shadow-lg">
-          <SearchForm onSearch={handleSearch} isSearching={isSearching} />
+            <div className="max-w-xl backdrop-blur-sm bg-white/80 p-6 rounded-xl shadow-lg">
+              <SearchForm onSearch={handleSearch} isSearching={isSearching} />
+            </div>
+          </div>
+
+          <div className="hidden md:block relative">
+            <div className="absolute top-1/2 right-0 w-72 h-72 bg-blue-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob" />
+            <div className="absolute top-1/2 right-24 w-72 h-72 bg-pink-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000" />
+            <div className="absolute top-1/2 right-12 w-72 h-72 bg-purple-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000" />
+          </div>
         </div>
       </div>
     </section>
