@@ -26,7 +26,7 @@ export const VendorCard = ({
   };
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent card click when clicking favorite button
+    e.stopPropagation();
     onToggleFavorite(vendor);
   };
 
@@ -73,6 +73,9 @@ export const VendorCard = ({
           phone={vendor.phone}
           address={vendor.address}
           url={vendor.url}
+          instagram={vendor.instagram}
+          facebook={vendor.facebook}
+          twitter={vendor.twitter}
         />
       </CardContent>
     </Card>

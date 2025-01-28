@@ -238,6 +238,9 @@ const VendorDetail = () => {
                 phone={vendor.phone}
                 address={vendor.address}
                 url={vendor.url}
+                instagram={vendor.instagram}
+                facebook={vendor.facebook}
+                twitter={vendor.twitter}
               />
             </div>
 
