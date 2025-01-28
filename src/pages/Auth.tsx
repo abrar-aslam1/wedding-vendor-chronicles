@@ -104,7 +104,7 @@ const Auth = () => {
           variant="outline"
           className="w-full flex items-center justify-center gap-2 bg-white hover:bg-gray-50 border-2 border-gray-200"
         >
-          <img src="/lovable-uploads/9235bfb6-3b99-4583-9d5d-add471a451ec.png" alt="Google" className="w-5 h-5" />
+          <img src="/lovable-uploads/3bd6330f-efab-4a54-89b3-56ae29a9e4b5.png" alt="Google" className="w-5 h-5" />
           Continue with Google
         </Button>
 
