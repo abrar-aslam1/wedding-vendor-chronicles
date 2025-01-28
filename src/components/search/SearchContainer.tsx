@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { prefetchCurrentRouteData } from "@/services/dataForSeoService";
 import { SearchResult } from "@/types/search";
 import { SearchHeader } from "./SearchHeader";
 import { LoadingState } from "./LoadingState";
@@ -19,6 +18,7 @@ export const SearchContainer = () => {
   useEffect(() => {
     if (category && city && state) {
       const cleanCategory = category.replace('top-20/', '').replace(/-/g, ' ');
+      console.log('Initiating search for:', { cleanCategory, city, state });
       fetchResults(cleanCategory, city, state);
     }
   }, [category, city, state]);
@@ -75,13 +75,27 @@ export const SearchContainer = () => {
         if (freshResults) {
           console.log('Got fresh results:', freshResults);
           setSearchResults(freshResults as SearchResult[]);
+
+          // Cache the new results
+          const { error: cacheUpdateError } = await supabase
+            .from('vendor_cache')
+            .upsert({
+              category: searchCategory.toLowerCase(),
+              city: searchCity,
+              state: searchState,
+              search_results: freshResults,
+            });
+
+          if (cacheUpdateError) {
+            console.error('Cache update error:', cacheUpdateError);
+          }
         }
       }
     } catch (error) {
       console.error('Error in fetchResults:', error);
       toast({
         title: "Error",
-        description: "Failed to fetch results. Please try again.",
+        description: "Failed to fetch vendors. Please try again.",
         variant: "destructive",
       });
       setSearchResults([]);
