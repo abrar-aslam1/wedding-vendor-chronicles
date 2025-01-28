@@ -10,7 +10,7 @@ export interface LocationCodes {
 }
 
 export interface Rating {
-  value?: number;
+  value: number;
   rating_max?: number | null;
   rating_type?: string;
   votes_count?: number;

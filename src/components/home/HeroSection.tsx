@@ -30,7 +30,7 @@ export const HeroSection = () => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center bg-gradient-to-br from-wedding-light to-wedding-secondary py-32 md:py-24">
+    <section className="relative min-h-screen flex items-center bg-gradient-to-br from-wedding-light to-wedding-secondary py-0 md:py-24">
       <div className="absolute inset-0 bg-white/30 backdrop-blur-[2px]" />
       
       <div className="container mx-auto px-4 relative z-10">
