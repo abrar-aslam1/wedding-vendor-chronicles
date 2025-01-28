@@ -3,12 +3,13 @@ import { Rating } from "@/types/search";
 
 interface RatingDisplayProps {
   rating?: Rating;
+  className?: string;
 }
 
-export const RatingDisplay = ({ rating }: RatingDisplayProps) => {
+export const RatingDisplay = ({ rating, className = "" }: RatingDisplayProps) => {
   if (!rating?.value) {
     return (
-      <div className="text-sm text-gray-500">
+      <div className={`text-sm text-gray-500 ${className}`}>
         No ratings available
       </div>
     );
@@ -36,7 +37,7 @@ export const RatingDisplay = ({ rating }: RatingDisplayProps) => {
   };
 
   return (
-    <div className="flex items-center gap-3 mb-3">
+    <div className={`flex items-center gap-3 ${className}`}>
       <div className="flex items-center gap-1">
         <div className="flex">{renderStars()}</div>
         <span className="ml-1 font-medium text-wedding-primary">
