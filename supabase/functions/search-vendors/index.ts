@@ -1,28 +1,23 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-import { corsHeaders } from '../_shared/cors.ts'
 
-interface SearchVendorsBody {
-  keyword: string
-  location: string
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
 serve(async (req) => {
-  // Handle CORS
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
+    return new Response(null, { headers: corsHeaders })
   }
 
   try {
-    const supabaseClient = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? ''
-    )
+    const { keyword, location } = await req.json()
+    
+    if (!keyword || !location) {
+      throw new Error('Missing required parameters')
+    }
 
-    // Get request body
-    const { keyword, location } = await req.json() as SearchVendorsBody
-
-    // Call DataForSEO API
     const dataForSeoUrl = 'https://api.dataforseo.com/v3/serp/google/organic/live/advanced'
     const dataForSeoLogin = Deno.env.get('DATAFORSEO_LOGIN')
     const dataForSeoPassword = Deno.env.get('DATAFORSEO_PASSWORD')
@@ -32,8 +27,8 @@ serve(async (req) => {
     }
 
     const auth = btoa(`${dataForSeoLogin}:${dataForSeoPassword}`)
-    
     const searchQuery = `${keyword} in ${location}`
+    
     console.log('Searching for:', searchQuery)
 
     const response = await fetch(dataForSeoUrl, {
@@ -45,8 +40,9 @@ serve(async (req) => {
       body: JSON.stringify([{
         keyword: searchQuery,
         language_code: "en",
-        location_code: 2840, // US
-        device: "desktop"
+        location_code: 2840,
+        device: "desktop",
+        limit: 20 // Limit results for faster response
       }])
     })
 
@@ -55,40 +51,26 @@ serve(async (req) => {
     }
 
     const data = await response.json()
-    console.log('DataForSEO response:', JSON.stringify(data))
-
-    // Process and return results
     const results = data.tasks?.[0]?.result?.[0]?.items || []
     
-    // Map results to SearchResult type
-    const searchResults = results.map((item: any) => ({
-      title: item.title,
-      description: item.description,
-      url: item.url,
-      position: item.rank_absolute,
-      domain: item.domain
-    }))
-
-    // Cache results in Supabase
-    const { error: cacheError } = await supabaseClient
-      .from('vendor_cache')
-      .insert({
-        category: keyword.toLowerCase(),
-        city: location.split(',')[0].trim().toLowerCase(),
-        state: location.split(',')[1]?.trim().toLowerCase(),
-        search_results: searchResults
-      })
-
-    if (cacheError) {
-      console.error('Cache error:', cacheError)
-    }
+    // Process results more efficiently
+    const searchResults = results
+      .slice(0, 20) // Ensure we only take top 20 results
+      .map(item => ({
+        title: item.title,
+        description: item.description,
+        url: item.url,
+        position: item.rank_absolute,
+        domain: item.domain
+      }))
 
     return new Response(
       JSON.stringify(searchResults),
       { 
         headers: { 
           ...corsHeaders,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Cache-Control': 'public, max-age=1209600' // 14 days cache
         }
       }
     )
