@@ -32,18 +32,32 @@ export const HeroSection = () => {
   };
 
   return (
-    <section className="relative py-20 overflow-hidden bg-wedding-background">
-      <div className="container mx-auto px-4">
+    <section className="relative py-20 overflow-hidden min-h-[600px] flex items-center" 
+      style={{
+        background: "linear-gradient(to right, #ee9ca7, #ffdde1)",
+        backgroundSize: "cover",
+        backgroundPosition: "center"
+      }}>
+      <div 
+        className="absolute inset-0 opacity-20"
+        style={{
+          backgroundImage: `url('/lovable-uploads/fc1186f3-9e97-4be6-910e-9851d1205033.png')`,
+          backgroundSize: "30%",
+          backgroundRepeat: "repeat",
+          filter: "brightness(1.2)"
+        }}
+      />
+      <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-3xl mx-auto text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold text-wedding-text mb-6">
+          <h1 className="text-4xl md:text-5xl font-bold text-wedding-text mb-6 drop-shadow-sm">
             Find Your Perfect Wedding Vendors
           </h1>
-          <p className="text-lg text-gray-600">
+          <p className="text-lg text-gray-700 drop-shadow-sm">
             Discover and connect with the best wedding professionals in your area
           </p>
         </div>
 
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-2xl mx-auto backdrop-blur-sm bg-white/80 p-6 rounded-lg shadow-lg">
           <SearchForm onSearch={handleSearch} isSearching={isSearching} />
         </div>
       </div>
