@@ -1,9 +1,9 @@
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { MapPin, Star, Globe, Phone, Heart } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Heart } from "lucide-react";
 import { SearchResult } from "@/types/search";
-import { RatingDisplay } from "./RatingDisplay";
 import { VendorContactInfo } from "./VendorContactInfo";
+import { RatingDisplay } from "./RatingDisplay";
 
 interface VendorCardProps {
   vendor: SearchResult;
@@ -18,10 +18,6 @@ export const VendorCard = ({
   isLoading, 
   onToggleFavorite 
 }: VendorCardProps) => {
-  // Extract contact info, checking both possible field names
-  const phoneNumber = vendor.phone_number || vendor.phone;
-  const websiteUrl = vendor.website || vendor.url;
-
   return (
     <Card 
       className="overflow-hidden hover:shadow-lg transition-all duration-300 h-full bg-white border-gray-100 hover:border-wedding-primary/20"
@@ -35,32 +31,35 @@ export const VendorCard = ({
           />
         </div>
       )}
-      <CardContent className="p-5 md:p-6 flex flex-col h-full">
-        <div className="flex justify-between items-start gap-3 mb-4">
-          <h3 className="text-lg font-semibold text-wedding-primary hover:text-wedding-accent transition-colors duration-200 line-clamp-2">
+      
+      <CardContent className="p-4 flex flex-col h-[calc(100%-12rem)]">
+        <div className="flex justify-between items-start mb-2">
+          <h3 className="text-lg font-semibold text-wedding-text line-clamp-2">
             {vendor.title}
           </h3>
-          <button
+          <Button
+            variant="ghost"
+            size="icon"
+            className={`${isFavorite ? 'text-red-500' : 'text-gray-400'} hover:text-red-500`}
             onClick={() => onToggleFavorite(vendor)}
             disabled={isLoading}
-            className="text-wedding-primary hover:scale-110 transition-transform disabled:opacity-50 p-1"
           >
-            <Heart 
-              className={`h-5 w-5 ${isFavorite ? 'fill-wedding-primary' : ''}`}
-            />
-          </button>
+            <Heart className={`h-5 w-5 ${isFavorite ? 'fill-current' : ''}`} />
+          </Button>
         </div>
-        
-        <RatingDisplay rating={vendor.rating} />
-        
-        <p className="text-sm text-gray-600 mb-4 line-clamp-2 flex-grow">
-          {vendor.snippet || 'No description available'}
+
+        {vendor.rating && (
+          <RatingDisplay rating={vendor.rating} className="mb-2" />
+        )}
+
+        <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+          {vendor.snippet || "No description available"}
         </p>
         
         <VendorContactInfo 
-          phone={phoneNumber}
+          phone={vendor.phone}
           address={vendor.address}
-          url={websiteUrl}
+          url={vendor.url}
         />
       </CardContent>
     </Card>

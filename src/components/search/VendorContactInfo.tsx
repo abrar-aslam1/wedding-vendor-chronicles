@@ -1,5 +1,5 @@
+import { Phone, MapPin, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { MapPin, Globe, Phone } from "lucide-react";
 
 interface VendorContactInfoProps {
   phone?: string;
@@ -20,21 +20,23 @@ export const VendorContactInfo = ({ phone, address, url }: VendorContactInfoProp
       )}
       
       {address && (
-        <div className="flex items-center text-sm text-gray-500">
-          <MapPin className="h-4 w-4 mr-2 flex-shrink-0 text-wedding-primary/70" />
+        <div className="flex items-start text-sm text-gray-500">
+          <MapPin className="h-4 w-4 mr-2 flex-shrink-0 mt-1 text-wedding-primary/70" />
           <span className="line-clamp-2">{address}</span>
         </div>
       )}
       
       {url && (
-        <Button
-          variant="outline"
-          className="w-full text-sm bg-white hover:bg-wedding-primary hover:text-white border-wedding-primary/20 text-wedding-primary transition-all duration-200"
-          onClick={() => window.open(url, '_blank')}
-        >
-          <Globe className="h-4 w-4 mr-2" />
-          Visit Website
-        </Button>
+        <div className="flex items-center">
+          <Globe className="h-4 w-4 mr-2 flex-shrink-0 text-wedding-primary/70" />
+          <Button
+            variant="link"
+            className="h-auto p-0 text-sm text-wedding-primary hover:text-wedding-accent truncate"
+            onClick={() => window.open(url, '_blank')}
+          >
+            Visit Website
+          </Button>
+        </div>
       )}
     </div>
   );
