@@ -1,18 +1,27 @@
-export interface SearchResult {
-  id: string;
-  title: string;
-  place_id: string;
-  main_image?: string;
-  snippet?: string;
-  rating?: Rating;
-  phone?: string;
-  address?: string;
-  url?: string;
+export interface LocationCodes {
+  [state: string]: {
+    code: number;
+    cities: {
+      [city: string]: number;
+    };
+  };
 }
 
 export interface Rating {
   value: number;
-  votes_count: number;
-  rating_type: string;
-  rating_max?: number;
+  rating_max: number | null;
+  rating_type?: string;
+  votes_count?: number;
+}
+
+export interface SearchResult {
+  id: string;
+  title: string;
+  description?: string;
+  rating?: Rating;
+  url?: string;
+  address?: string;
+  phone?: string;
+  category?: string;
+  images?: string[];
 }

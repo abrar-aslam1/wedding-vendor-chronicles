@@ -10,10 +10,13 @@ export const HeroSection = () => {
 
   const handleSearch = async (category: string, state: string, city: string) => {
     try {
+      console.log('SearchForm submitting:', { categoryToUse: category, selectedState: state, selectedCity: city });
       setIsSearching(true);
       const locationString = `${city}, ${state}`;
+      
       const formattedCategory = category.toLowerCase().replace(/ /g, '-');
       navigate(`/top-20/${formattedCategory}/${city}/${state}`);
+      
     } catch (error: any) {
       console.error('Search error:', error);
       toast({
@@ -27,37 +30,40 @@ export const HeroSection = () => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center bg-gradient-to-b from-white to-wedding-light">
-      <div className="container mx-auto px-4 relative z-10">
+    <section className="relative min-h-screen flex items-center">
+      {/* Background Image with Overlay */}
+      <div className="absolute inset-0 z-0">
+        <img 
+          src="/lovable-uploads/ee8ae089-8393-414d-bcf0-b3b2f4098b0c.png" 
+          alt="Wedding Background" 
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black/40" />
+      </div>
+      
+      <div className="container mx-auto px-4 relative z-10 pt-20 md:pt-0">
         <div className="max-w-4xl mx-auto text-center space-y-8">
-          <h1 className="text-4xl md:text-6xl font-bold text-wedding-text leading-tight">
+          <h1 className="text-4xl md:text-6xl font-bold text-white leading-tight">
             Not sure which vendor to choose?
             <br />
             Perfect.
           </h1>
           
-          <p className="text-xl text-wedding-text/80 max-w-2xl mx-auto">
+          <p className="text-xl text-white/90 max-w-2xl mx-auto">
             We'll help you find the best wedding vendors in your area
           </p>
 
-          <div className="bg-white rounded-2xl shadow-xl p-6 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl p-4 md:p-6 mt-8 backdrop-blur-sm bg-white/95">
             <SearchForm onSearch={handleSearch} isSearching={isSearching} />
           </div>
 
           <button 
             onClick={() => navigate("/search/all")}
-            className="inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-white bg-wedding-primary rounded-full hover:bg-wedding-accent transition-colors duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all"
+            className="inline-flex items-center justify-center px-6 py-3 mt-4 text-lg font-medium text-wedding-primary bg-white rounded-full hover:bg-wedding-primary hover:text-white transition-colors duration-300"
           >
             I'm Flexible
           </button>
         </div>
-      </div>
-
-      {/* Decorative elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-24 -left-24 w-96 h-96 bg-wedding-secondary rounded-full mix-blend-multiply filter blur-xl opacity-50" />
-        <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-wedding-primary rounded-full mix-blend-multiply filter blur-xl opacity-50" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gradient-to-b from-transparent to-white/50" />
       </div>
     </section>
   );
