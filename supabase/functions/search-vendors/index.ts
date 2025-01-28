@@ -18,7 +18,7 @@ serve(async (req) => {
       throw new Error('Missing required parameters')
     }
 
-    const dataForSeoUrl = 'https://api.dataforseo.com/v3/serp/google/organic/live/advanced'
+    const dataForSeoUrl = 'https://api.dataforseo.com/v3/serp/google/maps/live/advanced'
     const dataForSeoLogin = Deno.env.get('DATAFORSEO_LOGIN')
     const dataForSeoPassword = Deno.env.get('DATAFORSEO_PASSWORD')
 
@@ -42,7 +42,8 @@ serve(async (req) => {
         language_code: "en",
         location_code: 2840,
         device: "desktop",
-        limit: 20 // Limit results for faster response
+        search_type: "maps",
+        local_search: true
       }])
     })
 
@@ -51,18 +52,26 @@ serve(async (req) => {
     }
 
     const data = await response.json()
-    const results = data.tasks?.[0]?.result?.[0]?.items || []
+    const items = data?.tasks?.[0]?.result?.[0]?.items || []
     
-    // Process results more efficiently
-    const searchResults = results
-      .slice(0, 20) // Ensure we only take top 20 results
-      .map(item => ({
-        title: item.title,
-        description: item.description,
-        url: item.url,
-        position: item.rank_absolute,
-        domain: item.domain
-      }))
+    // Transform the results to match our SearchResult type
+    const searchResults = items.map(item => ({
+      title: item.title || '',
+      description: item.snippet || '',
+      rating: item.rating ? {
+        value: item.rating,
+        votes_count: item.rating_votes_count
+      } : undefined,
+      phone: item.phone,
+      address: item.address,
+      url: item.website,
+      place_id: item.place_id,
+      main_image: item.main_image,
+      images: item.images,
+      snippet: item.snippet
+    }))
+
+    console.log(`Found ${searchResults.length} results`)
 
     return new Response(
       JSON.stringify(searchResults),
