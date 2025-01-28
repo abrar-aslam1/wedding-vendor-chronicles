@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Search, Heart, Calendar, Users2 } from "lucide-react";
@@ -11,6 +11,21 @@ import { toast } from "@/components/ui/use-toast";
 export const HeroSection = () => {
   const navigate = useNavigate();
   const [isSearching, setIsSearching] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    // Check authentication status when component mounts
+    checkAuth();
+    // Subscribe to auth changes
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+      setIsAuthenticated(!!session);
+    });
+  }, []);
+
+  const checkAuth = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    setIsAuthenticated(!!session);
+  };
 
   const formatUrlSegment = (text: string) => {
     return text.toLowerCase().replace(/\s+&?\s+/g, "_");
@@ -20,10 +35,20 @@ export const HeroSection = () => {
     try {
       setIsSearching(true);
       
-      // Check cache first
+      // Check if user is authenticated before accessing vendor_cache
+      if (!isAuthenticated) {
+        toast({
+          title: "Authentication required",
+          description: "Please sign in to search for vendors",
+          variant: "destructive",
+        });
+        navigate('/auth');
+        return;
+      }
+      
       const locationString = `${city}, ${state}`;
       
-      const { data: cachedResults } = await supabase
+      const { data: cachedResults, error: cacheError } = await supabase
         .from('vendor_cache')
         .select('search_results')
         .eq('category', category.toLowerCase())
@@ -31,10 +56,14 @@ export const HeroSection = () => {
         .eq('state', state.toLowerCase())
         .maybeSingle();
 
+      if (cacheError) {
+        console.error('Cache error:', cacheError);
+        throw new Error('Failed to check cache');
+      }
+
       if (cachedResults?.search_results && Array.isArray(cachedResults.search_results)) {
         console.log('Using cached results');
         
-        // Format URL segments and navigate
         const formattedCategory = formatUrlSegment(category);
         const formattedCity = formatUrlSegment(city);
         const formattedState = formatUrlSegment(state);
