@@ -38,15 +38,6 @@ export const HeroSection = () => {
         backgroundSize: "cover",
         backgroundPosition: "center"
       }}>
-      <div 
-        className="absolute inset-0 opacity-10"
-        style={{
-          backgroundImage: "url('/lovable-uploads/fc1186f3-9e97-4be6-910e-9851d1205033.png')",
-          backgroundSize: "20%",
-          backgroundRepeat: "repeat",
-          filter: "brightness(1.1)"
-        }}
-      />
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-3xl mx-auto text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold text-wedding-text mb-6 drop-shadow-sm">
