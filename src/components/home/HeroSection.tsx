@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Search, Heart, Calendar, Users2 } from "lucide-react";
@@ -11,21 +11,6 @@ import { toast } from "@/components/ui/use-toast";
 export const HeroSection = () => {
   const navigate = useNavigate();
   const [isSearching, setIsSearching] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    // Check authentication status when component mounts
-    checkAuth();
-    // Subscribe to auth changes
-    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
-      setIsAuthenticated(!!session);
-    });
-  }, []);
-
-  const checkAuth = async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    setIsAuthenticated(!!session);
-  };
 
   const formatUrlSegment = (text: string) => {
     return text.toLowerCase().replace(/\s+&?\s+/g, "_");
@@ -34,18 +19,6 @@ export const HeroSection = () => {
   const handleSearch = async (category: string, state: string, city: string) => {
     try {
       setIsSearching(true);
-      
-      // Check if user is authenticated before accessing vendor_cache
-      if (!isAuthenticated) {
-        toast({
-          title: "Authentication required",
-          description: "Please sign in to search for vendors",
-          variant: "destructive",
-        });
-        navigate('/auth');
-        return;
-      }
-      
       const locationString = `${city}, ${state}`;
       
       const { data: cachedResults, error: cacheError } = await supabase
