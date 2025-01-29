@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, Heart, Clock, DollarSign, MapPin, Camera, Users } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { VendorCard } from "@/components/search/VendorCard";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage } from "@/components/ui/breadcrumb";
 
 const VendorDetail = () => {
   const location = useLocation();
@@ -152,6 +153,22 @@ const VendorDetail = () => {
     <div className="min-h-screen bg-wedding-light">
       <MainNav />
       <div className="container mx-auto px-4 py-8 mt-16">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/">Home</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbItem>
+              <BreadcrumbLink href={`/top-20/${vendor.category?.toLowerCase().replace(/ /g, '-')}`}>
+                {vendor.category}
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbItem>
+              <BreadcrumbPage>{vendor.title}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+
         <Button 
           variant="ghost" 
           onClick={() => navigate(-1)}

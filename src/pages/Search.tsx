@@ -1,10 +1,35 @@
 import { MainNav } from "@/components/MainNav";
 import { SearchContainer } from "@/components/search/SearchContainer";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage } from "@/components/ui/breadcrumb";
+import { useParams } from "react-router-dom";
 
 const Search = () => {
+  const { category, city, state } = useParams<{ category: string; city?: string; state?: string }>();
+  
+  const cleanCategory = category ? category.replace('top-20/', '').replace(/-/g, ' ') : '';
+  
   return (
     <div className="min-h-screen bg-background">
       <MainNav />
+      <div className="container mx-auto px-4 pt-20">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/">Home</BreadcrumbLink>
+            </BreadcrumbItem>
+            {category && (
+              <BreadcrumbItem>
+                <BreadcrumbPage>
+                  {cleanCategory.split(' ').map(word => 
+                    word.charAt(0).toUpperCase() + word.slice(1)
+                  ).join(' ')}
+                  {city && state ? ` in ${city}, ${state}` : ''}
+                </BreadcrumbPage>
+              </BreadcrumbItem>
+            )}
+          </BreadcrumbList>
+        </Breadcrumb>
+      </div>
       <SearchContainer />
     </div>
   );
