@@ -27,12 +27,8 @@ const generateSitemap = () => {
     // Add location-specific category pages for major cities
     Object.entries(locationCodes).forEach(([state, stateData]) => {
       Object.keys(stateData.cities).forEach((city) => {
-        // Format city and state to match route pattern in App.tsx
-        const formattedCity = city.toLowerCase().replace(/\s+/g, '-');
-        const formattedState = state.toLowerCase().replace(/\s+/g, '-');
-        
         urls.push({
-          url: `/top-20/${category.slug}/${formattedCity}/${formattedState}`,
+          url: `/top-20/${category.slug}/${city.toLowerCase().replace(/ /g, '-')}/${state.toLowerCase().replace(/ /g, '-')}`,
           priority: '0.7',
           changefreq: 'daily'
         });
