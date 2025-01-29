@@ -17,7 +17,7 @@ function generateSitemap() {
     { url: '/terms', priority: '0.5', changefreq: 'monthly' },
   ];
 
-  // Add category pages
+  // Add category-only pages
   categories.forEach(category => {
     urls.push({
       url: `/search/${category.slug}`,
@@ -27,10 +27,10 @@ function generateSitemap() {
 
     // Add location-specific category pages
     Object.entries(locationCodes).forEach(([state, stateData]) => {
-      Object.entries(stateData.cities).forEach(([city]) => {
+      Object.keys(stateData.cities).forEach((city) => {
         urls.push({
-          url: `/search/${category.slug}/${city.toLowerCase()}-${state.toLowerCase()}`,
-          priority: '0.8',
+          url: `/search/top-20/${category.slug}/${city.toLowerCase()}-${state.toLowerCase()}`,
+          priority: '0.7',
           changefreq: 'daily'
         });
       });
@@ -50,8 +50,11 @@ ${urls.map(({ url, priority, changefreq }) => `
 
   fs.writeFileSync(
     path.join(process.cwd(), 'public', 'sitemap.xml'),
-    sitemap
+    sitemap.trim()
   );
+
+  const totalUrls = urls.length;
+  console.log(`Sitemap generated successfully with ${totalUrls} URLs!`);
 }
 
 export default generateSitemap;
