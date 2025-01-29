@@ -31,9 +31,11 @@ function generateSitemap() {
     // Add location-specific category pages for major cities
     Object.entries(locationCodes).forEach(([state, stateData]) => {
       Object.keys(stateData.cities).forEach((city) => {
-        // Top 20 pages for each category in each city
+        // Match the exact route pattern from App.tsx: /top-20/:category/:city/:state
+        const formattedCity = city.toLowerCase().replace(/ /g, '-');
+        const formattedState = state.toLowerCase().replace(/ /g, '-');
         urls.push({
-          url: `/top-20/${category.slug}/${city.toLowerCase().replace(/ /g, '-')}/${state.toLowerCase().replace(/ /g, '-')}`,
+          url: `/top-20/${category.slug}/${formattedCity}/${formattedState}`,
           priority: '0.7',
           changefreq: 'daily'
         });
@@ -43,13 +45,12 @@ function generateSitemap() {
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls.map(({ url, priority, changefreq }) => `
-  <url>
+${urls.map(({ url, priority, changefreq }) => `  <url>
     <loc>${BASE_URL}${url}</loc>
     <lastmod>${today}</lastmod>
     <changefreq>${changefreq}</changefreq>
     <priority>${priority}</priority>
-  </url>`).join('')}
+  </url>`).join('\n')}
 </urlset>`;
 
   fs.writeFileSync(
@@ -57,8 +58,7 @@ ${urls.map(({ url, priority, changefreq }) => `
     sitemap.trim()
   );
 
-  const totalUrls = urls.length;
-  console.log(`Sitemap generated successfully with ${totalUrls} URLs!`);
+  console.log('Sitemap generation completed! The sitemap is now available at /sitemap.xml');
 }
 
 export default generateSitemap;
