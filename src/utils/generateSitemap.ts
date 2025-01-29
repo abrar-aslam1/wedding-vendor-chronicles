@@ -12,24 +12,28 @@ function generateSitemap() {
     // Static pages
     { url: '/', priority: '1.0', changefreq: 'weekly' },
     { url: '/auth', priority: '0.8', changefreq: 'monthly' },
+    { url: '/auth/callback', priority: '0.5', changefreq: 'monthly' },
     { url: '/search', priority: '0.9', changefreq: 'daily' },
     { url: '/privacy', priority: '0.5', changefreq: 'monthly' },
     { url: '/terms', priority: '0.5', changefreq: 'monthly' },
+    { url: '/favorites', priority: '0.7', changefreq: 'daily' },
   ];
 
-  // Add category-only pages
+  // Add category pages
   categories.forEach(category => {
+    // Basic category search page
     urls.push({
       url: `/search/${category.slug}`,
       priority: '0.8',
       changefreq: 'daily'
     });
 
-    // Add location-specific category pages
+    // Add location-specific category pages for major cities
     Object.entries(locationCodes).forEach(([state, stateData]) => {
       Object.keys(stateData.cities).forEach((city) => {
+        // Top 20 pages for each category in each city
         urls.push({
-          url: `/search/top-20/${category.slug}/${city.toLowerCase()}-${state.toLowerCase()}`,
+          url: `/top-20/${category.slug}/${city.toLowerCase().replace(/ /g, '-')}/${state.toLowerCase().replace(/ /g, '-')}`,
           priority: '0.7',
           changefreq: 'daily'
         });

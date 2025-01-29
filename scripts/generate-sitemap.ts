@@ -1,4 +1,4 @@
 import generateSitemap from '../src/utils/generateSitemap';
 
 generateSitemap();
-console.log('Sitemap generation completed! Run npm run generate-sitemap to update the sitemap.');
+console.log('Sitemap generation completed! The sitemap is now available at /sitemap.xml');
