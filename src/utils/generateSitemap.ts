@@ -12,16 +12,14 @@ function generateSitemap() {
     // Static pages
     { url: '/', priority: '1.0', changefreq: 'weekly' },
     { url: '/auth', priority: '0.8', changefreq: 'monthly' },
-    { url: '/auth/callback', priority: '0.5', changefreq: 'monthly' },
     { url: '/search', priority: '0.9', changefreq: 'daily' },
     { url: '/privacy', priority: '0.5', changefreq: 'monthly' },
     { url: '/terms', priority: '0.5', changefreq: 'monthly' },
     { url: '/favorites', priority: '0.7', changefreq: 'daily' },
   ];
 
-  // Add category pages
+  // Add category search pages
   categories.forEach(category => {
-    // Basic category search page
     urls.push({
       url: `/search/${category.slug}`,
       priority: '0.8',
@@ -32,10 +30,9 @@ function generateSitemap() {
     Object.entries(locationCodes).forEach(([state, stateData]) => {
       Object.keys(stateData.cities).forEach((city) => {
         // Match the exact route pattern from App.tsx: /top-20/:category/:city/:state
-        const formattedCity = city.toLowerCase().replace(/ /g, '-');
-        const formattedState = state.toLowerCase().replace(/ /g, '-');
+        // Keep original case for city and state as they appear in the URL
         urls.push({
-          url: `/top-20/${category.slug}/${formattedCity}/${formattedState}`,
+          url: `/top-20/${category.slug}/${city}/${state}`,
           priority: '0.7',
           changefreq: 'daily'
         });
