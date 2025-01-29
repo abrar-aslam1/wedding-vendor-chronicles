@@ -2,7 +2,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { SearchResult } from "@/types/search";
 import { locationCodes } from "@/utils/dataForSeoApi";
 
-const CACHE_DURATION = 14 * 24 * 60 * 60 * 1000; // 14 days in milliseconds
+const CACHE_DURATION = 30 * 24 * 60 * 60 * 1000; // 30 days in milliseconds
 
 export async function searchVendors(category: string, location: string): Promise<SearchResult[]> {
   try {
