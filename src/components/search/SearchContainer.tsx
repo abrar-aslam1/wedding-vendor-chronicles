@@ -46,16 +46,29 @@ export const SearchContainer = () => {
       console.log('Using fixed location code:', locationCode);
 
       // Check cache first
+      console.log('Checking cache for:', {
+        category: searchCategory.toLowerCase(),
+        city: searchCity,
+        state: searchState,
+        locationCode
+      });
+
       const { data: cachedResults, error: cacheError } = await supabase
         .from('vendor_cache')
-        .select('*')  // Changed from 'search_results' to '*' to see full row data
+        .select('*')
         .eq('category', searchCategory.toLowerCase())
         .eq('city', searchCity)
         .eq('state', searchState)
         .eq('location_code', locationCode)
         .maybeSingle();
 
-      console.log('Cache query response:', { cachedResults, cacheError });
+      console.log('Cache query response:', { 
+        cachedResults, 
+        cacheError,
+        cacheHit: !!cachedResults?.search_results,
+        cacheTimestamp: cachedResults?.created_at,
+        cacheExpiry: cachedResults?.expires_at
+      });
 
       if (cacheError) {
         console.error('Cache fetch error:', cacheError);
@@ -63,7 +76,7 @@ export const SearchContainer = () => {
       }
 
       if (cachedResults?.search_results) {
-        console.log('Found cached results:', cachedResults.search_results);
+        console.log('Using cached results from:', new Date(cachedResults.created_at).toLocaleString());
         setSearchResults(cachedResults.search_results as SearchResult[]);
         setIsSearching(false);
         return;
@@ -79,7 +92,10 @@ export const SearchContainer = () => {
         }
       });
 
-      console.log('API search response:', { freshResults, searchError });
+      console.log('API search response:', { 
+        resultsCount: freshResults?.length,
+        searchError
+      });
 
       if (searchError) {
         console.error('Search error:', searchError);
@@ -87,7 +103,7 @@ export const SearchContainer = () => {
       }
 
       if (freshResults && Array.isArray(freshResults)) {
-        console.log('Got fresh results:', freshResults);
+        console.log('Caching fresh results...');
         setSearchResults(freshResults as SearchResult[]);
 
         // Cache the results
@@ -113,6 +129,8 @@ export const SearchContainer = () => {
             description: "Results were found but couldn't be cached. This won't affect your search.",
             variant: "default",
           });
+        } else {
+          console.log('Successfully cached results');
         }
       } else {
         console.log('No results or invalid results format:', freshResults);
