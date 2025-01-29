@@ -11,7 +11,7 @@ const generateSitemap = () => {
     // Static Pages
     { url: '/', priority: '1.0', changefreq: 'weekly' },
     { url: '/auth', priority: '0.8', changefreq: 'monthly' },
-    { url: '/search', priority: '0.9', changefreq: 'daily' },
+    { url: '/favorites', priority: '0.7', changefreq: 'daily' },
     { url: '/privacy', priority: '0.5', changefreq: 'monthly' },
     { url: '/terms', priority: '0.5', changefreq: 'monthly' },
   ];
@@ -27,8 +27,12 @@ const generateSitemap = () => {
     // Add location-specific category pages for major cities
     Object.entries(locationCodes).forEach(([state, stateData]) => {
       Object.keys(stateData.cities).forEach((city) => {
+        // Format city and state to match route pattern in App.tsx
+        const formattedCity = city.toLowerCase().replace(/\s+/g, '-');
+        const formattedState = state.toLowerCase().replace(/\s+/g, '-');
+        
         urls.push({
-          url: `/top-20/${category.slug}/${city.toLowerCase().replace(/ /g, '-')}/${state.toLowerCase().replace(/ /g, '-')}`,
+          url: `/top-20/${category.slug}/${formattedCity}/${formattedState}`,
           priority: '0.7',
           changefreq: 'daily'
         });
