@@ -1,42 +1,57 @@
 export const categories = [
   {
-    name: "Wedding Photographers",
-    slug: "wedding-photographers",
-    description: "Professional photographers specializing in wedding photography"
-  },
-  {
     name: "Wedding Planners",
     slug: "wedding-planners",
-    description: "Expert wedding planners and coordinators"
+    description: "Professional planners to orchestrate your perfect day"
   },
   {
-    name: "Wedding Venues",
-    slug: "wedding-venues",
-    description: "Beautiful venues for your special day"
+    name: "Photographers",
+    slug: "photographers",
+    description: "Capture every magical moment"
   },
   {
-    name: "Wedding Caterers",
-    slug: "wedding-caterers",
-    description: "Professional catering services for weddings"
+    name: "Videographers",
+    slug: "videographers",
+    description: "Create lasting memories in motion"
   },
   {
-    name: "Wedding Florists",
-    slug: "wedding-florists",
-    description: "Expert florists for wedding decorations"
+    name: "Florists",
+    slug: "florists",
+    description: "Beautiful floral arrangements for your special day"
   },
   {
-    name: "Wedding DJs",
-    slug: "wedding-dj",
-    description: "Professional DJs for wedding entertainment"
+    name: "Caterers",
+    slug: "caterers",
+    description: "Delicious cuisine for your reception"
   },
   {
-    name: "Wedding Makeup Artists",
-    slug: "wedding-makeup-artists",
-    description: "Professional makeup artists for weddings"
+    name: "Venues",
+    slug: "venues",
+    description: "Perfect locations for your ceremony and reception"
   },
   {
-    name: "Wedding Videographers",
-    slug: "wedding-videographers",
-    description: "Professional videographers for wedding coverage"
+    name: "DJs & Bands",
+    slug: "djs-and-bands",
+    description: "Entertainment to keep the party going"
+  },
+  {
+    name: "Cake Designers",
+    slug: "cake-designers",
+    description: "Beautiful and delicious wedding cakes"
+  },
+  {
+    name: "Bridal Shops",
+    slug: "bridal-shops",
+    description: "Find your perfect wedding dress"
+  },
+  {
+    name: "Makeup Artists",
+    slug: "makeup-artists",
+    description: "Professional makeup services for your special day"
+  },
+  {
+    name: "Hair Stylists",
+    slug: "hair-stylists",
+    description: "Expert hair styling for the wedding party"
   }
 ];
