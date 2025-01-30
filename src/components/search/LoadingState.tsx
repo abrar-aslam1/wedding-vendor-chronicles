@@ -3,25 +3,20 @@ import React from 'react';
 export const LoadingState = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-[400px]">
-      <div className="w-20 h-[50px] relative mb-4">
-        {/* Loading text */}
-        <span className="absolute top-0 p-0 m-0 text-wedding-primary text-sm tracking-wider animate-[text_3.5s_ease_both_infinite]">
+      <div className="bg-[#212121] p-4 md:p-8 rounded-xl">
+        <div className="text-gray-400 font-body text-2xl font-medium h-[40px] px-2.5 flex items-center">
           loading
-        </span>
-        
-        {/* Main dot */}
-        <span className="block h-4 w-4 bg-wedding-primary rounded-full absolute bottom-0 animate-[loading_3.5s_ease_both_infinite]">
-          {/* Before element dot */}
-          <span className="absolute w-full h-full bg-wedding-secondary rounded-full animate-[loading2_3.5s_ease_both_infinite]" />
-        </span>
+          <div className="relative overflow-hidden ml-1.5">
+            <div className="relative h-10 after:content-[''] after:absolute after:inset-0 after:bg-gradient-to-b after:from-[#212121] after:via-transparent after:to-[#212121] after:z-20">
+              <span className="block h-full pl-1.5 text-wedding-primary animate-spin-words">vendors</span>
+              <span className="block h-full pl-1.5 text-wedding-primary animate-spin-words">venues</span>
+              <span className="block h-full pl-1.5 text-wedding-primary animate-spin-words">photographers</span>
+              <span className="block h-full pl-1.5 text-wedding-primary animate-spin-words">caterers</span>
+              <span className="block h-full pl-1.5 text-wedding-primary animate-spin-words">vendors</span>
+            </div>
+          </div>
+        </div>
       </div>
-      
-      <h1 className="text-2xl md:text-3xl font-semibold text-wedding-text mt-4">
-        Finding the Perfect Vendors
-      </h1>
-      <p className="text-gray-600 mt-2">
-        We're searching for the best matches in your area...
-      </p>
     </div>
   );
 };
