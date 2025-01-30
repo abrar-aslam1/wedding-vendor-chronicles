@@ -12,6 +12,7 @@ export const SearchContainer = () => {
   const { category, city, state } = useParams<{ category: string; city?: string; state?: string }>();
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [selectedSubcategory, setSelectedSubcategory] = useState<string>();
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -32,6 +33,7 @@ export const SearchContainer = () => {
       subcategory 
     });
     
+    setSelectedSubcategory(subcategory);
     const categoryToUse = category 
       ? category.replace('top-20/', '').replace(/-/g, ' ') 
       : selectedCategory;
@@ -178,7 +180,11 @@ export const SearchContainer = () => {
       {isSearching ? (
         <LoadingState />
       ) : (
-        <SearchResults results={searchResults} isSearching={isSearching} />
+        <SearchResults 
+          results={searchResults} 
+          isSearching={isSearching} 
+          subcategory={selectedSubcategory}
+        />
       )}
     </div>
   );

@@ -4,20 +4,23 @@ import { useToast } from "@/hooks/use-toast";
 import { SearchResult } from "@/types/search";
 import { VendorCard } from "./VendorCard";
 import { SearchSkeleton } from "./SearchSkeleton";
+import { useParams } from "react-router-dom";
 
 interface SearchResultsProps {
   results: SearchResult[];
   isSearching: boolean;
+  subcategory?: string;
 }
 
-export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
+export const SearchResults = ({ results, isSearching, subcategory }: SearchResultsProps) => {
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState<Set<string>>(new Set());
   const [hasSearched, setHasSearched] = useState(false);
+  const { category, city, state } = useParams();
   const { toast } = useToast();
 
   useEffect(() => {
-    console.log('Search Results component received:', { results, isSearching });
+    console.log('Search Results component received:', { results, isSearching, subcategory });
     fetchFavorites();
     if (isSearching) {
       setHasSearched(true);
@@ -137,17 +140,29 @@ export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
     );
   }
 
+  const formattedCategory = category?.replace('top-20/', '').replace(/-/g, ' ');
+  const resultTitle = subcategory 
+    ? `${subcategory} ${formattedCategory} in ${city}, ${state}`
+    : `${formattedCategory} in ${city}, ${state}`;
+
   return (
-    <div className="mt-4 md:mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {results.map((vendor, index) => (
-        <VendorCard
-          key={index}
-          vendor={vendor}
-          isFavorite={favorites.has(vendor.place_id || '')}
-          isLoading={loading.has(vendor.place_id || '')}
-          onToggleFavorite={toggleFavorite}
-        />
-      ))}
+    <div>
+      {results.length > 0 && (
+        <h2 className="text-2xl font-semibold mb-6 text-center text-wedding-text">
+          {resultTitle}
+        </h2>
+      )}
+      <div className="mt-4 md:mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {results.map((vendor, index) => (
+          <VendorCard
+            key={index}
+            vendor={vendor}
+            isFavorite={favorites.has(vendor.place_id || '')}
+            isLoading={loading.has(vendor.place_id || '')}
+            onToggleFavorite={toggleFavorite}
+          />
+        ))}
+      </div>
     </div>
   );
 };
