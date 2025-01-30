@@ -1,6 +1,6 @@
 {
-  "name": "Wedding Vendor Chronicles",
-  "short_name": "WV Chronicles",
+  "name": "Find My Wedding Vendor",
+  "short_name": "Wedding Vendor",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
@@ -13,7 +13,7 @@
       "type": "image/png"
     }
   ],
-  "theme_color": "#ffffff",
+  "theme_color": "#ee9ca7",
   "background_color": "#ffffff",
   "display": "standalone"
 }
