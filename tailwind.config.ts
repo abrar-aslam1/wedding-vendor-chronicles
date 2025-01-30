@@ -92,7 +92,13 @@ export default {
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out'
-      }
+      },
+      transitionDuration: {
+        '450': '450ms',
+      },
+      transitionTimingFunction: {
+        'out': 'cubic-bezier(0.65, 0, 0.076, 1)',
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],
