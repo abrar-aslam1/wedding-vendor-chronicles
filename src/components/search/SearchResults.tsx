@@ -8,17 +8,16 @@ import { SearchSkeleton } from "./SearchSkeleton";
 interface SearchResultsProps {
   results: SearchResult[];
   isSearching: boolean;
-  subcategory?: string;
 }
 
-export const SearchResults = ({ results, isSearching, subcategory }: SearchResultsProps) => {
+export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState<Set<string>>(new Set());
   const [hasSearched, setHasSearched] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
-    console.log('Search Results component received:', { results, isSearching, subcategory });
+    console.log('Search Results component received:', { results, isSearching });
     fetchFavorites();
     if (isSearching) {
       setHasSearched(true);
