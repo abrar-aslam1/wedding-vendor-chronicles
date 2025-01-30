@@ -8,9 +8,10 @@ import { SearchSkeleton } from "./SearchSkeleton";
 interface SearchResultsProps {
   results: SearchResult[];
   isSearching: boolean;
+  subcategory?: string;
 }
 
-export const SearchResults = ({ results, isSearching }: SearchResultsProps) => {
+export const SearchResults = ({ results, isSearching, subcategory }: SearchResultsProps) => {
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState<Set<string>>(new Set());
   const [hasSearched, setHasSearched] = useState(false);
