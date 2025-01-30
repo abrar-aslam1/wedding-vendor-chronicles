@@ -26,7 +26,10 @@ export const SearchForm = ({ onSearch, isSearching, preselectedCategory }: Searc
 
   useEffect(() => {
     const fetchSubcategories = async () => {
-      if (selectedCategory === 'caterers') {
+      const normalizedCategory = selectedCategory.toLowerCase();
+      console.log('Category being checked:', normalizedCategory);
+      
+      if (normalizedCategory === 'caterers') {
         console.log('Fetching subcategories for caterers...');
         const { data, error } = await supabase
           .from('vendor_subcategories')
@@ -75,7 +78,7 @@ export const SearchForm = ({ onSearch, isSearching, preselectedCategory }: Searc
           preselectedCategory={preselectedCategory}
         />
         
-        {selectedCategory === 'caterers' && subcategories.length > 0 && (
+        {selectedCategory.toLowerCase() === 'caterers' && subcategories.length > 0 && (
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">
               Select Cuisine Type
@@ -111,7 +114,7 @@ export const SearchForm = ({ onSearch, isSearching, preselectedCategory }: Searc
           (!preselectedCategory && !selectedCategory) || 
           !selectedState || 
           !selectedCity ||
-          (selectedCategory === 'caterers' && !selectedSubcategory)
+          (selectedCategory.toLowerCase() === 'caterers' && !selectedSubcategory)
         }
         onClick={handleSubmit}
       />
