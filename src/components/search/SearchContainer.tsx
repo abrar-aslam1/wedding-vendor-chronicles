@@ -36,7 +36,10 @@ export const SearchContainer = () => {
   return (
     <div className="container mx-auto px-4">
       <SearchHeader subcategory={selectedSubcategory} />
-      <SearchForm onSearch={handleSearch} />
+      <SearchForm 
+        onSearch={handleSearch} 
+        isSearching={isSearching}
+      />
       {isSearching ? (
         <LoadingState />
       ) : (
