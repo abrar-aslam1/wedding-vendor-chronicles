@@ -12,6 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { VendorCard } from "@/components/search/VendorCard";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage } from "@/components/ui/breadcrumb";
 import { SEOHead } from "@/components/SEOHead";
+import { SchemaMarkup } from "@/components/SchemaMarkup";
 
 const VendorDetail = () => {
   const location = useLocation();
@@ -137,6 +138,7 @@ const VendorDetail = () => {
     return (
       <div className="min-h-screen bg-wedding-light">
         <SEOHead />
+        <SchemaMarkup isHomePage={true} />
         <MainNav />
         <div className="container mx-auto px-4 py-8 mt-16">
           <div className="text-center">
@@ -157,6 +159,12 @@ const VendorDetail = () => {
         category={vendor.category}
         city={vendor.city}
         state={vendor.state}
+      />
+      <SchemaMarkup
+        category={vendor.category}
+        city={vendor.city}
+        state={vendor.state}
+        vendor={vendor}
       />
       <MainNav />
       <div className="container mx-auto px-4 py-8 mt-16">

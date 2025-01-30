@@ -3,6 +3,7 @@ import { SearchContainer } from "@/components/search/SearchContainer";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage } from "@/components/ui/breadcrumb";
 import { useParams } from "react-router-dom";
 import { SEOHead } from "@/components/SEOHead";
+import { SchemaMarkup } from "@/components/SchemaMarkup";
 
 const Search = () => {
   const { category, city, state } = useParams<{ category: string; city?: string; state?: string }>();
@@ -14,6 +15,11 @@ const Search = () => {
       <SEOHead 
         category={category?.replace('top-20/', '')} 
         city={city} 
+        state={state}
+      />
+      <SchemaMarkup
+        category={cleanCategory}
+        city={city}
         state={state}
       />
       <MainNav />
