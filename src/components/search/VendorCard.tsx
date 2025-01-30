@@ -1,8 +1,10 @@
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Heart, Mail } from "lucide-react";
+import { Heart } from "lucide-react";
 import { SearchResult } from "@/types/search";
+import { VendorContactInfo } from "./VendorContactInfo";
 import { RatingDisplay } from "./RatingDisplay";
+import { useNavigate } from "react-router-dom";
 
 interface VendorCardProps {
   vendor: SearchResult;
@@ -17,8 +19,10 @@ export const VendorCard = ({
   isLoading, 
   onToggleFavorite 
 }: VendorCardProps) => {
+  const navigate = useNavigate();
+
   const handleCardClick = () => {
-    window.open(`/vendor/${encodeURIComponent(vendor.place_id)}`, '_blank');
+    navigate(`/vendor/${encodeURIComponent(vendor.place_id)}`, { state: { vendor } });
   };
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
@@ -28,61 +32,60 @@ export const VendorCard = ({
 
   return (
     <Card 
-      className="relative w-[280px] h-[280px] bg-white rounded-[32px] p-4 shadow-lg cursor-pointer group"
+      className="overflow-hidden hover:shadow-lg transition-all duration-300 h-full bg-white border-gray-100 hover:border-wedding-primary/20 cursor-pointer"
       onClick={handleCardClick}
     >
-      {/* Main Content */}
-      <div className="flex flex-col h-full">
-        {/* Title and Rating */}
-        <div className="mb-3">
-          <h3 className="text-xl font-bold text-gray-800 truncate">
+      {vendor.main_image && (
+        <div className="relative h-48 overflow-hidden">
+          <img
+            src={vendor.main_image}
+            alt={vendor.title}
+            className="w-full h-full object-cover"
+          />
+        </div>
+      )}
+      
+      <CardContent className="p-4 flex flex-col h-[calc(100%-12rem)]">
+        <div className="flex justify-between items-start mb-2">
+          <h3 className="text-lg font-semibold text-wedding-text line-clamp-2">
             {vendor.title}
           </h3>
-          {vendor.rating && vendor.rating.value && (
-            <RatingDisplay rating={vendor.rating} className="mt-1" />
-          )}
-        </div>
-
-        {/* Description */}
-        <p className="text-sm text-gray-600 line-clamp-3 mb-4">
-          {vendor.snippet || "No description available"}
-        </p>
-
-        {/* Address */}
-        {vendor.address && (
-          <p className="text-sm text-gray-500 mb-2 truncate">
-            {vendor.address}
-          </p>
-        )}
-
-        {/* Action Buttons */}
-        <div className="mt-auto flex justify-between items-center">
           <Button
             variant="ghost"
             size="icon"
-            className="hover:text-wedding-primary"
-            onClick={(e) => {
-              e.stopPropagation();
-              window.location.href = `mailto:${vendor.email}`;
-            }}
-          >
-            <Mail className="h-5 w-5" />
-          </Button>
-
-          <Button
-            variant="ghost"
-            size="icon"
-            className={`${isFavorite ? 'text-red-500' : 'text-gray-400'} hover:text-red-500`}
+            className={`${isFavorite ? 'text-red-500' : 'text-gray-400'} hover:text-red-500 flex items-center justify-center`}
             onClick={handleFavoriteClick}
             disabled={isLoading}
+            style={{ display: 'inline-flex' }}
           >
             <Heart 
               className={`h-5 w-5 ${isFavorite ? 'fill-current' : ''}`}
               aria-hidden="true"
+              focusable="false"
             />
+            <span className="sr-only">
+              {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+            </span>
           </Button>
         </div>
-      </div>
+
+        {vendor.rating && vendor.rating.value && (
+          <RatingDisplay rating={vendor.rating} className="mb-2" />
+        )}
+
+        <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+          {vendor.snippet || "No description available"}
+        </p>
+        
+        <VendorContactInfo 
+          phone={vendor.phone}
+          address={vendor.address}
+          url={vendor.url}
+          instagram={vendor.instagram}
+          facebook={vendor.facebook}
+          twitter={vendor.twitter}
+        />
+      </CardContent>
     </Card>
   );
 };
