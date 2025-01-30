@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Heart, Mail } from "lucide-react";
+import { Heart } from "lucide-react";
 import { SearchResult } from "@/types/search";
 import { VendorContactInfo } from "./VendorContactInfo";
 import { RatingDisplay } from "./RatingDisplay";
@@ -53,21 +53,39 @@ export const VendorCard = ({
           <h3 className="text-lg font-semibold text-wedding-text line-clamp-2">
             {vendor.title}
           </h3>
-          <Button
-            variant="ghost"
-            size="icon"
-            className={`${isFavorite ? 'text-wedding-primary' : 'text-gray-400'} hover:text-wedding-primary`}
-            onClick={handleFavoriteClick}
-            disabled={isLoading}
-          >
-            <Heart 
-              className={`h-5 w-5 ${isFavorite ? 'fill-current' : ''}`}
-              aria-hidden="true"
+          <div className="relative">
+            <input 
+              type="checkbox" 
+              id={`favorite-${vendor.place_id}`}
+              checked={isFavorite}
+              onChange={handleFavoriteClick}
+              className="peer hidden" 
+              disabled={isLoading}
             />
-            <span className="sr-only">
-              {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-            </span>
-          </Button>
+            <label 
+              htmlFor={`favorite-${vendor.place_id}`}
+              className="flex items-center gap-3.5 px-4 py-2.5 rounded-lg cursor-pointer select-none bg-white shadow-[rgba(149,157,165,0.2)_0px_8px_24px] text-wedding-text"
+            >
+              <Heart 
+                className={`h-6 w-6 transition-all duration-500 ${
+                  isFavorite ? 'fill-wedding-primary stroke-wedding-primary animate-[heartBeat_1s_ease-in-out]' : 'stroke-current'
+                }`}
+                aria-hidden="true"
+              />
+              <div className="relative overflow-hidden grid">
+                <span className={`col-start-1 col-end-1 row-start-1 row-end-1 transition-all duration-500 ${
+                  isFavorite ? 'translate-y-[-100%] opacity-0' : 'translate-y-0 opacity-100'
+                }`}>
+                  Add to Favorites
+                </span>
+                <span className={`col-start-1 col-end-1 row-start-1 row-end-1 transition-all duration-500 ${
+                  isFavorite ? 'translate-y-0 opacity-100' : 'translate-y-[100%] opacity-0'
+                }`}>
+                  Added to Favorites
+                </span>
+              </div>
+            </label>
+          </div>
         </div>
 
         {vendor.rating && vendor.rating.value && (
