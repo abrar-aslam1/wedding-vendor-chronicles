@@ -9,27 +9,32 @@ import { SearchHeader } from "./SearchHeader";
 import { LoadingState } from "./LoadingState";
 
 export const SearchContainer = () => {
-  const { category, city, state } = useParams<{ category: string; city?: string; state?: string }>();
+  const { category, subcategory, city, state } = useParams<{ 
+    category: string; 
+    subcategory?: string;
+    city?: string; 
+    state?: string; 
+  }>();
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log('SearchContainer mounted with params:', { category, city, state });
+    console.log('SearchContainer mounted with params:', { category, subcategory, city, state });
     if (category && city && state) {
       const cleanCategory = category.replace('top-20/', '').replace(/-/g, ' ');
-      console.log('Initiating search for:', { cleanCategory, city, state });
-      fetchResults(cleanCategory, city, state);
+      console.log('Initiating search for:', { cleanCategory, subcategory, city, state });
+      fetchResults(cleanCategory, city, state, subcategory);
     }
-  }, [category, city, state]);
+  }, [category, subcategory, city, state]);
 
-  const handleSearch = async (selectedCategory: string, selectedState: string, selectedCity: string, subcategory?: string) => {
+  const handleSearch = async (selectedCategory: string, selectedState: string, selectedCity: string, selectedSubcategory?: string) => {
     console.log('Handling search with:', { 
       selectedCategory, 
       selectedState, 
       selectedCity,
-      subcategory 
+      selectedSubcategory 
     });
     
     const categoryToUse = category 
@@ -38,7 +43,11 @@ export const SearchContainer = () => {
     
     const formattedCategory = categoryToUse.toLowerCase().replace(/ /g, '-');
     
-    navigate(`/top-20/${formattedCategory}/${selectedCity}/${selectedState}`);
+    const urlPath = selectedSubcategory 
+      ? `/top-20/${formattedCategory}/${selectedSubcategory}/${selectedCity}/${selectedState}`
+      : `/top-20/${formattedCategory}/${selectedCity}/${selectedState}`;
+    
+    navigate(urlPath);
   };
 
   const fetchResults = async (searchCategory: string, searchCity: string, searchState: string, subcategory?: string) => {
@@ -163,7 +172,7 @@ export const SearchContainer = () => {
 
   return (
     <div className="container mx-auto px-4 py-8 mt-16">
-      <SearchHeader />
+      <SearchHeader subcategory={subcategory} />
       
       {(!city || !state) && (
         <div className="max-w-2xl mx-auto mb-8">
@@ -178,7 +187,7 @@ export const SearchContainer = () => {
       {isSearching ? (
         <LoadingState />
       ) : (
-        <SearchResults results={searchResults} isSearching={isSearching} />
+        <SearchResults results={searchResults} isSearching={isSearching} subcategory={subcategory} />
       )}
     </div>
   );

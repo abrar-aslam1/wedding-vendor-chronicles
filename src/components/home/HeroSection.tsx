@@ -8,14 +8,18 @@ export const HeroSection = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const handleSearch = async (category: string, state: string, city: string) => {
+  const handleSearch = async (category: string, state: string, city: string, subcategory?: string) => {
     try {
-      console.log('SearchForm submitting:', { categoryToUse: category, selectedState: state, selectedCity: city });
+      console.log('SearchForm submitting:', { categoryToUse: category, selectedState: state, selectedCity: city, subcategory });
       setIsSearching(true);
       const locationString = `${city}, ${state}`;
       
       const formattedCategory = category.toLowerCase().replace(/ /g, '-');
-      navigate(`/top-20/${formattedCategory}/${city}/${state}`);
+      const urlPath = subcategory 
+        ? `/top-20/${formattedCategory}/${subcategory}/${city}/${state}`
+        : `/top-20/${formattedCategory}/${city}/${state}`;
+      
+      navigate(urlPath);
       
     } catch (error: any) {
       console.error('Search error:', error);
