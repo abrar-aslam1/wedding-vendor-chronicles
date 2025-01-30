@@ -13,8 +13,8 @@ serve(async (req) => {
   }
 
   try {
-    const { keyword, location } = await req.json();
-    console.log('Search request received:', { keyword, location });
+    const { keyword, location, subcategory } = await req.json();
+    console.log('Search request received:', { keyword, location, subcategory });
     
     if (!keyword || !location) {
       throw new Error('Missing required parameters');
@@ -36,7 +36,10 @@ serve(async (req) => {
     }
 
     const auth = btoa(`${dataForSeoLogin}:${dataForSeoPassword}`);
-    const searchQuery = `${keyword} in ${location}`;
+    // Include subcategory in the search query if provided
+    const searchQuery = subcategory 
+      ? `${subcategory} ${keyword} in ${location}`
+      : `${keyword} in ${location}`;
     
     console.log('Making DataForSEO request for:', searchQuery);
 

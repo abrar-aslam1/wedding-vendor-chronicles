@@ -24,8 +24,13 @@ export const SearchContainer = () => {
     }
   }, [category, city, state]);
 
-  const handleSearch = async (selectedCategory: string, selectedState: string, selectedCity: string) => {
-    console.log('Handling search with:', { selectedCategory, selectedState, selectedCity });
+  const handleSearch = async (selectedCategory: string, selectedState: string, selectedCity: string, subcategory?: string) => {
+    console.log('Handling search with:', { 
+      selectedCategory, 
+      selectedState, 
+      selectedCity,
+      subcategory 
+    });
     
     const categoryToUse = category 
       ? category.replace('top-20/', '').replace(/-/g, ' ') 
@@ -36,8 +41,8 @@ export const SearchContainer = () => {
     navigate(`/top-20/${formattedCategory}/${selectedCity}/${selectedState}`);
   };
 
-  const fetchResults = async (searchCategory: string, searchCity: string, searchState: string) => {
-    console.log('Starting fetchResults with:', { searchCategory, searchCity, searchState });
+  const fetchResults = async (searchCategory: string, searchCity: string, searchState: string, subcategory?: string) => {
+    console.log('Starting fetchResults with:', { searchCategory, searchCity, searchState, subcategory });
     setIsSearching(true);
     
     try {
@@ -50,7 +55,8 @@ export const SearchContainer = () => {
         category: searchCategory.toLowerCase(),
         city: searchCity,
         state: searchState,
-        locationCode
+        locationCode,
+        subcategory
       });
 
       const { data: cachedResults, error: cacheError } = await supabase
@@ -88,7 +94,8 @@ export const SearchContainer = () => {
       const { data: freshResults, error: searchError } = await supabase.functions.invoke('search-vendors', {
         body: { 
           keyword: searchCategory,
-          location: `${searchCity}, ${searchState}`
+          location: `${searchCity}, ${searchState}`,
+          subcategory: subcategory // Pass the subcategory to the edge function
         }
       });
 
