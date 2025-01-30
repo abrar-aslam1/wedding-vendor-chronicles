@@ -16,7 +16,7 @@ const categories = [
     id: 2,
     name: "Photographers",
     description: "Capture every magical moment",
-    image: "https://images.unsplash.com/photo-1537633552985-df8429e048b",
+    image: "https://images.unsplash.com/photo-1537633552985-df8429e048b8",
     slug: "photographers"
   },
   {
@@ -112,11 +112,13 @@ export const CategoriesGrid = () => {
     <section className="py-8 px-4">
       <div className="container mx-auto">
         <h2 className="text-2xl font-bold text-center mb-8 text-wedding-text">Wedding Vendor Categories</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {categories.map((category) => (
             <Card 
               key={category.id} 
-              className="hover:shadow-lg transition-shadow group cursor-pointer"
+              className={`hover:shadow-lg transition-shadow group cursor-pointer ${
+                selectedCategory === 'caterers' && category.slug !== 'caterers' ? 'opacity-50' : ''
+              }`}
               onClick={() => handleCategoryClick(category.slug)}
             >
               <div className="aspect-video w-full overflow-hidden rounded-t-lg relative">
@@ -133,14 +135,14 @@ export const CategoriesGrid = () => {
               </CardHeader>
               <CardContent>
                 {selectedCategory === 'caterers' && category.slug === 'caterers' ? (
-                  <div className="space-y-2">
-                    <h3 className="font-medium text-sm text-gray-600 mb-2">Select a Cuisine:</h3>
-                    <div className="grid grid-cols-2 gap-2">
+                  <div className="space-y-4">
+                    <h3 className="font-medium text-sm text-gray-600">Select a Cuisine:</h3>
+                    <div className="grid grid-cols-2 gap-3">
                       {subcategories.map((subcategory) => (
                         <Button
                           key={subcategory.id}
                           variant="outline"
-                          className="text-sm h-auto py-2"
+                          className="text-sm py-2 h-auto w-full"
                           onClick={(e) => {
                             e.stopPropagation();
                             handleSubcategoryClick(subcategory.name);
