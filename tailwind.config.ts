@@ -19,7 +19,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        heading: ['Cormorant Garamond', 'serif'],
+        heading: ['Dynalight', 'cursive'],
         body: ['Lato', 'sans-serif'],
       },
       colors: {
