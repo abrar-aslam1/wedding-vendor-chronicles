@@ -2,6 +2,7 @@ import { MainNav } from "@/components/MainNav";
 import { SearchContainer } from "@/components/search/SearchContainer";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage } from "@/components/ui/breadcrumb";
 import { useParams } from "react-router-dom";
+import { SEOHead } from "@/components/SEOHead";
 
 const Search = () => {
   const { category, city, state } = useParams<{ category: string; city?: string; state?: string }>();
@@ -10,6 +11,11 @@ const Search = () => {
   
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead 
+        category={category?.replace('top-20/', '')} 
+        city={city} 
+        state={state}
+      />
       <MainNav />
       <div className="container mx-auto px-4 pt-20">
         <Breadcrumb>
