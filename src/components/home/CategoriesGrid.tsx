@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { supabase } from "@/integrations/supabase/client";
 
 const categories = [
   {
@@ -14,7 +16,7 @@ const categories = [
     id: 2,
     name: "Photographers",
     description: "Capture every magical moment",
-    image: "https://images.unsplash.com/photo-1537633552985-df8429e8048b",
+    image: "https://images.unsplash.com/photo-1537633552985-df8429e048b",
     slug: "photographers"
   },
   {
@@ -61,11 +63,49 @@ const categories = [
   },
 ];
 
+interface Subcategory {
+  id: string;
+  name: string;
+  description: string | null;
+}
+
 export const CategoriesGrid = () => {
   const navigate = useNavigate();
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
+
+  useEffect(() => {
+    const fetchSubcategories = async () => {
+      if (selectedCategory === 'caterers') {
+        const { data, error } = await supabase
+          .from('vendor_subcategories')
+          .select('*')
+          .eq('category', 'caterers');
+
+        if (error) {
+          console.error('Error fetching subcategories:', error);
+          return;
+        }
+
+        setSubcategories(data);
+      } else {
+        setSubcategories([]);
+      }
+    };
+
+    fetchSubcategories();
+  }, [selectedCategory]);
 
   const handleCategoryClick = (slug: string) => {
-    navigate(`/search/${slug}`);
+    if (slug === 'caterers') {
+      setSelectedCategory(slug);
+    } else {
+      navigate(`/search/${slug}`);
+    }
+  };
+
+  const handleSubcategoryClick = (subcategoryName: string) => {
+    navigate(`/search/caterers?cuisine=${encodeURIComponent(subcategoryName)}`);
   };
 
   return (
@@ -92,16 +132,47 @@ export const CategoriesGrid = () => {
                 <CardDescription>{category.description}</CardDescription>
               </CardHeader>
               <CardContent>
-                <Button 
-                  variant="ghost" 
-                  className="w-full text-wedding-primary hover:text-wedding-accent"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleCategoryClick(category.slug);
-                  }}
-                >
-                  Browse {category.name}
-                </Button>
+                {selectedCategory === 'caterers' && category.slug === 'caterers' ? (
+                  <div className="space-y-2">
+                    <h3 className="font-medium text-sm text-gray-600 mb-2">Select a Cuisine:</h3>
+                    <div className="grid grid-cols-2 gap-2">
+                      {subcategories.map((subcategory) => (
+                        <Button
+                          key={subcategory.id}
+                          variant="outline"
+                          className="text-sm h-auto py-2"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleSubcategoryClick(subcategory.name);
+                          }}
+                        >
+                          {subcategory.name}
+                        </Button>
+                      ))}
+                    </div>
+                    <Button 
+                      variant="ghost" 
+                      className="w-full mt-2 text-wedding-primary hover:text-wedding-accent"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedCategory(null);
+                      }}
+                    >
+                      Back to Categories
+                    </Button>
+                  </div>
+                ) : (
+                  <Button 
+                    variant="ghost" 
+                    className="w-full text-wedding-primary hover:text-wedding-accent"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleCategoryClick(category.slug);
+                    }}
+                  >
+                    Browse {category.name}
+                  </Button>
+                )}
               </CardContent>
             </Card>
           ))}
