@@ -5,6 +5,7 @@ import { SearchResult } from "@/types/search";
 import { VendorContactInfo } from "./VendorContactInfo";
 import { RatingDisplay } from "./RatingDisplay";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
 interface VendorCardProps {
   vendor: SearchResult;
@@ -25,8 +26,15 @@ export const VendorCard = ({
     navigate(`/vendor/${encodeURIComponent(vendor.place_id)}`, { state: { vendor } });
   };
 
-  const handleFavoriteClick = (e: React.MouseEvent) => {
+  const handleFavoriteClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    if (!session) {
+      navigate('/auth');
+      return;
+    }
+    
     onToggleFavorite(vendor);
   };
 
@@ -49,44 +57,9 @@ export const VendorCard = ({
 
       {/* Content Section */}
       <div className="p-6">
-        <div className="flex justify-between items-start mb-2">
-          <h3 className="text-lg font-semibold text-wedding-text line-clamp-2">
-            {vendor.title}
-          </h3>
-          <div className="relative">
-            <input 
-              type="checkbox" 
-              id={`favorite-${vendor.place_id}`}
-              checked={isFavorite}
-              onChange={handleFavoriteClick}
-              className="peer hidden" 
-              disabled={isLoading}
-            />
-            <label 
-              htmlFor={`favorite-${vendor.place_id}`}
-              className="flex items-center gap-3.5 px-4 py-2.5 rounded-lg cursor-pointer select-none bg-white shadow-[rgba(149,157,165,0.2)_0px_8px_24px] text-wedding-text"
-            >
-              <Heart 
-                className={`h-6 w-6 transition-all duration-500 ${
-                  isFavorite ? 'fill-wedding-primary stroke-wedding-primary animate-[heartBeat_1s_ease-in-out]' : 'stroke-current'
-                }`}
-                aria-hidden="true"
-              />
-              <div className="relative overflow-hidden grid">
-                <span className={`col-start-1 col-end-1 row-start-1 row-end-1 transition-all duration-500 ${
-                  isFavorite ? 'translate-y-[-100%] opacity-0' : 'translate-y-0 opacity-100'
-                }`}>
-                  Add to Favorites
-                </span>
-                <span className={`col-start-1 col-end-1 row-start-1 row-end-1 transition-all duration-500 ${
-                  isFavorite ? 'translate-y-0 opacity-100' : 'translate-y-[100%] opacity-0'
-                }`}>
-                  Added to Favorites
-                </span>
-              </div>
-            </label>
-          </div>
-        </div>
+        <h3 className="text-lg font-semibold text-wedding-text line-clamp-2 mb-2">
+          {vendor.title}
+        </h3>
 
         {vendor.rating && vendor.rating.value && (
           <RatingDisplay rating={vendor.rating} className="mb-2" />
@@ -104,6 +77,41 @@ export const VendorCard = ({
           facebook={vendor.facebook}
           twitter={vendor.twitter}
         />
+      </div>
+
+      {/* Favorite Button Section */}
+      <div className="px-6 pb-3">
+        <input 
+          type="checkbox" 
+          id={`favorite-${vendor.place_id}`}
+          checked={isFavorite}
+          onChange={handleFavoriteClick}
+          className="peer hidden" 
+          disabled={isLoading}
+        />
+        <label 
+          htmlFor={`favorite-${vendor.place_id}`}
+          className="flex w-full items-center justify-center gap-3.5 px-4 py-2.5 rounded-lg cursor-pointer select-none bg-white shadow-[rgba(149,157,165,0.2)_0px_8px_24px] text-wedding-text hover:bg-gray-50"
+        >
+          <Heart 
+            className={`h-6 w-6 transition-all duration-500 ${
+              isFavorite ? 'fill-wedding-primary stroke-wedding-primary animate-[heartBeat_1s_ease-in-out]' : 'stroke-current'
+            }`}
+            aria-hidden="true"
+          />
+          <div className="relative overflow-hidden grid">
+            <span className={`col-start-1 col-end-1 row-start-1 row-end-1 transition-all duration-500 ${
+              isFavorite ? 'translate-y-[-100%] opacity-0' : 'translate-y-0 opacity-100'
+            }`}>
+              Add to Favorites
+            </span>
+            <span className={`col-start-1 col-end-1 row-start-1 row-end-1 transition-all duration-500 ${
+              isFavorite ? 'translate-y-0 opacity-100' : 'translate-y-[100%] opacity-0'
+            }`}>
+              Added to Favorites
+            </span>
+          </div>
+        </label>
       </div>
 
       {/* Action Section */}
