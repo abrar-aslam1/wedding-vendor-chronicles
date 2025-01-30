@@ -19,10 +19,10 @@ export const VendorContactInfo = ({
   twitter 
 }: VendorContactInfoProps) => {
   return (
-    <div className="space-y-3 mt-auto pt-4 border-t border-gray-100">
+    <div className="space-y-2">
       {phone && (
-        <div className="flex items-center text-sm text-gray-500">
-          <Phone className="h-4 w-4 mr-2 flex-shrink-0 text-wedding-primary/70" />
+        <div className="flex items-center text-sm text-gray-600">
+          <Phone className="h-4 w-4 mr-2 flex-shrink-0 text-wedding-primary" />
           <a href={`tel:${phone}`} className="hover:text-wedding-primary transition-colors truncate">
             {phone}
           </a>
@@ -30,18 +30,18 @@ export const VendorContactInfo = ({
       )}
       
       {address && (
-        <div className="flex items-start text-sm text-gray-500">
-          <MapPin className="h-4 w-4 mr-2 flex-shrink-0 mt-1 text-wedding-primary/70" />
+        <div className="flex items-start text-sm text-gray-600">
+          <MapPin className="h-4 w-4 mr-2 flex-shrink-0 mt-1 text-wedding-primary" />
           <span className="line-clamp-2">{address}</span>
         </div>
       )}
       
       {url && (
         <div className="flex items-center">
-          <Globe className="h-4 w-4 mr-2 flex-shrink-0 text-wedding-primary/70" />
+          <Globe className="h-4 w-4 mr-2 flex-shrink-0 text-wedding-primary" />
           <Button
             variant="link"
-            className="h-auto p-0 text-sm text-wedding-primary hover:text-wedding-accent truncate"
+            className="h-auto p-0 text-sm text-wedding-primary hover:text-wedding-accent"
             onClick={() => window.open(url, '_blank')}
           >
             Visit Website
@@ -49,44 +49,40 @@ export const VendorContactInfo = ({
         </div>
       )}
 
-      {instagram && (
-        <div className="flex items-center">
-          <Instagram className="h-4 w-4 mr-2 flex-shrink-0 text-wedding-primary/70" />
+      <div className="flex gap-2 mt-2">
+        {instagram && (
           <Button
-            variant="link"
-            className="h-auto p-0 text-sm text-wedding-primary hover:text-wedding-accent truncate"
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 text-wedding-primary hover:text-wedding-accent"
             onClick={() => window.open(`https://instagram.com/${instagram.replace('@', '')}`, '_blank')}
           >
-            {instagram}
+            <Instagram className="h-4 w-4" />
           </Button>
-        </div>
-      )}
+        )}
 
-      {facebook && (
-        <div className="flex items-center">
-          <Facebook className="h-4 w-4 mr-2 flex-shrink-0 text-wedding-primary/70" />
+        {facebook && (
           <Button
-            variant="link"
-            className="h-auto p-0 text-sm text-wedding-primary hover:text-wedding-accent truncate"
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 text-wedding-primary hover:text-wedding-accent"
             onClick={() => window.open(facebook, '_blank')}
           >
-            Facebook Page
+            <Facebook className="h-4 w-4" />
           </Button>
-        </div>
-      )}
+        )}
 
-      {twitter && (
-        <div className="flex items-center">
-          <Twitter className="h-4 w-4 mr-2 flex-shrink-0 text-wedding-primary/70" />
+        {twitter && (
           <Button
-            variant="link"
-            className="h-auto p-0 text-sm text-wedding-primary hover:text-wedding-accent truncate"
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 text-wedding-primary hover:text-wedding-accent"
             onClick={() => window.open(twitter, '_blank')}
           >
-            Twitter Profile
+            <Twitter className="h-4 w-4" />
           </Button>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

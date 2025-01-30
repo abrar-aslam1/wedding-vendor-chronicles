@@ -1,6 +1,6 @@
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Heart } from "lucide-react";
+import { Heart, Mail } from "lucide-react";
 import { SearchResult } from "@/types/search";
 import { VendorContactInfo } from "./VendorContactInfo";
 import { RatingDisplay } from "./RatingDisplay";
@@ -31,21 +31,24 @@ export const VendorCard = ({
   };
 
   return (
-    <Card 
-      className="overflow-hidden hover:shadow-lg transition-all duration-300 h-full bg-white border-gray-100 hover:border-wedding-primary/20 cursor-pointer"
-      onClick={handleCardClick}
-    >
-      {vendor.main_image && (
-        <div className="relative h-48 overflow-hidden">
+    <div className="relative flex w-full flex-col rounded-xl bg-white shadow-md transition-all duration-300 hover:shadow-lg">
+      {/* Image Section */}
+      <div className="relative mx-4 -mt-6 h-48 overflow-hidden rounded-xl shadow-lg">
+        {vendor.main_image ? (
           <img
             src={vendor.main_image}
             alt={vendor.title}
-            className="w-full h-full object-cover"
+            className="h-full w-full object-cover"
           />
-        </div>
-      )}
-      
-      <CardContent className="p-4 flex flex-col h-[calc(100%-12rem)]">
+        ) : (
+          <div className="flex h-full w-full items-center justify-center bg-gradient-to-r from-wedding-primary to-wedding-secondary">
+            <span className="text-2xl font-semibold text-white">{vendor.title[0]}</span>
+          </div>
+        )}
+      </div>
+
+      {/* Content Section */}
+      <div className="p-6">
         <div className="flex justify-between items-start mb-2">
           <h3 className="text-lg font-semibold text-wedding-text line-clamp-2">
             {vendor.title}
@@ -53,15 +56,13 @@ export const VendorCard = ({
           <Button
             variant="ghost"
             size="icon"
-            className={`${isFavorite ? 'text-red-500' : 'text-gray-400'} hover:text-red-500 flex items-center justify-center`}
+            className={`${isFavorite ? 'text-wedding-primary' : 'text-gray-400'} hover:text-wedding-primary`}
             onClick={handleFavoriteClick}
             disabled={isLoading}
-            style={{ display: 'inline-flex' }}
           >
             <Heart 
               className={`h-5 w-5 ${isFavorite ? 'fill-current' : ''}`}
               aria-hidden="true"
-              focusable="false"
             />
             <span className="sr-only">
               {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
@@ -76,7 +77,7 @@ export const VendorCard = ({
         <p className="text-sm text-gray-600 mb-4 line-clamp-2">
           {vendor.snippet || "No description available"}
         </p>
-        
+
         <VendorContactInfo 
           phone={vendor.phone}
           address={vendor.address}
@@ -85,7 +86,17 @@ export const VendorCard = ({
           facebook={vendor.facebook}
           twitter={vendor.twitter}
         />
-      </CardContent>
-    </Card>
+      </div>
+
+      {/* Action Section */}
+      <div className="p-6 pt-0 mt-auto">
+        <Button
+          onClick={handleCardClick}
+          className="w-full bg-wedding-primary text-white hover:bg-wedding-accent shadow-md hover:shadow-lg transition-all duration-300"
+        >
+          View Details
+        </Button>
+      </div>
+    </div>
   );
 };
