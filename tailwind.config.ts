@@ -19,7 +19,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        heading: ['Dynalight', 'cursive'],
+        heading: ['Brittany', 'cursive'],
         body: ['Lato', 'sans-serif'],
       },
       colors: {
