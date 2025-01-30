@@ -53,11 +53,19 @@ export const VendorCard = ({
           <Button
             variant="ghost"
             size="icon"
-            className={`${isFavorite ? 'text-red-500' : 'text-gray-400'} hover:text-red-500`}
+            className={`${isFavorite ? 'text-red-500' : 'text-gray-400'} hover:text-red-500 flex items-center justify-center`}
             onClick={handleFavoriteClick}
             disabled={isLoading}
+            style={{ display: 'inline-flex' }}
           >
-            <Heart className={`h-5 w-5 ${isFavorite ? 'fill-current' : ''}`} />
+            <Heart 
+              className={`h-5 w-5 ${isFavorite ? 'fill-current' : ''}`}
+              aria-hidden="true"
+              focusable="false"
+            />
+            <span className="sr-only">
+              {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+            </span>
           </Button>
         </div>
 
