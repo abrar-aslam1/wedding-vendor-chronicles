@@ -77,6 +77,7 @@ export const CategoriesGrid = () => {
   useEffect(() => {
     const fetchSubcategories = async () => {
       if (selectedCategory === 'caterers') {
+        console.log('Fetching subcategories for caterers...');
         const { data, error } = await supabase
           .from('vendor_subcategories')
           .select('*')
@@ -87,6 +88,7 @@ export const CategoriesGrid = () => {
           return;
         }
 
+        console.log('Fetched subcategories:', data);
         setSubcategories(data);
       } else {
         setSubcategories([]);
@@ -97,6 +99,7 @@ export const CategoriesGrid = () => {
   }, [selectedCategory]);
 
   const handleCategoryClick = (slug: string) => {
+    console.log('Category clicked:', slug);
     if (slug === 'caterers') {
       setSelectedCategory(slug);
     } else {
@@ -105,6 +108,7 @@ export const CategoriesGrid = () => {
   };
 
   const handleSubcategoryClick = (subcategoryName: string) => {
+    console.log('Subcategory clicked:', subcategoryName);
     navigate(`/search/caterers?cuisine=${encodeURIComponent(subcategoryName)}`);
   };
 
@@ -167,10 +171,6 @@ export const CategoriesGrid = () => {
                   <Button 
                     variant="ghost" 
                     className="w-full text-wedding-primary hover:text-wedding-accent"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleCategoryClick(category.slug);
-                    }}
                   >
                     Browse {category.name}
                   </Button>
