@@ -41,19 +41,18 @@ export const HeroSection = () => {
         <div className="space-y-8 md:space-y-6 text-center md:text-left max-w-2xl mx-auto md:mx-0">
           <div>
             <h2 className="font-heading text-wedding-primary font-semibold mb-6 md:mb-4 tracking-wider text-xl md:text-lg uppercase">
-              BEST WEDDING VENDORS AROUND YOU
+              DISCOVER YOUR DREAM WEDDING TEAM
             </h2>
             <h1 className="font-heading text-4xl md:text-3xl lg:text-4xl font-bold text-wedding-text leading-tight">
-              It's your special day.
+              Find the Perfect Vendors
               <br />
-              We'll help you make it perfect.
+              for Your Special Day
             </h1>
           </div>
           
           <p className="font-body text-xl md:text-lg text-wedding-text/80 max-w-lg mx-auto md:mx-0">
-            Dedicated to making wedding planning as simple as possible, 
-            we help each and every couple find the best vendors to create 
-            their dream wedding.
+            Connect with trusted wedding professionals who will bring your vision to life. 
+            From photographers to florists, we'll help you build your perfect wedding team.
           </p>
 
           <div className="max-w-xl backdrop-blur-sm bg-white/90 p-6 rounded-xl shadow-lg mx-auto md:mx-0">
