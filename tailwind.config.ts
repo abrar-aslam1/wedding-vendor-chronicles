@@ -87,11 +87,17 @@ export default {
         'accordion-up': {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: '0' }
+        },
+        'page-flip': {
+          '0%': { transform: 'rotateY(0deg) skewY(0deg)' },
+          '50%': { transform: 'rotateY(90deg) skewY(-20deg)' },
+          '100%': { transform: 'rotateY(180deg) skewY(0deg)' }
         }
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
-        'accordion-up': 'accordion-up 0.2s ease-out'
+        'accordion-up': 'accordion-up 0.2s ease-out',
+        'page-flip': 'page-flip 0.15s linear infinite'
       },
       transitionDuration: {
         '450': '450ms',
