@@ -8,7 +8,7 @@ export const ListBusinessButton = () => {
           <span className="absolute right-0.5 -top-1 h-2.5 w-2.5 rotate-45 border-t-2 border-r-2 border-white"></span>
         </span>
       </span>
-      <span className="relative block py-2.5 px-8 text-center font-bold uppercase tracking-wider text-wedding-text/50 transition-all duration-450 ease-out group-hover:translate-x-0 group-hover:text-white">
+      <span className="relative block py-3 px-10 text-center font-bold uppercase tracking-wider text-wedding-text/50 transition-all duration-450 ease-out group-hover:translate-x-0 group-hover:text-white">
         List Your Business
       </span>
     </button>
