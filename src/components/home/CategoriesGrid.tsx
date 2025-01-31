@@ -116,7 +116,7 @@ export const CategoriesGrid = () => {
     <section className="py-8 px-4">
       <div className="container mx-auto">
         <h2 className="text-2xl font-bold text-center mb-8 text-wedding-text">Wedding Vendor Categories</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 max-w-5xl mx-auto">
           {categories.map((category) => (
             <Card 
               key={category.id} 
