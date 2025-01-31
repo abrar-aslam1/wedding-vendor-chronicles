@@ -55,7 +55,6 @@ export function MainNav() {
   const renderAuthButtons = () => (
     user ? (
       <>
-        <ListBusinessButton />
         <Button
           variant="ghost"
           onClick={() => navigate("/favorites")}
@@ -107,6 +106,7 @@ export function MainNav() {
               <Search className="h-4 w-4 mr-2" />
               Search Vendors
             </Button>
+            <ListBusinessButton />
             {renderAuthButtons()}
           </div>
 
@@ -139,6 +139,7 @@ export function MainNav() {
                     <Search className="h-4 w-4 mr-2" />
                     Search Vendors
                   </Button>
+                  <ListBusinessButton />
                   <div className="flex flex-col gap-2 mt-4">
                     {renderAuthButtons()}
                   </div>
