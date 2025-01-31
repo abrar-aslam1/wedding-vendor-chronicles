@@ -20,6 +20,8 @@ function App() {
         <Route path="/auth" element={<Auth />} />
         <Route path="/auth/callback" element={<AuthCallback />} />
         <Route path="/search/:category" element={<Search />} />
+        <Route path="/search/:state" element={<Search />} />
+        <Route path="/search/:state/:city" element={<Search />} />
         <Route path="/loading" element={<Loading />} />
         <Route path="/top-20/:category/:city/:state" element={<Search />} />
         <Route path="/vendor/:vendorId" element={<VendorDetail />} />

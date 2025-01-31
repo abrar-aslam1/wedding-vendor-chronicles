@@ -51,7 +51,7 @@ export const CityGrid = ({ state }: CityGridProps) => {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {cities.map((city) => (
         <CityCard
-          key={city.city}
+          key={`${city.city}-${city.state}`}
           city={city.city}
           state={city.state}
           vendorCount={city.vendor_count}

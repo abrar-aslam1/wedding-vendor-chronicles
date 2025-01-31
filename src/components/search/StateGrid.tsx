@@ -4,15 +4,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { Json } from "@/integrations/supabase/types";
 
 interface LocationMetadata {
+  id: string;
   state: string;
-  vendor_count: number | null;
+  vendor_count: number;
   popular_cities: string[];
-  average_rating: number | null;
+  average_rating: number;
   seo_description: string | null;
   created_at: string;
   updated_at: string;
-  id: string;
-  city: string | null;
 }
 
 export const StateGrid = () => {
@@ -31,13 +30,12 @@ export const StateGrid = () => {
         return;
       }
 
-      // Transform the data to ensure popular_cities is always a string array
       const transformedData = data?.map(item => ({
         ...item,
         popular_cities: Array.isArray(item.popular_cities) 
           ? item.popular_cities 
-          : Array.isArray(item.popular_cities as unknown) 
-            ? (item.popular_cities as string[])
+          : typeof item.popular_cities === 'object' && item.popular_cities !== null
+            ? Object.values(item.popular_cities as Record<string, string>)
             : []
       })) || [];
 
