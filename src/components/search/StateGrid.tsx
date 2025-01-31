@@ -36,7 +36,9 @@ export const StateGrid = () => {
         ...item,
         popular_cities: Array.isArray(item.popular_cities) 
           ? item.popular_cities 
-          : (item.popular_cities as Json[] || []).map(city => String(city))
+          : Array.isArray(item.popular_cities as unknown) 
+            ? (item.popular_cities as string[])
+            : []
       })) || [];
 
       setStates(transformedData as LocationMetadata[]);
