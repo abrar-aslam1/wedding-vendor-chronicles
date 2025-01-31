@@ -12,6 +12,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ListBusinessButton } from "@/components/ui/list-business-button";
 
 export function MainNav() {
   const [user, setUser] = useState(null);
@@ -54,9 +55,7 @@ export function MainNav() {
   const renderAuthButtons = () => (
     user ? (
       <>
-        <Button variant="outline" className="w-full md:w-auto border-wedding-primary text-wedding-primary hover:bg-wedding-primary hover:text-white">
-          List Your Business
-        </Button>
+        <ListBusinessButton />
         <Button
           variant="ghost"
           onClick={() => navigate("/favorites")}
