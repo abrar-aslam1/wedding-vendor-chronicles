@@ -40,7 +40,7 @@ export const HeroSection = () => {
       <div className="container mx-auto px-6 relative z-10">
         <div className="space-y-8 md:space-y-6 text-center md:text-left max-w-2xl mx-auto md:mx-0">
           <div>
-            <h2 className="font-heading text-wedding-primary font-semibold mb-6 md:mb-4 tracking-wider text-xl md:text-lg uppercase">
+            <h2 className="font-heading text-wedding-primary text-sm md:text-base uppercase tracking-wider mb-6 md:mb-4">
               DISCOVER YOUR DREAM WEDDING TEAM
             </h2>
             <h1 className="font-heading text-4xl md:text-3xl lg:text-4xl font-bold text-wedding-text leading-tight">
