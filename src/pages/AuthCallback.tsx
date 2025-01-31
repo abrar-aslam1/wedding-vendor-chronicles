@@ -1,18 +1,58 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const AuthCallback = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const { toast } = useToast();
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        navigate("/");
-      } else {
+    const handleCallback = async () => {
+      try {
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        
+        if (sessionError) throw sessionError;
+        
+        if (session) {
+          // Check if profile exists
+          const { data: profile, error: profileError } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', session.user.id)
+            .single();
+
+          if (profileError && profileError.code !== 'PGRST116') { // PGRST116 is "no rows returned"
+            throw profileError;
+          }
+
+          // Create profile if it doesn't exist
+          if (!profile) {
+            const { error: insertError } = await supabase
+              .from('profiles')
+              .insert({ id: session.user.id });
+
+            if (insertError) throw insertError;
+          }
+
+          const returnUrl = searchParams.get("returnUrl");
+          navigate(returnUrl ? decodeURIComponent(returnUrl) : "/");
+        } else {
+          navigate("/auth");
+        }
+      } catch (error: any) {
+        console.error('Auth callback error:', error);
+        toast({
+          title: "Authentication Error",
+          description: error.message || "Failed to complete authentication",
+          variant: "destructive",
+        });
         navigate("/auth");
       }
-    });
+    };
+
+    handleCallback();
   }, [navigate]);
 
   return (

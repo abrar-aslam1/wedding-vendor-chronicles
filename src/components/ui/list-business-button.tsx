@@ -1,6 +1,30 @@
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+
 export const ListBusinessButton = () => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const handleClick = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (!user) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in to list your business",
+        variant: "default",
+      });
+      navigate("/auth?returnUrl=/list-business");
+      return;
+    }
+
+    navigate("/list-business");
+  };
+  
   return (
     <button
+      onClick={handleClick}
       className="group relative inline-block w-full md:w-auto cursor-pointer outline-none border-0 bg-transparent p-0 text-base font-inherit mx-2"
     >
       <span className="absolute top-0 left-0 h-10 w-10 rounded-full bg-wedding-primary transition-all duration-450 ease-out group-hover:w-full group-hover:shadow-lg group-active:scale-95">

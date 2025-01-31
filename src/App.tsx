@@ -10,6 +10,8 @@ import Favorites from "@/pages/Favorites";
 import Terms from "@/pages/Terms";
 import Privacy from "@/pages/Privacy";
 import NotFound from "@/pages/NotFound";
+import ListBusiness from "@/pages/ListBusiness";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 function App() {
   return (
@@ -27,6 +29,11 @@ function App() {
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/privacy" element={<Privacy />} />
+        <Route path="/list-business" element={
+          <ProtectedRoute>
+            <ListBusiness />
+          </ProtectedRoute>
+        } />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Toaster />
