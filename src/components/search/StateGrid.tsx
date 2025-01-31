@@ -1,11 +1,18 @@
 import { useEffect, useState } from "react";
 import { StateCard } from "./StateCard";
 import { supabase } from "@/integrations/supabase/client";
+import { Json } from "@/integrations/supabase/types";
 
 interface LocationMetadata {
   state: string;
-  vendor_count: number;
+  vendor_count: number | null;
   popular_cities: string[];
+  average_rating: number | null;
+  seo_description: string | null;
+  created_at: string;
+  updated_at: string;
+  id: string;
+  city: string | null;
 }
 
 export const StateGrid = () => {
@@ -24,7 +31,15 @@ export const StateGrid = () => {
         return;
       }
 
-      setStates(data || []);
+      // Transform the data to ensure popular_cities is always a string array
+      const transformedData = data?.map(item => ({
+        ...item,
+        popular_cities: Array.isArray(item.popular_cities) 
+          ? item.popular_cities 
+          : (item.popular_cities as Json[] || []).map(city => String(city))
+      })) || [];
+
+      setStates(transformedData as LocationMetadata[]);
       setLoading(false);
     };
 
@@ -45,9 +60,9 @@ export const StateGrid = () => {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {states.map((state) => (
         <StateCard
-          key={state.state}
+          key={state.id}
           state={state.state}
-          vendorCount={state.vendor_count}
+          vendorCount={state.vendor_count || 0}
           popularCities={state.popular_cities}
         />
       ))}
