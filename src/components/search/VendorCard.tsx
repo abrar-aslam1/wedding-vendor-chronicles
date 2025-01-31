@@ -26,7 +26,7 @@ export const VendorCard = ({
     navigate(`/vendor/${encodeURIComponent(vendor.place_id)}`, { state: { vendor } });
   };
 
-  const handleFavoriteClick = async (e: React.MouseEvent) => {
+  const handleFavoriteClick = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.stopPropagation();
     const { data: { session } } = await supabase.auth.getSession();
     
