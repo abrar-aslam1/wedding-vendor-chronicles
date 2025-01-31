@@ -1,44 +1,60 @@
-import { ChevronRight, Home } from "lucide-react";
+import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-interface LocationHeaderProps {
-  state?: string;
-  city?: string;
-}
+export const LocationHeader = () => {
+  const { state, city } = useParams();
 
-export const LocationHeader = ({ state, city }: LocationHeaderProps) => {
   return (
     <div className="mb-8">
-      <div className="flex items-center gap-2 text-sm text-gray-600 mb-4">
-        <Link to="/" className="hover:text-wedding-primary">
-          <Home className="w-4 h-4" />
-        </Link>
-        {state && (
-          <>
-            <ChevronRight className="w-4 h-4" />
+      <nav className="flex" aria-label="Breadcrumb">
+        <ol className="inline-flex items-center space-x-1 md:space-x-3">
+          <li className="inline-flex items-center">
             <Link 
-              to={`/search/${state.toLowerCase()}`}
-              className="hover:text-wedding-primary"
+              to="/" 
+              className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-wedding-primary"
             >
-              {state}
+              Home
             </Link>
-          </>
-        )}
-        {city && (
-          <>
-            <ChevronRight className="w-4 h-4" />
-            <span className="text-wedding-primary">{city}</span>
-          </>
-        )}
-      </div>
-      <h1 className="text-3xl font-heading text-wedding-text">
+          </li>
+          
+          {state && (
+            <li>
+              <div className="flex items-center">
+                <span className="mx-2 text-gray-400">/</span>
+                <Link 
+                  to={`/search/${state}`}
+                  className="text-sm font-medium text-gray-700 hover:text-wedding-primary"
+                >
+                  {state}
+                </Link>
+              </div>
+            </li>
+          )}
+          
+          {city && (
+            <li>
+              <div className="flex items-center">
+                <span className="mx-2 text-gray-400">/</span>
+                <span className="text-sm font-medium text-wedding-primary">
+                  {city}
+                </span>
+              </div>
+            </li>
+          )}
+        </ol>
+      </nav>
+      
+      <h1 className="text-3xl font-bold text-wedding-text mt-4">
         {city 
           ? `Wedding Vendors in ${city}, ${state}`
-          : state
-          ? `Wedding Vendors in ${state}`
-          : 'Find Wedding Vendors by Location'
+          : state 
+            ? `Wedding Vendors in ${state}`
+            : 'Find Wedding Vendors Near You'
         }
       </h1>
+      <p className="text-gray-600 mt-2">
+        Discover and connect with the best wedding vendors in your area
+      </p>
     </div>
   );
 };

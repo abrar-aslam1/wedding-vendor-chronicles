@@ -1,37 +1,36 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import Auth from "./pages/Auth";
-import AuthCallback from "./pages/AuthCallback";
-import Search from "./pages/Search";
-import Loading from "./pages/Loading";
-import Privacy from "./pages/Privacy";
-import Terms from "./pages/Terms";
-import Favorites from "./pages/Favorites";
-import NotFound from "./pages/NotFound";
-import VendorDetail from "./pages/VendorDetail";
-import { Toaster } from "./components/ui/toaster";
-import "./App.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Toaster } from "@/components/ui/toaster";
+import Index from "@/pages/Index";
+import Search from "@/pages/Search";
+import VendorDetail from "@/pages/VendorDetail";
+import Auth from "@/pages/Auth";
+import AuthCallback from "@/pages/AuthCallback";
+import Loading from "@/pages/Loading";
+import Favorites from "@/pages/Favorites";
+import Terms from "@/pages/Terms";
+import Privacy from "@/pages/Privacy";
+import NotFound from "@/pages/NotFound";
 
 function App() {
   return (
-    <Router>
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/auth/callback" element={<AuthCallback />} />
-        <Route path="/search/:category" element={<Search />} />
         <Route path="/search/:state" element={<Search />} />
         <Route path="/search/:state/:city" element={<Search />} />
         <Route path="/loading" element={<Loading />} />
         <Route path="/top-20/:category/:city/:state" element={<Search />} />
+        <Route path="/top-20/:category/:subcategory/:city/:state" element={<Search />} />
         <Route path="/vendor/:vendorId" element={<VendorDetail />} />
-        <Route path="/privacy" element={<Privacy />} />
-        <Route path="/terms" element={<Terms />} />
         <Route path="/favorites" element={<Favorites />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/privacy" element={<Privacy />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Toaster />
-    </Router>
+    </BrowserRouter>
   );
 }
 

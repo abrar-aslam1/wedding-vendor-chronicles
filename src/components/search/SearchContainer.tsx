@@ -55,18 +55,8 @@ export const SearchContainer = () => {
     setIsSearching(true);
     
     try {
-      // Always use location code 2840
       const locationCode = 2840;
       console.log('Using fixed location code:', locationCode);
-
-      // Check cache first
-      console.log('Checking cache for:', {
-        category: searchCategory.toLowerCase(),
-        city: searchCity,
-        state: searchState,
-        locationCode,
-        subcategory
-      });
 
       const { data: cachedResults, error: cacheError } = await supabase
         .from('vendor_cache')
@@ -99,12 +89,11 @@ export const SearchContainer = () => {
 
       console.log('No cache found, fetching from API...');
       
-      // If no cache, invoke the edge function
       const { data: freshResults, error: searchError } = await supabase.functions.invoke('search-vendors', {
         body: { 
           keyword: searchCategory,
           location: `${searchCity}, ${searchState}`,
-          subcategory: subcategory // Pass the subcategory to the edge function
+          subcategory: subcategory
         }
       });
 
@@ -119,10 +108,9 @@ export const SearchContainer = () => {
       }
 
       if (freshResults && Array.isArray(freshResults)) {
-        console.log('Caching fresh results...');
+        console.log('Setting and caching fresh results...');
         setSearchResults(freshResults as SearchResult[]);
 
-        // Cache the results
         const { error: upsertError } = await supabase
           .from('vendor_cache')
           .upsert(
@@ -145,8 +133,6 @@ export const SearchContainer = () => {
             description: "Results were found but couldn't be cached. This won't affect your search.",
             variant: "default",
           });
-        } else {
-          console.log('Successfully cached results');
         }
       } else {
         console.log('No results or invalid results format:', freshResults);

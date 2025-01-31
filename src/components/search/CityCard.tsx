@@ -1,38 +1,32 @@
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface CityCardProps {
   city: string;
   state: string;
-  vendorCount?: number;
-  averageRating?: number;
+  vendorCount: number;
 }
 
-export const CityCard = ({ city, state, vendorCount = 0, averageRating }: CityCardProps) => {
+export const CityCard = ({ city, state, vendorCount }: CityCardProps) => {
   const navigate = useNavigate();
 
+  const handleClick = () => {
+    navigate(`/search/${state}/${city}`);
+  };
+
   return (
-    <Card 
-      className="cursor-pointer hover:shadow-lg transition-shadow duration-300"
-      onClick={() => navigate(`/search/${state.toLowerCase()}/${city.toLowerCase()}`)}
+    <div 
+      onClick={handleClick}
+      className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer"
     >
-      <CardHeader className="pb-2">
-        <h3 className="text-xl font-semibold text-wedding-text">{city}</h3>
-      </CardHeader>
-      <CardContent>
-        <p className="text-sm text-gray-600 mb-2">
-          {vendorCount} vendors available
-        </p>
-        {averageRating && (
-          <div className="flex items-center gap-1">
-            <Star className="w-4 h-4 text-yellow-400 fill-current" />
-            <span className="text-sm text-gray-600">
-              {averageRating.toFixed(1)}
-            </span>
-          </div>
-        )}
-      </CardContent>
-    </Card>
+      <h3 className="text-xl font-semibold text-wedding-text mb-2">{city}</h3>
+      <p className="text-gray-600">
+        {vendorCount} {vendorCount === 1 ? 'Vendor' : 'Vendors'} Available
+      </p>
+      <div className="mt-4">
+        <span className="text-wedding-primary text-sm font-medium">
+          View Vendors →
+        </span>
+      </div>
+    </div>
   );
 };
