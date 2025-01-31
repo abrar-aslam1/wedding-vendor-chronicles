@@ -9,6 +9,42 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      location_metadata: {
+        Row: {
+          average_rating: number | null
+          city: string | null
+          created_at: string
+          id: string
+          popular_cities: Json | null
+          seo_description: string | null
+          state: string
+          updated_at: string
+          vendor_count: number | null
+        }
+        Insert: {
+          average_rating?: number | null
+          city?: string | null
+          created_at?: string
+          id?: string
+          popular_cities?: Json | null
+          seo_description?: string | null
+          state: string
+          updated_at?: string
+          vendor_count?: number | null
+        }
+        Update: {
+          average_rating?: number | null
+          city?: string | null
+          created_at?: string
+          id?: string
+          popular_cities?: Json | null
+          seo_description?: string | null
+          state?: string
+          updated_at?: string
+          vendor_count?: number | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
