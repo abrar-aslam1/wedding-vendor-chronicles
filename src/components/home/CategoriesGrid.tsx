@@ -116,7 +116,7 @@ export const CategoriesGrid = () => {
     <section className="py-8 px-4">
       <div className="container mx-auto">
         <h2 className="text-2xl font-bold text-center mb-8 text-wedding-text">Wedding Vendor Categories</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 max-w-7xl mx-auto">
           {categories.map((category) => (
             <Card 
               key={category.id} 
@@ -125,7 +125,7 @@ export const CategoriesGrid = () => {
               }`}
               onClick={() => handleCategoryClick(category.slug)}
             >
-              <div className="aspect-video w-full overflow-hidden rounded-t-lg relative">
+              <div className="aspect-[4/3] w-full overflow-hidden rounded-t-lg relative">
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors" />
                 <img 
                   src={category.image} 
@@ -133,11 +133,11 @@ export const CategoriesGrid = () => {
                   className="w-full h-full object-cover"
                 />
               </div>
-              <CardHeader>
+              <CardHeader className="p-4">
                 <CardTitle className="text-lg text-wedding-text">{category.name}</CardTitle>
-                <CardDescription>{category.description}</CardDescription>
+                <CardDescription className="text-sm">{category.description}</CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-4 pt-0">
                 {selectedCategory === 'caterers' && category.slug === 'caterers' ? (
                   <div className="space-y-4">
                     <h3 className="font-medium text-sm text-gray-600">Select a Cuisine:</h3>
