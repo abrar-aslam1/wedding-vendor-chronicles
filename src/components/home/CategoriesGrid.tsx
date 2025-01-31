@@ -16,7 +16,7 @@ const categories = [
     id: 2,
     name: "Photographers",
     description: "Capture every magical moment",
-    image: "https://images.unsplash.com/photo-1537633552985-df8429e048b8",
+    image: "https://images.unsplash.com/photo-1519741497674-611481863552",
     slug: "photographers"
   },
   {
