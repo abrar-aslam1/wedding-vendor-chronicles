@@ -6,7 +6,6 @@ interface CityMetadata {
   city: string;
   state: string;
   vendor_count: number;
-  average_rating: number;
 }
 
 interface CityGridProps {
@@ -55,7 +54,6 @@ export const CityGrid = ({ state }: CityGridProps) => {
           city={city.city}
           state={city.state}
           vendorCount={city.vendor_count}
-          averageRating={city.average_rating}
         />
       ))}
     </div>
