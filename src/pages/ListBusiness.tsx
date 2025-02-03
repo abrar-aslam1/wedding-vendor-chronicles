@@ -12,18 +12,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { LocationSelects } from "@/components/search/LocationSelects";
-
-interface Category {
-  id: string;
-  category: string;
-  name: string;
-  description: string | null;
-}
+import { categories } from "@/config/categories";
 
 const formSchema = z.object({
   businessName: z.string().min(2, "Business name must be at least 2 characters"),
@@ -49,7 +43,6 @@ export default function ListBusiness() {
   const [selectedState, setSelectedState] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
   const [isSearching, setIsSearching] = useState(false);
-  const [categories, setCategories] = useState<Category[]>([]);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -64,30 +57,6 @@ export default function ListBusiness() {
       website: "",
     },
   });
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const { data, error } = await supabase
-        .from('vendor_subcategories')
-        .select('*');
-      
-      if (error) {
-        console.error('Error fetching categories:', error);
-        toast({
-          title: "Error",
-          description: "Failed to load categories. Please try again.",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      if (data) {
-        setCategories(data);
-      }
-    };
-
-    fetchCategories();
-  }, [toast]);
 
   const uploadImage = async (file: File): Promise<string> => {
     const fileExt = file.name.split('.').pop();
@@ -139,7 +108,7 @@ export default function ListBusiness() {
         .insert({
           business_name: data.businessName,
           description: data.description,
-          category: data.category,
+          category: data.category.toLowerCase(),
           city: data.city,
           state: data.state,
           contact_info,
@@ -211,8 +180,8 @@ export default function ListBusiness() {
                 <SelectContent className="max-h-[300px]">
                   {categories.map((category) => (
                     <SelectItem
-                      key={category.id}
-                      value={category.category}
+                      key={category.slug}
+                      value={category.slug}
                     >
                       <div className="flex flex-col">
                         <span>{category.name}</span>
