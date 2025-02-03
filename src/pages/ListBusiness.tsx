@@ -18,7 +18,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { LocationSelects } from "@/components/search/LocationSelects";
 
-// We'll fetch categories from the database instead of using a static list
 interface Category {
   id: string;
   category: string;
@@ -90,47 +89,42 @@ export default function ListBusiness() {
     fetchCategories();
   }, [toast]);
 
+  const uploadImage = async (file: File): Promise<string> => {
+    const fileExt = file.name.split('.').pop();
+    const timestamp = new Date().getTime();
+    const fileName = `vendor_${timestamp}_${Math.random().toString(36).substring(2)}.${fileExt}`;
+    const filePath = `vendors/${fileName}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from('vendor-images')
+      .upload(filePath, file);
+
+    if (uploadError) {
+      throw new Error(`Failed to upload image: ${uploadError.message}`);
+    }
+
+    const { data: { publicUrl } } = supabase.storage
+      .from('vendor-images')
+      .getPublicUrl(filePath);
+
+    return publicUrl;
+  };
+
   const onSubmit = async (data: FormValues) => {
     try {
       setIsSubmitting(true);
 
-      // Validate images
       if (selectedFiles.length === 0) {
         throw new Error("Please upload at least one image of your business");
       }
 
-      // Get current user
       const { data: { user }, error: userError } = await supabase.auth.getUser();
       if (userError || !user) throw new Error("Please sign in to list your business");
 
-      // Upload images
-      const imageUrls: string[] = [];
-      for (const file of selectedFiles) {
-        const fileExt = file.name.split('.').pop();
-        const timestamp = new Date().getTime();
-        const fileName = `vendor_${timestamp}_${Math.random().toString(36).substring(2)}.${fileExt}`;
-        const filePath = `vendors/${fileName}`;
+      // Upload all images concurrently
+      const imageUploadPromises = selectedFiles.map(file => uploadImage(file));
+      const imageUrls = await Promise.all(imageUploadPromises);
 
-        try {
-          const { error: uploadError } = await supabase.storage
-            .from('vendor-images')
-            .upload(filePath, file);
-
-          if (uploadError) {
-            throw new Error(`Failed to upload image: ${uploadError.message}`);
-          }
-
-          const { data: { publicUrl } } = supabase.storage
-            .from('vendor-images')
-            .getPublicUrl(filePath);
-
-          imageUrls.push(publicUrl);
-        } catch (uploadError) {
-          throw new Error(`Failed to upload image: ${uploadError instanceof Error ? uploadError.message : 'Unknown error'}`);
-        }
-      }
-
-      // Prepare contact info
       const contact_info: Record<string, string> = {
         phone: data.phone,
         email: data.email,
@@ -140,13 +134,12 @@ export default function ListBusiness() {
         contact_info.website = data.website;
       }
 
-      // Create vendor entry
       const { error: insertError } = await supabase
         .from('vendors')
         .insert({
           business_name: data.businessName,
           description: data.description,
-          category: data.category, // This now matches exactly with the category in vendor_subcategories
+          category: data.category,
           city: data.city,
           state: data.state,
           contact_info,
