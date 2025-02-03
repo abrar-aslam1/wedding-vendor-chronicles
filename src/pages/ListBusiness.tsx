@@ -12,25 +12,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { LocationSelects } from "@/components/search/LocationSelects";
-import { categories } from "@/config/categories";
 
-// Get valid category slugs for validation
-const validCategorySlugs = categories.map(cat => cat.slug);
+// We'll fetch categories from the database instead of using a static list
+interface Category {
+  id: string;
+  category: string;
+  name: string;
+  description: string | null;
+}
 
 const formSchema = z.object({
   businessName: z.string().min(2, "Business name must be at least 2 characters"),
   description: z.string().min(10, "Description must be at least 10 characters"),
-  category: z.string()
-    .min(1, "Please select a category")
-    .refine(
-      (val) => validCategorySlugs.includes(val),
-      "Please select a valid category"
-    ),
+  category: z.string().min(1, "Please select a category"),
   city: z.string().min(1, "Please select a city"),
   state: z.string().min(1, "Please select a state"),
   phone: z.string().min(10, "Please enter a valid phone number"),
@@ -51,6 +50,7 @@ export default function ListBusiness() {
   const [selectedState, setSelectedState] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
   const [isSearching, setIsSearching] = useState(false);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -65,6 +65,30 @@ export default function ListBusiness() {
       website: "",
     },
   });
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const { data, error } = await supabase
+        .from('vendor_subcategories')
+        .select('*');
+      
+      if (error) {
+        console.error('Error fetching categories:', error);
+        toast({
+          title: "Error",
+          description: "Failed to load categories. Please try again.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (data) {
+        setCategories(data);
+      }
+    };
+
+    fetchCategories();
+  }, [toast]);
 
   const onSubmit = async (data: FormValues) => {
     try {
@@ -95,15 +119,15 @@ export default function ListBusiness() {
           if (uploadError) {
             throw new Error(`Failed to upload image: ${uploadError.message}`);
           }
+
+          const { data: { publicUrl } } = supabase.storage
+            .from('vendor-images')
+            .getPublicUrl(filePath);
+
+          imageUrls.push(publicUrl);
         } catch (uploadError) {
           throw new Error(`Failed to upload image: ${uploadError instanceof Error ? uploadError.message : 'Unknown error'}`);
         }
-
-        const { data: { publicUrl } } = supabase.storage
-          .from('vendor-images')
-          .getPublicUrl(filePath);
-
-        imageUrls.push(publicUrl);
       }
 
       // Prepare contact info
@@ -112,7 +136,6 @@ export default function ListBusiness() {
         email: data.email,
       };
       
-      // Only add website if it's provided
       if (data.website) {
         contact_info.website = data.website;
       }
@@ -123,7 +146,7 @@ export default function ListBusiness() {
         .insert({
           business_name: data.businessName,
           description: data.description,
-          category: data.category,
+          category: data.category, // This now matches exactly with the category in vendor_subcategories
           city: data.city,
           state: data.state,
           contact_info,
@@ -147,7 +170,7 @@ export default function ListBusiness() {
         title: "Error",
         description: error instanceof Error 
           ? error.message 
-          : error?.message || "Failed to list business. Please try again.",
+          : "Failed to list business. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -195,12 +218,14 @@ export default function ListBusiness() {
                 <SelectContent className="max-h-[300px]">
                   {categories.map((category) => (
                     <SelectItem
-                      key={category.slug}
-                      value={category.slug}
+                      key={category.id}
+                      value={category.category}
                     >
                       <div className="flex flex-col">
                         <span>{category.name}</span>
-                        <span className="text-sm text-gray-500">{category.description}</span>
+                        {category.description && (
+                          <span className="text-sm text-gray-500">{category.description}</span>
+                        )}
                       </div>
                     </SelectItem>
                   ))}

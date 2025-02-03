@@ -174,6 +174,60 @@ export type Database = {
         }
         Relationships: []
       }
+      vendors: {
+        Row: {
+          business_name: string
+          category: string
+          city: string
+          contact_info: Json
+          created_at: string
+          description: string
+          id: string
+          images: string[]
+          owner_id: string
+          state: string
+        }
+        Insert: {
+          business_name: string
+          category: string
+          city: string
+          contact_info: Json
+          created_at?: string
+          description: string
+          id?: string
+          images: string[]
+          owner_id: string
+          state: string
+        }
+        Update: {
+          business_name?: string
+          category?: string
+          city?: string
+          contact_info?: Json
+          created_at?: string
+          description?: string
+          id?: string
+          images?: string[]
+          owner_id?: string
+          state?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vendors_category_fkey"
+            columns: ["category"]
+            isOneToOne: false
+            referencedRelation: "vendor_subcategories"
+            referencedColumns: ["category"]
+          },
+          {
+            foreignKeyName: "vendors_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
