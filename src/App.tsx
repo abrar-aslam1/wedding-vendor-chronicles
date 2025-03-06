@@ -1,3 +1,4 @@
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import Index from "@/pages/Index";
@@ -11,6 +12,7 @@ import Terms from "@/pages/Terms";
 import Privacy from "@/pages/Privacy";
 import NotFound from "@/pages/NotFound";
 import ListBusiness from "@/pages/ListBusiness";
+import States from "@/pages/States";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 function App() {
@@ -22,6 +24,7 @@ function App() {
         <Route path="/auth/callback" element={<AuthCallback />} />
         <Route path="/search/:state" element={<Search />} />
         <Route path="/search/:state/:city" element={<Search />} />
+        <Route path="/states" element={<States />} />
         <Route path="/loading" element={<Loading />} />
         <Route path="/top-20/:category/:city/:state" element={<Search />} />
         <Route path="/top-20/:category/:subcategory/:city/:state" element={<Search />} />
