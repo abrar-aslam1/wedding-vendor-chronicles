@@ -1,33 +1,48 @@
 
 import { categories } from '@/config/categories';
+import { locationCodes } from '@/config/locations';
 import fs from 'fs';
 import path from 'path';
 
 const BASE_URL = 'https://findmyweddingvendor.com';
-const TODAY = new Date().toISOString().split('T')[0];
+const TODAY = new Date().toISOString(); // Full ISO 8601 format with time
 
 const generateSitemap = () => {
-  // Create an array of URL objects with priority levels
+  // Create an array of URL objects
   const urls = [
-    // High priority pages
-    { url: '/', priority: '1.0' },
-    { url: '/states', priority: '0.9' },
+    // Main pages
+    { url: '/' },
+    { url: '/states' },
     
-    // Medium priority pages
-    { url: '/auth', priority: '0.8' },
-    { url: '/favorites', priority: '0.7' },
+    // User pages
+    { url: '/auth' },
+    { url: '/favorites' },
     
     // Category pages - organized by category
     ...categories.map(category => ({
-      url: `/search/${category.slug}`,
-      priority: '0.8'
+      url: `/search/${category.slug}`
     })),
     
-    // Informational pages - lower priority
-    { url: '/privacy', priority: '0.5' },
-    { url: '/terms', priority: '0.5' },
-    { url: '/list-business', priority: '0.6' },
+    // Informational pages
+    { url: '/privacy' },
+    { url: '/terms' },
+    { url: '/list-business' },
   ];
+
+  // Location pages - for each state, city, and category
+  const locationUrls = [];
+  
+  // Generate URLs for each state, city, and category
+  Object.entries(locationCodes).forEach(([state, stateData]) => {
+    Object.entries(stateData.cities).forEach(([city, cityCode]) => {
+      // Add URLs for each category in this location
+      categories.forEach(category => {
+        locationUrls.push({
+          url: `/top-20/${category.slug}/${city}/${state}`
+        });
+      });
+    });
+  });
 
   // Build an XML structure with proper indentation and organization
   const xmlHeader = '<?xml version="1.0" encoding="UTF-8"?>\n';
@@ -50,6 +65,8 @@ const generateSitemap = () => {
     .filter(item => ['/privacy', '/terms', '/list-business'].includes(item.url))
     .map(formatUrl)
     .join('');
+    
+  const locationPages = locationUrls.map(formatUrl).join('');
   
   // Build the complete sitemap with section comments
   const sitemap = 
@@ -61,6 +78,8 @@ const generateSitemap = () => {
     categoryPages +
     '  <!-- Informational pages -->\n' +
     infoPages +
+    '  <!-- Location pages -->\n' +
+    locationPages +
     urlsetClose;
 
   // Ensure the public directory exists
@@ -75,13 +94,13 @@ const generateSitemap = () => {
     sitemap.trim()
   );
 
-  const urlCount = urls.length;
+  const urlCount = urls.length + locationUrls.length;
   console.log(`Sitemap generated successfully with ${urlCount} URLs!`);
 };
 
 // Helper function to format a URL entry with proper indentation
-function formatUrl({ url, priority }: { url: string, priority: string }) {
-  return `  <url>\n    <loc>${BASE_URL}${url}</loc>\n    <lastmod>${TODAY}</lastmod>\n    <priority>${priority}</priority>\n  </url>\n`;
+function formatUrl({ url }: { url: string }) {
+  return `  <url>\n    <loc>${BASE_URL}${url}</loc>\n    <lastmod>${TODAY}</lastmod>\n  </url>\n`;
 }
 
 export default generateSitemap;

@@ -1,5 +1,5 @@
 
-import generateSitemap from '../src/utils/generateSitemap';
+import generateSitemap from '../src/utils/generateSitemap.js';
 
 // Execute the sitemap generation
 generateSitemap();
