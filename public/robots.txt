@@ -1,6 +1,19 @@
 
+# Find My Wedding Vendor - robots.txt
+# Updated: July 2023
+
+# Allow all web crawlers to access all content
 User-agent: *
 Allow: /
+
+# Don't index the authentication pages
+User-agent: *
+Disallow: /auth
+Disallow: /auth/*
+Disallow: /loading
+
+# Crawl delay for all bots to prevent server overload
+Crawl-delay: 10
 
 # Sitemap location
 Sitemap: https://findmyweddingvendor.com/sitemap.xml

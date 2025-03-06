@@ -10,6 +10,7 @@ export default function States() {
       <SEOHead 
         title="Browse Wedding Vendors by State" 
         description="Find the perfect wedding vendors in your state. Browse our comprehensive directory of wedding professionals across the United States."
+        canonicalPath="/states"
       />
       <MainNav />
       <div className="pt-20 px-4 py-8 md:py-12">
