@@ -1,5 +1,5 @@
+
 import { categories } from '@/config/categories';
-import { locationCodes } from '@/config/locations';
 import fs from 'fs';
 import path from 'path';
 
@@ -9,39 +9,27 @@ const TODAY = new Date().toISOString().split('T')[0];
 const generateSitemap = () => {
   const urls = [
     // Static Pages
-    { url: '/', priority: '1.0', changefreq: 'weekly' },
-    { url: '/auth', priority: '0.8', changefreq: 'monthly' },
-    { url: '/favorites', priority: '0.7', changefreq: 'daily' },
-    { url: '/privacy', priority: '0.5', changefreq: 'monthly' },
-    { url: '/terms', priority: '0.5', changefreq: 'monthly' },
+    { url: '/', priority: '1.0' },
+    { url: '/auth', priority: '0.8' },
+    { url: '/favorites', priority: '0.7' },
+    { url: '/privacy', priority: '0.5' },
+    { url: '/terms', priority: '0.5' },
   ];
 
-  // Add category search pages
+  // Add category search pages - limiting to just the main categories
   categories.forEach(category => {
     urls.push({
       url: `/search/${category.slug}`,
-      priority: '0.8',
-      changefreq: 'daily'
-    });
-
-    // Add location-specific category pages for major cities
-    Object.entries(locationCodes).forEach(([state, stateData]) => {
-      Object.keys(stateData.cities).forEach((city) => {
-        urls.push({
-          url: `/top-20/${category.slug}/${city.toLowerCase().replace(/ /g, '-')}/${state.toLowerCase().replace(/ /g, '-')}`,
-          priority: '0.7',
-          changefreq: 'daily'
-        });
-      });
+      priority: '0.8'
     });
   });
 
+  // Build a simpler XML structure
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls.map(({ url, priority, changefreq }) => `  <url>
+${urls.map(({ url, priority }) => `  <url>
     <loc>${BASE_URL}${url}</loc>
     <lastmod>${TODAY}</lastmod>
-    <changefreq>${changefreq}</changefreq>
     <priority>${priority}</priority>
   </url>`).join('\n')}
 </urlset>`;
