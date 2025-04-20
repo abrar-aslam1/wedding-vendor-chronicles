@@ -103,10 +103,106 @@
     </ul>
 
     <script>
+        // Function to display hardcoded list of sitemaps for local testing
+        function displayHardcodedSitemaps() {
+            const sitemapList = document.getElementById('individual-sitemaps');
+            sitemapList.innerHTML = '';
+            
+            // Update the main sitemap index links for local viewing
+            document.querySelectorAll('.sitemap-list a').forEach(link => {
+                const href = link.getAttribute('href');
+                if (href.startsWith('/')) {
+                    link.setAttribute('href', href.substring(1));
+                }
+            });
+            
+            // List of sitemap files we know exist
+            const sitemaps = [
+                { name: 'static.xml', description: 'Contains main pages, category pages, and informational pages' },
+                { name: 'wedding-planners.xml', description: 'Contains URLs for wedding planners and planning services' },
+                { name: 'photographers.xml', description: 'Contains URLs for photographers and photography styles' },
+                { name: 'videographers.xml', description: 'Contains URLs for videographers and video services' },
+                { name: 'florists.xml', description: 'Contains URLs for florists and floral styles' },
+                { name: 'caterers-1.xml', description: 'Contains URLs for caterers and cuisine types (part 1)' },
+                { name: 'caterers-2.xml', description: 'Contains URLs for caterers and cuisine types (part 2)' },
+                { name: 'venues-1.xml', description: 'Contains URLs for wedding venues and venue types (part 1)' },
+                { name: 'venues-2.xml', description: 'Contains URLs for wedding venues and venue types (part 2)' },
+                { name: 'djs-and-bands.xml', description: 'Contains URLs for DJs, bands, and entertainment services' },
+                { name: 'cake-designers.xml', description: 'Contains URLs for cake designers and bakeries' },
+                { name: 'bridal-shops.xml', description: 'Contains URLs for bridal shops and dress designers' },
+                { name: 'makeup-artists.xml', description: 'Contains URLs for makeup artists and beauty services' },
+                { name: 'hair-stylists.xml', description: 'Contains URLs for hair stylists and hair services' }
+            ];
+            
+            // Create list items for each sitemap
+            sitemaps.forEach(sitemap => {
+                const li = document.createElement('li');
+                
+                // Create the XML link
+                const xmlLink = document.createElement('a');
+                xmlLink.href = 'sitemaps/' + sitemap.name;
+                xmlLink.target = '_blank';
+                xmlLink.textContent = sitemap.name;
+                li.appendChild(xmlLink);
+                
+                // Add the XML badge
+                const xmlBadge = document.createElement('span');
+                xmlBadge.className = 'format-badge xml-badge';
+                xmlBadge.textContent = 'XML';
+                li.appendChild(xmlBadge);
+                
+                // Create the GZ link
+                const gzLink = document.createElement('a');
+                gzLink.href = 'sitemaps/' + sitemap.name + '.gz';
+                gzLink.target = '_blank';
+                gzLink.textContent = sitemap.name + '.gz';
+                gzLink.style.marginLeft = '15px';
+                li.appendChild(gzLink);
+                
+                // Add the GZ badge
+                const gzBadge = document.createElement('span');
+                gzBadge.className = 'format-badge gz-badge';
+                gzBadge.textContent = 'GZ';
+                li.appendChild(gzBadge);
+                
+                // Add the description
+                const info = document.createElement('div');
+                info.className = 'sitemap-info';
+                info.textContent = sitemap.description;
+                li.appendChild(info);
+                
+                // Add the last modified date
+                const dateInfo = document.createElement('div');
+                dateInfo.className = 'sitemap-info';
+                dateInfo.textContent = `Last updated: ${new Date().toISOString().split('T')[0]}`;
+                li.appendChild(dateInfo);
+                
+                sitemapList.appendChild(li);
+            });
+        }
+        
         // This script will dynamically load the sitemap index and display all individual sitemaps
         document.addEventListener('DOMContentLoaded', async () => {
             try {
-                const response = await fetch('/sitemap.xml');
+                // Check if we're running locally (file://) or on a server
+                const isLocalFile = window.location.protocol === 'file:';
+                
+                // Adjust paths based on environment
+                let sitemapIndexPath = '/sitemap.xml';
+                let sitemapsBasePath = '/sitemaps/';
+                
+                if (isLocalFile) {
+                    // When running locally, use relative paths
+                    sitemapIndexPath = 'sitemap.xml';
+                    sitemapsBasePath = 'sitemaps/';
+                    
+                    // For local testing, we'll use a hardcoded list of sitemaps
+                    // since we can't fetch the sitemap.xml file due to CORS restrictions
+                    displayHardcodedSitemaps();
+                    return;
+                }
+                
+                const response = await fetch(sitemapIndexPath);
                 const text = await response.text();
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(text, "text/xml");
