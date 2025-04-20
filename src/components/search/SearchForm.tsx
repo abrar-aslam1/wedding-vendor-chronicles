@@ -4,6 +4,7 @@ import { LocationSelects } from "./LocationSelects";
 import { SearchButton } from "./SearchButton";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { subcategories as hardcodedSubcategories } from "@/config/subcategories";
 
 interface SearchFormProps {
   onSearch: (category: string, state: string, city: string, subcategory?: string) => Promise<void>;
@@ -24,127 +25,36 @@ export const SearchForm = ({ onSearch, isSearching, preselectedCategory }: Searc
   const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
   const [selectedSubcategory, setSelectedSubcategory] = useState<string>("");
 
+  // Helper function to convert display name to slug
+  const displayNameToSlug = (displayName: string): string => {
+    return displayName.toLowerCase().replace(/\s+&\s+/g, '-and-').replace(/\s+/g, '-');
+  };
+
   useEffect(() => {
     const fetchSubcategories = async () => {
-      const normalizedCategory = selectedCategory.toLowerCase();
-      console.log('Category being checked:', normalizedCategory);
+      if (!selectedCategory) return;
       
+      // Convert display name to slug
+      const categorySlug = displayNameToSlug(selectedCategory);
+      console.log('Category being checked:', selectedCategory);
+      console.log('Category slug:', categorySlug);
+      
+      // Reset subcategories and selected subcategory
       setSubcategories([]);
       setSelectedSubcategory("");
       
-      if (normalizedCategory === 'caterers') {
-        console.log('Fetching cuisine types for caterers...');
-        
-        try {
-          // Use type assertion to bypass TypeScript errors
-          const { data, error } = await (supabase as any)
-            .from('cuisine_types')
-            .select('id, name, description')
-            .eq('category', 'caterers');
-            
-          if (data && !error) {
-            setSubcategories(data);
-          } else {
-            console.error('Error fetching cuisine types:', error);
-          }
-        } catch (err) {
-          console.error('Error fetching cuisine types:', err);
-        }
-      } 
-      else if (normalizedCategory === 'wedding-planners') {
-        console.log('Fetching planner types...');
-        
-        try {
-          // Use type assertion to bypass TypeScript errors
-          const { data, error } = await (supabase as any)
-            .from('planner_types')
-            .select('id, name, description')
-            .eq('category', 'wedding-planners');
-            
-          if (data && !error) {
-            setSubcategories(data);
-          } else {
-            console.error('Error fetching planner types:', error);
-          }
-        } catch (err) {
-          console.error('Error fetching planner types:', err);
-        }
-      }
-      else if (normalizedCategory === 'photographers') {
-        console.log('Fetching photographer types...');
-        
-        try {
-          // Use type assertion to bypass TypeScript errors
-          const { data, error } = await (supabase as any)
-            .from('photographer_types')
-            .select('id, name, description')
-            .eq('category', 'photographers');
-            
-          if (data && !error) {
-            setSubcategories(data);
-          } else {
-            console.error('Error fetching photographer types:', error);
-          }
-        } catch (err) {
-          console.error('Error fetching photographer types:', err);
-        }
-      }
-      else if (normalizedCategory === 'florists') {
-        console.log('Fetching florist types...');
-        
-        try {
-          // Use type assertion to bypass TypeScript errors
-          const { data, error } = await (supabase as any)
-            .from('florist_types')
-            .select('id, name, description')
-            .eq('category', 'florists');
-            
-          if (data && !error) {
-            setSubcategories(data);
-          } else {
-            console.error('Error fetching florist types:', error);
-          }
-        } catch (err) {
-          console.error('Error fetching florist types:', err);
-        }
-      }
-      else if (normalizedCategory === 'venues') {
-        console.log('Fetching venue types...');
-        
-        try {
-          // Use type assertion to bypass TypeScript errors
-          const { data, error } = await (supabase as any)
-            .from('venue_types')
-            .select('id, name, description')
-            .eq('category', 'venues');
-            
-          if (data && !error) {
-            setSubcategories(data);
-          } else {
-            console.error('Error fetching venue types:', error);
-          }
-        } catch (err) {
-          console.error('Error fetching venue types:', err);
-        }
-      }
-      else if (normalizedCategory === 'djs-and-bands') {
-        console.log('Fetching entertainment types...');
-        
-        try {
-          // Use type assertion to bypass TypeScript errors
-          const { data, error } = await (supabase as any)
-            .from('entertainment_types')
-            .select('id, name, description')
-            .eq('category', 'djs-and-bands');
-            
-          if (data && !error) {
-            setSubcategories(data);
-          } else {
-            console.error('Error fetching entertainment types:', error);
-          }
-        } catch (err) {
-          console.error('Error fetching entertainment types:', err);
-        }
+      // Debug: Log all available categories in hardcodedSubcategories
+      console.log('Available categories in hardcodedSubcategories:', Object.keys(hardcodedSubcategories));
+      
+      // Check if we have hardcoded subcategories for this category
+      if (categorySlug && hardcodedSubcategories[categorySlug]) {
+        console.log(`Setting subcategories for ${categorySlug}...`);
+        const categorySubcategories = hardcodedSubcategories[categorySlug];
+        console.log('Subcategories:', categorySubcategories);
+        setSubcategories(categorySubcategories);
+      } else {
+        console.log(`No subcategories found for category slug: ${categorySlug}`);
+        console.log('Is category slug in hardcodedSubcategories?', categorySlug in hardcodedSubcategories);
       }
     };
 
@@ -166,6 +76,11 @@ export const SearchForm = ({ onSearch, isSearching, preselectedCategory }: Searc
       selectedSubcategory
     );
   };
+
+  // Debug: Log subcategories whenever they change
+  useEffect(() => {
+    console.log('Subcategories changed:', subcategories);
+  }, [subcategories]);
 
   return (
     <div className="bg-white rounded-2xl shadow-xl p-6 space-y-4">

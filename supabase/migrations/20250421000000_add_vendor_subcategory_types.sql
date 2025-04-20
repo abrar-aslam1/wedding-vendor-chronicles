@@ -1,14 +1,6 @@
--- First, add the main categories to the vendor_subcategories table if they don't exist already
-INSERT INTO vendor_subcategories (id, name, description, category)
-VALUES 
-  (uuid_generate_v4(), 'Wedding Planners', 'Professional planners to orchestrate your perfect day', 'wedding-planners'),
-  (uuid_generate_v4(), 'Photographers', 'Capture every magical moment', 'photographers'),
-  (uuid_generate_v4(), 'Florists', 'Beautiful floral arrangements for your special day', 'florists'),
-  (uuid_generate_v4(), 'Venues', 'Perfect locations for your ceremony and reception', 'venues'),
-  (uuid_generate_v4(), 'DJs & Bands', 'Entertainment to keep the party going', 'djs-and-bands')
-ON CONFLICT (category) DO NOTHING;
+-- Create tables for various vendor subcategory types
 
--- Create tables for each category's subcategories
+-- Wedding Planner Types
 CREATE TABLE IF NOT EXISTS public.planner_types (
   id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
   name text NOT NULL,
@@ -16,35 +8,7 @@ CREATE TABLE IF NOT EXISTS public.planner_types (
   category text NOT NULL REFERENCES vendor_subcategories(category)
 );
 
-CREATE TABLE IF NOT EXISTS public.photographer_types (
-  id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-  name text NOT NULL,
-  description text,
-  category text NOT NULL REFERENCES vendor_subcategories(category)
-);
-
-CREATE TABLE IF NOT EXISTS public.florist_types (
-  id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-  name text NOT NULL,
-  description text,
-  category text NOT NULL REFERENCES vendor_subcategories(category)
-);
-
-CREATE TABLE IF NOT EXISTS public.venue_types (
-  id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-  name text NOT NULL,
-  description text,
-  category text NOT NULL REFERENCES vendor_subcategories(category)
-);
-
-CREATE TABLE IF NOT EXISTS public.entertainment_types (
-  id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-  name text NOT NULL,
-  description text,
-  category text NOT NULL REFERENCES vendor_subcategories(category)
-);
-
--- Add subcategories for Wedding Planners
+-- Add planner types
 INSERT INTO planner_types (name, description, category)
 VALUES 
   ('Full-Service Planning', 'Comprehensive planning services from engagement to wedding day', 'wedding-planners'),
@@ -54,7 +18,15 @@ VALUES
   ('Cultural Wedding Specialists', 'Planners with expertise in specific cultural wedding traditions', 'wedding-planners')
 ON CONFLICT (id) DO NOTHING;
 
--- Add subcategories for Photographers
+-- Photographer Types
+CREATE TABLE IF NOT EXISTS public.photographer_types (
+  id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+  name text NOT NULL,
+  description text,
+  category text NOT NULL REFERENCES vendor_subcategories(category)
+);
+
+-- Add photographer types
 INSERT INTO photographer_types (name, description, category)
 VALUES 
   ('Traditional Photography', 'Classic posed wedding photography with formal portraits', 'photographers'),
@@ -64,7 +36,15 @@ VALUES
   ('Engagement Specialists', 'Photographers specializing in engagement and pre-wedding sessions', 'photographers')
 ON CONFLICT (id) DO NOTHING;
 
--- Add subcategories for Florists
+-- Florist Types
+CREATE TABLE IF NOT EXISTS public.florist_types (
+  id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+  name text NOT NULL,
+  description text,
+  category text NOT NULL REFERENCES vendor_subcategories(category)
+);
+
+-- Add florist types
 INSERT INTO florist_types (name, description, category)
 VALUES 
   ('Modern Arrangements', 'Contemporary floral designs with clean lines and unique elements', 'florists'),
@@ -74,7 +54,15 @@ VALUES
   ('Luxury/Extravagant', 'Opulent floral installations and high-end arrangements', 'florists')
 ON CONFLICT (id) DO NOTHING;
 
--- Add subcategories for Venues
+-- Venue Types
+CREATE TABLE IF NOT EXISTS public.venue_types (
+  id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+  name text NOT NULL,
+  description text,
+  category text NOT NULL REFERENCES vendor_subcategories(category)
+);
+
+-- Add venue types
 INSERT INTO venue_types (name, description, category)
 VALUES 
   ('Ballrooms', 'Elegant indoor spaces for traditional wedding receptions', 'venues'),
@@ -87,7 +75,15 @@ VALUES
   ('Industrial Spaces', 'Modern, urban venues with raw architectural elements', 'venues')
 ON CONFLICT (id) DO NOTHING;
 
--- Add subcategories for DJs & Bands
+-- Entertainment Types
+CREATE TABLE IF NOT EXISTS public.entertainment_types (
+  id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+  name text NOT NULL,
+  description text,
+  category text NOT NULL REFERENCES vendor_subcategories(category)
+);
+
+-- Add entertainment types
 INSERT INTO entertainment_types (name, description, category)
 VALUES 
   ('DJs', 'Professional DJs specializing in wedding entertainment', 'djs-and-bands'),
@@ -105,8 +101,27 @@ ALTER TABLE public.venue_types ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.entertainment_types ENABLE ROW LEVEL SECURITY;
 
 -- Create policies for all new tables
-CREATE POLICY "Allow public read access" ON public.planner_types FOR SELECT USING (true);
-CREATE POLICY "Allow public read access" ON public.photographer_types FOR SELECT USING (true);
-CREATE POLICY "Allow public read access" ON public.florist_types FOR SELECT USING (true);
-CREATE POLICY "Allow public read access" ON public.venue_types FOR SELECT USING (true);
-CREATE POLICY "Allow public read access" ON public.entertainment_types FOR SELECT USING (true);
+CREATE POLICY "Allow public read access for planner types"
+  ON public.planner_types
+  FOR SELECT
+  USING (true);
+
+CREATE POLICY "Allow public read access for photographer types"
+  ON public.photographer_types
+  FOR SELECT
+  USING (true);
+
+CREATE POLICY "Allow public read access for florist types"
+  ON public.florist_types
+  FOR SELECT
+  USING (true);
+
+CREATE POLICY "Allow public read access for venue types"
+  ON public.venue_types
+  FOR SELECT
+  USING (true);
+
+CREATE POLICY "Allow public read access for entertainment types"
+  ON public.entertainment_types
+  FOR SELECT
+  USING (true);
