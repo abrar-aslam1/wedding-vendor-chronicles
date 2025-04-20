@@ -1,18 +1,54 @@
 # Find My Wedding Vendor - robots.txt
-# Updated: July 2023
+# Updated: April 2025
 
-# Allow all web crawlers to access all content
+# Default rules for all web crawlers
 User-agent: *
 Allow: /
+Disallow: /auth/
+Disallow: /loading/
+Disallow: /api/
+Disallow: /*.json$
+Crawl-delay: 5
 
-# Don't index the authentication pages
+# Google-specific rules
+User-agent: Googlebot
+Allow: /
+Disallow: /auth/
+Disallow: /loading/
+Disallow: /api/
+# No crawl delay for Google to ensure faster indexing
+
+# Bing-specific rules
+User-agent: Bingbot
+Allow: /
+Disallow: /auth/
+Disallow: /loading/
+Disallow: /api/
+Crawl-delay: 5
+
+# Rules for Google Image
+User-agent: Googlebot-Image
+Allow: /lovable-uploads/
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.png$
+Allow: /*.webp$
+Allow: /*.svg$
+Disallow: /
+
+# Rules for mobile Googlebot
+User-agent: Googlebot-Mobile
+Allow: /
+Disallow: /auth/
+Disallow: /loading/
+Disallow: /api/
+
+# Prevent indexing of duplicate content
 User-agent: *
-Disallow: /auth
-Disallow: /auth/*
-Disallow: /loading
-
-# Crawl delay for all bots to prevent server overload
-Crawl-delay: 10
+Disallow: /*?*
 
 # Sitemaps
 Sitemap: https://findmyweddingvendor.com/sitemap.xml
+
+# Host directive to specify the preferred domain
+Host: findmyweddingvendor.com
