@@ -1,6 +1,7 @@
 
 import { categories } from '@/config/categories';
 import { locationCodes } from '@/config/locations';
+import { subcategories } from '@/config/subcategories';
 import fs from 'fs';
 import path from 'path';
 
@@ -37,9 +38,19 @@ const generateSitemap = () => {
     Object.entries(stateData.cities).forEach(([city, cityCode]) => {
       // Add URLs for each category in this location
       categories.forEach(category => {
+        // Add the main category URL
         locationUrls.push({
           url: `/top-20/${category.slug}/${city}/${state}`
         });
+        
+        // Add subcategory URLs if available for this category
+        if (subcategories[category.slug]) {
+          subcategories[category.slug].forEach(subcategory => {
+            locationUrls.push({
+              url: `/top-20/${category.slug}/${subcategory.name.toLowerCase().replace(/\s+/g, '-')}/${city}/${state}`
+            });
+          });
+        }
       });
     });
   });
@@ -78,7 +89,7 @@ const generateSitemap = () => {
     categoryPages +
     '  <!-- Informational pages -->\n' +
     infoPages +
-    '  <!-- Location pages -->\n' +
+    '  <!-- Location pages (including subcategory pages) -->\n' +
     locationPages +
     urlsetClose;
 
