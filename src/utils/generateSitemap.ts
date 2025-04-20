@@ -143,7 +143,9 @@ function createSitemapIndex(sitemapFiles) {
   const sitemapIndexClose = '</sitemapindex>';
   
   const sitemapsXml = sitemapFiles.map(file => {
-    return `  <sitemap>\n    <loc>${BASE_URL}/sitemaps/${file}</loc>\n    <lastmod>${TODAY}</lastmod>\n  </sitemap>\n`;
+    // Escape the URL to ensure it's valid XML
+    const escapedUrl = escapeXml(`${BASE_URL}/sitemaps/${file}`);
+    return `  <sitemap>\n    <loc>${escapedUrl}</loc>\n    <lastmod>${TODAY}</lastmod>\n  </sitemap>\n`;
   }).join('');
   
   const sitemapIndex = xmlHeader + sitemapIndexOpen + sitemapsXml + sitemapIndexClose;
@@ -165,28 +167,46 @@ function updateRobotsTxt() {
   if (fs.existsSync(robotsPath)) {
     robotsContent = fs.readFileSync(robotsPath, 'utf8');
     
-    // Remove any existing Sitemap: lines
+    // Remove any existing Sitemap: lines and sitemap-related comments
     robotsContent = robotsContent
       .split('\n')
-      .filter(line => !line.startsWith('Sitemap:'))
+      .filter(line => {
+        const trimmedLine = line.trim().toLowerCase();
+        return !line.startsWith('Sitemap:') && 
+               !trimmedLine.startsWith('# sitemap') &&
+               !trimmedLine.includes('sitemap location');
+      })
       .join('\n');
   } else {
     // Create a basic robots.txt if it doesn't exist
     robotsContent = 'User-agent: *\nAllow: /\n';
   }
   
-  // Add sitemap reference
-  robotsContent = robotsContent.trim() + '\n\n# Sitemaps\nSitemap: ' + BASE_URL + '/sitemap.xml\n';
+  // Add sitemap reference with escaped URL
+  const escapedSitemapUrl = escapeXml(`${BASE_URL}/sitemap.xml`);
+  robotsContent = robotsContent.trim() + '\n\n# Sitemaps\nSitemap: ' + escapedSitemapUrl + '\n';
   
   // Write the updated robots.txt
   fs.writeFileSync(robotsPath, robotsContent);
   console.log('Updated robots.txt with sitemap reference');
 }
 
+// Helper function to escape XML special characters
+function escapeXml(unsafe: string): string {
+  return unsafe
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
 // Helper function to format a URL entry with proper indentation
 function formatUrl({ url, type }) {
   const { priority, changefreq } = URL_TYPES[type];
-  return `  <url>\n    <loc>${BASE_URL}${url}</loc>\n    <lastmod>${TODAY}</lastmod>\n    <changefreq>${changefreq}</changefreq>\n    <priority>${priority}</priority>\n  </url>\n`;
+  // Escape the URL to ensure it's valid XML
+  const escapedUrl = escapeXml(`${BASE_URL}${url}`);
+  return `  <url>\n    <loc>${escapedUrl}</loc>\n    <lastmod>${TODAY}</lastmod>\n    <changefreq>${changefreq}</changefreq>\n    <priority>${priority}</priority>\n  </url>\n`;
 }
 
 // Helper function to split an array into chunks

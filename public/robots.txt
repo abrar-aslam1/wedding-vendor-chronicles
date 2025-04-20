@@ -1,4 +1,3 @@
-
 # Find My Wedding Vendor - robots.txt
 # Updated: July 2023
 
@@ -15,5 +14,5 @@ Disallow: /loading
 # Crawl delay for all bots to prevent server overload
 Crawl-delay: 10
 
-# Sitemap location
+# Sitemaps
 Sitemap: https://findmyweddingvendor.com/sitemap.xml
