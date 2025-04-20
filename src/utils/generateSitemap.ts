@@ -86,7 +86,7 @@ const generateSitemap = () => {
   createSitemap('static', staticUrls);
   
   // Create separate sitemaps for each category's location pages
-  const sitemapFiles = ['static.xml.gz'];
+  const sitemapFiles = ['static.xml']; // Use uncompressed version in sitemap index
   
   for (const [category, urls] of Object.entries(locationUrlsByCategory)) {
     // Split into chunks if needed
@@ -95,13 +95,13 @@ const generateSitemap = () => {
     if (chunks.length === 1) {
       // Just one sitemap for this category
       createSitemap(category, urls);
-      sitemapFiles.push(`${category}.xml.gz`);
+      sitemapFiles.push(`${category}.xml`); // Use uncompressed version in sitemap index
     } else {
       // Multiple sitemaps for this category
       chunks.forEach((chunk, index) => {
         const filename = `${category}-${index + 1}`;
         createSitemap(filename, chunk);
-        sitemapFiles.push(`${filename}.xml.gz`);
+        sitemapFiles.push(`${filename}.xml`); // Use uncompressed version in sitemap index
       });
     }
   }
@@ -126,14 +126,14 @@ function createSitemap(name, urls) {
   
   const sitemap = xmlHeader + urlsetOpen + urlsXml + urlsetClose;
   
-  // Write uncompressed version for debugging if needed
-  // fs.writeFileSync(path.join(SITEMAP_DIR, `${name}.xml`), sitemap.trim());
+  // Write uncompressed version
+  fs.writeFileSync(path.join(SITEMAP_DIR, `${name}.xml`), sitemap.trim());
   
   // Write gzipped version
   const compressed = zlib.gzipSync(sitemap);
   fs.writeFileSync(path.join(SITEMAP_DIR, `${name}.xml.gz`), compressed);
   
-  console.log(`Created sitemap: ${name}.xml.gz with ${urls.length} URLs`);
+  console.log(`Created sitemap: ${name}.xml with ${urls.length} URLs (+ gzipped version)`);
 }
 
 // Helper function to create a sitemap index file

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sitemap Browser - Find My Wedding Vendor</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #d81b60;
+            border-bottom: 2px solid #f8bbd0;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #c2185b;
+            margin-top: 30px;
+        }
+        .sitemap-list {
+            list-style: none;
+            padding: 0;
+        }
+        .sitemap-list li {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .sitemap-list a {
+            color: #0277bd;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .sitemap-list a:hover {
+            text-decoration: underline;
+        }
+        .sitemap-info {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+        .format-badge {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.8em;
+            margin-left: 8px;
+            font-weight: bold;
+        }
+        .xml-badge {
+            background-color: #e3f2fd;
+            color: #1565c0;
+        }
+        .gz-badge {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        .description {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #fff8e1;
+            border-left: 4px solid #ffc107;
+            border-radius: 0 4px 4px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sitemap Browser</h1>
+    
+    <div class="description">
+        <p>This page allows you to browse all the sitemaps for Find My Wedding Vendor. Each sitemap contains URLs for different sections of the website.</p>
+        <p>Sitemaps are available in both XML format (human-readable) and GZ format (compressed for search engines).</p>
+    </div>
+    
+    <h2>Main Sitemap Index</h2>
+    <ul class="sitemap-list">
+        <li>
+            <a href="/sitemap.xml" target="_blank">sitemap.xml</a>
+            <span class="format-badge xml-badge">XML</span>
+            <div class="sitemap-info">The main sitemap index that references all individual sitemaps</div>
+        </li>
+        <li>
+            <a href="/sitemap.xml.gz" target="_blank">sitemap.xml.gz</a>
+            <span class="format-badge gz-badge">GZ</span>
+            <div class="sitemap-info">Compressed version of the sitemap index (for search engines)</div>
+        </li>
+    </ul>
+    
+    <h2>Individual Sitemaps</h2>
+    <ul class="sitemap-list" id="individual-sitemaps">
+        <li>
+            <a href="/sitemaps/static.xml" target="_blank">static.xml</a>
+            <span class="format-badge xml-badge">XML</span>
+            <div class="sitemap-info">Contains main pages, category pages, and informational pages</div>
+        </li>
+    </ul>
+
+    <script>
+        // This script will dynamically load the sitemap index and display all individual sitemaps
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch('/sitemap.xml');
+                const text = await response.text();
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(text, "text/xml");
+                
+                const sitemaps = xmlDoc.getElementsByTagName("sitemap");
+                const sitemapList = document.getElementById('individual-sitemaps');
+                
+                // Clear the initial example
+                sitemapList.innerHTML = '';
+                
+                for (let i = 0; i < sitemaps.length; i++) {
+                    const loc = sitemaps[i].getElementsByTagName("loc")[0].textContent;
+                    const lastmod = sitemaps[i].getElementsByTagName("lastmod")[0].textContent;
+                    
+                    // Extract the filename from the URL
+                    const filename = loc.split('/').pop();
+                    
+                    // Create a description based on the filename
+                    let description = '';
+                    if (filename === 'static.xml') {
+                        description = 'Contains main pages, category pages, and informational pages';
+                    } else if (filename.includes('caterers')) {
+                        description = 'Contains URLs for caterers and cuisine types';
+                    } else if (filename.includes('photographers')) {
+                        description = 'Contains URLs for photographers and photography styles';
+                    } else if (filename.includes('venues')) {
+                        description = 'Contains URLs for wedding venues and venue types';
+                    } else if (filename.includes('florists')) {
+                        description = 'Contains URLs for florists and floral styles';
+                    } else if (filename.includes('wedding-planners')) {
+                        description = 'Contains URLs for wedding planners and planning services';
+                    } else if (filename.includes('djs-and-bands')) {
+                        description = 'Contains URLs for DJs, bands, and entertainment services';
+                    } else if (filename.includes('cake-designers')) {
+                        description = 'Contains URLs for cake designers and bakeries';
+                    } else if (filename.includes('bridal-shops')) {
+                        description = 'Contains URLs for bridal shops and dress designers';
+                    } else if (filename.includes('makeup-artists')) {
+                        description = 'Contains URLs for makeup artists and beauty services';
+                    } else if (filename.includes('hair-stylists')) {
+                        description = 'Contains URLs for hair stylists and hair services';
+                    } else if (filename.includes('videographers')) {
+                        description = 'Contains URLs for videographers and video services';
+                    } else {
+                        description = 'Contains URLs for wedding vendors';
+                    }
+                    
+                    // Create the list item
+                    const li = document.createElement('li');
+                    
+                    // Create the XML link
+                    const xmlLink = document.createElement('a');
+                    xmlLink.href = loc;
+                    xmlLink.target = '_blank';
+                    xmlLink.textContent = filename;
+                    li.appendChild(xmlLink);
+                    
+                    // Add the XML badge
+                    const xmlBadge = document.createElement('span');
+                    xmlBadge.className = 'format-badge xml-badge';
+                    xmlBadge.textContent = 'XML';
+                    li.appendChild(xmlBadge);
+                    
+                    // Create the GZ link if it's not already a GZ file
+                    if (!filename.endsWith('.gz')) {
+                        const gzLink = document.createElement('a');
+                        gzLink.href = loc + '.gz';
+                        gzLink.target = '_blank';
+                        gzLink.textContent = filename + '.gz';
+                        gzLink.style.marginLeft = '15px';
+                        li.appendChild(gzLink);
+                        
+                        // Add the GZ badge
+                        const gzBadge = document.createElement('span');
+                        gzBadge.className = 'format-badge gz-badge';
+                        gzBadge.textContent = 'GZ';
+                        li.appendChild(gzBadge);
+                    }
+                    
+                    // Add the description
+                    const info = document.createElement('div');
+                    info.className = 'sitemap-info';
+                    info.textContent = description;
+                    li.appendChild(info);
+                    
+                    // Add the last modified date
+                    const dateInfo = document.createElement('div');
+                    dateInfo.className = 'sitemap-info';
+                    dateInfo.textContent = `Last updated: ${lastmod}`;
+                    li.appendChild(dateInfo);
+                    
+                    sitemapList.appendChild(li);
+                }
+            } catch (error) {
+                console.error('Error loading sitemap index:', error);
+                document.getElementById('individual-sitemaps').innerHTML = 
+                    '<li>Error loading sitemap index. Please check the console for details.</li>';
+            }
+        });
+    </script>
+</body>
+</html>
