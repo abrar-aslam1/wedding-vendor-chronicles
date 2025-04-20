@@ -58,33 +58,38 @@ export const SearchContainer = () => {
       const locationCode = 2840;
       console.log('Using fixed location code:', locationCode);
 
-      const { data: cachedResults, error: cacheError } = await supabase
-        .from('vendor_cache')
-        .select('*')
-        .eq('category', searchCategory.toLowerCase())
-        .eq('city', searchCity)
-        .eq('state', searchState)
-        .eq('location_code', locationCode)
-        .maybeSingle();
+      // Skip cache if subcategory is provided to ensure fresh, filtered results
+      if (!subcategory) {
+        const { data: cachedResults, error: cacheError } = await supabase
+          .from('vendor_cache')
+          .select('*')
+          .eq('category', searchCategory.toLowerCase())
+          .eq('city', searchCity)
+          .eq('state', searchState)
+          .eq('location_code', locationCode)
+          .maybeSingle();
 
-      console.log('Cache query response:', { 
-        cachedResults, 
-        cacheError,
-        cacheHit: !!cachedResults?.search_results,
-        cacheTimestamp: cachedResults?.created_at,
-        cacheExpiry: cachedResults?.expires_at
-      });
+        console.log('Cache query response:', { 
+          cachedResults, 
+          cacheError,
+          cacheHit: !!cachedResults?.search_results,
+          cacheTimestamp: cachedResults?.created_at,
+          cacheExpiry: cachedResults?.expires_at
+        });
 
-      if (cacheError) {
-        console.error('Cache fetch error:', cacheError);
-        throw cacheError;
-      }
+        if (cacheError) {
+          console.error('Cache fetch error:', cacheError);
+          throw cacheError;
+        }
 
-      if (cachedResults?.search_results) {
-        console.log('Using cached results from:', new Date(cachedResults.created_at).toLocaleString());
-        setSearchResults(cachedResults.search_results as SearchResult[]);
-        setIsSearching(false);
-        return;
+        if (cachedResults?.search_results) {
+          console.log('Using cached results from:', new Date(cachedResults.created_at).toLocaleString());
+          setSearchResults(cachedResults.search_results as SearchResult[]);
+          setIsSearching(false);
+          return;
+        }
+      } else {
+        console.log('Bypassing cache for subcategory search:', subcategory);
       }
 
       console.log('No cache found, fetching from API...');
@@ -111,28 +116,31 @@ export const SearchContainer = () => {
         console.log('Setting and caching fresh results...');
         setSearchResults(freshResults as SearchResult[]);
 
-        const { error: upsertError } = await supabase
-          .from('vendor_cache')
-          .upsert(
-            {
-              category: searchCategory.toLowerCase(),
-              city: searchCity,
-              state: searchState,
-              location_code: locationCode,
-              search_results: freshResults,
-            },
-            {
-              onConflict: 'category,city,state,location_code'
-            }
-          );
+        // Only cache results if no subcategory is provided
+        if (!subcategory) {
+          const { error: upsertError } = await supabase
+            .from('vendor_cache')
+            .upsert(
+              {
+                category: searchCategory.toLowerCase(),
+                city: searchCity,
+                state: searchState,
+                location_code: locationCode,
+                search_results: freshResults,
+              },
+              {
+                onConflict: 'category,city,state,location_code'
+              }
+            );
 
-        if (upsertError) {
-          console.error('Cache upsert error:', upsertError);
-          toast({
-            title: "Warning",
-            description: "Results were found but couldn't be cached. This won't affect your search.",
-            variant: "default",
-          });
+          if (upsertError) {
+            console.error('Cache upsert error:', upsertError);
+            toast({
+              title: "Warning",
+              description: "Results were found but couldn't be cached. This won't affect your search.",
+              variant: "default",
+            });
+          }
         }
       } else {
         console.log('No results or invalid results format:', freshResults);

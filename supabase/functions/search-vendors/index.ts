@@ -97,27 +97,139 @@ serve(async (req) => {
 
     console.log(`Transformed ${searchResults.length} results`);
     
-    // Additional filtering for subcategory if provided
+    // Enhanced filtering for subcategory if provided
     if (subcategory) {
       const subcategoryLower = subcategory.toLowerCase();
-      // Filter results that mention the subcategory in title or description
-      const filteredResults = searchResults.filter(result => {
+      
+      // Calculate relevance score for each result
+      const scoredResults = searchResults.map(result => {
         const titleLower = result.title.toLowerCase();
         const descriptionLower = (result.description || '').toLowerCase();
         const snippetLower = (result.snippet || '').toLowerCase();
         
-        return titleLower.includes(subcategoryLower) || 
-               descriptionLower.includes(subcategoryLower) ||
-               snippetLower.includes(subcategoryLower);
+        // Base score
+        let score = 0;
+        
+        // Title matches are most important
+        if (titleLower.includes(subcategoryLower)) {
+          score += 10;
+          // Exact match or starts with the subcategory
+          if (titleLower === subcategoryLower || 
+              titleLower.startsWith(`${subcategoryLower} `) || 
+              titleLower.includes(` ${subcategoryLower} `)) {
+            score += 15;
+          }
+        }
+        
+        // Description matches
+        if (descriptionLower.includes(subcategoryLower)) {
+          score += 5;
+          // Phrase matches rather than just word fragments
+          if (descriptionLower.includes(` ${subcategoryLower} `)) {
+            score += 3;
+          }
+        }
+        
+        // Snippet matches
+        if (snippetLower.includes(subcategoryLower)) {
+          score += 5;
+          // Phrase matches rather than just word fragments
+          if (snippetLower.includes(` ${subcategoryLower} `)) {
+            score += 3;
+          }
+        }
+        
+        // Check for related terms based on subcategory
+        // For example, if searching for "Italian", also look for "pasta", "pizza", etc.
+        const relatedTerms = getRelatedTerms(subcategoryLower);
+        for (const term of relatedTerms) {
+          if (titleLower.includes(term)) score += 3;
+          if (descriptionLower.includes(term)) score += 2;
+          if (snippetLower.includes(term)) score += 2;
+        }
+        
+        return { ...result, relevanceScore: score };
       });
+      
+      // Sort by relevance score (highest first)
+      scoredResults.sort((a, b) => (b.relevanceScore || 0) - (a.relevanceScore || 0));
+      
+      // Filter out results with zero relevance
+      const filteredResults = scoredResults.filter(result => (result.relevanceScore || 0) > 0);
+      
+      // Log scoring information
+      console.log(`Scored ${scoredResults.length} results for subcategory: ${subcategory}`);
+      console.log(`Top 3 scores:`, scoredResults.slice(0, 3).map(r => ({ 
+        title: r.title, 
+        score: r.relevanceScore 
+      })));
       
       // If we have filtered results, use them; otherwise fall back to all results
       if (filteredResults.length > 0) {
         console.log(`Filtered to ${filteredResults.length} results matching subcategory: ${subcategory}`);
-        searchResults = filteredResults;
+        // Remove the relevanceScore property before returning
+        searchResults = filteredResults.map(({ relevanceScore, ...rest }) => rest);
       } else {
         console.log(`No results specifically matching subcategory: ${subcategory}, using all results`);
       }
+    }
+    
+    // Helper function to get related terms for a subcategory
+    function getRelatedTerms(subcategory: string): string[] {
+      const relatedTermsMap: Record<string, string[]> = {
+        // Cuisine types
+        'italian': ['pasta', 'pizza', 'risotto', 'italian cuisine', 'italy'],
+        'mexican': ['tacos', 'enchiladas', 'burritos', 'mexican cuisine', 'mexico'],
+        'chinese': ['dim sum', 'stir fry', 'chinese cuisine', 'china'],
+        'indian': ['curry', 'tandoori', 'indian cuisine', 'india'],
+        'american': ['burgers', 'steaks', 'american cuisine', 'usa'],
+        'mediterranean': ['greek', 'turkish', 'mediterranean cuisine'],
+        'japanese': ['sushi', 'ramen', 'japanese cuisine', 'japan'],
+        'thai': ['curry', 'pad thai', 'thai cuisine', 'thailand'],
+        'french': ['pastries', 'french cuisine', 'france'],
+        'spanish': ['paella', 'tapas', 'spanish cuisine', 'spain'],
+        'middle eastern': ['falafel', 'hummus', 'middle eastern cuisine'],
+        
+        // Photographer types
+        'traditional photography': ['formal portraits', 'posed', 'traditional'],
+        'photojournalistic': ['candid', 'documentary', 'storytelling'],
+        'fine art': ['artistic', 'editorial', 'creative'],
+        'aerial photography': ['drone', 'aerial', 'birds eye'],
+        'engagement specialists': ['engagement', 'pre-wedding'],
+        
+        // Planner types
+        'full-service planning': ['full service', 'comprehensive', 'complete'],
+        'day-of coordination': ['day of', 'coordinator', 'on the day'],
+        'partial planning': ['partial', 'some aspects', 'specific services'],
+        'destination wedding planning': ['destination', 'travel', 'abroad'],
+        'cultural wedding specialists': ['cultural', 'traditional', 'specific culture'],
+        
+        // Florist types
+        'modern arrangements': ['modern', 'contemporary', 'unique'],
+        'classic/traditional': ['classic', 'traditional', 'timeless'],
+        'rustic/bohemian': ['rustic', 'boho', 'wildflower', 'natural'],
+        'minimalist': ['minimalist', 'simple', 'clean'],
+        'luxury/extravagant': ['luxury', 'extravagant', 'high-end', 'opulent'],
+        
+        // Venue types
+        'ballrooms': ['ballroom', 'banquet hall', 'indoor'],
+        'barns & farms': ['barn', 'farm', 'rustic', 'countryside'],
+        'beach/waterfront': ['beach', 'waterfront', 'ocean', 'lake', 'river'],
+        'gardens & parks': ['garden', 'park', 'outdoor', 'nature'],
+        'historic buildings': ['historic', 'heritage', 'old', 'landmark'],
+        'hotels & resorts': ['hotel', 'resort', 'accommodation'],
+        'wineries & vineyards': ['winery', 'vineyard', 'wine'],
+        'industrial spaces': ['industrial', 'warehouse', 'loft', 'urban'],
+        
+        // Entertainment types
+        'djs': ['dj', 'disc jockey', 'music'],
+        'live bands': ['band', 'live music', 'musicians'],
+        'solo musicians': ['solo', 'single', 'acoustic'],
+        'orchestras': ['orchestra', 'classical', 'ensemble'],
+        'cultural music specialists': ['cultural music', 'traditional music']
+      };
+      
+      return relatedTermsMap[subcategory] || [];
     }
 
     return new Response(
