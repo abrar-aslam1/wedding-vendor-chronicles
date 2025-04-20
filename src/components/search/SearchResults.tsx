@@ -136,8 +136,14 @@ export const SearchResults = ({ results, isSearching, subcategory }: SearchResul
   const [vendorType, setVendorType] = useState<string>('vendors');
   
   useEffect(() => {
-    // Extract vendor type from URL
+    // Check if we're on the Favorites page
     const path = window.location.pathname;
+    if (path === '/favorites') {
+      setVendorType('Vendors');
+      return;
+    }
+    
+    // Extract vendor type from URL for category pages
     const matches = path.match(/\/top-20\/([^\/]+)/);
     if (matches && matches[1]) {
       // Convert slug to display name

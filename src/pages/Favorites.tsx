@@ -40,16 +40,23 @@ const Favorites = () => {
         return {
           title: vendorData.title || '',
           description: vendorData.description || '',
+          snippet: vendorData.snippet || vendorData.description || '',
           rating: vendorData.rating ? {
-            value: vendorData.rating.value,
-            votes_count: vendorData.rating.votes_count,
-            rating_type: 'Max5',
-            rating_max: 5
+            value: vendorData.rating.value || 0,
+            votes_count: vendorData.rating.votes_count || 0,
+            // Ensure count property exists for RatingDisplay component
+            count: vendorData.rating.votes_count || 0
           } : undefined,
           phone: vendorData.phone || '',
           address: vendorData.address || '',
           url: vendorData.url || '',
-          place_id: vendorData.place_id || ''
+          place_id: vendorData.place_id || '',
+          main_image: vendorData.main_image || '',
+          images: vendorData.images || [],
+          // Add social media properties with fallbacks
+          instagram: vendorData.instagram || '',
+          facebook: vendorData.facebook || '',
+          twitter: vendorData.twitter || ''
         };
       }) || [];
 

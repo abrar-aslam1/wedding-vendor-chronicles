@@ -29,8 +29,14 @@ export const VendorCard = ({
     // Format subcategory for display with proper capitalization
     const formattedSubcategory = subcategory.charAt(0).toUpperCase() + subcategory.slice(1);
     
-    // Extract vendor type from URL
+    // Check if we're on the Favorites page
     const path = window.location.pathname;
+    if (path === '/favorites') {
+      // On Favorites page, just return the formatted subcategory
+      return formattedSubcategory;
+    }
+    
+    // Extract vendor type from URL for category pages
     const matches = path.match(/\/top-20\/([^\/]+)/);
     
     if (matches && matches[1]) {
@@ -77,12 +83,14 @@ export const VendorCard = ({
         {vendor.main_image ? (
           <img
             src={vendor.main_image}
-            alt={vendor.title}
+            alt={vendor.title || 'Vendor image'}
             className="h-full w-full object-cover"
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-gradient-to-r from-wedding-primary to-wedding-secondary">
-            <span className="text-2xl font-semibold text-white">{vendor.title[0]}</span>
+            <span className="text-2xl font-semibold text-white">
+              {vendor.title && vendor.title.length > 0 ? vendor.title[0] : '?'}
+            </span>
           </div>
         )}
       </div>

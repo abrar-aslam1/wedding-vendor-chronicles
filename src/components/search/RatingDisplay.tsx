@@ -4,6 +4,7 @@ import { Star, StarHalf } from 'lucide-react';
 interface Rating {
   value: number | null;
   count?: number;
+  votes_count?: number;
 }
 
 interface RatingDisplayProps {
@@ -22,6 +23,9 @@ export const RatingDisplay: React.FC<RatingDisplayProps> = ({ rating, showCount 
   const fullStars = Math.floor(ratingValue);
   const hasHalfStar = ratingValue % 1 >= 0.5;
   const emptyStars = 5 - Math.ceil(ratingValue);
+  
+  // Use count or votes_count, whichever is available
+  const reviewCount = rating.count !== undefined ? rating.count : rating.votes_count;
 
   return (
     <div className={`flex items-center gap-1 ${className}`}>
@@ -34,8 +38,8 @@ export const RatingDisplay: React.FC<RatingDisplayProps> = ({ rating, showCount 
           <Star key={`empty-${i}`} className="w-4 h-4 text-gray-300" />
         ))}
       </div>
-      {showCount && rating.count !== undefined && (
-        <span className="text-sm text-gray-600">({rating.count})</span>
+      {showCount && reviewCount !== undefined && (
+        <span className="text-sm text-gray-600">({reviewCount})</span>
       )}
     </div>
   );
