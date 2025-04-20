@@ -132,11 +132,61 @@ export const SearchResults = ({ results, isSearching, subcategory }: SearchResul
     return <SearchSkeleton />;
   }
 
+  // Get vendor type from URL
+  const [vendorType, setVendorType] = useState<string>('vendors');
+  
+  useEffect(() => {
+    // Extract vendor type from URL
+    const path = window.location.pathname;
+    const matches = path.match(/\/top-20\/([^\/]+)/);
+    if (matches && matches[1]) {
+      // Convert slug to display name
+      const slug = matches[1];
+      let displayType = slug.replace(/-/g, ' ');
+      // Capitalize first letter of each word
+      displayType = displayType
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+      setVendorType(displayType);
+    }
+  }, []);
+  
+  // Get singular form of vendor type
+  const getSingularVendorType = () => {
+    const type = vendorType.toLowerCase();
+    // Handle special cases
+    if (type === 'caterers') return 'caterer';
+    if (type === 'photographers') return 'photographer';
+    if (type === 'videographers') return 'videographer';
+    if (type === 'florists') return 'florist';
+    if (type === 'venues') return 'venue';
+    if (type === 'djs & bands') return 'entertainment provider';
+    if (type === 'cake designers') return 'cake designer';
+    if (type === 'bridal shops') return 'bridal shop';
+    if (type === 'makeup artists') return 'makeup artist';
+    if (type === 'hair stylists') return 'hair stylist';
+    // Default: remove trailing 's'
+    return type.endsWith('s') ? type.slice(0, -1) : type;
+  };
+  
+  // Get appropriate subcategory description based on vendor type
+  const getSubcategoryDescription = () => {
+    const type = vendorType.toLowerCase();
+    if (type === 'caterers') return `${formattedSubcategory} Cuisine`;
+    if (type === 'wedding planners') return `${formattedSubcategory}`;
+    if (type === 'photographers') return `${formattedSubcategory} Style`;
+    if (type === 'florists') return `${formattedSubcategory} Style`;
+    if (type === 'venues') return `${formattedSubcategory} Venues`;
+    if (type === 'djs & bands') return `${formattedSubcategory}`;
+    return formattedSubcategory;
+  };
+
   if (hasSearched && results.length === 0 && !isSearching) {
     return (
       <div className="mt-4 md:mt-8 text-center text-gray-500">
         {subcategory 
-          ? `No caterers found for ${formattedSubcategory} cuisine. Try selecting a different cuisine type.`
+          ? `No ${vendorType.toLowerCase()} found for ${getSubcategoryDescription()}. Try selecting a different option.`
           : "No vendors found. Try adjusting your search criteria."}
       </div>
     );
@@ -147,10 +197,10 @@ export const SearchResults = ({ results, isSearching, subcategory }: SearchResul
       {subcategory && (
         <div className="mb-6 text-center">
           <h2 className="text-xl font-semibold text-wedding-text">
-            Showing Caterers Specializing in {formattedSubcategory} Cuisine
+            Showing {vendorType} Specializing in {getSubcategoryDescription()}
           </h2>
           <p className="text-sm text-gray-500 mt-1">
-            {results.length} {results.length === 1 ? 'caterer' : 'caterers'} found
+            {results.length} {results.length === 1 ? getSingularVendorType() : vendorType.toLowerCase()} found
           </p>
         </div>
       )}

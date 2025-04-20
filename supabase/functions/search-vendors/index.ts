@@ -36,9 +36,9 @@ serve(async (req) => {
     }
 
     const auth = btoa(`${dataForSeoLogin}:${dataForSeoPassword}`);
-    // Include subcategory in the search query if provided
+    // Include subcategory in the search query if provided, with more specific phrasing
     const searchQuery = subcategory 
-      ? `${subcategory} ${keyword} in ${location}`
+      ? `${keyword} specializing in ${subcategory} in ${location}`
       : `${keyword} in ${location}`;
     
     console.log('Making DataForSEO request for:', searchQuery);
@@ -79,7 +79,7 @@ serve(async (req) => {
     console.log('Extracted items count:', items.length);
     
     // Transform the results to match our SearchResult type
-    const searchResults = items.map(item => ({
+    let searchResults = items.map(item => ({
       title: item.title || '',
       description: item.snippet || '',
       rating: item.rating ? {
@@ -96,6 +96,29 @@ serve(async (req) => {
     }));
 
     console.log(`Transformed ${searchResults.length} results`);
+    
+    // Additional filtering for subcategory if provided
+    if (subcategory) {
+      const subcategoryLower = subcategory.toLowerCase();
+      // Filter results that mention the subcategory in title or description
+      const filteredResults = searchResults.filter(result => {
+        const titleLower = result.title.toLowerCase();
+        const descriptionLower = (result.description || '').toLowerCase();
+        const snippetLower = (result.snippet || '').toLowerCase();
+        
+        return titleLower.includes(subcategoryLower) || 
+               descriptionLower.includes(subcategoryLower) ||
+               snippetLower.includes(subcategoryLower);
+      });
+      
+      // If we have filtered results, use them; otherwise fall back to all results
+      if (filteredResults.length > 0) {
+        console.log(`Filtered to ${filteredResults.length} results matching subcategory: ${subcategory}`);
+        searchResults = filteredResults;
+      } else {
+        console.log(`No results specifically matching subcategory: ${subcategory}, using all results`);
+      }
+    }
 
     return new Response(
       JSON.stringify(searchResults),

@@ -23,6 +23,31 @@ export const VendorCard = ({
   subcategory
 }: VendorCardProps) => {
   const navigate = useNavigate();
+  
+  // Get appropriate subcategory label based on vendor type and URL
+  const getSubcategoryLabel = (subcategory: string) => {
+    // Format subcategory for display with proper capitalization
+    const formattedSubcategory = subcategory.charAt(0).toUpperCase() + subcategory.slice(1);
+    
+    // Extract vendor type from URL
+    const path = window.location.pathname;
+    const matches = path.match(/\/top-20\/([^\/]+)/);
+    
+    if (matches && matches[1]) {
+      const vendorTypeSlug = matches[1];
+      
+      // Return appropriate label based on vendor type
+      if (vendorTypeSlug === 'caterers') return `${formattedSubcategory} Cuisine`;
+      if (vendorTypeSlug === 'photographers') return `${formattedSubcategory} Style`;
+      if (vendorTypeSlug === 'florists') return `${formattedSubcategory} Style`;
+      if (vendorTypeSlug === 'venues') return `${formattedSubcategory}`;
+      if (vendorTypeSlug === 'djs-and-bands') return `${formattedSubcategory}`;
+      if (vendorTypeSlug === 'wedding-planners') return `${formattedSubcategory}`;
+    }
+    
+    // Default fallback
+    return formattedSubcategory;
+  };
 
   const handleCardClick = () => {
     navigate(`/vendor/${encodeURIComponent(vendor.place_id)}`, { state: { vendor } });
@@ -46,7 +71,7 @@ export const VendorCard = ({
       <div className="relative mx-4 -mt-6 h-48 overflow-hidden rounded-xl shadow-lg">
         {subcategory && (
           <div className="absolute top-2 right-2 bg-wedding-primary text-white px-3 py-1 rounded-full text-xs font-medium shadow-md z-10">
-            {subcategory.charAt(0).toUpperCase() + subcategory.slice(1)} Cuisine
+            {getSubcategoryLabel(subcategory)}
           </div>
         )}
         {vendor.main_image ? (
