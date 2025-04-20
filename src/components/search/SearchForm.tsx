@@ -30,19 +30,23 @@ export const SearchForm = ({ onSearch, isSearching, preselectedCategory }: Searc
       console.log('Category being checked:', normalizedCategory);
       
       if (normalizedCategory === 'caterers') {
-        console.log('Fetching subcategories for caterers...');
-        const { data, error } = await supabase
-          .from('vendor_subcategories')
-          .select('*')
-          .eq('category', 'caterers');
-
-        if (error) {
-          console.error('Error fetching subcategories:', error);
-          return;
-        }
-
-        console.log('Fetched subcategories:', data);
-        setSubcategories(data);
+        console.log('Setting cuisine types for caterers...');
+        
+        // Use hardcoded subcategories for now
+        const cuisineTypes = [
+          { id: '1', name: 'American', description: 'American cuisine with burgers, steaks, and comfort food' },
+          { id: '2', name: 'Italian', description: 'Italian cuisine featuring pasta, pizza, and more' },
+          { id: '3', name: 'Mexican', description: 'Mexican cuisine with tacos, enchiladas, and traditional dishes' },
+          { id: '4', name: 'Indian', description: 'Indian cuisine with curry, tandoori, and diverse regional dishes' },
+          { id: '5', name: 'Chinese', description: 'Chinese cuisine with stir-fry, dim sum, and regional specialties' },
+          { id: '6', name: 'Mediterranean', description: 'Mediterranean cuisine featuring healthy dishes from Greece, Turkey, and more' },
+          { id: '7', name: 'Japanese', description: 'Japanese cuisine with sushi, ramen, and traditional dishes' },
+          { id: '8', name: 'Thai', description: 'Thai cuisine with flavorful curries, noodles, and aromatic dishes' },
+          { id: '9', name: 'French', description: 'French cuisine with elegant dishes, pastries, and culinary traditions' },
+          { id: '10', name: 'Middle Eastern', description: 'Middle Eastern cuisine with falafel, hummus, and traditional dishes' }
+        ];
+        
+        setSubcategories(cuisineTypes);
       } else {
         setSubcategories([]);
         setSelectedSubcategory("");
@@ -79,16 +83,23 @@ export const SearchForm = ({ onSearch, isSearching, preselectedCategory }: Searc
         />
         
         {selectedCategory.toLowerCase() === 'caterers' && subcategories.length > 0 && (
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700">
-              Select Cuisine Type
+          <div className="space-y-3">
+            <label className="block text-base font-medium text-wedding-text">
+              Select Cuisine Type for Catering
             </label>
-            <div className="grid grid-cols-2 gap-2">
+            <p className="text-sm text-gray-500 mb-2">
+              Choose a cuisine to see caterers specializing in that type of food
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
               {subcategories.map((subcategory) => (
                 <Button
                   key={subcategory.id}
                   variant={selectedSubcategory === subcategory.name ? "default" : "outline"}
-                  className="w-full text-sm"
+                  className={`w-full text-sm py-3 ${
+                    selectedSubcategory === subcategory.name 
+                      ? "bg-wedding-primary text-white shadow-md" 
+                      : "hover:bg-wedding-primary/10"
+                  }`}
                   onClick={() => setSelectedSubcategory(subcategory.name)}
                 >
                   {subcategory.name}

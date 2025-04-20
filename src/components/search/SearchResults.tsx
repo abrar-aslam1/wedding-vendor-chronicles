@@ -12,6 +12,8 @@ interface SearchResultsProps {
 }
 
 export const SearchResults = ({ results, isSearching, subcategory }: SearchResultsProps) => {
+  // Format subcategory for display
+  const formattedSubcategory = subcategory ? subcategory.charAt(0).toUpperCase() + subcategory.slice(1) : '';
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState<Set<string>>(new Set());
   const [hasSearched, setHasSearched] = useState(false);
@@ -133,22 +135,37 @@ export const SearchResults = ({ results, isSearching, subcategory }: SearchResul
   if (hasSearched && results.length === 0 && !isSearching) {
     return (
       <div className="mt-4 md:mt-8 text-center text-gray-500">
-        No vendors found. Try adjusting your search criteria.
+        {subcategory 
+          ? `No caterers found for ${formattedSubcategory} cuisine. Try selecting a different cuisine type.`
+          : "No vendors found. Try adjusting your search criteria."}
       </div>
     );
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
-      {results.map((vendor, index) => (
-        <VendorCard
-          key={index}
-          vendor={vendor}
-          isFavorite={favorites.has(vendor.place_id || '')}
-          isLoading={loading.has(vendor.place_id || '')}
-          onToggleFavorite={toggleFavorite}
-        />
-      ))}
+    <div>
+      {subcategory && (
+        <div className="mb-6 text-center">
+          <h2 className="text-xl font-semibold text-wedding-text">
+            Showing Caterers Specializing in {formattedSubcategory} Cuisine
+          </h2>
+          <p className="text-sm text-gray-500 mt-1">
+            {results.length} {results.length === 1 ? 'caterer' : 'caterers'} found
+          </p>
+        </div>
+      )}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
+        {results.map((vendor, index) => (
+          <VendorCard
+            key={index}
+            vendor={vendor}
+            isFavorite={favorites.has(vendor.place_id || '')}
+            isLoading={loading.has(vendor.place_id || '')}
+            onToggleFavorite={toggleFavorite}
+            subcategory={subcategory}
+          />
+        ))}
+      </div>
     </div>
   );
 };

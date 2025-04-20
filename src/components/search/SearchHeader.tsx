@@ -9,15 +9,25 @@ export const SearchHeader = ({ subcategory }: SearchHeaderProps) => {
   
   const cleanCategory = category?.replace('top-20/', '').replace(/-/g, ' ');
   const displayLocation = city && state ? ` in ${city}, ${state}` : '';
-  const displaySubcategory = subcategory ? `${subcategory} ` : '';
+  
+  // Format subcategory for display with proper capitalization
+  const formattedSubcategory = subcategory 
+    ? subcategory.charAt(0).toUpperCase() + subcategory.slice(1) 
+    : '';
   
   return (
     <div className="mb-8">
       <h1 className="text-3xl font-bold text-wedding-text capitalize">
-        {subcategory ? displaySubcategory : 'Top 20 '}{cleanCategory}{displayLocation}
+        {subcategory 
+          ? `${formattedSubcategory} Cuisine ${cleanCategory}${displayLocation}`
+          : `Top 20 ${cleanCategory}${displayLocation}`
+        }
       </h1>
       <p className="text-gray-600 mt-2">
-        Find the best wedding vendors in your area
+        {subcategory
+          ? `Find the best ${formattedSubcategory} cuisine caterers for your wedding`
+          : "Find the best wedding vendors in your area"
+        }
       </p>
     </div>
   );

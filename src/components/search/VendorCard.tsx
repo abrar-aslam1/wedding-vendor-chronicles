@@ -12,13 +12,15 @@ interface VendorCardProps {
   isFavorite: boolean;
   isLoading: boolean;
   onToggleFavorite: (vendor: SearchResult) => void;
+  subcategory?: string;
 }
 
 export const VendorCard = ({ 
   vendor, 
   isFavorite, 
   isLoading, 
-  onToggleFavorite 
+  onToggleFavorite,
+  subcategory
 }: VendorCardProps) => {
   const navigate = useNavigate();
 
@@ -42,6 +44,11 @@ export const VendorCard = ({
     <div className="relative flex w-full flex-col rounded-xl bg-white shadow-md transition-all duration-300 hover:shadow-lg">
       {/* Image Section */}
       <div className="relative mx-4 -mt-6 h-48 overflow-hidden rounded-xl shadow-lg">
+        {subcategory && (
+          <div className="absolute top-2 right-2 bg-wedding-primary text-white px-3 py-1 rounded-full text-xs font-medium shadow-md z-10">
+            {subcategory.charAt(0).toUpperCase() + subcategory.slice(1)} Cuisine
+          </div>
+        )}
         {vendor.main_image ? (
           <img
             src={vendor.main_image}
