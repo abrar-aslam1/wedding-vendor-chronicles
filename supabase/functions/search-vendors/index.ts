@@ -55,7 +55,7 @@ serve(async (req) => {
         location_code: locationCode,
         device: "desktop",
         os: "windows",
-        depth: 20,
+        depth: 40, // Increased from 20 to get more results
         search_type: "maps",
         local_search: true
       }])
@@ -154,8 +154,31 @@ serve(async (req) => {
       // Sort by relevance score (highest first)
       scoredResults.sort((a, b) => (b.relevanceScore || 0) - (a.relevanceScore || 0));
       
-      // Filter out results with zero relevance
+      // Filter results, but with a very low threshold to include more businesses
+      // We'll still sort by relevance, so the most relevant will appear first
       const filteredResults = scoredResults.filter(result => (result.relevanceScore || 0) > 0);
+      
+      // Ensure we have at least 5 results if possible
+      const MIN_RESULTS = 5;
+      let finalResults = filteredResults;
+      
+      if (filteredResults.length < MIN_RESULTS && scoredResults.length > filteredResults.length) {
+        console.log(`Not enough filtered results (${filteredResults.length}), adding more to reach minimum ${MIN_RESULTS}`);
+        // Add more results to reach the minimum, taking the highest scored ones first
+        const additionalResults = scoredResults
+          .filter(result => (result.relevanceScore || 0) === 0) // Get the ones we filtered out
+          .sort((a, b) => {
+            // If no relevance score, sort by rating if available
+            if (a.rating && b.rating) {
+              return (b.rating.value || 0) - (a.rating.value || 0);
+            }
+            return 0;
+          })
+          .slice(0, MIN_RESULTS - filteredResults.length);
+          
+        finalResults = [...filteredResults, ...additionalResults];
+        console.log(`Added ${additionalResults.length} additional results to reach ${finalResults.length} total`);
+      }
       
       // Log scoring information
       console.log(`Scored ${scoredResults.length} results for subcategory: ${subcategory}`);
@@ -165,10 +188,10 @@ serve(async (req) => {
       })));
       
       // If we have filtered results, use them; otherwise fall back to all results
-      if (filteredResults.length > 0) {
-        console.log(`Filtered to ${filteredResults.length} results matching subcategory: ${subcategory}`);
+      if (finalResults.length > 0) {
+        console.log(`Using ${finalResults.length} results for subcategory: ${subcategory}`);
         // Remove the relevanceScore property before returning
-        searchResults = filteredResults.map(({ relevanceScore, ...rest }) => rest);
+        searchResults = finalResults.map(({ relevanceScore, ...rest }) => rest);
       } else {
         console.log(`No results specifically matching subcategory: ${subcategory}, using all results`);
       }
