@@ -29,11 +29,19 @@ const Favorites = () => {
     }
 
     try {
+      console.log('Fetching favorites for user:', session.session.user.id);
+      
       const { data, error } = await supabase
         .from('vendor_favorites')
-        .select('vendor_data');
+        .select('vendor_data')
+        .eq('user_id', session.session.user.id);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching favorites:', error);
+        throw error;
+      }
+
+      console.log('Favorites data:', data);
 
       const transformedFavorites: SearchResult[] = data?.map(item => {
         const vendorData = item.vendor_data as Record<string, any>;
@@ -46,7 +54,11 @@ const Favorites = () => {
             votes_count: vendorData.rating.votes_count || 0,
             // Ensure count property exists for RatingDisplay component
             count: vendorData.rating.votes_count || 0
-          } : undefined,
+          } : {
+            value: 0,
+            votes_count: 0,
+            count: 0
+          }, // Provide a default rating object instead of undefined
           phone: vendorData.phone || '',
           address: vendorData.address || '',
           url: vendorData.url || '',
@@ -59,6 +71,8 @@ const Favorites = () => {
           twitter: vendorData.twitter || ''
         };
       }) || [];
+      
+      console.log('Transformed favorites:', transformedFavorites);
 
       setFavorites(transformedFavorites);
     } catch (error: any) {
