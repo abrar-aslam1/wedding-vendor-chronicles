@@ -29,27 +29,122 @@ export const SearchForm = ({ onSearch, isSearching, preselectedCategory }: Searc
       const normalizedCategory = selectedCategory.toLowerCase();
       console.log('Category being checked:', normalizedCategory);
       
+      setSubcategories([]);
+      setSelectedSubcategory("");
+      
       if (normalizedCategory === 'caterers') {
-        console.log('Setting cuisine types for caterers...');
+        console.log('Fetching cuisine types for caterers...');
         
-        // Use hardcoded subcategories for now
-        const cuisineTypes = [
-          { id: '1', name: 'American', description: 'American cuisine with burgers, steaks, and comfort food' },
-          { id: '2', name: 'Italian', description: 'Italian cuisine featuring pasta, pizza, and more' },
-          { id: '3', name: 'Mexican', description: 'Mexican cuisine with tacos, enchiladas, and traditional dishes' },
-          { id: '4', name: 'Indian', description: 'Indian cuisine with curry, tandoori, and diverse regional dishes' },
-          { id: '5', name: 'Chinese', description: 'Chinese cuisine with stir-fry, dim sum, and regional specialties' },
-          { id: '6', name: 'Mediterranean', description: 'Mediterranean cuisine featuring healthy dishes from Greece, Turkey, and more' },
-          { id: '7', name: 'Japanese', description: 'Japanese cuisine with sushi, ramen, and traditional dishes' },
-          { id: '8', name: 'Thai', description: 'Thai cuisine with flavorful curries, noodles, and aromatic dishes' },
-          { id: '9', name: 'French', description: 'French cuisine with elegant dishes, pastries, and culinary traditions' },
-          { id: '10', name: 'Middle Eastern', description: 'Middle Eastern cuisine with falafel, hummus, and traditional dishes' }
-        ];
+        try {
+          // Use type assertion to bypass TypeScript errors
+          const { data, error } = await (supabase as any)
+            .from('cuisine_types')
+            .select('id, name, description')
+            .eq('category', 'caterers');
+            
+          if (data && !error) {
+            setSubcategories(data);
+          } else {
+            console.error('Error fetching cuisine types:', error);
+          }
+        } catch (err) {
+          console.error('Error fetching cuisine types:', err);
+        }
+      } 
+      else if (normalizedCategory === 'wedding-planners') {
+        console.log('Fetching planner types...');
         
-        setSubcategories(cuisineTypes);
-      } else {
-        setSubcategories([]);
-        setSelectedSubcategory("");
+        try {
+          // Use type assertion to bypass TypeScript errors
+          const { data, error } = await (supabase as any)
+            .from('planner_types')
+            .select('id, name, description')
+            .eq('category', 'wedding-planners');
+            
+          if (data && !error) {
+            setSubcategories(data);
+          } else {
+            console.error('Error fetching planner types:', error);
+          }
+        } catch (err) {
+          console.error('Error fetching planner types:', err);
+        }
+      }
+      else if (normalizedCategory === 'photographers') {
+        console.log('Fetching photographer types...');
+        
+        try {
+          // Use type assertion to bypass TypeScript errors
+          const { data, error } = await (supabase as any)
+            .from('photographer_types')
+            .select('id, name, description')
+            .eq('category', 'photographers');
+            
+          if (data && !error) {
+            setSubcategories(data);
+          } else {
+            console.error('Error fetching photographer types:', error);
+          }
+        } catch (err) {
+          console.error('Error fetching photographer types:', err);
+        }
+      }
+      else if (normalizedCategory === 'florists') {
+        console.log('Fetching florist types...');
+        
+        try {
+          // Use type assertion to bypass TypeScript errors
+          const { data, error } = await (supabase as any)
+            .from('florist_types')
+            .select('id, name, description')
+            .eq('category', 'florists');
+            
+          if (data && !error) {
+            setSubcategories(data);
+          } else {
+            console.error('Error fetching florist types:', error);
+          }
+        } catch (err) {
+          console.error('Error fetching florist types:', err);
+        }
+      }
+      else if (normalizedCategory === 'venues') {
+        console.log('Fetching venue types...');
+        
+        try {
+          // Use type assertion to bypass TypeScript errors
+          const { data, error } = await (supabase as any)
+            .from('venue_types')
+            .select('id, name, description')
+            .eq('category', 'venues');
+            
+          if (data && !error) {
+            setSubcategories(data);
+          } else {
+            console.error('Error fetching venue types:', error);
+          }
+        } catch (err) {
+          console.error('Error fetching venue types:', err);
+        }
+      }
+      else if (normalizedCategory === 'djs-and-bands') {
+        console.log('Fetching entertainment types...');
+        
+        try {
+          // Use type assertion to bypass TypeScript errors
+          const { data, error } = await (supabase as any)
+            .from('entertainment_types')
+            .select('id, name, description')
+            .eq('category', 'djs-and-bands');
+            
+          if (data && !error) {
+            setSubcategories(data);
+          } else {
+            console.error('Error fetching entertainment types:', error);
+          }
+        } catch (err) {
+          console.error('Error fetching entertainment types:', err);
+        }
       }
     };
 
@@ -82,13 +177,27 @@ export const SearchForm = ({ onSearch, isSearching, preselectedCategory }: Searc
           preselectedCategory={preselectedCategory}
         />
         
-        {selectedCategory.toLowerCase() === 'caterers' && subcategories.length > 0 && (
+        {subcategories.length > 0 && (
           <div className="space-y-3">
             <label className="block text-base font-medium text-wedding-text">
-              Select Cuisine Type for Catering
+              {selectedCategory.toLowerCase() === 'caterers' 
+                ? 'Select Cuisine Type for Catering'
+                : selectedCategory.toLowerCase() === 'wedding-planners'
+                ? 'Select Planning Service Type'
+                : selectedCategory.toLowerCase() === 'photographers'
+                ? 'Select Photography Style'
+                : selectedCategory.toLowerCase() === 'florists'
+                ? 'Select Floral Style'
+                : selectedCategory.toLowerCase() === 'venues'
+                ? 'Select Venue Type'
+                : selectedCategory.toLowerCase() === 'djs-and-bands'
+                ? 'Select Entertainment Type'
+                : `Select ${selectedCategory} Type`}
             </label>
             <p className="text-sm text-gray-500 mb-2">
-              Choose a cuisine to see caterers specializing in that type of food
+              {selectedCategory.toLowerCase() === 'caterers' 
+                ? 'Choose a cuisine to see caterers specializing in that type of food'
+                : `Choose a type to see ${selectedCategory.toLowerCase()} specializing in that area`}
             </p>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
               {subcategories.map((subcategory) => (
@@ -125,7 +234,7 @@ export const SearchForm = ({ onSearch, isSearching, preselectedCategory }: Searc
           (!preselectedCategory && !selectedCategory) || 
           !selectedState || 
           !selectedCity ||
-          (selectedCategory.toLowerCase() === 'caterers' && !selectedSubcategory)
+          (subcategories.length > 0 && !selectedSubcategory)
         }
         onClick={handleSubmit}
       />
