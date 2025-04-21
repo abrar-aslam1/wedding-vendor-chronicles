@@ -14,6 +14,7 @@ export interface Rating {
   rating_max?: number | null;
   rating_type?: string;
   votes_count?: number;
+  count?: number; // Added for compatibility with RatingDisplay component
 }
 
 export interface SearchResult {

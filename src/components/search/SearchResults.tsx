@@ -28,51 +28,79 @@ export const SearchResults = ({ results, isSearching, subcategory }: SearchResul
   }, [results, isSearching]);
 
   const fetchFavorites = async () => {
-    const { data: session } = await supabase.auth.getSession();
-    console.log('Current session:', session);
+    try {
+      const { data: session } = await supabase.auth.getSession();
+      console.log('Current session:', session);
 
-    if (!session?.session?.user) {
-      console.log('No authenticated user found');
-      return;
-    }
+      if (!session?.session?.user) {
+        console.log('No authenticated user found');
+        return;
+      }
 
-    const { data: favoritesData, error } = await supabase
-      .from('vendor_favorites')
-      .select('vendor_id');
+      const { data: favoritesData, error } = await supabase
+        .from('vendor_favorites')
+        .select('vendor_id');
 
-    console.log('Favorites fetch response:', { favoritesData, error });
+      console.log('Favorites fetch response:', { favoritesData, error });
 
-    if (favoritesData) {
-      setFavorites(new Set(favoritesData.map(f => f.vendor_id)));
+      if (error) {
+        console.error('Error fetching favorites:', error);
+        return;
+      }
+
+      if (favoritesData && Array.isArray(favoritesData)) {
+        // Filter out any undefined or null vendor_ids
+        const validFavoriteIds = favoritesData
+          .filter(f => f && f.vendor_id)
+          .map(f => f.vendor_id);
+        
+        console.log('Valid favorite IDs:', validFavoriteIds);
+        setFavorites(new Set(validFavoriteIds));
+      } else {
+        console.log('No favorites data found or invalid format');
+        setFavorites(new Set());
+      }
+    } catch (error) {
+      console.error('Error in fetchFavorites:', error);
+      // Don't reset favorites on error to avoid UI flashing
     }
   };
 
   const toggleFavorite = async (vendor: SearchResult) => {
-    const { data: session } = await supabase.auth.getSession();
-    if (!session?.session?.user) {
-      toast({
-        title: "Authentication required",
-        description: "Please sign in to favorite vendors",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (!vendor.place_id) return;
-
-    setLoading(prev => new Set([...prev, vendor.place_id!]));
-
     try {
-      if (favorites.has(vendor.place_id)) {
-        const { error: deleteError } = await supabase
-          .from('vendor_favorites')
-          .delete()
-          .eq('vendor_id', vendor.place_id)
-          .eq('user_id', session.session.user.id);
+      const { data: session } = await supabase.auth.getSession();
+      if (!session?.session?.user) {
+        toast({
+          title: "Authentication required",
+          description: "Please sign in to favorite vendors",
+          variant: "destructive",
+        });
+        return;
+      }
 
-        console.log('Delete favorite response:', { deleteError });
+      if (!vendor.place_id) {
+        console.error('Cannot toggle favorite: vendor has no place_id');
+        return;
+      }
 
-        if (!deleteError) {
+      setLoading(prev => new Set([...prev, vendor.place_id!]));
+
+      try {
+        if (favorites.has(vendor.place_id)) {
+          // Remove from favorites
+          const { error: deleteError } = await supabase
+            .from('vendor_favorites')
+            .delete()
+            .eq('vendor_id', vendor.place_id)
+            .eq('user_id', session.session.user.id);
+
+          console.log('Delete favorite response:', { deleteError });
+
+          if (deleteError) {
+            console.error('Error removing from favorites:', deleteError);
+            throw new Error(deleteError.message);
+          }
+
           setFavorites(prev => {
             const next = new Set(prev);
             next.delete(vendor.place_id!);
@@ -83,27 +111,40 @@ export const SearchResults = ({ results, isSearching, subcategory }: SearchResul
             title: "Removed from favorites",
             description: "Vendor has been removed from your favorites",
           });
-        }
-      } else {
-        const vendorData = {
-          ...vendor,
-          rating: vendor.rating ? {
-            value: vendor.rating.value,
-            votes_count: vendor.rating.votes_count
-          } : null
-        };
+        } else {
+          // Add to favorites - ensure rating object is properly structured
+          const ratingData = vendor.rating ? {
+            value: typeof vendor.rating.value === 'number' ? vendor.rating.value : 0,
+            votes_count: typeof vendor.rating.votes_count === 'number' ? vendor.rating.votes_count : 0,
+            count: typeof vendor.rating.count === 'number' ? vendor.rating.count : 
+                  (typeof vendor.rating.votes_count === 'number' ? vendor.rating.votes_count : 0)
+          } : null;
 
-        const { error: insertError } = await supabase
-          .from('vendor_favorites')
-          .insert({
-            user_id: session.session.user.id,
-            vendor_id: vendor.place_id,
-            vendor_data: vendorData,
-          });
+          const vendorData = {
+            ...vendor,
+            rating: ratingData,
+            // Ensure these fields exist to prevent undefined values
+            title: vendor.title || '',
+            description: vendor.description || '',
+            snippet: vendor.snippet || vendor.description || '',
+            images: Array.isArray(vendor.images) ? vendor.images : []
+          };
 
-        console.log('Insert favorite response:', { insertError });
+          const { error: insertError } = await supabase
+            .from('vendor_favorites')
+            .insert({
+              user_id: session.session.user.id,
+              vendor_id: vendor.place_id,
+              vendor_data: vendorData,
+            });
 
-        if (!insertError) {
+          console.log('Insert favorite response:', { insertError });
+
+          if (insertError) {
+            console.error('Error adding to favorites:', insertError);
+            throw new Error(insertError.message);
+          }
+
           setFavorites(prev => new Set([...prev, vendor.place_id!]));
 
           toast({
@@ -111,20 +152,29 @@ export const SearchResults = ({ results, isSearching, subcategory }: SearchResul
             description: "Vendor has been added to your favorites",
           });
         }
+      } catch (error: any) {
+        console.error('Favorite operation error:', error);
+        toast({
+          title: "Error",
+          description: error.message || "Failed to update favorites. Please try again.",
+          variant: "destructive",
+        });
       }
-    } catch (error) {
-      console.error('Favorite error:', error);
+    } catch (error: any) {
+      console.error('Toggle favorite error:', error);
       toast({
         title: "Error",
         description: "Failed to update favorites. Please try again.",
         variant: "destructive",
       });
     } finally {
-      setLoading(prev => {
-        const next = new Set(prev);
-        next.delete(vendor.place_id!);
-        return next;
-      });
+      if (vendor.place_id) {
+        setLoading(prev => {
+          const next = new Set(prev);
+          next.delete(vendor.place_id!);
+          return next;
+        });
+      }
     }
   };
 

@@ -43,42 +43,72 @@ const Favorites = () => {
 
       console.log('Favorites data:', data);
 
+      // Safely transform vendor data with proper type checking and fallbacks
       const transformedFavorites: SearchResult[] = data?.map(item => {
+        // Ensure vendor_data exists and is an object
+        if (!item.vendor_data || typeof item.vendor_data !== 'object') {
+          console.error('Invalid vendor_data format:', item.vendor_data);
+          return null;
+        }
+
         const vendorData = item.vendor_data as Record<string, any>;
+        
+        // Log the structure of vendorData for debugging
+        console.log('Processing vendor data:', vendorData);
+        
+        // Create a properly structured rating object
+        let ratingObject = {
+          value: 0,
+          votes_count: 0,
+          count: 0
+        };
+        
+        // Carefully extract rating information if it exists
+        if (vendorData.rating) {
+          try {
+            const ratingValue = parseFloat(vendorData.rating.value) || 0;
+            const votesCount = parseInt(vendorData.rating.votes_count || 0, 10);
+            
+            ratingObject = {
+              value: isNaN(ratingValue) ? 0 : ratingValue,
+              votes_count: isNaN(votesCount) ? 0 : votesCount,
+              count: isNaN(votesCount) ? 0 : votesCount // Ensure count exists for RatingDisplay
+            };
+          } catch (error) {
+            console.error('Error parsing rating data:', error);
+          }
+        }
+        
         return {
           title: vendorData.title || '',
           description: vendorData.description || '',
           snippet: vendorData.snippet || vendorData.description || '',
-          rating: vendorData.rating ? {
-            value: vendorData.rating.value || 0,
-            votes_count: vendorData.rating.votes_count || 0,
-            // Ensure count property exists for RatingDisplay component
-            count: vendorData.rating.votes_count || 0
-          } : {
-            value: 0,
-            votes_count: 0,
-            count: 0
-          }, // Provide a default rating object instead of undefined
+          rating: ratingObject,
           phone: vendorData.phone || '',
           address: vendorData.address || '',
           url: vendorData.url || '',
           place_id: vendorData.place_id || '',
           main_image: vendorData.main_image || '',
-          images: vendorData.images || [],
+          images: Array.isArray(vendorData.images) ? vendorData.images : [],
           // Add social media properties with fallbacks
           instagram: vendorData.instagram || '',
           facebook: vendorData.facebook || '',
           twitter: vendorData.twitter || ''
         };
-      }) || [];
+      }).filter(Boolean) as SearchResult[] || []; // Filter out any null values
       
       console.log('Transformed favorites:', transformedFavorites);
 
+      if (transformedFavorites.length === 0) {
+        console.log('No favorites found or transformation resulted in empty array');
+      }
+
       setFavorites(transformedFavorites);
     } catch (error: any) {
+      console.error('Error in fetchFavorites:', error);
       toast({
         title: "Error loading favorites",
-        description: error.message,
+        description: error.message || "Failed to load favorites. Please try again.",
         variant: "destructive",
       });
     } finally {
