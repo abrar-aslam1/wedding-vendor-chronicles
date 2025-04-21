@@ -39,7 +39,8 @@ export const SearchResults = ({ results, isSearching, subcategory }: SearchResul
 
       const { data: favoritesData, error } = await supabase
         .from('vendor_favorites')
-        .select('vendor_id');
+        .select('vendor_id')
+        .eq('user_id', session.session.user.id);
 
       console.log('Favorites fetch response:', { favoritesData, error });
 
