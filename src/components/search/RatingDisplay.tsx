@@ -14,12 +14,20 @@ interface RatingDisplayProps {
 }
 
 export const RatingDisplay: React.FC<RatingDisplayProps> = ({ rating, showCount = true, className = '' }) => {
+  // Handle case where rating is undefined or null
+  if (!rating) {
+    return null;
+  }
+  
+  // Handle case where rating.value is undefined, null, or not a number
+  const ratingVal = typeof rating.value === 'number' ? rating.value : 0;
+  
   // Return null if rating is invalid
-  if (!rating || rating.value === null || isNaN(rating.value) || rating.value < 0 || rating.value > 5) {
+  if (isNaN(ratingVal) || ratingVal < 0 || ratingVal > 5) {
     return null;
   }
 
-  const ratingValue = Math.min(Math.max(rating.value, 0), 5); // Clamp between 0 and 5
+  const ratingValue = Math.min(Math.max(ratingVal, 0), 5); // Clamp between 0 and 5
   const fullStars = Math.floor(ratingValue);
   const hasHalfStar = ratingValue % 1 >= 0.5;
   const emptyStars = 5 - Math.ceil(ratingValue);

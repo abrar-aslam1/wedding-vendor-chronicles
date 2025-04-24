@@ -10,7 +10,7 @@ export const SearchHeader = ({ subcategory }: SearchHeaderProps) => {
   const [vendorType, setVendorType] = useState<string>('vendors');
   const [singularVendorType, setSingularVendorType] = useState<string>('vendor');
   
-  const cleanCategory = category?.replace('top-20/', '').replace(/-/g, ' ');
+  const cleanCategory = category?.replace('top-20/', '').replace(/-/g, ' ') || 'Wedding Vendors';
   const displayLocation = city && state ? ` in ${city}, ${state}` : '';
   
   // Format subcategory for display with proper capitalization

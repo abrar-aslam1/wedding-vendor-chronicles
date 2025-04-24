@@ -22,8 +22,8 @@ export const SearchContainer = () => {
 
   useEffect(() => {
     console.log('SearchContainer mounted with params:', { category, subcategory, city, state });
-    if (category && city && state) {
-      const cleanCategory = category.replace('top-20/', '').replace(/-/g, ' ');
+    if (city && state) {
+      const cleanCategory = category ? category.replace('top-20/', '').replace(/-/g, ' ') : 'wedding vendors';
       console.log('Initiating search for:', { cleanCategory, subcategory, city, state });
       fetchResults(cleanCategory, city, state, subcategory);
     }

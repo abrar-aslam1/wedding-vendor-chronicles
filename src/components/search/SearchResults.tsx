@@ -239,12 +239,17 @@ export const SearchResults = ({ results, isSearching, subcategory }: SearchResul
     return formattedSubcategory;
   };
 
-  if (hasSearched && results.length === 0 && !isSearching) {
+  // Check if we're on the Favorites page
+  const isFavoritesPage = window.location.pathname === '/favorites';
+
+  if (results.length === 0 && !isSearching) {
     return (
       <div className="mt-4 md:mt-8 text-center text-gray-500">
-        {subcategory 
-          ? `No ${vendorType.toLowerCase()} found for ${getSubcategoryDescription()}. Try selecting a different option.`
-          : "No vendors found. Try adjusting your search criteria."}
+        {isFavoritesPage 
+          ? "You don't have any favorites yet. Browse vendors and click the heart icon to add them to your favorites."
+          : subcategory 
+            ? `No ${vendorType.toLowerCase()} found for ${getSubcategoryDescription()}. Try selecting a different option.`
+            : "No vendors found. Try adjusting your search criteria."}
       </div>
     );
   }

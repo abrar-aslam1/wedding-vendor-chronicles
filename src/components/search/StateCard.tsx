@@ -13,7 +13,7 @@ export const StateCard = ({ state, vendorCount = 0, popularCities = [] }: StateC
   return (
     <Card 
       className="cursor-pointer hover:shadow-lg transition-shadow duration-300"
-      onClick={() => navigate(`/search/${state.toLowerCase()}`)}
+      onClick={() => navigate(`/search/${state.replace(/\s+/g, '-').toLowerCase()}`)}
     >
       <CardHeader className="pb-2">
         <h3 className="text-xl font-semibold text-wedding-text">{state}</h3>

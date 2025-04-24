@@ -33,7 +33,7 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
       // Format category and subcategory if they exist
       const formattedCategory = category ? formatText(category) : '';
       const formattedSubcategory = subcategory ? formatText(subcategory) : '';
-      const vendorCount = totalVendors || 'Top';
+      const vendorCount = totalVendors || 'Top 20';
       
       // Generate location string if city and state are provided
       const locationString = city && state ? `in ${city}, ${state}` : 'Near You';

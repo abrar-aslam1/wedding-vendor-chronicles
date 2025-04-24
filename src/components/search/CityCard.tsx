@@ -10,7 +10,7 @@ export const CityCard = ({ city, state, vendorCount }: CityCardProps) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/search/${state}/${city}`);
+    navigate(`/search/${state.replace(/\s+/g, '-').toLowerCase()}/${city.replace(/\s+/g, '-').toLowerCase()}`);
   };
 
   return (

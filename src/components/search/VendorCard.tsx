@@ -101,7 +101,7 @@ export const VendorCard = ({
           {vendor.title}
         </h3>
 
-        {vendor.rating && vendor.rating.value && (
+        {vendor.rating && (
           <RatingDisplay rating={vendor.rating} className="mb-2" />
         )}
 

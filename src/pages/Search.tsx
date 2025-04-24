@@ -8,7 +8,7 @@ import { SchemaMarkup } from "@/components/SchemaMarkup";
 const Search = () => {
   const { category, city, state } = useParams<{ category: string; city?: string; state?: string }>();
   
-  const cleanCategory = category ? category.replace('top-20/', '').replace(/-/g, ' ') : '';
+  const cleanCategory = category ? category.replace('top-20/', '').replace(/-/g, ' ') : 'wedding-vendors';
   
   return (
     <div className="min-h-screen bg-background">
