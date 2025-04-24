@@ -1,0 +1,19 @@
+{
+  "name": "Find My Wedding Vendor",
+  "short_name": "Wedding Vendor",
+  "icons": [
+    {
+      "src": "/Find-My Wedding-Favicon/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/Find-My Wedding-Favicon/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#ee9ca7",
+  "background_color": "#ffffff",
+  "display": "standalone"
+}

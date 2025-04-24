@@ -1,0 +1,33 @@
+{
+  "mcpServers": {
+    "github.com/alexander-zuev/supabase-mcp-server": {
+      "command": "/Users/abraraslam/Documents/Cline/MCP/supabase-mcp-server/.venv/bin/supabase-mcp-server",
+      "args": [],
+      "env": {
+        "SUPABASE_PROJECT_REF": "",
+        "SUPABASE_DB_PASSWORD": "",
+        "SUPABASE_REGION": "us-east-1"
+      },
+      "disabled": false,
+      "autoApprove": [
+        "get_db_schemas"
+      ]
+    },
+    "github.com/stripe/agent-toolkit": {
+      "command": "node",
+      "args": ["/Users/abraraslam/Documents/Cline/MCP/stripe-agent-toolkit/server.js"],
+      "env": {
+        "STRIPE_SECRET_KEY": "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"
+      },
+      "disabled": false,
+      "autoApprove": []
+    },
+    "github.com/upstash/context7-mcp": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@latest"],
+      "env": {},
+      "disabled": false,
+      "autoApprove": []
+    }
+  }
+}

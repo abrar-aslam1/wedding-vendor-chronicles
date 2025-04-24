@@ -87,7 +87,7 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
     const metadata = generateMetadata();
     const siteUrl = window.location.origin;
     const currentUrl = canonicalUrl || window.location.href;
-    const defaultImage = `${siteUrl}/og-image.png`;
+    const defaultImage = `${siteUrl}/Screenshot 2025-04-20 at 9.59.36 PM.png`;
     const pageImage = imageUrl || defaultImage;
     
     // Set basic meta tags
