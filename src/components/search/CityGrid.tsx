@@ -22,7 +22,9 @@ export const CityGrid = ({ state }: CityGridProps) => {
         .from('location_metadata')
         .select('*')
         .eq('state', state)
-        .not('city', 'is', null);
+        .not('city', 'is', null)
+        .order('vendor_count', { ascending: false })
+        .limit(20);
 
       if (error) {
         console.error('Error fetching cities:', error);
@@ -39,7 +41,7 @@ export const CityGrid = ({ state }: CityGridProps) => {
   if (loading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-pulse">
-        {[...Array(9)].map((_, i) => (
+        {[...Array(20)].map((_, i) => (
           <div key={i} className="h-40 bg-gray-200 rounded-lg"></div>
         ))}
       </div>

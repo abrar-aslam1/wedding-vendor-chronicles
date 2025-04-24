@@ -26,7 +26,7 @@ export const StateCard = ({ state, vendorCount = 0, popularCities = [] }: StateC
           <div className="space-y-1">
             <p className="text-xs text-gray-500">Popular cities:</p>
             <div className="flex flex-wrap gap-1">
-              {popularCities.slice(0, 3).map((city) => (
+              {popularCities.slice(0, 5).map((city) => (
                 <span 
                   key={city}
                   className="text-xs bg-wedding-secondary/20 text-wedding-text px-2 py-1 rounded-full"

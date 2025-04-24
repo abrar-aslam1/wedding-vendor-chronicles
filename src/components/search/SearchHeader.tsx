@@ -55,13 +55,13 @@ export const SearchHeader = ({ subcategory }: SearchHeaderProps) => {
     if (!subcategory) return `Top 20 ${cleanCategory}${displayLocation}`;
     
     const type = vendorType.toLowerCase();
-    if (type === 'caterers') return `${formattedSubcategory} Cuisine ${cleanCategory}${displayLocation}`;
-    if (type === 'wedding planners') return `${formattedSubcategory} ${cleanCategory}${displayLocation}`;
-    if (type === 'photographers') return `${formattedSubcategory} ${cleanCategory}${displayLocation}`;
-    if (type === 'florists') return `${formattedSubcategory} ${cleanCategory}${displayLocation}`;
-    if (type === 'venues') return `${formattedSubcategory} ${cleanCategory}${displayLocation}`;
-    if (type === 'djs & bands') return `${formattedSubcategory} ${cleanCategory}${displayLocation}`;
-    return `${formattedSubcategory} ${cleanCategory}${displayLocation}`;
+    if (type === 'caterers') return `Top 20 ${formattedSubcategory} Cuisine ${cleanCategory}${displayLocation}`;
+    if (type === 'wedding planners') return `Top 20 ${formattedSubcategory} ${cleanCategory}${displayLocation}`;
+    if (type === 'photographers') return `Top 20 ${formattedSubcategory} ${cleanCategory}${displayLocation}`;
+    if (type === 'florists') return `Top 20 ${formattedSubcategory} ${cleanCategory}${displayLocation}`;
+    if (type === 'venues') return `Top 20 ${formattedSubcategory} ${cleanCategory}${displayLocation}`;
+    if (type === 'djs & bands') return `Top 20 ${formattedSubcategory} ${cleanCategory}${displayLocation}`;
+    return `Top 20 ${formattedSubcategory} ${cleanCategory}${displayLocation}`;
   };
   
   // Get appropriate subtitle based on vendor type and subcategory

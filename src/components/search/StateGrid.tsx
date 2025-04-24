@@ -29,7 +29,9 @@ export const StateGrid = () => {
         const { data, error } = await supabase
           .from('location_metadata')
           .select('*')
-          .is('city', null);
+          .is('city', null)
+          .order('vendor_count', { ascending: false })
+          .limit(20);
 
         if (error) {
           console.error('Error fetching states:', error);
@@ -81,7 +83,7 @@ export const StateGrid = () => {
   if (loading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-pulse">
-        {[...Array(9)].map((_, i) => (
+        {[...Array(20)].map((_, i) => (
           <div key={i} className="h-40 bg-gray-200 rounded-lg"></div>
         ))}
       </div>

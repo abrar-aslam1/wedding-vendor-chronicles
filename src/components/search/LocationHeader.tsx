@@ -46,9 +46,9 @@ export const LocationHeader = () => {
       
       <h1 className="text-3xl font-bold text-wedding-text mt-4">
         {city 
-          ? `Wedding Vendors in ${city}, ${state}`
+          ? `Top 20 Wedding Vendors in ${city}, ${state}`
           : state 
-            ? `Wedding Vendors in ${state}`
+            ? `Top 20 Wedding Vendors in ${state}`
             : 'Find Wedding Vendors Near You'
         }
       </h1>
