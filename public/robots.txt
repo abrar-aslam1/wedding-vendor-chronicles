@@ -16,7 +16,7 @@ Allow: /
 Disallow: /auth/
 Disallow: /loading/
 Disallow: /api/
-# No crawl delay for Google to ensure faster indexing
+# Note: Google doesn't support Crawl-delay directive, use Search Console instead
 
 # Bing-specific rules
 User-agent: Bingbot
@@ -28,13 +28,13 @@ Crawl-delay: 5
 
 # Rules for Google Image
 User-agent: Googlebot-Image
+Disallow: /
 Allow: /lovable-uploads/
 Allow: /*.jpg$
 Allow: /*.jpeg$
 Allow: /*.png$
 Allow: /*.webp$
 Allow: /*.svg$
-Disallow: /
 
 # Rules for mobile Googlebot
 User-agent: Googlebot-Mobile
@@ -50,5 +50,5 @@ Disallow: /*?*
 # Sitemaps
 Sitemap: https://findmyweddingvendor.com/sitemap.xml
 
-# Host directive to specify the preferred domain
-Host: findmyweddingvendor.com
+# Host directive (only supported by Yandex, not Google)
+# Host: findmyweddingvendor.com
