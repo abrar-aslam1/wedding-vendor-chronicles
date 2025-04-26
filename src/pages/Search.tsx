@@ -6,7 +6,12 @@ import { SEOHead } from "@/components/SEOHead";
 import { SchemaMarkup } from "@/components/SchemaMarkup";
 
 const Search = () => {
-  const { category, city, state } = useParams<{ category: string; city?: string; state?: string }>();
+  const { category, subcategory, city, state } = useParams<{ 
+    category: string; 
+    subcategory?: string;
+    city?: string; 
+    state?: string; 
+  }>();
   
   const cleanCategory = category ? category.replace('top-20/', '').replace(/-/g, ' ') : 'wedding-vendors';
   
@@ -16,11 +21,13 @@ const Search = () => {
         category={category?.replace('top-20/', '')} 
         city={city} 
         state={state}
+        subcategory={subcategory}
       />
       <SchemaMarkup
         category={cleanCategory}
         city={city}
         state={state}
+        subcategory={subcategory}
       />
       <MainNav />
       <div className="container mx-auto px-4 pt-20">
@@ -31,10 +38,27 @@ const Search = () => {
             </BreadcrumbItem>
             {category && (
               <BreadcrumbItem>
+                {subcategory ? (
+                  <BreadcrumbLink href={`/top-20/${category}`}>
+                    {cleanCategory.split(' ').map(word => 
+                      word.charAt(0).toUpperCase() + word.slice(1)
+                    ).join(' ')}
+                  </BreadcrumbLink>
+                ) : (
+                  <BreadcrumbPage>
+                    {cleanCategory.split(' ').map(word => 
+                      word.charAt(0).toUpperCase() + word.slice(1)
+                    ).join(' ')}
+                    {city && state ? ` in ${city}, ${state}` : ''}
+                  </BreadcrumbPage>
+                )}
+              </BreadcrumbItem>
+            )}
+            
+            {subcategory && (
+              <BreadcrumbItem>
                 <BreadcrumbPage>
-                  {cleanCategory.split(' ').map(word => 
-                    word.charAt(0).toUpperCase() + word.slice(1)
-                  ).join(' ')}
+                  {subcategory.charAt(0).toUpperCase() + subcategory.slice(1)}
                   {city && state ? ` in ${city}, ${state}` : ''}
                 </BreadcrumbPage>
               </BreadcrumbItem>

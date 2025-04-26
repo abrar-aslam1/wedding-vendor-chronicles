@@ -22,10 +22,27 @@ export const SearchContainer = () => {
 
   useEffect(() => {
     console.log('SearchContainer mounted with params:', { category, subcategory, city, state });
+    
+    // Check if this is a test URL for showing the "no results" message
+    const urlParams = new URLSearchParams(window.location.search);
+    const testNoResults = urlParams.get('test-no-results') === 'true';
+    
+    if (testNoResults) {
+      console.log('Test mode: Showing no results message');
+      setSearchResults([]);
+      setIsSearching(false);
+      return;
+    }
+    
     if (city && state) {
       const cleanCategory = category ? category.replace('top-20/', '').replace(/-/g, ' ') : 'wedding vendors';
       console.log('Initiating search for:', { cleanCategory, subcategory, city, state });
       fetchResults(cleanCategory, city, state, subcategory);
+    } else {
+      // If we don't have city and state, we're not in a search context
+      // Set empty results to ensure we don't show a loading state indefinitely
+      setSearchResults([]);
+      setIsSearching(false);
     }
   }, [category, subcategory, city, state]);
 

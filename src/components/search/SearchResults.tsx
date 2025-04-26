@@ -244,12 +244,41 @@ export const SearchResults = ({ results, isSearching, subcategory }: SearchResul
 
   if (results.length === 0 && !isSearching) {
     return (
-      <div className="mt-4 md:mt-8 text-center text-gray-500">
-        {isFavoritesPage 
-          ? "You don't have any favorites yet. Browse vendors and click the heart icon to add them to your favorites."
-          : subcategory 
-            ? `No ${vendorType.toLowerCase()} found for ${getSubcategoryDescription()}. Try selecting a different option.`
-            : "No vendors found. Try adjusting your search criteria."}
+      <div className="mt-8 md:mt-12 text-center">
+        <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md border border-gray-100">
+          <div className="mb-4 text-wedding-text">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3 className="text-xl font-semibold text-wedding-text mb-2">
+            {isFavoritesPage 
+              ? "No Favorites Yet"
+              : "No Results Found"}
+          </h3>
+          <p className="text-gray-600 mb-4">
+            {isFavoritesPage 
+              ? "You don't have any favorites yet. Browse vendors and click the heart icon to add them to your favorites."
+              : subcategory 
+                ? `We couldn't find any ${vendorType.toLowerCase()} specializing in ${getSubcategoryDescription()} in this area.`
+                : `We couldn't find any ${vendorType.toLowerCase()} in this area.`}
+          </p>
+          <div className="text-sm text-gray-500">
+            {!isFavoritesPage && (
+              <div className="space-y-2">
+                <p className="font-medium">Suggestions:</p>
+                <ul className="list-disc list-inside space-y-1">
+                  {subcategory && (
+                    <li>Try a different specialization or category</li>
+                  )}
+                  <li>Check your spelling and location</li>
+                  <li>Try searching in a larger nearby city</li>
+                  <li>Broaden your search criteria</li>
+                </ul>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     );
   }

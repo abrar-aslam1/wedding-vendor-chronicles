@@ -28,6 +28,9 @@ function App() {
         <Route path="/loading" element={<Loading />} />
         <Route path="/top-20/:category/:city/:state" element={<Search />} />
         <Route path="/top-20/:category/:subcategory/:city/:state" element={<Search />} />
+        {/* Catch additional search-like patterns to prevent 404s */}
+        <Route path="/top-20/:category" element={<Search />} />
+        <Route path="/top-20/:category/:subcategory" element={<Search />} />
         <Route path="/vendor/:vendorId" element={<VendorDetail />} />
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/terms" element={<Terms />} />
