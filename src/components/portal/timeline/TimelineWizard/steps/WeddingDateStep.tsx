@@ -68,9 +68,6 @@ export const WeddingDateStep = () => {
             <div className="text-lg font-medium text-wedding-primary">
               {format(date, "MMMM d, yyyy")}
             </div>
-            <p className="text-sm text-gray-500 mt-1">
-              {Math.ceil((date.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))} days from today
-            </p>
           </div>
         )}
       </div>

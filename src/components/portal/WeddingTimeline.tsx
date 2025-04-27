@@ -65,13 +65,23 @@ const WeddingTimeline = () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session?.user) return;
       
+      // Ensure a date is provided
+      if (!eventData.date) {
+        toast({
+          title: "Date required",
+          description: "Please select a date for the event",
+          variant: "destructive",
+        });
+        return;
+      }
+      
       const { data, error } = await supabase
         .from('timeline_events')
         .insert({
           user_id: session.user.id,
           title: eventData.title || '',
           description: eventData.description,
-          date: eventData.date || new Date().toISOString().split('T')[0],
+          date: eventData.date,
           completed: false,
           is_generated: eventData.is_generated,
           template_id: eventData.template_id,

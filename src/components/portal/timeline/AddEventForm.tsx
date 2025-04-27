@@ -14,7 +14,7 @@ interface AddEventFormProps {
 export const AddEventForm = ({ onCancel, onAdd }: AddEventFormProps) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [date, setDate] = useState(format(new Date(), "yyyy-MM-dd"));
+  const [date, setDate] = useState("");
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,7 +30,7 @@ export const AddEventForm = ({ onCancel, onAdd }: AddEventFormProps) => {
     // Reset form
     setTitle("");
     setDescription("");
-    setDate(format(new Date(), "yyyy-MM-dd"));
+    setDate("");
   };
   
   return (
