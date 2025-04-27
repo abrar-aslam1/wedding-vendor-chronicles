@@ -265,6 +265,186 @@ export const WeddingHashtagGenerator = () => {
               stateSlug={stateSlug}
               citySlug={citySlug}
             />
+            
+            {/* Generator Tool - shown on all pages */}
+            <div className="mt-8 mb-8">
+              <h2 className="text-2xl font-bold mb-6">Generate Your {citySlug ? `${citySlug.replace(/-/g, ' ')}` : stateSlug ? `${stateSlug.replace(/-/g, ' ')}` : ''} Wedding Hashtags</h2>
+              
+              <Tabs defaultValue="generator" className="w-full">
+                <TabsList className="grid w-full grid-cols-2 mb-6">
+                  <TabsTrigger value="generator">Hashtag Generator</TabsTrigger>
+                  <TabsTrigger value="tips">Hashtag Tips</TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="generator">
+                  {!showResults ? (
+                    <div className="bg-white rounded-lg shadow-md p-6">
+                      <h2 className="text-xl font-semibold mb-6">Enter Your Details</h2>
+                      
+                      <div className="space-y-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div className="space-y-2">
+                            <Label htmlFor="partner1Name" className="text-base">
+                              Partner 1's Full Name <span className="text-red-500">*</span>
+                            </Label>
+                            <Input
+                              id="partner1Name"
+                              name="partner1Name"
+                              placeholder="e.g. John Smith"
+                              value={formInputs.partner1Name}
+                              onChange={handleInputChange}
+                              className={errors.partner1Name ? "border-red-500" : ""}
+                            />
+                            {errors.partner1Name && (
+                              <p className="text-red-500 text-sm">{errors.partner1Name}</p>
+                            )}
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <Label htmlFor="partner2Name" className="text-base">
+                              Partner 2's Full Name <span className="text-red-500">*</span>
+                            </Label>
+                            <Input
+                              id="partner2Name"
+                              name="partner2Name"
+                              placeholder="e.g. Jane Doe"
+                              value={formInputs.partner2Name}
+                              onChange={handleInputChange}
+                              className={errors.partner2Name ? "border-red-500" : ""}
+                            />
+                            {errors.partner2Name && (
+                              <p className="text-red-500 text-sm">{errors.partner2Name}</p>
+                            )}
+                          </div>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div className="space-y-2">
+                            <Label htmlFor="weddingDate" className="text-base">
+                              Wedding Date (Optional)
+                            </Label>
+                            <Input
+                              id="weddingDate"
+                              name="weddingDate"
+                              type="date"
+                              value={formInputs.weddingDate}
+                              onChange={handleInputChange}
+                            />
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <Label htmlFor="weddingTheme" className="text-base">
+                              Wedding Theme or Interests (Optional)
+                            </Label>
+                            <Input
+                              id="weddingTheme"
+                              name="weddingTheme"
+                              placeholder="e.g. Rustic, Beach, Vintage, Travel"
+                              value={formInputs.weddingTheme}
+                              onChange={handleInputChange}
+                            />
+                          </div>
+                        </div>
+                        
+                        <Button 
+                          onClick={generateHashtags} 
+                          className="w-full md:w-auto"
+                          size="lg"
+                        >
+                          Generate Hashtags
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-8">
+                      <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+                        <h2 className="text-2xl font-semibold text-wedding-text">Your Wedding Hashtags</h2>
+                        
+                        <Button 
+                          variant="outline" 
+                          onClick={handleReset}
+                          className="flex items-center gap-2 mt-4 md:mt-0"
+                        >
+                          <ArrowLeft className="h-4 w-4" />
+                          Back to Generator
+                        </Button>
+                      </div>
+                      
+                      <div className="bg-white rounded-lg shadow-md p-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                          {generatedHashtags.map((hashtag, index) => (
+                            <Card key={index} className="overflow-hidden">
+                              <CardHeader className="p-4 pb-2">
+                                <CardTitle className="text-lg font-medium break-all">
+                                  {hashtag.text}
+                                </CardTitle>
+                                <CardDescription>{hashtag.category}</CardDescription>
+                              </CardHeader>
+                              <CardFooter className="p-4 pt-2">
+                                <Button 
+                                  variant="outline" 
+                                  size="sm" 
+                                  className="w-full"
+                                  onClick={() => copyToClipboard(hashtag.text)}
+                                >
+                                  <Copy className="h-3.5 w-3.5 mr-2" />
+                                  Copy
+                                </Button>
+                              </CardFooter>
+                            </Card>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </TabsContent>
+                
+                <TabsContent value="tips">
+                  <div className="bg-white rounded-lg shadow-md p-6">
+                    <h2 className="text-xl font-semibold mb-6">Wedding Hashtag Tips</h2>
+                    
+                    <div className="space-y-6">
+                      <div className="flex gap-4">
+                        <div className="flex-shrink-0 w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center">
+                          <Heart className="h-5 w-5 text-pink-500" />
+                        </div>
+                        <div>
+                          <h3 className="text-lg font-medium mb-2">Keep it Short and Memorable</h3>
+                          <p className="text-gray-600">
+                            The best wedding hashtags are short, sweet, and easy to remember. Aim for something that guests can quickly type without making mistakes.
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex gap-4">
+                        <div className="flex-shrink-0 w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                          <Sparkles className="h-5 w-5 text-blue-500" />
+                        </div>
+                        <div>
+                          <h3 className="text-lg font-medium mb-2">Check if Hashtags are Already in Use</h3>
+                          <p className="text-gray-600">
+                            Before finalizing your hashtag, search for it on social media platforms to ensure it's not already being used for another wedding or event.
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex gap-4">
+                        <div className="flex-shrink-0 w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+                          <Calendar className="h-5 w-5 text-green-500" />
+                        </div>
+                        <div>
+                          <h3 className="text-lg font-medium mb-2">Use CamelCase for Readability</h3>
+                          <p className="text-gray-600">
+                            Capitalize the first letter of each word in your hashtag (like #JohnAndJane) to make it easier to read.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </div>
+            
             <HashtagFAQ 
               stateSlug={stateSlug}
               citySlug={citySlug}

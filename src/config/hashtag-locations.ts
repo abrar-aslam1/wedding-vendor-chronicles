@@ -61,6 +61,12 @@ const locationData: { [key: string]: LocationData } = {
         nicknames: ["Queen City", "Nickel City"],
         landmarks: ["Niagara", "Erie", "Falls"],
         specialTerms: ["Bison", "Snow", "Wings"]
+      },
+      "rochester": {
+        cityName: "Rochester",
+        nicknames: ["Flower City", "ROC"],
+        landmarks: ["Eastman", "High Falls", "Lake Ontario"],
+        specialTerms: ["Kodak", "Lilac", "Canal"]
       }
     }
   },
@@ -105,6 +111,12 @@ const locationData: { [key: string]: LocationData } = {
         nicknames: ["O-Town", "The City Beautiful"],
         landmarks: ["Disney", "Universal", "Epcot"],
         specialTerms: ["Magic", "Theme", "Parks"]
+      },
+      "tampa": {
+        cityName: "Tampa",
+        nicknames: ["Cigar City", "Big Guava"],
+        landmarks: ["Bayshore", "Ybor", "Busch Gardens"],
+        specialTerms: ["Bay", "Pirate", "Gulf"]
       }
     }
   },
@@ -118,6 +130,18 @@ const locationData: { [key: string]: LocationData } = {
         nicknames: ["Windy City", "Chi-Town", "Second City"],
         landmarks: ["Willis", "Navy", "Millennium"],
         specialTerms: ["Wind", "Lake", "Blues"]
+      },
+      "springfield": {
+        cityName: "Springfield",
+        nicknames: ["Flower City", "Lincoln's Home"],
+        landmarks: ["Capitol", "Lincoln Home", "Dana-Thomas"],
+        specialTerms: ["Capital", "Lincoln", "Prairie"]
+      },
+      "naperville": {
+        cityName: "Naperville",
+        nicknames: ["Tree City", "The Nape"],
+        landmarks: ["Riverwalk", "Centennial Beach", "Moser Tower"],
+        specialTerms: ["River", "Suburb", "Historic"]
       }
     }
   }
@@ -312,6 +336,18 @@ export function getLocationWeddingStats(stateSlug: string, citySlug?: string): {
         popularMonths: ["June", "September", "October"],
         popularVenues: ["Rooftops", "Lofts", "Luxury Hotels"],
         averageGuestCount: 130
+      },
+      "buffalo": {
+        averageCost: "$32,000",
+        popularMonths: ["June", "August", "September"],
+        popularVenues: ["Historic Mansions", "Waterfront", "Gardens"],
+        averageGuestCount: 125
+      },
+      "rochester": {
+        averageCost: "$30,000",
+        popularMonths: ["June", "July", "September"],
+        popularVenues: ["Museums", "Wineries", "Historic Buildings"],
+        averageGuestCount: 120
       }
     },
     "texas": {
@@ -320,6 +356,18 @@ export function getLocationWeddingStats(stateSlug: string, citySlug?: string): {
         popularMonths: ["April", "May", "October"],
         popularVenues: ["Hill Country Venues", "Downtown Lofts", "Lakeside Estates"],
         averageGuestCount: 140
+      },
+      "dallas": {
+        averageCost: "$33,000",
+        popularMonths: ["April", "May", "October"],
+        popularVenues: ["Luxury Hotels", "Country Clubs", "Historic Venues"],
+        averageGuestCount: 150
+      },
+      "houston": {
+        averageCost: "$35,000",
+        popularMonths: ["March", "April", "October"],
+        popularVenues: ["Downtown Hotels", "Country Clubs", "Gardens"],
+        averageGuestCount: 155
       }
     },
     "florida": {
@@ -328,6 +376,18 @@ export function getLocationWeddingStats(stateSlug: string, citySlug?: string): {
         popularMonths: ["November", "February", "March"],
         popularVenues: ["Beachfront Resorts", "Luxury Hotels", "Waterfront Estates"],
         averageGuestCount: 125
+      },
+      "orlando": {
+        averageCost: "$33,000",
+        popularMonths: ["October", "November", "April"],
+        popularVenues: ["Theme Parks", "Resorts", "Gardens"],
+        averageGuestCount: 130
+      },
+      "tampa": {
+        averageCost: "$30,000",
+        popularMonths: ["October", "November", "April"],
+        popularVenues: ["Waterfront Venues", "Historic Buildings", "Gardens"],
+        averageGuestCount: 120
       }
     },
     "illinois": {
@@ -336,6 +396,18 @@ export function getLocationWeddingStats(stateSlug: string, citySlug?: string): {
         popularMonths: ["June", "August", "September"],
         popularVenues: ["Downtown Hotels", "Historic Buildings", "Waterfront Venues"],
         averageGuestCount: 145
+      },
+      "springfield": {
+        averageCost: "$25,000",
+        popularMonths: ["May", "June", "September"],
+        popularVenues: ["Historic Sites", "Gardens", "Ballrooms"],
+        averageGuestCount: 130
+      },
+      "naperville": {
+        averageCost: "$28,000",
+        popularMonths: ["June", "August", "September"],
+        popularVenues: ["Riverwalk", "Country Clubs", "Historic Buildings"],
+        averageGuestCount: 135
       }
     }
   };

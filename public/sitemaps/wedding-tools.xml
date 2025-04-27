@@ -73,6 +73,12 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/new-york/rochester</loc>
+    <lastmod>2025-04-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
   
   <!-- Texas state page -->
   <url>
@@ -123,6 +129,12 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/florida/tampa</loc>
+    <lastmod>2025-04-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
   
   <!-- Illinois state page -->
   <url>
@@ -135,6 +147,18 @@
   <!-- Illinois cities -->
   <url>
     <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/illinois/chicago</loc>
+    <lastmod>2025-04-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/illinois/springfield</loc>
+    <lastmod>2025-04-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/illinois/naperville</loc>
     <lastmod>2025-04-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
