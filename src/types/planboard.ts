@@ -28,6 +28,14 @@ export type VendorCategory = {
   essential: boolean;
 };
 
+export interface VendorCompletion {
+  userId: string;
+  vendorSlug: string;
+  completed: boolean;
+  notes?: string;
+  updatedAt: string;
+}
+
 export const essentialCategories: VendorCategory[] = [
   {
     name: "Venues",

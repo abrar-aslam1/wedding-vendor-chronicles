@@ -25,7 +25,11 @@ import { Column } from "./planboard/Column";
 import { AddColumnForm } from "./planboard/AddColumnForm";
 import { EssentialVendorsGuide } from "./planboard/EssentialVendorsGuide";
 
-const PlanBoard = () => {
+interface PlanBoardProps {
+  isDemo?: boolean;
+}
+
+const PlanBoard = ({ isDemo = false }: PlanBoardProps) => {
   const [columns, setColumns] = useState<PlanBoardColumn[]>([]);
   const [items, setItems] = useState<PlanBoardItem[]>([]);
   const [isAddingColumn, setIsAddingColumn] = useState(false);
@@ -423,7 +427,7 @@ const PlanBoard = () => {
         </Button>
       </div>
       
-      <EssentialVendorsGuide />
+      <EssentialVendorsGuide isDemo={isDemo} />
       
       {isLoading ? (
         <div className="flex justify-center items-center h-64">

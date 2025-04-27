@@ -1,8 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronUp, CheckCircle, Info } from "lucide-react";
-import { essentialCategories } from "@/types/planboard";
+import { ChevronDown, ChevronUp, CheckCircle, Info, Check } from "lucide-react";
+import { essentialCategories, VendorCompletion } from "@/types/planboard";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
 import {
   Accordion,
   AccordionContent,
@@ -10,11 +14,108 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-export const EssentialVendorsGuide = () => {
+interface EssentialVendorsGuideProps {
+  isDemo?: boolean;
+}
+
+export const EssentialVendorsGuide = ({ isDemo = false }: EssentialVendorsGuideProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [completions, setCompletions] = useState<Record<string, boolean>>({});
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
   
   const essentialVendors = essentialCategories.filter(cat => cat.essential);
   const otherVendors = essentialCategories.filter(cat => !cat.essential);
+  
+  useEffect(() => {
+    if (!isDemo) {
+      fetchCompletions();
+    }
+  }, [isDemo]);
+  
+  const fetchCompletions = async () => {
+    try {
+      setIsLoading(true);
+      
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) return;
+      
+      const { data, error } = await supabase
+        .from('vendor_completions')
+        .select('vendor_slug, completed')
+        .eq('user_id', session.user.id);
+        
+      if (error) throw error;
+      
+      const completionsMap: Record<string, boolean> = {};
+      data?.forEach(item => {
+        completionsMap[item.vendor_slug] = item.completed;
+      });
+      
+      setCompletions(completionsMap);
+    } catch (error: any) {
+      console.error('Error fetching vendor completions:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+  const handleCheckboxChange = async (vendorSlug: string, checked: boolean) => {
+    if (isDemo) {
+      // For demo mode, just update the local state
+      setCompletions(prev => ({
+        ...prev,
+        [vendorSlug]: checked
+      }));
+      return;
+    }
+    
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) {
+        toast({
+          title: "Authentication required",
+          description: "Please sign in to track your vendor completions",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      // Optimistically update UI
+      setCompletions(prev => ({
+        ...prev,
+        [vendorSlug]: checked
+      }));
+      
+      const { data, error } = await supabase
+        .from('vendor_completions')
+        .upsert({
+          user_id: session.user.id,
+          vendor_slug: vendorSlug,
+          completed: checked,
+          updated_at: new Date().toISOString()
+        }, {
+          onConflict: 'user_id,vendor_slug'
+        })
+        .select()
+        .single();
+        
+      if (error) throw error;
+      
+    } catch (error: any) {
+      // Revert optimistic update on error
+      setCompletions(prev => ({
+        ...prev,
+        [vendorSlug]: !checked
+      }));
+      
+      toast({
+        title: "Error updating vendor status",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  };
   
   return (
     <Card className="p-4 mb-6 bg-white shadow-sm">
@@ -43,10 +144,29 @@ export const EssentialVendorsGuide = () => {
                 <div className="space-y-3 pt-2">
                   {essentialVendors.map(vendor => (
                     <div key={vendor.slug} className="flex items-start gap-2">
-                      <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                      <div>
-                        <h4 className="font-medium text-wedding-text">{vendor.name}</h4>
-                        <p className="text-sm text-gray-600">{vendor.description}</p>
+                      <div className="flex items-center mt-1">
+                        <Checkbox 
+                          id={`vendor-${vendor.slug}`}
+                          checked={completions[vendor.slug] || false}
+                          onCheckedChange={(checked) => handleCheckboxChange(vendor.slug, checked === true)}
+                          className="mr-2"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center">
+                          <label 
+                            htmlFor={`vendor-${vendor.slug}`}
+                            className={`font-medium cursor-pointer ${completions[vendor.slug] ? 'line-through text-gray-500' : 'text-wedding-text'}`}
+                          >
+                            {vendor.name}
+                          </label>
+                          <Badge variant="outline" className="ml-2 bg-green-50 text-green-700 border-green-200 text-xs">
+                            Essential
+                          </Badge>
+                        </div>
+                        <p className={`text-sm ${completions[vendor.slug] ? 'text-gray-400' : 'text-gray-600'}`}>
+                          {vendor.description}
+                        </p>
                       </div>
                     </div>
                   ))}
@@ -62,10 +182,26 @@ export const EssentialVendorsGuide = () => {
                 <div className="space-y-3 pt-2">
                   {otherVendors.map(vendor => (
                     <div key={vendor.slug} className="flex items-start gap-2">
-                      <div className="h-5 w-5 flex-shrink-0" />
-                      <div>
-                        <h4 className="font-medium text-wedding-text">{vendor.name}</h4>
-                        <p className="text-sm text-gray-600">{vendor.description}</p>
+                      <div className="flex items-center mt-1">
+                        <Checkbox 
+                          id={`vendor-${vendor.slug}`}
+                          checked={completions[vendor.slug] || false}
+                          onCheckedChange={(checked) => handleCheckboxChange(vendor.slug, checked === true)}
+                          className="mr-2"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center">
+                          <label 
+                            htmlFor={`vendor-${vendor.slug}`}
+                            className={`font-medium cursor-pointer ${completions[vendor.slug] ? 'line-through text-gray-500' : 'text-wedding-text'}`}
+                          >
+                            {vendor.name}
+                          </label>
+                        </div>
+                        <p className={`text-sm ${completions[vendor.slug] ? 'text-gray-400' : 'text-gray-600'}`}>
+                          {vendor.description}
+                        </p>
                       </div>
                     </div>
                   ))}

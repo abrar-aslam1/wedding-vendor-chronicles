@@ -154,7 +154,7 @@ const DemoPortal = () => {
           </TabsContent>
           
           <TabsContent value="planboard">
-            <PlanBoard />
+            <PlanBoard isDemo={true} />
           </TabsContent>
           
           <TabsContent value="timeline">

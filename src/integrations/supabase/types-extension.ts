@@ -58,6 +58,7 @@ export interface ExtendedDatabase extends OriginalDatabase {
           description?: string;
           budget?: number;
           notes?: string;
+          category?: string;
           position: number;
           created_at: string;
         };
@@ -71,6 +72,7 @@ export interface ExtendedDatabase extends OriginalDatabase {
           description?: string;
           budget?: number;
           notes?: string;
+          category?: string;
           position: number;
           created_at?: string;
         };
@@ -84,6 +86,7 @@ export interface ExtendedDatabase extends OriginalDatabase {
           description?: string;
           budget?: number;
           notes?: string;
+          category?: string;
           position?: number;
           created_at?: string;
         };
@@ -100,6 +103,45 @@ export interface ExtendedDatabase extends OriginalDatabase {
             columns: ["column_id"];
             isOneToOne: false;
             referencedRelation: "plan_board_columns";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
+      
+      vendor_completions: {
+        Row: {
+          id: string;
+          user_id: string;
+          vendor_slug: string;
+          completed: boolean;
+          notes?: string;
+          updated_at: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          vendor_slug: string;
+          completed?: boolean;
+          notes?: string;
+          updated_at?: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          vendor_slug?: string;
+          completed?: boolean;
+          notes?: string;
+          updated_at?: string;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "vendor_completions_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "users";
             referencedColumns: ["id"];
           }
         ];
