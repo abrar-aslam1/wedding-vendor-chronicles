@@ -18,6 +18,9 @@ This document outlines the implementation of the user portal features for the We
 - Includes a Wedding Essentials Guide to help users understand which vendors are essential
 - Allows categorizing vendors by type (e.g., Venue, Photographer, Caterer)
 - Highlights essential vendors with badges to help with planning
+- Features interactive checklists for tracking vendor booking progress
+- Supports marking vendors as completed with visual strikethrough styling
+- Persists completion status in the database for each user
 
 ### 3. Wedding Timeline
 - Helps users track important wedding planning milestones and deadlines
@@ -39,7 +42,11 @@ We've added the following tables to the Supabase database:
    - Stores the items within each column
    - Fields: id, user_id, column_id, vendor_id, vendor_data, title, description, budget, notes, category, position, created_at
 
-3. `timeline_events`
+3. `vendor_completions`
+   - Stores the completion status of vendors in the essentials guide
+   - Fields: id, user_id, vendor_slug, completed, notes, updated_at, created_at
+
+4. `timeline_events`
    - Stores the timeline events
    - Fields: id, user_id, title, description, date, completed, created_at
 
