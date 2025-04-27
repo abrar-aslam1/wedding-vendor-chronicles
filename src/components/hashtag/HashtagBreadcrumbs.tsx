@@ -1,6 +1,8 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { getState, getCity } from '@/config/hashtag-locations';
+import React from "react";
+import { Link } from "react-router-dom";
+import { getLocationData } from "@/config/hashtag-locations";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
+import { ChevronRight, Home } from "lucide-react";
 
 interface HashtagBreadcrumbsProps {
   stateSlug?: string;
@@ -8,113 +10,99 @@ interface HashtagBreadcrumbsProps {
   className?: string;
 }
 
-interface BreadcrumbItem {
-  label: string;
-  path: string;
-  isLast: boolean;
-}
-
-export const HashtagBreadcrumbs: React.FC<HashtagBreadcrumbsProps> = ({
-  stateSlug,
+const HashtagBreadcrumbs: React.FC<HashtagBreadcrumbsProps> = ({ 
+  stateSlug, 
   citySlug,
-  className = ''
+  className = ""
 }) => {
-  // Build breadcrumb items array
-  const breadcrumbs: BreadcrumbItem[] = [
-    {
-      label: 'Home',
-      path: '/',
-      isLast: false
-    },
-    {
-      label: 'Wedding Tools',
-      path: '/tools',
-      isLast: false
-    },
-    {
-      label: 'Wedding Hashtag Generator',
-      path: '/tools/wedding-hashtag-generator',
-      isLast: !stateSlug
-    }
-  ];
-
-  // Add state if provided
-  if (stateSlug) {
-    const state = getState(stateSlug);
-    
-    if (state) {
-      breadcrumbs.push({
-        label: state.name,
-        path: `/tools/wedding-hashtag-generator/states/${stateSlug}`,
-        isLast: !citySlug
-      });
-      
-      // Add city if provided
-      if (citySlug) {
-        const city = getCity(stateSlug, citySlug);
-        
-        if (city) {
-          breadcrumbs.push({
-            label: city.name,
-            path: `/tools/wedding-hashtag-generator/states/${stateSlug}/${citySlug}`,
-            isLast: true
-          });
-        }
-      }
-    }
-  }
-
-  // Ensure the last item is marked as last
-  if (breadcrumbs.length > 0) {
-    breadcrumbs[breadcrumbs.length - 1].isLast = true;
-  }
-
+  // Get location data
+  const { state, city } = getLocationData(stateSlug, citySlug);
+  
   return (
-    <nav aria-label="Breadcrumb" className={`py-3 ${className}`}>
-      <ol className="flex flex-wrap items-center text-sm text-gray-600">
-        {breadcrumbs.map((crumb, index) => (
-          <li key={index} className="flex items-center">
-            {index > 0 && (
-              <span className="mx-2 text-gray-400" aria-hidden="true">
-                /
-              </span>
-            )}
+    <Breadcrumb className={`mb-4 ${className}`}>
+      <BreadcrumbList>
+        <BreadcrumbItem>
+          <BreadcrumbLink asChild>
+            <Link to="/">
+              <Home className="h-4 w-4 mr-1" />
+              Home
+            </Link>
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+        
+        <BreadcrumbSeparator>
+          <ChevronRight className="h-4 w-4" />
+        </BreadcrumbSeparator>
+        
+        <BreadcrumbItem>
+          <BreadcrumbLink asChild>
+            <Link to="/tools/wedding-hashtag-generator">
+              Wedding Tools
+            </Link>
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+        
+        <BreadcrumbSeparator>
+          <ChevronRight className="h-4 w-4" />
+        </BreadcrumbSeparator>
+        
+        {!stateSlug ? (
+          <BreadcrumbItem>
+            <BreadcrumbPage>Wedding Hashtag Generator</BreadcrumbPage>
+          </BreadcrumbItem>
+        ) : (
+          <>
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link to="/tools/wedding-hashtag-generator">
+                  Wedding Hashtag Generator
+                </Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
             
-            {crumb.isLast ? (
-              <span className="font-medium text-gray-900" aria-current="page">
-                {crumb.label}
-              </span>
+            <BreadcrumbSeparator>
+              <ChevronRight className="h-4 w-4" />
+            </BreadcrumbSeparator>
+            
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link to="/tools/wedding-hashtag-generator/states">
+                  States
+                </Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            
+            <BreadcrumbSeparator>
+              <ChevronRight className="h-4 w-4" />
+            </BreadcrumbSeparator>
+            
+            {!citySlug ? (
+              <BreadcrumbItem>
+                <BreadcrumbPage>{state?.stateName || stateSlug}</BreadcrumbPage>
+              </BreadcrumbItem>
             ) : (
-              <Link 
-                to={crumb.path} 
-                className="hover:text-blue-600 hover:underline"
-              >
-                {crumb.label}
-              </Link>
+              <>
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link to={`/tools/wedding-hashtag-generator/states/${stateSlug}`}>
+                      {state?.stateName || stateSlug}
+                    </Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                
+                <BreadcrumbSeparator>
+                  <ChevronRight className="h-4 w-4" />
+                </BreadcrumbSeparator>
+                
+                <BreadcrumbItem>
+                  <BreadcrumbPage>{city?.cityName || citySlug}</BreadcrumbPage>
+                </BreadcrumbItem>
+              </>
             )}
-          </li>
-        ))}
-      </ol>
-      
-      {/* Structured data for breadcrumbs */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'BreadcrumbList',
-            'itemListElement': breadcrumbs.map((crumb, index) => ({
-              '@type': 'ListItem',
-              'position': index + 1,
-              'item': {
-                '@id': `${window.location.origin}${crumb.path}`,
-                'name': crumb.label
-              }
-            }))
-          })
-        }}
-      />
-    </nav>
+          </>
+        )}
+      </BreadcrumbList>
+    </Breadcrumb>
   );
 };
 

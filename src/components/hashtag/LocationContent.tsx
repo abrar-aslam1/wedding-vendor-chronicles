@@ -1,391 +1,281 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { getState, getCity, City, State } from '@/config/hashtag-locations';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { MapPin, Calendar, DollarSign, Heart, Sparkles } from 'lucide-react';
+import React from "react";
+import { Link } from "react-router-dom";
+import { getLocationData, getLocationWeddingStats, getAllStatesSlugs, getCitySlugsForState } from "@/config/hashtag-locations";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { MapPin, Calendar, Users, Building, ChevronRight } from "lucide-react";
 
 interface LocationContentProps {
   stateSlug?: string;
   citySlug?: string;
 }
 
-export const LocationContent: React.FC<LocationContentProps> = ({ stateSlug, citySlug }) => {
-  // If no state is provided, show a list of all states
+const LocationContent: React.FC<LocationContentProps> = ({
+  stateSlug,
+  citySlug
+}) => {
+  // Get location data
+  const { state, city } = getLocationData(stateSlug, citySlug);
+  
+  // Get wedding statistics for the location
+  const stats = stateSlug ? getLocationWeddingStats(stateSlug, citySlug) : null;
+  
+  // If no state is provided, show a list of states
   if (!stateSlug) {
-    return <StatesList />;
-  }
-
-  // If state is provided but no city, show a list of cities in that state
-  if (stateSlug && !citySlug) {
-    return <CitiesList stateSlug={stateSlug} />;
-  }
-
-  // If both state and city are provided, show location-specific content
-  const state = getState(stateSlug);
-  const city = getCity(stateSlug, citySlug);
-
-  if (!state || !city) {
-    return <LocationNotFound />;
-  }
-
-  return (
-    <div className="space-y-8">
-      <LocationHeader state={state} city={city} />
-      <LocationStats state={state} city={city} />
-      <PopularVenues city={city} />
-      <LocalHashtagIdeas state={state} city={city} />
-      <WeddingTrends state={state} />
-    </div>
-  );
-};
-
-// Component to display a list of all states
-const StatesList: React.FC = () => {
-  // Import getAllStates at the top of the file
-  const { getAllStates } = require('@/config/hashtag-locations');
-  const states = getAllStates();
-
-  return (
-    <div className="space-y-6">
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-wedding-primary mb-2">
-          Wedding Hashtag Generator by Location
-        </h2>
-        <p className="text-gray-600 max-w-2xl mx-auto">
-          Create personalized wedding hashtags specific to your wedding location. 
-          Select your state to get started with location-specific hashtag ideas.
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {states.map((state) => (
-          <Link 
-            key={state.slug} 
-            to={`/tools/wedding-hashtag-generator/states/${state.slug}`}
-            className="no-underline"
-          >
-            <Card className="hover:shadow-md transition-shadow">
-              <CardHeader className="pb-2">
-                <CardTitle>{state.name}</CardTitle>
-                <CardDescription>
-                  {Object.keys(state.cities).length} Cities
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center text-sm text-gray-600 mb-2">
-                  <DollarSign className="h-4 w-4 mr-1" />
-                  Avg. Wedding Cost: ${state.weddingStats.averageCost.toLocaleString()}
-                </div>
-                <div className="flex items-center text-sm text-gray-600 mb-2">
-                  <Calendar className="h-4 w-4 mr-1" />
-                  Peak Season: {state.weddingStats.peakSeason}
-                </div>
-                <div className="flex items-center text-sm text-gray-600">
-                  <Heart className="h-4 w-4 mr-1" />
-                  Popular Themes: {state.weddingStats.popularThemes.join(', ')}
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-// Component to display a list of cities in a state
-const CitiesList: React.FC<{ stateSlug: string }> = ({ stateSlug }) => {
-  const { getCitiesInState, getState } = require('@/config/hashtag-locations');
-  const cities = getCitiesInState(stateSlug);
-  const state = getState(stateSlug);
-
-  if (!state) {
-    return <LocationNotFound />;
-  }
-
-  return (
-    <div className="space-y-6">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
-        <div>
-          <h2 className="text-2xl font-bold text-wedding-primary mb-2">
-            Wedding Hashtag Generator for {state.name}
-          </h2>
-          <p className="text-gray-600">
-            Select your city to get location-specific wedding hashtag ideas.
-          </p>
-        </div>
-        <Link to="/tools/wedding-hashtag-generator/states" className="mt-4 md:mt-0">
-          <Button variant="outline">
-            Back to All States
-          </Button>
-        </Link>
-      </div>
-
-      <div className="bg-blue-50 p-6 rounded-lg mb-8">
-        <h3 className="text-lg font-semibold text-blue-800 mb-3">
-          {state.name} Wedding Statistics
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="flex items-center">
-            <DollarSign className="h-5 w-5 text-blue-600 mr-2" />
-            <div>
-              <p className="font-medium">Average Cost</p>
-              <p className="text-blue-700">${state.weddingStats.averageCost.toLocaleString()}</p>
-            </div>
-          </div>
-          <div className="flex items-center">
-            <Calendar className="h-5 w-5 text-blue-600 mr-2" />
-            <div>
-              <p className="font-medium">Peak Wedding Season</p>
-              <p className="text-blue-700">{state.weddingStats.peakSeason}</p>
-            </div>
-          </div>
-          <div className="flex items-center">
-            <Heart className="h-5 w-5 text-blue-600 mr-2" />
-            <div>
-              <p className="font-medium">Popular Themes</p>
-              <p className="text-blue-700">{state.weddingStats.popularThemes.join(', ')}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {cities.map((city) => (
-          <Link 
-            key={city.slug} 
-            to={`/tools/wedding-hashtag-generator/states/${stateSlug}/${city.slug}`}
-            className="no-underline"
-          >
-            <Card className="hover:shadow-md transition-shadow">
-              <CardHeader className="pb-2">
-                <CardTitle>{city.name}</CardTitle>
-                <CardDescription>
-                  {city.weddingVenues} Wedding Venues
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center text-sm text-gray-600 mb-2">
-                  <MapPin className="h-4 w-4 mr-1" />
-                  Population: {city.population.toLocaleString()}
-                </div>
-                <div className="flex items-center text-sm text-gray-600 mb-2">
-                  <Heart className="h-4 w-4 mr-1" />
-                  Popular Venues: {city.popularVenues[0]}, {city.popularVenues[1]}
-                </div>
-                <div className="flex items-center text-sm text-gray-600">
-                  <Sparkles className="h-4 w-4 mr-1" />
-                  Local Nicknames: {city.localNicknames.join(', ')}
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-// Component to display when a location is not found
-const LocationNotFound: React.FC = () => {
-  return (
-    <div className="text-center py-12">
-      <h2 className="text-2xl font-bold text-wedding-primary mb-4">
-        Location Not Found
-      </h2>
-      <p className="text-gray-600 mb-6">
-        We couldn't find the location you're looking for. Please select from one of our available locations.
-      </p>
-      <Link to="/tools/wedding-hashtag-generator/states">
-        <Button>
-          Browse Locations
-        </Button>
-      </Link>
-    </div>
-  );
-};
-
-// Component to display the location header
-const LocationHeader: React.FC<{ state: State; city: City }> = ({ state, city }) => {
-  return (
-    <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+    const statesSlugs = getAllStatesSlugs();
+    
+    return (
       <div>
-        <h2 className="text-2xl font-bold text-wedding-primary mb-2">
-          Wedding Hashtag Generator for {city.name}, {state.name}
-        </h2>
-        <p className="text-gray-600">
-          Create personalized wedding hashtags for your {city.name} wedding with our free generator.
+        <h1 className="text-3xl font-bold mb-6">Wedding Hashtag Generator by Location</h1>
+        <p className="text-gray-600 mb-8">
+          Create location-specific wedding hashtags that celebrate where your special day will take place. 
+          Choose your state below to get started with personalized hashtag suggestions.
         </p>
-      </div>
-      <div className="flex space-x-3 mt-4 md:mt-0">
-        <Link to={`/tools/wedding-hashtag-generator/states/${state.slug}`}>
-          <Button variant="outline" size="sm">
-            Back to {state.name}
-          </Button>
-        </Link>
-        <Link to="/tools/wedding-hashtag-generator/states">
-          <Button variant="outline" size="sm">
-            All States
-          </Button>
-        </Link>
-      </div>
-    </div>
-  );
-};
-
-// Component to display location statistics
-const LocationStats: React.FC<{ state: State; city: City }> = ({ state, city }) => {
-  return (
-    <div className="bg-blue-50 p-6 rounded-lg">
-      <h3 className="text-lg font-semibold text-blue-800 mb-3">
-        {city.name} Wedding Statistics
-      </h3>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="flex items-center">
-          <MapPin className="h-5 w-5 text-blue-600 mr-2" />
-          <div>
-            <p className="font-medium">Wedding Venues</p>
-            <p className="text-blue-700">{city.weddingVenues} venues</p>
-          </div>
-        </div>
-        <div className="flex items-center">
-          <DollarSign className="h-5 w-5 text-blue-600 mr-2" />
-          <div>
-            <p className="font-medium">Average Wedding Cost</p>
-            <p className="text-blue-700">${state.weddingStats.averageCost.toLocaleString()}</p>
-          </div>
-        </div>
-        <div className="flex items-center">
-          <Calendar className="h-5 w-5 text-blue-600 mr-2" />
-          <div>
-            <p className="font-medium">Peak Wedding Season</p>
-            <p className="text-blue-700">{state.weddingStats.peakSeason}</p>
-          </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
+          {statesSlugs.map(slug => {
+            const { state } = getLocationData(slug);
+            if (!state) return null;
+            
+            return (
+              <Card key={slug} className="hover:shadow-md transition-shadow">
+                <CardHeader className="pb-2">
+                  <CardTitle>{state.stateName}</CardTitle>
+                  <CardDescription>{state.stateNickname || "Wedding Hashtags"}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Link to={`/tools/wedding-hashtag-generator/states/${slug}`}>
+                    <Button variant="outline" className="w-full">
+                      View {state.stateName} Hashtags
+                      <ChevronRight className="h-4 w-4 ml-2" />
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       </div>
-    </div>
-  );
-};
-
-// Component to display popular venues
-const PopularVenues: React.FC<{ city: City }> = ({ city }) => {
-  return (
-    <div>
-      <h3 className="text-xl font-semibold mb-4">
-        Popular Wedding Venues in {city.name}
-      </h3>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {city.popularVenues.map((venue, index) => (
-          <Card key={index}>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg">{venue}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-gray-600">
-                Create a venue-specific hashtag like <span className="font-medium">#{venue.replace(/\s+/g, '')}Wedding</span> or <span className="font-medium">#{venue.replace(/\s+/g, '')}Love</span>
-              </p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-// Component to display local hashtag ideas
-const LocalHashtagIdeas: React.FC<{ state: State; city: City }> = ({ state, city }) => {
-  return (
-    <div>
-      <h3 className="text-xl font-semibold mb-4">
-        {city.name} Wedding Hashtag Ideas
-      </h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg">City-Based Hashtags</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="list-disc list-inside space-y-2">
-              <li><span className="font-medium">#{city.name.replace(/\s+/g, '')}Wedding</span> - Simple and direct</li>
-              <li><span className="font-medium">#WeddingIn{city.name.replace(/\s+/g, '')}</span> - Location focused</li>
-              <li><span className="font-medium">#Getting{city.localNicknames[0].replace(/\s+/g, '')}Married</span> - Using local nickname</li>
-            </ul>
-          </CardContent>
-        </Card>
+    );
+  }
+  
+  // If a state is provided but no city, show a list of cities in that state
+  if (stateSlug && !citySlug && state) {
+    const citySlugs = getCitySlugsForState(stateSlug);
+    
+    return (
+      <div>
+        <h1 className="text-3xl font-bold mb-2">
+          {state.stateName} Wedding Hashtag Generator
+        </h1>
+        <p className="text-gray-600 mb-6">
+          Create the perfect wedding hashtag for your {state.stateName} wedding. Our generator creates unique, 
+          personalized hashtags that incorporate {state.stateName}'s unique character and charm.
+        </p>
         
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg">Landmark-Based Hashtags</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="list-disc list-inside space-y-2">
-              {city.localLandmarks.map((landmark, index) => (
-                <li key={index}>
-                  <span className="font-medium">#{landmark.replace(/\s+/g, '')}Love</span> - Featuring {landmark}
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg">Nickname-Based Hashtags</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="list-disc list-inside space-y-2">
-              {city.localNicknames.map((nickname, index) => (
-                <li key={index}>
-                  <span className="font-medium">#{nickname.replace(/\s+/g, '')}Wedding</span> - Using {nickname}
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg">State-Based Hashtags</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="list-disc list-inside space-y-2">
-              <li><span className="font-medium">#{state.name.replace(/\s+/g, '')}Wedding</span> - State focus</li>
-              <li><span className="font-medium">#{state.abbreviation}Wedding</span> - Using state abbreviation</li>
-              <li><span className="font-medium">#Wedding{state.name.replace(/\s+/g, '')}</span> - Another variation</li>
-            </ul>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
-};
-
-// Component to display wedding trends
-const WeddingTrends: React.FC<{ state: State }> = ({ state }) => {
-  return (
-    <div>
-      <h3 className="text-xl font-semibold mb-4">
-        Wedding Trends in {state.name}
-      </h3>
-      <div className="bg-pink-50 p-6 rounded-lg">
-        <h4 className="text-lg font-medium text-pink-800 mb-3">
-          Popular Wedding Themes
-        </h4>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {state.weddingStats.popularThemes.map((theme, index) => (
-            <div key={index} className="flex items-center">
-              <Heart className="h-5 w-5 text-pink-600 mr-2" />
+        <div className="bg-blue-50 p-6 rounded-lg mb-8">
+          <h2 className="text-xl font-bold mb-4">Wedding Statistics for {state.stateName}</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="flex items-start">
+              <div className="mr-3 mt-1">
+                <Calendar className="h-5 w-5 text-blue-600" />
+              </div>
               <div>
-                <p className="font-medium">{theme}</p>
-                <p className="text-sm text-pink-700">
-                  Try <span className="font-medium">#{theme.replace(/\s+/g, '')}Wedding</span>
-                </p>
+                <h3 className="font-semibold text-sm">Popular Months</h3>
+                <p className="text-gray-700">{stats?.popularMonths.join(", ")}</p>
               </div>
             </div>
-          ))}
+            
+            <div className="flex items-start">
+              <div className="mr-3 mt-1">
+                <Building className="h-5 w-5 text-blue-600" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-sm">Popular Venues</h3>
+                <p className="text-gray-700">{stats?.popularVenues.join(", ")}</p>
+              </div>
+            </div>
+            
+            <div className="flex items-start">
+              <div className="mr-3 mt-1">
+                <Users className="h-5 w-5 text-blue-600" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-sm">Average Guest Count</h3>
+                <p className="text-gray-700">{stats?.averageGuestCount} guests</p>
+              </div>
+            </div>
+            
+            <div className="flex items-start">
+              <div className="mr-3 mt-1">
+                <MapPin className="h-5 w-5 text-blue-600" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-sm">Average Cost</h3>
+                <p className="text-gray-700">{stats?.averageCost}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <h2 className="text-2xl font-bold mb-4">Choose a City in {state.stateName}</h2>
+        <p className="text-gray-600 mb-6">
+          Select a city to get even more personalized wedding hashtag suggestions that incorporate local landmarks and terminology.
+        </p>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
+          {citySlugs.map(citySlug => {
+            const { city } = getLocationData(stateSlug, citySlug);
+            if (!city) return null;
+            
+            return (
+              <Card key={citySlug} className="hover:shadow-md transition-shadow">
+                <CardHeader className="pb-2">
+                  <CardTitle>{city.cityName}</CardTitle>
+                  <CardDescription>
+                    {city.nicknames && city.nicknames.length > 0 
+                      ? `Known as: ${city.nicknames[0]}`
+                      : "Wedding Hashtags"}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Link to={`/tools/wedding-hashtag-generator/states/${stateSlug}/${citySlug}`}>
+                    <Button variant="outline" className="w-full">
+                      {city.cityName} Hashtags
+                      <ChevronRight className="h-4 w-4 ml-2" />
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       </div>
+    );
+  }
+  
+  // If both state and city are provided, show location-specific content
+  if (stateSlug && citySlug && state && city) {
+    return (
+      <div>
+        <h1 className="text-3xl font-bold mb-2">
+          {city.cityName}, {state.stateName} Wedding Hashtag Generator
+        </h1>
+        <p className="text-gray-600 mb-6">
+          Create the perfect wedding hashtag for your {city.cityName} wedding. Our generator creates unique, 
+          personalized hashtags that incorporate {city.cityName}'s landmarks, nicknames, and local terminology.
+        </p>
+        
+        <div className="bg-blue-50 p-6 rounded-lg mb-8">
+          <h2 className="text-xl font-bold mb-4">Wedding Statistics for {city.cityName}</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="flex items-start">
+              <div className="mr-3 mt-1">
+                <Calendar className="h-5 w-5 text-blue-600" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-sm">Popular Months</h3>
+                <p className="text-gray-700">{stats?.popularMonths.join(", ")}</p>
+              </div>
+            </div>
+            
+            <div className="flex items-start">
+              <div className="mr-3 mt-1">
+                <Building className="h-5 w-5 text-blue-600" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-sm">Popular Venues</h3>
+                <p className="text-gray-700">{stats?.popularVenues.join(", ")}</p>
+              </div>
+            </div>
+            
+            <div className="flex items-start">
+              <div className="mr-3 mt-1">
+                <Users className="h-5 w-5 text-blue-600" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-sm">Average Guest Count</h3>
+                <p className="text-gray-700">{stats?.averageGuestCount} guests</p>
+              </div>
+            </div>
+            
+            <div className="flex items-start">
+              <div className="mr-3 mt-1">
+                <MapPin className="h-5 w-5 text-blue-600" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-sm">Average Cost</h3>
+                <p className="text-gray-700">{stats?.averageCost}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold mb-4">{city.cityName} Wedding Hashtag Ideas</h2>
+          <p className="text-gray-600 mb-4">
+            Here are some ideas for incorporating {city.cityName} into your wedding hashtag:
+          </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            {city.landmarks && city.landmarks.length > 0 && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Landmark-Based Hashtags</CardTitle>
+                  <CardDescription>Incorporate famous {city.cityName} landmarks</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ul className="list-disc list-inside space-y-2">
+                    {city.landmarks.map((landmark, index) => (
+                      <li key={index} className="text-gray-700">
+                        <span className="font-medium">#{landmark}Wedding</span> - Celebrate your wedding at or near {landmark}
+                      </li>
+                    ))}
+                    <li className="text-gray-700">
+                      <span className="font-medium">#YourNamesAt{city.landmarks[0]}</span> - Personalize with your names
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
+            )}
+            
+            {city.nicknames && city.nicknames.length > 0 && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Nickname-Based Hashtags</CardTitle>
+                  <CardDescription>Use {city.cityName}'s popular nicknames</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ul className="list-disc list-inside space-y-2">
+                    {city.nicknames.map((nickname, index) => (
+                      <li key={index} className="text-gray-700">
+                        <span className="font-medium">#{nickname.replace(/\s+/g, "")}Wedding</span> - Using the nickname "{nickname}"
+                      </li>
+                    ))}
+                    <li className="text-gray-700">
+                      <span className="font-medium">#YourNamesIn{city.nicknames[0].replace(/\s+/g, "")}</span> - Personalize with your names
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+          
+          <p className="text-gray-600 mb-4">
+            Use our generator below to create personalized {city.cityName} wedding hashtags with your names!
+          </p>
+        </div>
+      </div>
+    );
+  }
+  
+  // Fallback content if location data is not found
+  return (
+    <div>
+      <h1 className="text-3xl font-bold mb-6">Wedding Hashtag Generator</h1>
+      <p className="text-gray-600 mb-8">
+        Create unique, personalized hashtags for your wedding in seconds. Our free tool helps couples create memorable hashtags for capturing all your special moments.
+      </p>
     </div>
   );
 };

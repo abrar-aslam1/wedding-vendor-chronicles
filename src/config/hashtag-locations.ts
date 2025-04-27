@@ -1,386 +1,355 @@
 /**
- * Location data for the Wedding Hashtag Generator
- * This file contains state and city information for location-specific hashtag pages
+ * Location-specific hashtag data and generation functions
+ * 
+ * This file contains data and functions for generating location-specific wedding hashtags
  */
 
-export interface City {
-  name: string;
-  slug: string;
-  population: number;
-  weddingVenues: number;
-  popularVenues: string[];
-  localLandmarks: string[];
-  localNicknames: string[];
-}
-
-export interface State {
-  name: string;
-  abbreviation: string;
-  slug: string;
-  weddingStats: {
-    averageCost: number;
-    peakSeason: string;
-    popularThemes: string[];
+interface LocationData {
+  stateName: string;
+  stateNickname?: string;
+  stateAbbreviation: string;
+  cities: {
+    [key: string]: {
+      cityName: string;
+      nicknames?: string[];
+      landmarks?: string[];
+      specialTerms?: string[];
+    };
   };
-  cities: Record<string, City>;
 }
 
-export const hashtagLocations: Record<string, State> = {
+// Location data for generating location-specific hashtags
+const locationData: { [key: string]: LocationData } = {
   "california": {
-    name: "California",
-    abbreviation: "CA",
-    slug: "california",
-    weddingStats: {
-      averageCost: 39000,
-      peakSeason: "June-September",
-      popularThemes: ["Beach", "Vineyard", "Rustic"]
-    },
+    stateName: "California",
+    stateNickname: "Golden State",
+    stateAbbreviation: "CA",
     cities: {
       "los-angeles": {
-        name: "Los Angeles",
-        slug: "los-angeles",
-        population: 3990000,
-        weddingVenues: 450,
-        popularVenues: [
-          "Vibiana",
-          "Carondelet House",
-          "Malibu Rocky Oaks Estate Vineyards"
-        ],
-        localLandmarks: [
-          "Hollywood Sign",
-          "Griffith Observatory",
-          "Santa Monica Pier"
-        ],
-        localNicknames: [
-          "LA",
-          "City of Angels",
-          "Tinseltown"
-        ]
+        cityName: "Los Angeles",
+        nicknames: ["LA", "City of Angels"],
+        landmarks: ["Hollywood", "Sunset", "Venice"],
+        specialTerms: ["Angels", "Stars", "Palms"]
       },
       "san-francisco": {
-        name: "San Francisco",
-        slug: "san-francisco",
-        population: 883305,
-        weddingVenues: 280,
-        popularVenues: [
-          "San Francisco City Hall",
-          "The Fairmont",
-          "Legion of Honor"
-        ],
-        localLandmarks: [
-          "Golden Gate Bridge",
-          "Alcatraz Island",
-          "Fisherman's Wharf"
-        ],
-        localNicknames: [
-          "SF",
-          "The City",
-          "Fog City"
-        ]
+        cityName: "San Francisco",
+        nicknames: ["SF", "The City", "Frisco"],
+        landmarks: ["GoldenGate", "Bay", "Alcatraz"],
+        specialTerms: ["Fog", "Hills", "Bay"]
       },
       "san-diego": {
-        name: "San Diego",
-        slug: "san-diego",
-        population: 1420000,
-        weddingVenues: 320,
-        popularVenues: [
-          "Hotel Del Coronado",
-          "Balboa Park",
-          "The Prado"
-        ],
-        localLandmarks: [
-          "San Diego Zoo",
-          "Coronado Bridge",
-          "Sunset Cliffs"
-        ],
-        localNicknames: [
-          "America's Finest City",
-          "SD",
-          "City in Motion"
-        ]
+        cityName: "San Diego",
+        nicknames: ["SD", "America's Finest City"],
+        landmarks: ["Coronado", "Balboa", "LaJolla"],
+        specialTerms: ["Sunny", "Beach", "Coastal"]
       }
     }
   },
   "new-york": {
-    name: "New York",
-    abbreviation: "NY",
-    slug: "new-york",
-    weddingStats: {
-      averageCost: 48000,
-      peakSeason: "May-October",
-      popularThemes: ["Urban Chic", "Classic Elegance", "Industrial"]
-    },
+    stateName: "New York",
+    stateNickname: "Empire State",
+    stateAbbreviation: "NY",
     cities: {
       "new-york-city": {
-        name: "New York City",
-        slug: "new-york-city",
-        population: 8380000,
-        weddingVenues: 520,
-        popularVenues: [
-          "The Plaza Hotel",
-          "Brooklyn Botanic Garden",
-          "The Rainbow Room"
-        ],
-        localLandmarks: [
-          "Empire State Building",
-          "Central Park",
-          "Statue of Liberty"
-        ],
-        localNicknames: [
-          "NYC",
-          "The Big Apple",
-          "Gotham"
-        ]
+        cityName: "New York City",
+        nicknames: ["NYC", "The Big Apple", "Gotham"],
+        landmarks: ["Manhattan", "Brooklyn", "Central"],
+        specialTerms: ["Empire", "Metro", "Urban"]
       },
       "buffalo": {
-        name: "Buffalo",
-        slug: "buffalo",
-        population: 278349,
-        weddingVenues: 95,
-        popularVenues: [
-          "Kleinhans Music Hall",
-          "The Mansion on Delaware",
-          "Hotel Henry"
-        ],
-        localLandmarks: [
-          "Niagara Falls",
-          "Buffalo City Hall",
-          "Canalside"
-        ],
-        localNicknames: [
-          "The Queen City",
-          "The Nickel City",
-          "City of Good Neighbors"
-        ]
+        cityName: "Buffalo",
+        nicknames: ["Queen City", "Nickel City"],
+        landmarks: ["Niagara", "Erie", "Falls"],
+        specialTerms: ["Bison", "Snow", "Wings"]
       }
     }
   },
   "texas": {
-    name: "Texas",
-    abbreviation: "TX",
-    slug: "texas",
-    weddingStats: {
-      averageCost: 30000,
-      peakSeason: "March-June, September-November",
-      popularThemes: ["Rustic", "Country", "Modern"]
-    },
+    stateName: "Texas",
+    stateNickname: "Lone Star State",
+    stateAbbreviation: "TX",
     cities: {
       "austin": {
-        name: "Austin",
-        slug: "austin",
-        population: 964254,
-        weddingVenues: 280,
-        popularVenues: [
-          "The Driskill Hotel",
-          "Barr Mansion",
-          "Vista West Ranch"
-        ],
-        localLandmarks: [
-          "Texas State Capitol",
-          "Lady Bird Lake",
-          "Zilker Park"
-        ],
-        localNicknames: [
-          "ATX",
-          "Live Music Capital of the World",
-          "Silicon Hills"
-        ]
+        cityName: "Austin",
+        nicknames: ["ATX", "Live Music Capital"],
+        landmarks: ["Capitol", "SoCo", "Zilker"],
+        specialTerms: ["Weird", "Music", "Bats"]
       },
       "dallas": {
-        name: "Dallas",
-        slug: "dallas",
-        population: 1345000,
-        weddingVenues: 310,
-        popularVenues: [
-          "The Adolphus Hotel",
-          "Arlington Hall",
-          "The Joule"
-        ],
-        localLandmarks: [
-          "Reunion Tower",
-          "Dallas Arboretum",
-          "Dealey Plaza"
-        ],
-        localNicknames: [
-          "Big D",
-          "Triple D",
-          "The 214"
-        ]
+        cityName: "Dallas",
+        nicknames: ["Big D", "Triple D"],
+        landmarks: ["Reunion", "Dealey", "Uptown"],
+        specialTerms: ["Cowboys", "Stars", "Mavs"]
       },
       "houston": {
-        name: "Houston",
-        slug: "houston",
-        population: 2310000,
-        weddingVenues: 340,
-        popularVenues: [
-          "The Corinthian",
-          "The Bell Tower on 34th",
-          "Chateau Cocomar"
-        ],
-        localLandmarks: [
-          "Space Center Houston",
-          "Buffalo Bayou Park",
-          "Gerald D. Hines Waterwall Park"
-        ],
-        localNicknames: [
-          "H-Town",
-          "Bayou City",
-          "Space City"
-        ]
+        cityName: "Houston",
+        nicknames: ["H-Town", "Space City", "Bayou City"],
+        landmarks: ["NASA", "Galleria", "Bayou"],
+        specialTerms: ["Space", "Rockets", "Astros"]
       }
     }
   },
   "florida": {
-    name: "Florida",
-    abbreviation: "FL",
-    slug: "florida",
-    weddingStats: {
-      averageCost: 33000,
-      peakSeason: "October-May",
-      popularThemes: ["Beach", "Tropical", "Garden"]
-    },
+    stateName: "Florida",
+    stateNickname: "Sunshine State",
+    stateAbbreviation: "FL",
     cities: {
       "miami": {
-        name: "Miami",
-        slug: "miami",
-        population: 463347,
-        weddingVenues: 290,
-        popularVenues: [
-          "Vizcaya Museum & Gardens",
-          "The Biltmore Hotel",
-          "The Ancient Spanish Monastery"
-        ],
-        localLandmarks: [
-          "South Beach",
-          "Wynwood Walls",
-          "Bayside Marketplace"
-        ],
-        localNicknames: [
-          "Magic City",
-          "The 305",
-          "Vice City"
-        ]
+        cityName: "Miami",
+        nicknames: ["Magic City", "Vice City"],
+        landmarks: ["SouthBeach", "Wynwood", "Brickell"],
+        specialTerms: ["Heat", "Tropical", "Ocean"]
       },
       "orlando": {
-        name: "Orlando",
-        slug: "orlando",
-        population: 287442,
-        weddingVenues: 240,
-        popularVenues: [
-          "Walt Disney World",
-          "Bella Collina",
-          "Casa Feliz"
-        ],
-        localLandmarks: [
-          "Disney World",
-          "Universal Studios",
-          "Lake Eola Park"
-        ],
-        localNicknames: [
-          "The City Beautiful",
-          "O-Town",
-          "Theme Park Capital of the World"
-        ]
+        cityName: "Orlando",
+        nicknames: ["O-Town", "The City Beautiful"],
+        landmarks: ["Disney", "Universal", "Epcot"],
+        specialTerms: ["Magic", "Theme", "Parks"]
       }
     }
   },
   "illinois": {
-    name: "Illinois",
-    abbreviation: "IL",
-    slug: "illinois",
-    weddingStats: {
-      averageCost: 35000,
-      peakSeason: "May-October",
-      popularThemes: ["Urban Chic", "Classic", "Industrial"]
-    },
+    stateName: "Illinois",
+    stateNickname: "Prairie State",
+    stateAbbreviation: "IL",
     cities: {
       "chicago": {
-        name: "Chicago",
-        slug: "chicago",
-        population: 2710000,
-        weddingVenues: 380,
-        popularVenues: [
-          "The Drake Hotel",
-          "Adler Planetarium",
-          "Chicago Cultural Center"
-        ],
-        localLandmarks: [
-          "Cloud Gate (The Bean)",
-          "Navy Pier",
-          "Willis Tower"
-        ],
-        localNicknames: [
-          "The Windy City",
-          "Chi-Town",
-          "Second City"
-        ]
+        cityName: "Chicago",
+        nicknames: ["Windy City", "Chi-Town", "Second City"],
+        landmarks: ["Willis", "Navy", "Millennium"],
+        specialTerms: ["Wind", "Lake", "Blues"]
       }
     }
   }
 };
 
-// Helper function to get all states
-export const getAllStates = (): State[] => {
-  return Object.values(hashtagLocations);
-};
-
-// Helper function to get all cities in a state
-export const getCitiesInState = (stateSlug: string): City[] => {
-  const state = hashtagLocations[stateSlug];
-  if (!state) return [];
-  return Object.values(state.cities);
-};
-
-// Helper function to get a specific city
-export const getCity = (stateSlug: string, citySlug: string): City | null => {
-  const state = hashtagLocations[stateSlug];
-  if (!state) return null;
-  return state.cities[citySlug] || null;
-};
-
-// Helper function to get a specific state
-export const getState = (stateSlug: string): State | null => {
-  return hashtagLocations[stateSlug] || null;
-};
-
-// Helper function to generate location-specific hashtag ideas
-export const generateLocationHashtags = (
-  stateSlug: string, 
-  citySlug: string, 
-  partner1Name: string, 
-  partner2Name: string
-): string[] => {
-  const state = getState(stateSlug);
-  const city = getCity(stateSlug, citySlug);
-  
-  if (!state || !city) return [];
-  
+/**
+ * Generate location-specific hashtags based on state and city
+ * 
+ * @param stateSlug The state slug (e.g., "california")
+ * @param citySlug The city slug (e.g., "los-angeles")
+ * @param partner1FirstName First partner's first name
+ * @param partner2FirstName Second partner's first name
+ * @returns Array of location-specific hashtags
+ */
+export function generateLocationHashtags(
+  stateSlug: string,
+  citySlug: string,
+  partner1FirstName: string,
+  partner2FirstName: string
+): string[] {
   const hashtags: string[] = [];
   
-  // City-based hashtags
-  hashtags.push(`#${partner1Name}${partner2Name}In${city.name.replace(/\s+/g, '')}`);
-  hashtags.push(`#${city.name.replace(/\s+/g, '')}Wedding`);
+  // Get location data
+  const state = locationData[stateSlug];
+  if (!state) return hashtags;
   
-  // Nickname-based hashtags
-  if (city.localNicknames && city.localNicknames.length > 0) {
-    const nickname = city.localNicknames[0].replace(/\s+/g, '');
-    hashtags.push(`#${nickname}Wedding${partner1Name}${partner2Name}`);
+  const city = state.cities[citySlug];
+  if (!city) return hashtags;
+  
+  // Generate state-based hashtags
+  hashtags.push(`#${partner1FirstName}${partner2FirstName}${state.stateName}`);
+  hashtags.push(`#${state.stateName}Wedding`);
+  
+  if (state.stateNickname) {
+    hashtags.push(`#${state.stateNickname}Wedding`);
   }
   
-  // Landmark-based hashtags
-  if (city.localLandmarks && city.localLandmarks.length > 0) {
-    const landmark = city.localLandmarks[0].replace(/\s+/g, '');
-    hashtags.push(`#${landmark}Love`);
+  // Generate city-based hashtags
+  hashtags.push(`#${partner1FirstName}${partner2FirstName}${city.cityName.replace(/\s+/g, "")}`);
+  hashtags.push(`#${city.cityName.replace(/\s+/g, "")}Wedding`);
+  
+  // Add nickname-based hashtags
+  if (city.nicknames && city.nicknames.length > 0) {
+    city.nicknames.forEach(nickname => {
+      hashtags.push(`#${nickname.replace(/\s+/g, "")}Wedding`);
+      hashtags.push(`#${partner1FirstName}${partner2FirstName}In${nickname.replace(/\s+/g, "")}`);
+    });
   }
   
-  // Venue-based hashtags
-  if (city.popularVenues && city.popularVenues.length > 0) {
-    const venue = city.popularVenues[0].replace(/\s+/g, '');
-    hashtags.push(`#${venue}Wedding`);
+  // Add landmark-based hashtags
+  if (city.landmarks && city.landmarks.length > 0) {
+    city.landmarks.forEach(landmark => {
+      hashtags.push(`#${landmark}Wedding`);
+    });
+    
+    // Pick a random landmark for a more specific hashtag
+    const randomLandmark = city.landmarks[Math.floor(Math.random() * city.landmarks.length)];
+    hashtags.push(`#${partner1FirstName}${partner2FirstName}At${randomLandmark}`);
   }
   
-  // State-based hashtags
-  hashtags.push(`#${state.name.replace(/\s+/g, '')}Wedding${partner1Name}${partner2Name}`);
+  // Add special term-based hashtags
+  if (city.specialTerms && city.specialTerms.length > 0) {
+    // Pick a random special term
+    const randomTerm = city.specialTerms[Math.floor(Math.random() * city.specialTerms.length)];
+    hashtags.push(`#${randomTerm}${partner1FirstName}${partner2FirstName}`);
+    hashtags.push(`#${randomTerm}Wedding`);
+  }
+  
+  // Add combined state abbreviation and city hashtags
+  hashtags.push(`#${partner1FirstName}${partner2FirstName}${state.stateAbbreviation}`);
   
   return hashtags;
-};
+}
+
+/**
+ * Get location data for a specific state and city
+ * 
+ * @param stateSlug The state slug (e.g., "california")
+ * @param citySlug The city slug (e.g., "los-angeles")
+ * @returns Location data or undefined if not found
+ */
+export function getLocationData(stateSlug?: string, citySlug?: string): {
+  state?: LocationData,
+  city?: LocationData["cities"][string]
+} {
+  if (!stateSlug) return {};
+  
+  const state = locationData[stateSlug];
+  if (!state) return {};
+  
+  if (!citySlug) return { state };
+  
+  const city = state.cities[citySlug];
+  if (!city) return { state };
+  
+  return { state, city };
+}
+
+/**
+ * Get all available state slugs
+ */
+export function getAllStatesSlugs(): string[] {
+  return Object.keys(locationData);
+}
+
+/**
+ * Get all available city slugs for a state
+ */
+export function getCitySlugsForState(stateSlug: string): string[] {
+  const state = locationData[stateSlug];
+  if (!state) return [];
+  
+  return Object.keys(state.cities);
+}
+
+/**
+ * Get wedding statistics for a location
+ */
+export function getLocationWeddingStats(stateSlug: string, citySlug?: string): {
+  averageCost: string;
+  popularMonths: string[];
+  popularVenues: string[];
+  averageGuestCount: number;
+} {
+  // This would ideally come from a database, but for now we'll use static data
+  const defaultStats = {
+    averageCost: "$28,000",
+    popularMonths: ["June", "September", "October"],
+    popularVenues: ["Hotels", "Barns", "Gardens"],
+    averageGuestCount: 125
+  };
+  
+  // State-specific stats
+  const stateStats: Record<string, typeof defaultStats> = {
+    "california": {
+      averageCost: "$39,000",
+      popularMonths: ["May", "June", "September"],
+      popularVenues: ["Wineries", "Beaches", "Historic Estates"],
+      averageGuestCount: 130
+    },
+    "new-york": {
+      averageCost: "$48,000",
+      popularMonths: ["June", "September", "October"],
+      popularVenues: ["Lofts", "Hotels", "Rooftops"],
+      averageGuestCount: 135
+    },
+    "texas": {
+      averageCost: "$30,000",
+      popularMonths: ["April", "May", "October"],
+      popularVenues: ["Ranches", "Barns", "Ballrooms"],
+      averageGuestCount: 145
+    },
+    "florida": {
+      averageCost: "$35,000",
+      popularMonths: ["November", "February", "March"],
+      popularVenues: ["Beaches", "Resorts", "Gardens"],
+      averageGuestCount: 120
+    },
+    "illinois": {
+      averageCost: "$33,000",
+      popularMonths: ["June", "August", "September"],
+      popularVenues: ["Ballrooms", "Lofts", "Historic Buildings"],
+      averageGuestCount: 140
+    }
+  };
+  
+  // City-specific stats
+  const cityStats: Record<string, Record<string, typeof defaultStats>> = {
+    "california": {
+      "los-angeles": {
+        averageCost: "$42,000",
+        popularMonths: ["May", "June", "October"],
+        popularVenues: ["Beachfront Estates", "Historic Theaters", "Luxury Hotels"],
+        averageGuestCount: 135
+      },
+      "san-francisco": {
+        averageCost: "$45,000",
+        popularMonths: ["June", "September", "October"],
+        popularVenues: ["Wineries", "Historic Buildings", "Bay View Venues"],
+        averageGuestCount: 125
+      },
+      "san-diego": {
+        averageCost: "$36,000",
+        popularMonths: ["April", "May", "October"],
+        popularVenues: ["Beaches", "Resorts", "Gardens"],
+        averageGuestCount: 130
+      }
+    },
+    "new-york": {
+      "new-york-city": {
+        averageCost: "$55,000",
+        popularMonths: ["June", "September", "October"],
+        popularVenues: ["Rooftops", "Lofts", "Luxury Hotels"],
+        averageGuestCount: 130
+      }
+    },
+    "texas": {
+      "austin": {
+        averageCost: "$31,000",
+        popularMonths: ["April", "May", "October"],
+        popularVenues: ["Hill Country Venues", "Downtown Lofts", "Lakeside Estates"],
+        averageGuestCount: 140
+      }
+    },
+    "florida": {
+      "miami": {
+        averageCost: "$38,000",
+        popularMonths: ["November", "February", "March"],
+        popularVenues: ["Beachfront Resorts", "Luxury Hotels", "Waterfront Estates"],
+        averageGuestCount: 125
+      }
+    },
+    "illinois": {
+      "chicago": {
+        averageCost: "$37,000",
+        popularMonths: ["June", "August", "September"],
+        popularVenues: ["Downtown Hotels", "Historic Buildings", "Waterfront Venues"],
+        averageGuestCount: 145
+      }
+    }
+  };
+  
+  // Return city-specific stats if available
+  if (stateSlug && citySlug && cityStats[stateSlug]?.[citySlug]) {
+    return cityStats[stateSlug][citySlug];
+  }
+  
+  // Return state-specific stats if available
+  if (stateSlug && stateStats[stateSlug]) {
+    return stateStats[stateSlug];
+  }
+  
+  // Return default stats
+  return defaultStats;
+}
