@@ -5,6 +5,7 @@ import { TimelineEventType } from "@/types/timeline";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { format } from "date-fns";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface AddEventFormProps {
   onCancel: () => void;
@@ -15,6 +16,7 @@ export const AddEventForm = ({ onCancel, onAdd }: AddEventFormProps) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
+  const isMobile = useIsMobile();
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,10 +79,11 @@ export const AddEventForm = ({ onCancel, onAdd }: AddEventFormProps) => {
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Add details about this event"
           className="w-full min-h-[100px]"
+          rows={isMobile ? 3 : 5}
         />
       </div>
       
-      <div className="flex justify-end gap-2 mt-6">
+      <div className={`flex ${isMobile ? 'justify-between' : 'justify-end'} gap-2 mt-6`}>
         <Button 
           type="button"
           variant="outline" 

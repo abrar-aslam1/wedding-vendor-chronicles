@@ -13,9 +13,10 @@ import { generateTimeline } from "./TimelineGenerator";
 interface TimelineWizardProps {
   onClose: () => void;
   onAddEvents: (events: Partial<TimelineEventType>[]) => void;
+  requireAuth?: boolean;
 }
 
-const WizardContent = ({ onClose, onAddEvents }: TimelineWizardProps) => {
+const WizardContent = ({ onClose, onAddEvents, requireAuth = true }: TimelineWizardProps) => {
   const { currentStep, goToNextStep, goToPreviousStep, weddingDetails, setWeddingDetails, isComplete } = useWizard();
   const [generatedEvents, setGeneratedEvents] = useState<Partial<TimelineEventType>[]>([]);
   

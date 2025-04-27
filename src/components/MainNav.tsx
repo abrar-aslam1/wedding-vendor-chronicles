@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { LogIn, LogOut, Menu, Search, Heart, LayoutDashboard } from "lucide-react";
+import { LogIn, LogOut, Menu, Search, Heart, LayoutDashboard, Calendar, Gift } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
@@ -121,6 +121,14 @@ export function MainNav() {
             >
               Blog
             </Button>
+            <Button
+              variant="ghost"
+              onClick={() => navigate("/free-tools/timeline-generator")}
+              className="text-wedding-text hover:text-wedding-primary"
+            >
+              <Calendar className="h-4 w-4 mr-2" />
+              Free Timeline
+            </Button>
             <ListBusinessButton />
             {renderAuthButtons()}
           </div>
@@ -160,6 +168,14 @@ export function MainNav() {
                     className="text-left text-wedding-text hover:text-wedding-primary"
                   >
                     Blog
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    onClick={() => navigate("/free-tools/timeline-generator")}
+                    className="text-left text-wedding-text hover:text-wedding-primary"
+                  >
+                    <Calendar className="h-4 w-4 mr-2" />
+                    Free Timeline Generator
                   </Button>
                   <ListBusinessButton />
                   <div className="flex flex-col gap-2 mt-4">

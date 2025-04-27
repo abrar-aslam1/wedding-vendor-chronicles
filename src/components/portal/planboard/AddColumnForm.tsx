@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { X, Check } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface AddColumnFormProps {
   onCancel: () => void;
@@ -11,6 +12,7 @@ interface AddColumnFormProps {
 
 export const AddColumnForm = ({ onCancel, onAdd }: AddColumnFormProps) => {
   const [name, setName] = useState("");
+  const isMobile = useIsMobile();
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,7 +26,7 @@ export const AddColumnForm = ({ onCancel, onAdd }: AddColumnFormProps) => {
   };
   
   return (
-    <div className="flex-shrink-0 w-80 bg-gray-50 rounded-lg shadow-sm">
+    <div className={`${isMobile ? 'w-full' : 'flex-shrink-0 w-80'} bg-gray-50 rounded-lg shadow-sm`}>
       <Card className="p-3">
         <form onSubmit={handleSubmit} className="space-y-3">
           <h3 className="font-semibold text-wedding-text mb-2">Add New Column</h3>

@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // We'll implement these components next
 import PlanBoard from "@/components/portal/PlanBoard";
@@ -15,6 +16,7 @@ const UserPortal = () => {
   const [activeTab, setActiveTab] = useState("favorites");
   const { toast } = useToast();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     // Check if user is authenticated
@@ -40,22 +42,22 @@ const UserPortal = () => {
         <h1 className="text-3xl font-bold text-wedding-primary mb-8">My Wedding Portal</h1>
         
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="w-full flex justify-between mb-8 bg-gray-100">
+          <TabsList className={`w-full ${isMobile ? 'flex flex-col gap-2' : 'flex justify-between'} mb-8 ${isMobile ? 'bg-transparent' : 'bg-gray-100'}`}>
             <TabsTrigger 
               value="favorites" 
-              className="flex-1 data-[state=active]:bg-wedding-primary data-[state=active]:text-white"
+              className={`${isMobile ? 'w-full' : 'flex-1'} data-[state=active]:bg-wedding-primary data-[state=active]:text-white`}
             >
               My Favorites
             </TabsTrigger>
             <TabsTrigger 
               value="planboard" 
-              className="flex-1 data-[state=active]:bg-wedding-primary data-[state=active]:text-white"
+              className={`${isMobile ? 'w-full' : 'flex-1'} data-[state=active]:bg-wedding-primary data-[state=active]:text-white`}
             >
               Plan Board
             </TabsTrigger>
             <TabsTrigger 
               value="timeline" 
-              className="flex-1 data-[state=active]:bg-wedding-primary data-[state=active]:text-white"
+              className={`${isMobile ? 'w-full' : 'flex-1'} data-[state=active]:bg-wedding-primary data-[state=active]:text-white`}
             >
               Wedding Timeline
             </TabsTrigger>

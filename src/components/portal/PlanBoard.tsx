@@ -14,7 +14,8 @@ import {
   arrayMove, 
   SortableContext, 
   sortableKeyboardCoordinates, 
-  horizontalListSortingStrategy 
+  horizontalListSortingStrategy,
+  verticalListSortingStrategy
 } from "@dnd-kit/sortable";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -24,6 +25,7 @@ import { PlanBoardColumn, PlanBoardItem } from "@/types/planboard";
 import { Column } from "./planboard/Column";
 import { AddColumnForm } from "./planboard/AddColumnForm";
 import { EssentialVendorsGuide } from "./planboard/EssentialVendorsGuide";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface PlanBoardProps {
   isDemo?: boolean;
@@ -36,6 +38,7 @@ const PlanBoard = ({ isDemo = false }: PlanBoardProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [activeId, setActiveId] = useState<string | null>(null);
   const { toast } = useToast();
+  const isMobile = useIsMobile();
   
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -416,11 +419,11 @@ const PlanBoard = ({ isDemo = false }: PlanBoardProps) => {
   
   return (
     <div className="w-full">
-      <div className="flex justify-between items-center mb-6">
+      <div className={`${isMobile ? 'flex flex-col gap-4' : 'flex justify-between items-center'} mb-6`}>
         <h2 className="text-2xl font-semibold text-wedding-text">My Plan Board</h2>
         <Button 
           onClick={() => setIsAddingColumn(true)}
-          className="bg-wedding-primary hover:bg-wedding-primary/90"
+          className={`bg-wedding-primary hover:bg-wedding-primary/90 ${isMobile ? 'w-full' : ''}`}
         >
           <Plus className="h-4 w-4 mr-2" />
           Add Column
@@ -441,10 +444,10 @@ const PlanBoard = ({ isDemo = false }: PlanBoardProps) => {
           onDragOver={handleDragOver}
           onDragEnd={handleDragEnd}
         >
-          <div className="flex gap-4 overflow-x-auto pb-4 min-h-[60vh]">
+          <div className={`${isMobile ? 'flex flex-col' : 'flex'} gap-4 ${isMobile ? '' : 'overflow-x-auto'} pb-4 min-h-[60vh]`}>
             <SortableContext 
               items={columns.map(col => col.id)} 
-              strategy={horizontalListSortingStrategy}
+              strategy={isMobile ? verticalListSortingStrategy : horizontalListSortingStrategy}
             >
               {columns.map(column => (
                 <Column 

@@ -7,6 +7,7 @@ import { AddEventForm } from "@/components/portal/timeline/AddEventForm";
 import { TimelineEventType } from "@/types/timeline";
 import { useToast } from "@/hooks/use-toast";
 import { TimelineWizard } from "@/components/portal/timeline/TimelineWizard";
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,6 +22,7 @@ const WeddingTimeline = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'upcoming' | 'completed'>('all');
   const { toast } = useToast();
+  const isMobile = useIsMobile();
   
   useEffect(() => {
     fetchEvents();
@@ -83,9 +85,9 @@ const WeddingTimeline = () => {
           description: eventData.description,
           date: eventData.date,
           completed: false,
-          is_generated: eventData.is_generated,
-          template_id: eventData.template_id,
-          vendor_category: eventData.vendor_category
+          is_generated: eventData.is_generated || false,
+          template_id: eventData.template_id || null,
+          vendor_category: eventData.vendor_category || null
         })
         .select()
         .single();
@@ -127,9 +129,9 @@ const WeddingTimeline = () => {
         description: event.description,
         date: event.date || new Date().toISOString().split('T')[0],
         completed: false,
-        is_generated: event.is_generated,
-        template_id: event.template_id,
-        vendor_category: event.vendor_category
+        is_generated: event.is_generated || false,
+        template_id: event.template_id || null,
+        vendor_category: event.vendor_category || null
       }));
       
       // Insert all events
@@ -214,18 +216,18 @@ const WeddingTimeline = () => {
   
   return (
     <div className="w-full">
-      <div className="flex justify-between items-center mb-6">
+      <div className={`${isMobile ? 'flex flex-col gap-4' : 'flex justify-between items-center'} mb-6`}>
         <h2 className="text-2xl font-semibold text-wedding-text">Wedding Timeline</h2>
-        <div className="flex gap-2">
+        <div className={`${isMobile ? 'flex flex-col w-full' : 'flex'} gap-2`}>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="flex items-center gap-2">
+              <Button variant="outline" className={`flex items-center gap-2 ${isMobile ? 'w-full justify-between' : ''}`}>
                 <Filter className="h-4 w-4" />
                 {filter === 'all' ? 'All Events' : 
                  filter === 'upcoming' ? 'Upcoming' : 'Completed'}
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align={isMobile ? "center" : "end"}>
               <DropdownMenuItem onClick={() => setFilter('all')}>
                 All Events
               </DropdownMenuItem>
@@ -241,7 +243,7 @@ const WeddingTimeline = () => {
           <Button 
             onClick={() => setIsUsingWizard(true)}
             variant="outline"
-            className="flex items-center gap-2 border-blue-300 text-blue-600 hover:bg-blue-50"
+            className={`flex items-center gap-2 border-blue-300 text-blue-600 hover:bg-blue-50 ${isMobile ? 'w-full justify-center' : ''}`}
           >
             <Wand2 className="h-4 w-4" />
             Generate Timeline
@@ -249,7 +251,7 @@ const WeddingTimeline = () => {
           
           <Button 
             onClick={() => setIsAddingEvent(true)}
-            className="bg-wedding-primary hover:bg-wedding-primary/90"
+            className={`bg-wedding-primary hover:bg-wedding-primary/90 ${isMobile ? 'w-full justify-center' : ''}`}
           >
             <Plus className="h-4 w-4 mr-2" />
             Add Event
@@ -264,9 +266,9 @@ const WeddingTimeline = () => {
       ) : (
         <div className="relative mt-8">
           {/* Timeline line */}
-          <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-200"></div>
+          <div className={`absolute ${isMobile ? 'left-2' : 'left-4'} top-0 bottom-0 w-0.5 bg-gray-200`}></div>
           
-          <div className="space-y-6">
+          <div className={`space-y-6 ${isMobile ? 'pl-1' : ''}`}>
             {filteredEvents().length === 0 ? (
               <div className="text-center py-12 text-gray-500">
                 <Calendar className="h-12 w-12 mx-auto mb-4 text-wedding-primary/50" />
@@ -287,7 +289,7 @@ const WeddingTimeline = () => {
           
           {isAddingEvent && (
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-              <div className="bg-white rounded-lg p-6 max-w-md w-full">
+              <div className="bg-white rounded-lg p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
                 <h3 className="text-xl font-semibold mb-4">Add New Event</h3>
                 <AddEventForm 
                   onCancel={() => setIsAddingEvent(false)}
@@ -299,7 +301,7 @@ const WeddingTimeline = () => {
           
           {isUsingWizard && (
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-              <div className="bg-white rounded-lg p-6 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+              <div className={`bg-white rounded-lg p-6 ${isMobile ? 'w-full' : 'max-w-4xl w-full'} max-h-[90vh] overflow-y-auto`}>
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="text-xl font-semibold">Wedding Timeline Wizard</h3>
                   <Button 

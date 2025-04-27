@@ -5,6 +5,7 @@ import { X, Check, DollarSign, Tag } from "lucide-react";
 import { PlanBoardItem, essentialCategories, VendorCategory } from "@/types/planboard";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   Select,
   SelectContent,
@@ -27,6 +28,7 @@ export const AddItemForm = ({ onCancel, onAdd }: AddItemFormProps) => {
   const [budget, setBudget] = useState("");
   const [category, setCategory] = useState<string | undefined>(undefined);
   const [selectedCategory, setSelectedCategory] = useState<VendorCategory | undefined>(undefined);
+  const isMobile = useIsMobile();
   
   useEffect(() => {
     if (category) {
@@ -119,6 +121,7 @@ export const AddItemForm = ({ onCancel, onAdd }: AddItemFormProps) => {
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Description"
           className="w-full min-h-[80px]"
+          rows={isMobile ? 3 : 4}
         />
         
         <div className="flex items-center">
@@ -134,7 +137,7 @@ export const AddItemForm = ({ onCancel, onAdd }: AddItemFormProps) => {
           />
         </div>
         
-        <div className="flex justify-end gap-2 mt-3">
+        <div className={`flex ${isMobile ? 'justify-between' : 'justify-end'} gap-2 mt-3`}>
           <Button 
             type="button"
             variant="outline" 

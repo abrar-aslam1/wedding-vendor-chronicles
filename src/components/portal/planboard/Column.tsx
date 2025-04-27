@@ -5,8 +5,9 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Plus, MoreVertical, Trash } from "lucide-react";
 import { PlanBoardColumn, PlanBoardItem } from "@/types/planboard";
-import { Item } from "./Item";
-import { AddItemForm } from "./AddItemForm";
+import { Item } from "@/components/portal/planboard/Item";
+import { AddItemForm } from "@/components/portal/planboard/AddItemForm";
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,6 +33,7 @@ export const Column = ({
   onDeleteColumn 
 }: ColumnProps) => {
   const [isAddingItem, setIsAddingItem] = useState(false);
+  const isMobile = useIsMobile();
   
   const {
     attributes,
@@ -56,7 +58,7 @@ export const Column = ({
     <div
       ref={setNodeRef}
       style={style}
-      className="flex-shrink-0 w-80 bg-gray-50 rounded-lg shadow-sm"
+      className={`${isMobile ? 'w-full mb-4' : 'flex-shrink-0 w-80'} bg-gray-50 rounded-lg shadow-sm`}
     >
       <div className="p-3">
         <div className="flex items-center justify-between mb-2">
@@ -86,7 +88,7 @@ export const Column = ({
           </DropdownMenu>
         </div>
         
-        <div className="mt-3 space-y-3 max-h-[calc(100vh-250px)] overflow-y-auto p-1">
+        <div className={`mt-3 space-y-3 ${isMobile ? 'max-h-[300px]' : 'max-h-[calc(100vh-250px)]'} overflow-y-auto p-1`}>
           {items.map(item => (
             <Item 
               key={item.id} 

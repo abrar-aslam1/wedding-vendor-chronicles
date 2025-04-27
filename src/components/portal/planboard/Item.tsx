@@ -8,6 +8,7 @@ import { PlanBoardItem, essentialCategories } from "@/types/planboard";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   Select,
   SelectContent,
@@ -30,6 +31,7 @@ export const Item = ({ item, onUpdate, onDelete }: ItemProps) => {
   const [description, setDescription] = useState(item.description || "");
   const [budget, setBudget] = useState(item.budget?.toString() || "");
   const [category, setCategory] = useState(item.category || "");
+  const isMobile = useIsMobile();
   
   const {
     attributes,
@@ -175,7 +177,7 @@ export const Item = ({ item, onUpdate, onDelete }: ItemProps) => {
       className="p-3 bg-white shadow-sm hover:shadow-md transition-shadow"
     >
       <div className="flex justify-between items-start">
-        <h3 className="font-medium text-wedding-text">{item.title}</h3>
+        <h3 className={`font-medium text-wedding-text ${isMobile ? 'text-sm' : ''}`}>{item.title}</h3>
         <div
           {...attributes}
           {...listeners}
@@ -189,7 +191,7 @@ export const Item = ({ item, onUpdate, onDelete }: ItemProps) => {
         <p className="text-sm text-gray-600 mt-2">{item.description}</p>
       )}
       
-      <div className="flex flex-wrap gap-2 mt-2">
+      <div className={`flex flex-wrap gap-2 mt-2 ${isMobile ? 'text-xs' : ''}`}>
         {item.category && (
           <div className="flex items-center">
             <Tag className="h-3 w-3 mr-1 text-gray-600" />
@@ -207,7 +209,7 @@ export const Item = ({ item, onUpdate, onDelete }: ItemProps) => {
         )}
       </div>
       
-      <div className="flex justify-end gap-2 mt-3">
+      <div className={`flex ${isMobile ? 'justify-between' : 'justify-end'} gap-2 mt-3`}>
         <Button 
           variant="ghost" 
           size="sm" 
