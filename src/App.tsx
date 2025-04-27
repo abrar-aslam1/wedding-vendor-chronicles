@@ -13,6 +13,7 @@ import Privacy from "@/pages/Privacy";
 import NotFound from "@/pages/NotFound";
 import ListBusiness from "@/pages/ListBusiness";
 import States from "@/pages/States";
+import Blog from "@/pages/Blog";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 function App() {
@@ -35,6 +36,10 @@ function App() {
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/privacy" element={<Privacy />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:slug" element={<Blog />} />
+        <Route path="/blog/category/:category" element={<Blog />} />
+        <Route path="/blog/tag/:tag" element={<Blog />} />
         <Route path="/list-business" element={
           <ProtectedRoute>
             <ListBusiness />

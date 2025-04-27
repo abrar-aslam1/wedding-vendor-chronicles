@@ -1,6 +1,7 @@
 import { categories } from '@/config/categories';
 import { locationCodes } from '@/config/locations';
 import { subcategories } from '@/config/subcategories';
+import { blogPosts } from '../config/blog-posts';
 import fs from 'fs';
 import path from 'path';
 import zlib from 'zlib';
@@ -18,7 +19,9 @@ const URL_TYPES = {
   CATEGORY: { priority: '0.8', changefreq: 'weekly' },
   INFO: { priority: '0.6', changefreq: 'monthly' },
   LOCATION: { priority: '0.7', changefreq: 'weekly' },
-  SUBCATEGORY: { priority: '0.8', changefreq: 'weekly' }
+  SUBCATEGORY: { priority: '0.8', changefreq: 'weekly' },
+  BLOG: { priority: '0.9', changefreq: 'weekly' },
+  BLOG_POST: { priority: '0.8', changefreq: 'monthly' }
 };
 
 const generateSitemap = () => {
@@ -48,6 +51,31 @@ const generateSitemap = () => {
     { url: '/terms', type: 'INFO' },
     { url: '/list-business', type: 'INFO' }
   ];
+  
+  // Generate blog URLs
+  const blogMainUrl = { url: '/blog', type: 'BLOG' };
+  
+  // Generate individual blog post URLs
+  const blogPostUrls = blogPosts.map(post => ({
+    url: `/blog/${post.slug}`,
+    type: 'BLOG_POST'
+  }));
+  
+  // Generate blog category URLs
+  const blogCategories = Array.from(new Set(blogPosts.map(post => post.category)))
+    .filter(Boolean)
+    .map(category => ({
+      url: `/blog/category/${category.toLowerCase().replace(/ /g, '-')}`,
+      type: 'BLOG'
+    }));
+  
+  // Generate blog tag URLs
+  const blogTags = Array.from(new Set(blogPosts.flatMap(post => post.tags || [])))
+    .filter(Boolean)
+    .map(tag => ({
+      url: `/blog/tag/${tag.toLowerCase().replace(/ /g, '-')}`,
+      type: 'BLOG'
+    }));
   
   // Generate location URLs by category
   const locationUrlsByCategory = {};
@@ -81,8 +109,17 @@ const generateSitemap = () => {
     });
   });
   
-  // Create a sitemap for main, user, category, and info pages
-  const staticUrls = [...mainUrls, ...userUrls, ...categoryUrls, ...infoUrls];
+  // Create a sitemap for main, user, category, info, and blog pages
+  const staticUrls = [
+    ...mainUrls, 
+    ...userUrls, 
+    ...categoryUrls, 
+    ...infoUrls,
+    blogMainUrl,
+    ...blogPostUrls,
+    ...blogCategories,
+    ...blogTags
+  ];
   createSitemap('static', staticUrls);
   
   // Create separate sitemaps for each category's location pages

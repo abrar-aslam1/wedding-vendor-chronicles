@@ -106,6 +106,13 @@ export function MainNav() {
               <Search className="h-4 w-4 mr-2" />
               Search Vendors
             </Button>
+            <Button
+              variant="ghost"
+              onClick={() => navigate("/blog")}
+              className="text-wedding-text hover:text-wedding-primary"
+            >
+              Blog
+            </Button>
             <ListBusinessButton />
             {renderAuthButtons()}
           </div>
@@ -138,6 +145,13 @@ export function MainNav() {
                   >
                     <Search className="h-4 w-4 mr-2" />
                     Search Vendors
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    onClick={() => navigate("/blog")}
+                    className="text-left text-wedding-text hover:text-wedding-primary"
+                  >
+                    Blog
                   </Button>
                   <ListBusinessButton />
                   <div className="flex flex-col gap-2 mt-4">
