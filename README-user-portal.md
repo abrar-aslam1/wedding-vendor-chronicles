@@ -28,6 +28,12 @@ This document outlines the implementation of the user portal features for the We
 - Allows users to mark events as completed
 - Supports filtering events by status (all, upcoming, completed)
 - Enables users to add, edit, and delete timeline events
+- Features an interactive timeline wizard that:
+  - Guides users through a step-by-step process to create a personalized timeline
+  - Collects wedding date, size, venue type, and vendor preferences
+  - Automatically generates a customized timeline based on user inputs
+  - Allows users to review and customize generated events before adding to their timeline
+  - Provides educational content about wedding planning best practices
 
 ## Technical Implementation
 
@@ -48,7 +54,7 @@ We've added the following tables to the Supabase database:
 
 4. `timeline_events`
    - Stores the timeline events
-   - Fields: id, user_id, title, description, date, completed, created_at
+   - Fields: id, user_id, title, description, date, completed, created_at, is_generated, template_id, vendor_category
 
 ### Components Created
 
@@ -66,6 +72,16 @@ We've added the following tables to the Supabase database:
 3. Timeline Components:
    - `TimelineEvent.tsx`: Represents an event in the timeline
    - `AddEventForm.tsx`: Form for adding a new event
+   - `TimelineWizard/`: Interactive wizard for generating personalized timelines
+     - `index.tsx`: Main wizard component
+     - `WizardContext.tsx`: Context provider for wizard state management
+     - `WizardSteps.tsx`: Step navigation component
+     - `TimelineGenerator.ts`: Logic for generating timeline events
+     - `steps/`: Individual wizard step components
+       - `WeddingDateStep.tsx`: Step for selecting wedding date
+       - `WeddingDetailsStep.tsx`: Step for wedding size and venue type
+       - `VendorSelectionStep.tsx`: Step for selecting vendors
+       - `TimelineReviewStep.tsx`: Step for reviewing generated timeline
 
 4. Demo and Testing:
    - `DemoPortal.tsx`: Demonstrates the portal UI with mock data

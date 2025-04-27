@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Plus, Calendar, Check, X, Filter } from "lucide-react";
-import { TimelineEvent } from "./timeline/TimelineEvent";
-import { AddEventForm } from "./timeline/AddEventForm";
+import { Plus, Calendar, Check, X, Filter, Wand2 } from "lucide-react";
+import { TimelineEvent } from "@/components/portal/timeline/TimelineEvent";
+import { AddEventForm } from "@/components/portal/timeline/AddEventForm";
 import { TimelineEventType } from "@/types/timeline";
 import { useToast } from "@/hooks/use-toast";
+import { TimelineWizard } from "@/components/portal/timeline/TimelineWizard";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,6 +17,7 @@ import {
 const WeddingTimeline = () => {
   const [events, setEvents] = useState<TimelineEventType[]>([]);
   const [isAddingEvent, setIsAddingEvent] = useState(false);
+  const [isUsingWizard, setIsUsingWizard] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'upcoming' | 'completed'>('all');
   const { toast } = useToast();
@@ -70,7 +72,10 @@ const WeddingTimeline = () => {
           title: eventData.title || '',
           description: eventData.description,
           date: eventData.date || new Date().toISOString().split('T')[0],
-          completed: false
+          completed: false,
+          is_generated: eventData.is_generated,
+          template_id: eventData.template_id,
+          vendor_category: eventData.vendor_category
         })
         .select()
         .single();
@@ -82,6 +87,59 @@ const WeddingTimeline = () => {
     } catch (error: any) {
       toast({
         title: "Error adding event",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  };
+  
+  const handleAddEventsFromWizard = async (eventsData: Partial<TimelineEventType>[]) => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) return;
+      
+      // Filter out events that the user deselected in the wizard
+      const eventsToAdd = eventsData.filter(event => event.title);
+      
+      if (eventsToAdd.length === 0) {
+        toast({
+          title: "No events to add",
+          description: "Please select at least one event to add to your timeline.",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      // Prepare events for insertion
+      const eventsForInsert = eventsToAdd.map(event => ({
+        user_id: session.user.id,
+        title: event.title || '',
+        description: event.description,
+        date: event.date || new Date().toISOString().split('T')[0],
+        completed: false,
+        is_generated: event.is_generated,
+        template_id: event.template_id,
+        vendor_category: event.vendor_category
+      }));
+      
+      // Insert all events
+      const { data, error } = await supabase
+        .from('timeline_events')
+        .insert(eventsForInsert)
+        .select();
+        
+      if (error) throw error;
+      
+      // Update the events state
+      setEvents([...events, ...data]);
+      
+      toast({
+        title: "Timeline generated",
+        description: `Added ${data.length} events to your timeline.`,
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error adding events",
         description: error.message,
         variant: "destructive",
       });
@@ -171,6 +229,15 @@ const WeddingTimeline = () => {
           </DropdownMenu>
           
           <Button 
+            onClick={() => setIsUsingWizard(true)}
+            variant="outline"
+            className="flex items-center gap-2 border-blue-300 text-blue-600 hover:bg-blue-50"
+          >
+            <Wand2 className="h-4 w-4" />
+            Generate Timeline
+          </Button>
+          
+          <Button 
             onClick={() => setIsAddingEvent(true)}
             className="bg-wedding-primary hover:bg-wedding-primary/90"
           >
@@ -215,6 +282,28 @@ const WeddingTimeline = () => {
                 <AddEventForm 
                   onCancel={() => setIsAddingEvent(false)}
                   onAdd={handleAddEvent}
+                />
+              </div>
+            </div>
+          )}
+          
+          {isUsingWizard && (
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+              <div className="bg-white rounded-lg p-6 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-xl font-semibold">Wedding Timeline Wizard</h3>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="h-8 w-8 p-0" 
+                    onClick={() => setIsUsingWizard(false)}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+                <TimelineWizard 
+                  onClose={() => setIsUsingWizard(false)}
+                  onAddEvents={handleAddEventsFromWizard}
                 />
               </div>
             </div>
