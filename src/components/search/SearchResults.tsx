@@ -121,14 +121,34 @@ export const SearchResults = ({ results, isSearching, subcategory }: SearchResul
                   (typeof vendor.rating.votes_count === 'number' ? vendor.rating.votes_count : 0)
           } : null;
 
+          // Create a JSON-serializable version of the vendor data
+          // Only include simple properties that can be safely stored in Supabase
           const vendorData = {
-            ...vendor,
-            rating: ratingData,
-            // Ensure these fields exist to prevent undefined values
             title: vendor.title || '',
             description: vendor.description || '',
             snippet: vendor.snippet || vendor.description || '',
-            images: Array.isArray(vendor.images) ? vendor.images : []
+            phone: vendor.phone || '',
+            address: vendor.address || '',
+            url: vendor.url || '',
+            place_id: vendor.place_id || '',
+            main_image: vendor.main_image || '',
+            images: Array.isArray(vendor.images) ? vendor.images : [],
+            rating: ratingData,
+            // Include new fields as simple JSON-serializable values
+            latitude: vendor.latitude || null,
+            longitude: vendor.longitude || null,
+            price_range: vendor.price_range || '',
+            payment_methods: Array.isArray(vendor.payment_methods) ? vendor.payment_methods : [],
+            service_area: Array.isArray(vendor.service_area) ? vendor.service_area : [],
+            categories: Array.isArray(vendor.categories) ? vendor.categories : [],
+            year_established: vendor.year_established || '',
+            email: vendor.email || '',
+            city: vendor.city || '',
+            state: vendor.state || '',
+            postal_code: vendor.postal_code || '',
+            // Convert complex objects to simple JSON
+            business_hours: vendor.business_hours ? JSON.stringify(vendor.business_hours) : null,
+            reviews: vendor.reviews ? JSON.stringify(vendor.reviews) : null
           };
 
           const { error: insertError } = await supabase

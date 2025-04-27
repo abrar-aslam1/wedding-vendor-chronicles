@@ -74,21 +74,28 @@ export const SchemaMarkup: FC<DirectoryPageSchema> = ({
 
   // Local Business schema for vendor listings
   const generateVendorSchema = (v: SearchResult) => {
-    // Determine business hours - this is a placeholder, ideally would come from vendor data
-    const businessHours = [
-      {
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-        opens: '09:00',
-        closes: '17:00'
-      },
-      {
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: ['Saturday'],
-        opens: '10:00',
-        closes: '15:00'
-      }
-    ];
+    // Use actual business hours if available, otherwise use default placeholder
+    const businessHours = v.business_hours && v.business_hours.length > 0
+      ? v.business_hours.map(hour => ({
+          '@type': 'OpeningHoursSpecification',
+          dayOfWeek: hour.day,
+          opens: hour.opens,
+          closes: hour.closes
+        }))
+      : [
+          {
+            '@type': 'OpeningHoursSpecification',
+            dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+            opens: '09:00',
+            closes: '17:00'
+          },
+          {
+            '@type': 'OpeningHoursSpecification',
+            dayOfWeek: ['Saturday'],
+            opens: '10:00',
+            closes: '15:00'
+          }
+        ];
     
     // Generate service offerings based on category and subcategory
     const serviceOfferings = [];
@@ -114,6 +121,37 @@ export const SchemaMarkup: FC<DirectoryPageSchema> = ({
       });
     }
     
+    // Add reviews schema if available
+    const reviews = v.reviews && v.reviews.length > 0
+      ? v.reviews.map(review => ({
+          '@type': 'Review',
+          author: {
+            '@type': 'Person',
+            name: review.author
+          },
+          reviewRating: {
+            '@type': 'Rating',
+            ratingValue: review.rating,
+            bestRating: '5'
+          },
+          reviewBody: review.text,
+          datePublished: review.date || new Date().toISOString().split('T')[0]
+        }))
+      : undefined;
+    
+    // Create service area if available
+    const serviceAreaSchema = v.service_area && v.service_area.length > 0 && v.latitude && v.longitude
+      ? {
+          '@type': 'GeoCircle',
+          geoMidpoint: {
+            '@type': 'GeoCoordinates',
+            latitude: v.latitude,
+            longitude: v.longitude
+          },
+          geoRadius: '50mi' // Default radius
+        }
+      : undefined;
+    
     return {
       '@context': 'https://schema.org',
       '@type': ['LocalBusiness', 'WeddingService'],
@@ -127,16 +165,22 @@ export const SchemaMarkup: FC<DirectoryPageSchema> = ({
         streetAddress: v.address || '',
         addressLocality: v.city || city || '',
         addressRegion: v.state || state || '',
-        postalCode: '', // Would be good to add if available
+        postalCode: v.postal_code || '',
         addressCountry: 'US'
       },
-      geo: {
+      geo: v.latitude && v.longitude ? {
         '@type': 'GeoCoordinates',
-        latitude: v.latitude || undefined,
-        longitude: v.longitude || undefined
-      },
+        latitude: v.latitude,
+        longitude: v.longitude
+      } : undefined,
       telephone: v.phone || '',
-      priceRange: '$$-$$$',
+      email: v.email || undefined,
+      priceRange: v.price_range || '$$-$$$',
+      paymentAccepted: v.payment_methods && v.payment_methods.length > 0 
+        ? v.payment_methods.join(', ') 
+        : undefined,
+      foundingDate: v.year_established,
+      areaServed: serviceAreaSchema,
       openingHoursSpecification: businessHours,
       ...(v.rating && {
         aggregateRating: {
@@ -146,6 +190,7 @@ export const SchemaMarkup: FC<DirectoryPageSchema> = ({
           bestRating: 5
         }
       }),
+      ...(reviews && { review: reviews }),
       hasOfferCatalog: {
         '@type': 'OfferCatalog',
         name: 'Wedding Services',
@@ -330,10 +375,128 @@ export const SchemaMarkup: FC<DirectoryPageSchema> = ({
   
   const faqSchema = generateFaqSchema();
 
+  // Generate a location-specific schema for better local SEO
+  const generateLocationSchema = () => {
+    if (!city || !state) return null;
+    
+    // Try to get coordinates from the first vendor if available
+    const firstVendorWithCoords = vendors.find(v => v.latitude && v.longitude);
+    const latitude = firstVendorWithCoords?.latitude;
+    const longitude = firstVendorWithCoords?.longitude;
+    
+    // Get approximate coordinates for common cities if not available from vendors
+    const getApproximateCoordinates = () => {
+      // This is a simplified example with hardcoded values for common cities
+      const coordinates = {
+        'New York': { 'NY': { lat: 40.7128, lng: -74.0060 } },
+        'Los Angeles': { 'CA': { lat: 34.0522, lng: -118.2437 } },
+        'Chicago': { 'IL': { lat: 41.8781, lng: -87.6298 } },
+        'Houston': { 'TX': { lat: 29.7604, lng: -95.3698 } },
+        'Phoenix': { 'AZ': { lat: 33.4484, lng: -112.0740 } },
+        'Philadelphia': { 'PA': { lat: 39.9526, lng: -75.1652 } },
+        'San Antonio': { 'TX': { lat: 29.4241, lng: -98.4936 } },
+        'San Diego': { 'CA': { lat: 32.7157, lng: -117.1611 } },
+        'Dallas': { 'TX': { lat: 32.7767, lng: -96.7970 } },
+        'San Jose': { 'CA': { lat: 37.3382, lng: -121.8863 } },
+        'Austin': { 'TX': { lat: 30.2672, lng: -97.7431 } },
+        'Jacksonville': { 'FL': { lat: 30.3322, lng: -81.6557 } },
+        'Fort Worth': { 'TX': { lat: 32.7555, lng: -97.3308 } },
+        'Columbus': { 'OH': { lat: 39.9612, lng: -82.9988 } },
+        'Charlotte': { 'NC': { lat: 35.2271, lng: -80.8431 } },
+        'San Francisco': { 'CA': { lat: 37.7749, lng: -122.4194 } },
+        'Indianapolis': { 'IN': { lat: 39.7684, lng: -86.1581 } },
+        'Seattle': { 'WA': { lat: 47.6062, lng: -122.3321 } },
+        'Denver': { 'CO': { lat: 39.7392, lng: -104.9903 } },
+        'Washington': { 'DC': { lat: 38.9072, lng: -77.0369 } }
+      };
+      
+      return coordinates[city]?.[state];
+    };
+    
+    const coords = latitude && longitude 
+      ? { lat: latitude, lng: longitude }
+      : getApproximateCoordinates();
+    
+    // Create location-specific schema
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'Place',
+      name: `${city}, ${state}`,
+      description: `Wedding vendors and services in ${city}, ${state}`,
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: city,
+        addressRegion: state,
+        addressCountry: 'US'
+      },
+      ...(coords ? {
+        geo: {
+          '@type': 'GeoCoordinates',
+          latitude: coords.lat,
+          longitude: coords.lng
+        }
+      } : {})
+    };
+  };
+  
+  // Generate location-specific FAQs
+  const generateLocationFaqs = () => {
+    if (!category || !city || !state) return [];
+    
+    // Get top vendor names for this location (up to 3)
+    const topVendorNames = vendors
+      .slice(0, 3)
+      .map(v => v.title)
+      .filter(Boolean);
+    
+    const vendorNamesText = topVendorNames.length > 0
+      ? `The top-rated wedding ${category.toLowerCase()} in ${city}, ${state} include ${topVendorNames.join(', ')}. These vendors have excellent reviews and are highly recommended by local couples.`
+      : `There are several highly-rated wedding ${category.toLowerCase()} in ${city}, ${state}. We recommend contacting vendors directly to check their availability for your wedding date.`;
+    
+    return [
+      {
+        '@type': 'Question',
+        name: `What are the best wedding ${category.toLowerCase()} in ${city}, ${state}?`,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: vendorNamesText
+        }
+      },
+      {
+        '@type': 'Question',
+        name: `How much do wedding ${category.toLowerCase()} cost in ${city}, ${state}?`,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: `Wedding ${category.toLowerCase()} in ${city}, ${state} typically range from $1,000 to $5,000 depending on experience, package options, and specific requirements. It's recommended to contact vendors directly for accurate pricing information.`
+        }
+      },
+      {
+        '@type': 'Question',
+        name: `When should I book a wedding ${category.toLowerCase()} in ${city}, ${state}?`,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: `In ${city}, ${state}, it's advisable to book your wedding ${category.toLowerCase()} 9-12 months in advance, especially during peak wedding season (May-October). Popular vendors may be booked 12-18 months in advance for prime dates.`
+        }
+      }
+    ];
+  };
+  
+  // Get location schema
+  const locationSchema = generateLocationSchema();
+  
+  // Add location-specific FAQs to the FAQ schema
+  if (faqSchema && city && state) {
+    const locationFaqs = generateLocationFaqs();
+    if (locationFaqs.length > 0) {
+      faqSchema.mainEntity = [...faqSchema.mainEntity, ...locationFaqs];
+    }
+  }
+
   const schemas = [
     websiteSchema,
     websiteStructuredData,
     directorySchema,
+    ...(locationSchema ? [locationSchema] : []),
     ...vendorSchemas,
     breadcrumbSchema,
     ...(faqSchema ? [faqSchema] : [])

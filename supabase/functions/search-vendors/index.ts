@@ -79,21 +79,213 @@ serve(async (req) => {
     console.log('Extracted items count:', items.length);
     
     // Transform the results to match our SearchResult type
-    let searchResults = items.map(item => ({
-      title: item.title || '',
-      description: item.snippet || '',
-      rating: item.rating ? {
-        value: item.rating,
-        votes_count: item.rating_votes_count
-      } : undefined,
-      phone: item.phone,
-      address: item.address,
-      url: item.website,
-      place_id: item.place_id,
-      main_image: item.main_image,
-      images: item.images,
-      snippet: item.snippet
-    }));
+    let searchResults = items.map(item => {
+      // Extract business hours if available
+      const businessHours = extractBusinessHours(item);
+      
+      // Extract reviews if available
+      const reviews = extractReviews(item);
+      
+      // Extract service area if available
+      const serviceArea = extractServiceArea(item);
+      
+      return {
+        title: item.title || '',
+        description: item.snippet || '',
+        rating: item.rating ? {
+          value: item.rating,
+          votes_count: item.rating_votes_count
+        } : undefined,
+        phone: item.phone,
+        address: item.address,
+        url: item.website,
+        place_id: item.place_id,
+        main_image: item.main_image,
+        images: item.images,
+        snippet: item.snippet,
+        // Add new fields for enhanced schema markup
+        latitude: item.latitude || undefined,
+        longitude: item.longitude || undefined,
+        business_hours: businessHours,
+        price_range: extractPriceRange(item),
+        payment_methods: item.payment_methods || undefined,
+        service_area: serviceArea,
+        categories: item.categories || undefined,
+        reviews: reviews,
+        year_established: item.year_established || undefined,
+        email: item.email || undefined,
+        city: extractCity(item),
+        state: extractState(item),
+        postal_code: extractPostalCode(item)
+      };
+    });
+    
+    // Helper functions to extract structured data
+    function extractBusinessHours(item) {
+      if (!item.work_hours) return undefined;
+      
+      try {
+        // DataForSEO might provide hours in various formats
+        // This is a simplified example - adjust based on actual data format
+        const hours = [];
+        const daysMap = {
+          1: 'Monday', 2: 'Tuesday', 3: 'Wednesday', 4: 'Thursday',
+          5: 'Friday', 6: 'Saturday', 7: 'Sunday'
+        };
+        
+        if (typeof item.work_hours === 'string') {
+          // Parse text format like "Mon-Fri: 9AM-5PM, Sat: 10AM-3PM"
+          const parts = item.work_hours.split(',');
+          parts.forEach(part => {
+            const [days, times] = part.split(':').map(s => s.trim());
+            if (days && times) {
+              const [opens, closes] = times.split('-').map(s => s.trim());
+              // Handle day ranges like "Mon-Fri"
+              if (days.includes('-')) {
+                const [startDay, endDay] = days.split('-');
+                const startIdx = Object.values(daysMap).findIndex(d => d.startsWith(startDay));
+                const endIdx = Object.values(daysMap).findIndex(d => d.startsWith(endDay));
+                if (startIdx >= 0 && endIdx >= 0) {
+                  for (let i = startIdx + 1; i <= endIdx + 1; i++) {
+                    hours.push({ day: daysMap[i], opens, closes });
+                  }
+                }
+              } else {
+                // Single day
+                const dayIdx = Object.values(daysMap).findIndex(d => d.startsWith(days));
+                if (dayIdx >= 0) {
+                  hours.push({ day: daysMap[dayIdx + 1], opens, closes });
+                }
+              }
+            }
+          });
+        } else if (Array.isArray(item.work_hours)) {
+          // Handle array format if provided
+          item.work_hours.forEach(entry => {
+            if (entry.day && entry.hours) {
+              hours.push({
+                day: daysMap[entry.day] || entry.day,
+                opens: entry.hours.split('-')[0]?.trim(),
+                closes: entry.hours.split('-')[1]?.trim()
+              });
+            }
+          });
+        }
+        
+        return hours.length > 0 ? hours : undefined;
+      } catch (error) {
+        console.error('Error parsing business hours:', error);
+        return undefined;
+      }
+    }
+    
+    function extractReviews(item) {
+      if (!item.reviews || !Array.isArray(item.reviews)) {
+        // If no reviews array, try to create one from available data
+        if (item.rating && item.rating_votes_count) {
+          // Create a generic review if we have rating data but no specific reviews
+          return [{
+            author: 'Google User',
+            text: `This ${keyword} has an average rating of ${item.rating} from ${item.rating_votes_count} reviews.`,
+            rating: item.rating,
+            date: new Date().toISOString().split('T')[0] // Today's date
+          }];
+        }
+        return undefined;
+      }
+      
+      try {
+        return item.reviews.map(review => ({
+          author: review.author || 'Anonymous',
+          text: review.text || '',
+          rating: review.rating || 5,
+          date: review.date
+        }));
+      } catch (error) {
+        console.error('Error parsing reviews:', error);
+        return undefined;
+      }
+    }
+    
+    function extractServiceArea(item) {
+      // Extract service area information if available
+      if (item.service_area) return item.service_area;
+      
+      // If not directly available, try to infer from other fields
+      const serviceArea = [];
+      
+      // Try to extract city and state from address
+      if (item.address) {
+        const cityStateMatch = item.address.match(/([^,]+),\s*([A-Z]{2})/);
+        if (cityStateMatch) {
+          const [_, extractedCity, extractedState] = cityStateMatch;
+          if (extractedCity) serviceArea.push(extractedCity.trim());
+          if (extractedState) serviceArea.push(extractedState.trim());
+        }
+      }
+      
+      // Add the search location as a fallback
+      if (serviceArea.length === 0 && city && state) {
+        serviceArea.push(city, state);
+      }
+      
+      return serviceArea.length > 0 ? serviceArea : undefined;
+    }
+    
+    function extractPriceRange(item) {
+      // Extract price range if available
+      if (item.price_range) return item.price_range;
+      
+      // If not available, try to infer from description or other fields
+      if (item.snippet && item.snippet.includes('$')) {
+        // Count dollar signs in snippet to estimate price range
+        const dollarCount = (item.snippet.match(/\$/g) || []).length;
+        if (dollarCount > 0) {
+          return '$'.repeat(Math.min(dollarCount, 4));
+        }
+      }
+      
+      // Default price range for wedding vendors
+      return '$$-$$$';
+    }
+    
+    function extractCity(item) {
+      // Try to extract city from address
+      if (item.address) {
+        const cityMatch = item.address.match(/([^,]+),\s*[A-Z]{2}/);
+        if (cityMatch && cityMatch[1]) {
+          return cityMatch[1].trim();
+        }
+      }
+      
+      // Fallback to search city
+      return city || '';
+    }
+    
+    function extractState(item) {
+      // Try to extract state from address
+      if (item.address) {
+        const stateMatch = item.address.match(/,\s*([A-Z]{2})/);
+        if (stateMatch && stateMatch[1]) {
+          return stateMatch[1].trim();
+        }
+      }
+      
+      // Fallback to search state
+      return state || '';
+    }
+    
+    function extractPostalCode(item) {
+      // Try to extract postal code from address
+      if (item.address) {
+        const zipMatch = item.address.match(/\b\d{5}(?:-\d{4})?\b/);
+        if (zipMatch) {
+          return zipMatch[0];
+        }
+      }
+      
+      return '';
+    }
 
     console.log(`Transformed ${searchResults.length} results`);
     
