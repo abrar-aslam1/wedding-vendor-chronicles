@@ -18,6 +18,7 @@ import UserPortal from "@/pages/UserPortal";
 import DemoPortal from "@/pages/DemoPortal";
 import TestAuth from "@/pages/TestAuth";
 import FreeTimelineGenerator from "@/pages/FreeTimelineGenerator";
+import { WeddingHashtagGenerator } from "@/pages/WeddingHashtagGenerator";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 function App() {
@@ -53,6 +54,12 @@ function App() {
         <Route path="/demo-portal" element={<DemoPortal />} />
         <Route path="/test-auth" element={<TestAuth />} />
         <Route path="/free-tools/timeline-generator" element={<FreeTimelineGenerator />} />
+        <Route path="/free-tools/hashtag-generator" element={<WeddingHashtagGenerator />} />
+        {/* New SEO-optimized routes for Wedding Hashtag Generator */}
+        <Route path="/tools/wedding-hashtag-generator" element={<WeddingHashtagGenerator />} />
+        <Route path="/tools/wedding-hashtag-generator/states" element={<WeddingHashtagGenerator />} />
+        <Route path="/tools/wedding-hashtag-generator/states/:state" element={<WeddingHashtagGenerator />} />
+        <Route path="/tools/wedding-hashtag-generator/states/:state/:city" element={<WeddingHashtagGenerator />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Toaster />
