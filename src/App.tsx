@@ -14,6 +14,9 @@ import NotFound from "@/pages/NotFound";
 import ListBusiness from "@/pages/ListBusiness";
 import States from "@/pages/States";
 import Blog from "@/pages/Blog";
+import UserPortal from "@/pages/UserPortal";
+import DemoPortal from "@/pages/DemoPortal";
+import TestAuth from "@/pages/TestAuth";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 function App() {
@@ -45,6 +48,9 @@ function App() {
             <ListBusiness />
           </ProtectedRoute>
         } />
+        <Route path="/portal" element={<UserPortal />} />
+        <Route path="/demo-portal" element={<DemoPortal />} />
+        <Route path="/test-auth" element={<TestAuth />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Toaster />

@@ -1,5 +1,16 @@
 {
   "mcpServers": {
+    "github.com/modelcontextprotocol/servers/tree/main/src/google-maps": {
+      "command": "node",
+      "args": [
+        "/Users/abraraslam/Documents/Cline/MCP/google-maps/node_modules/@modelcontextprotocol/server-google-maps/dist/index.js"
+      ],
+      "env": {
+        "GOOGLE_MAPS_API_KEY": "AIzaSyBi9MdYauVRUtAOkbfGT7aduUA5dGL8Cso"
+      },
+      "disabled": false,
+      "autoApprove": []
+    },
     "github.com/alexander-zuev/supabase-mcp-server": {
       "command": "/Users/abraraslam/Documents/Cline/MCP/supabase-mcp-server/.venv/bin/supabase-mcp-server",
       "args": [],

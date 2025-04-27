@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { LogIn, LogOut, Menu, Search, Heart } from "lucide-react";
+import { LogIn, LogOut, Menu, Search, Heart, LayoutDashboard } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
@@ -62,6 +62,14 @@ export function MainNav() {
         >
           <Heart className="h-4 w-4 mr-2" />
           My Favorites
+        </Button>
+        <Button
+          variant="ghost"
+          onClick={() => navigate("/portal")}
+          className="w-full md:w-auto text-wedding-text hover:text-wedding-primary"
+        >
+          <LayoutDashboard className="h-4 w-4 mr-2" />
+          Wedding Portal
         </Button>
         <Button
           variant="ghost"
