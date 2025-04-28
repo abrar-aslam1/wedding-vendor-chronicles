@@ -47,8 +47,9 @@ Disallow: /api/
 User-agent: *
 Disallow: /*?*
 
-# Sitemaps
-Sitemap: https://findmyweddingvendor.com/sitemap.xml
 
 # Host directive (only supported by Yandex, not Google)
 # Host: findmyweddingvendor.com
+
+# Sitemaps
+Sitemap: https://findmyweddingvendor.com/sitemap.xml

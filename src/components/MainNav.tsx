@@ -1,6 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { LogIn, LogOut, Menu, Search, Heart, LayoutDashboard, Calendar, Gift, Hash } from "lucide-react";
+import { LogIn, LogOut, Menu, Search, Heart, LayoutDashboard, Calendar, Gift, Hash, ChevronDown } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
@@ -121,22 +127,28 @@ export function MainNav() {
             >
               Blog
             </Button>
-            <Button
-              variant="ghost"
-              onClick={() => navigate("/free-tools/timeline-generator")}
-              className="text-wedding-text hover:text-wedding-primary"
-            >
-              <Calendar className="h-4 w-4 mr-2" />
-              Free Timeline
-            </Button>
-            <Button
-              variant="ghost"
-              onClick={() => navigate("/free-tools/hashtag-generator")}
-              className="text-wedding-text hover:text-wedding-primary"
-            >
-              <Hash className="h-4 w-4 mr-2" />
-              Hashtag Generator
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="text-wedding-text hover:text-wedding-primary"
+                >
+                  <Gift className="h-4 w-4 mr-2" />
+                  Free Tools
+                  <ChevronDown className="h-4 w-4 ml-1" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem onClick={() => navigate("/tools/wedding-timeline-generator")}>
+                  <Calendar className="h-4 w-4 mr-2" />
+                  Free Timeline
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate("/tools/wedding-hashtag-generator")}>
+                  <Hash className="h-4 w-4 mr-2" />
+                  Hashtag Generator
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <ListBusinessButton />
             {renderAuthButtons()}
           </div>
@@ -177,22 +189,30 @@ export function MainNav() {
                   >
                     Blog
                   </Button>
-                  <Button
-                    variant="ghost"
-                    onClick={() => navigate("/free-tools/timeline-generator")}
-                    className="text-left text-wedding-text hover:text-wedding-primary"
-                  >
-                    <Calendar className="h-4 w-4 mr-2" />
-                    Free Timeline Generator
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    onClick={() => navigate("/free-tools/hashtag-generator")}
-                    className="text-left text-wedding-text hover:text-wedding-primary"
-                  >
-                    <Hash className="h-4 w-4 mr-2" />
-                    Wedding Hashtag Generator
-                  </Button>
+                  <div className="space-y-1">
+                    <div className="px-2 py-1.5">
+                      <span className="text-sm font-semibold flex items-center">
+                        <Gift className="h-4 w-4 mr-2" />
+                        Free Tools
+                      </span>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      onClick={() => navigate("/tools/wedding-timeline-generator")}
+                      className="text-left text-wedding-text hover:text-wedding-primary pl-6"
+                    >
+                      <Calendar className="h-4 w-4 mr-2" />
+                      Free Timeline Generator
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      onClick={() => navigate("/tools/wedding-hashtag-generator")}
+                      className="text-left text-wedding-text hover:text-wedding-primary pl-6"
+                    >
+                      <Hash className="h-4 w-4 mr-2" />
+                      Wedding Hashtag Generator
+                    </Button>
+                  </div>
                   <ListBusinessButton />
                   <div className="flex flex-col gap-2 mt-4">
                     {renderAuthButtons()}

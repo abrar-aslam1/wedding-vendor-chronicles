@@ -55,6 +55,11 @@ function App() {
         <Route path="/test-auth" element={<TestAuth />} />
         <Route path="/free-tools/timeline-generator" element={<FreeTimelineGenerator />} />
         <Route path="/free-tools/hashtag-generator" element={<WeddingHashtagGenerator />} />
+        {/* New SEO-optimized routes for Timeline Generator */}
+        <Route path="/tools/wedding-timeline-generator" element={<FreeTimelineGenerator />} />
+        <Route path="/tools/wedding-timeline-generator/states" element={<FreeTimelineGenerator />} />
+        <Route path="/tools/wedding-timeline-generator/states/:state" element={<FreeTimelineGenerator />} />
+        <Route path="/tools/wedding-timeline-generator/states/:state/:city" element={<FreeTimelineGenerator />} />
         {/* New SEO-optimized routes for Wedding Hashtag Generator */}
         <Route path="/tools/wedding-hashtag-generator" element={<WeddingHashtagGenerator />} />
         <Route path="/tools/wedding-hashtag-generator/states" element={<WeddingHashtagGenerator />} />

@@ -7,7 +7,12 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
+import { fileURLToPath } from 'url';
 import { getAllStatesSlugs, getCitySlugsForState } from '../src/config/hashtag-locations.js';
+
+// Get the directory name using import.meta.url
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const DOMAIN = 'https://findmyweddingvendor.com';
 const BASE_PATH = '/tools/wedding-hashtag-generator';
@@ -78,14 +83,61 @@ function generateSitemapXml(): string {
     }
   });
   
-  // Free Timeline Generator
-  xml += '  <!-- Free Timeline Generator -->\n';
+  // Free Timeline Generator - Legacy URL
+  xml += '  <!-- Free Timeline Generator - Legacy URL -->\n';
   xml += `  <url>\n`;
   xml += `    <loc>${DOMAIN}/free-tools/timeline-generator</loc>\n`;
   xml += `    <lastmod>${CURRENT_DATE}</lastmod>\n`;
   xml += `    <changefreq>weekly</changefreq>\n`;
+  xml += `    <priority>0.7</priority>\n`;
+  xml += `  </url>\n`;
+  
+  // Wedding Timeline Generator - SEO Optimized URLs
+  xml += '  <!-- Wedding Timeline Generator - Main page -->\n';
+  xml += `  <url>\n`;
+  xml += `    <loc>${DOMAIN}/tools/wedding-timeline-generator</loc>\n`;
+  xml += `    <lastmod>${CURRENT_DATE}</lastmod>\n`;
+  xml += `    <changefreq>weekly</changefreq>\n`;
+  xml += `    <priority>0.9</priority>\n`;
+  xml += `  </url>\n`;
+  
+  // Timeline Generator States listing page
+  xml += '  <!-- Timeline Generator States listing page -->\n';
+  xml += `  <url>\n`;
+  xml += `    <loc>${DOMAIN}/tools/wedding-timeline-generator/states</loc>\n`;
+  xml += `    <lastmod>${CURRENT_DATE}</lastmod>\n`;
+  xml += `    <changefreq>weekly</changefreq>\n`;
   xml += `    <priority>0.8</priority>\n`;
   xml += `  </url>\n`;
+  
+  // Generate entries for each state and its cities for Timeline Generator
+  statesSlugs.forEach(stateSlug => {
+    // State page for Timeline Generator
+    xml += `  <!-- ${stateSlug} state page for Timeline Generator -->\n`;
+    xml += `  <url>\n`;
+    xml += `    <loc>${DOMAIN}/tools/wedding-timeline-generator/states/${stateSlug}</loc>\n`;
+    xml += `    <lastmod>${CURRENT_DATE}</lastmod>\n`;
+    xml += `    <changefreq>weekly</changefreq>\n`;
+    xml += `    <priority>0.8</priority>\n`;
+    xml += `  </url>\n`;
+    
+    // Get all city slugs for this state
+    const citySlugs = getCitySlugsForState(stateSlug);
+    
+    // Generate entries for each city for Timeline Generator
+    if (citySlugs.length > 0) {
+      xml += `  <!-- ${stateSlug} cities for Timeline Generator -->\n`;
+      
+      citySlugs.forEach(citySlug => {
+        xml += `  <url>\n`;
+        xml += `    <loc>${DOMAIN}/tools/wedding-timeline-generator/states/${stateSlug}/${citySlug}</loc>\n`;
+        xml += `    <lastmod>${CURRENT_DATE}</lastmod>\n`;
+        xml += `    <changefreq>weekly</changefreq>\n`;
+        xml += `    <priority>0.8</priority>\n`;
+        xml += `  </url>\n`;
+      });
+    }
+  });
   
   xml += '</urlset>';
   
