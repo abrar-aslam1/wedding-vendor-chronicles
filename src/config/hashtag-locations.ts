@@ -20,6 +20,106 @@ interface LocationData {
 
 // Location data for generating location-specific hashtags
 const locationData: { [key: string]: LocationData } = {
+  "alabama": {
+    stateName: "Alabama",
+    stateNickname: "Heart of Dixie",
+    stateAbbreviation: "AL",
+    cities: {
+      "birmingham": {
+        cityName: "Birmingham",
+        nicknames: ["Magic City", "The Ham"],
+        landmarks: ["Vulcan", "Railroad Park", "Sloss Furnaces"],
+        specialTerms: ["Southern", "Iron", "Magic"]
+      },
+      "montgomery": {
+        cityName: "Montgomery",
+        nicknames: ["Capital City", "Gump City"],
+        landmarks: ["Capitol", "Civil Rights Memorial", "Riverfront"],
+        specialTerms: ["Capital", "Historic", "River"]
+      },
+      "mobile": {
+        cityName: "Mobile",
+        nicknames: ["Azalea City", "Port City"],
+        landmarks: ["Battleship", "Bellingrath", "Mardi Gras"],
+        specialTerms: ["Port", "Azalea", "Gulf"]
+      }
+    }
+  },
+  "alaska": {
+    stateName: "Alaska",
+    stateNickname: "Last Frontier",
+    stateAbbreviation: "AK",
+    cities: {
+      "anchorage": {
+        cityName: "Anchorage",
+        nicknames: ["City of Lights", "Los Anchorage"],
+        landmarks: ["Denali", "Chugach", "Cook Inlet"],
+        specialTerms: ["Northern", "Wilderness", "Frontier"]
+      },
+      "fairbanks": {
+        cityName: "Fairbanks",
+        nicknames: ["Golden Heart City", "The Interior"],
+        landmarks: ["Aurora", "Chena", "Pioneer Park"],
+        specialTerms: ["Northern", "Gold", "Lights"]
+      },
+      "juneau": {
+        cityName: "Juneau",
+        nicknames: ["Capital City", "Little San Francisco"],
+        landmarks: ["Mendenhall", "Mount Roberts", "Glacier"],
+        specialTerms: ["Capital", "Glacier", "Coastal"]
+      }
+    }
+  },
+  "arizona": {
+    stateName: "Arizona",
+    stateNickname: "Grand Canyon State",
+    stateAbbreviation: "AZ",
+    cities: {
+      "phoenix": {
+        cityName: "Phoenix",
+        nicknames: ["Valley of the Sun", "PHX"],
+        landmarks: ["Camelback", "Desert Botanical", "Papago"],
+        specialTerms: ["Desert", "Sun", "Cactus"]
+      },
+      "tucson": {
+        cityName: "Tucson",
+        nicknames: ["Old Pueblo", "Optics Valley"],
+        landmarks: ["Saguaro", "Catalina", "Sabino Canyon"],
+        specialTerms: ["Desert", "Mountain", "Sunset"]
+      },
+      "scottsdale": {
+        cityName: "Scottsdale",
+        nicknames: ["West's Most Western Town", "The West's Beverly Hills"],
+        landmarks: ["OldTown", "TPC", "Camelback"],
+        specialTerms: ["Resort", "Western", "Luxury"]
+      }
+    }
+  },
+  "arkansas": {
+    stateName: "Arkansas",
+    stateNickname: "Natural State",
+    stateAbbreviation: "AR",
+    cities: {
+      "little-rock": {
+        cityName: "Little Rock",
+        nicknames: ["Rock Town", "The Rock"],
+        landmarks: ["Capitol", "Clinton Library", "River Market"],
+        specialTerms: ["Natural", "River", "Capital"]
+      },
+      "fayetteville": {
+        cityName: "Fayetteville",
+        nicknames: ["Athens of the Ozarks", "Track Capital"],
+        landmarks: ["Dickson", "Razorback Stadium", "Crystal Bridges"],
+        specialTerms: ["Ozark", "University", "Arts"]
+      },
+      "hot-springs": {
+        cityName: "Hot Springs",
+        nicknames: ["Spa City", "Valley of the Vapors"],
+        landmarks: ["Bathhouse Row", "Hot Springs National Park", "Oaklawn"],
+        specialTerms: ["Thermal", "Historic", "Spa"]
+      }
+    }
+  },
   "california": {
     stateName: "California",
     stateNickname: "Golden State",
@@ -45,53 +145,78 @@ const locationData: { [key: string]: LocationData } = {
       }
     }
   },
-  "new-york": {
-    stateName: "New York",
-    stateNickname: "Empire State",
-    stateAbbreviation: "NY",
+  "colorado": {
+    stateName: "Colorado",
+    stateNickname: "Centennial State",
+    stateAbbreviation: "CO",
     cities: {
-      "new-york-city": {
-        cityName: "New York City",
-        nicknames: ["NYC", "The Big Apple", "Gotham"],
-        landmarks: ["Manhattan", "Brooklyn", "Central"],
-        specialTerms: ["Empire", "Metro", "Urban"]
+      "denver": {
+        cityName: "Denver",
+        nicknames: ["Mile High City", "Queen City of the Plains"],
+        landmarks: ["RedRocks", "Union Station", "Larimer Square"],
+        specialTerms: ["Mountain", "Mile High", "Rocky"]
       },
-      "buffalo": {
-        cityName: "Buffalo",
-        nicknames: ["Queen City", "Nickel City"],
-        landmarks: ["Niagara", "Erie", "Falls"],
-        specialTerms: ["Bison", "Snow", "Wings"]
+      "colorado-springs": {
+        cityName: "Colorado Springs",
+        nicknames: ["Olympic City USA", "The Springs"],
+        landmarks: ["Garden of the Gods", "Pikes Peak", "Air Force Academy"],
+        specialTerms: ["Mountain", "Olympic", "Garden"]
       },
-      "rochester": {
-        cityName: "Rochester",
-        nicknames: ["Flower City", "ROC"],
-        landmarks: ["Eastman", "High Falls", "Lake Ontario"],
-        specialTerms: ["Kodak", "Lilac", "Canal"]
+      "boulder": {
+        cityName: "Boulder",
+        nicknames: ["People's Republic of Boulder", "The Bubble"],
+        landmarks: ["Flatirons", "Pearl Street", "Chautauqua"],
+        specialTerms: ["Mountain", "Flatiron", "Outdoor"]
       }
     }
   },
-  "texas": {
-    stateName: "Texas",
-    stateNickname: "Lone Star State",
-    stateAbbreviation: "TX",
+  "connecticut": {
+    stateName: "Connecticut",
+    stateNickname: "Constitution State",
+    stateAbbreviation: "CT",
     cities: {
-      "austin": {
-        cityName: "Austin",
-        nicknames: ["ATX", "Live Music Capital"],
-        landmarks: ["Capitol", "SoCo", "Zilker"],
-        specialTerms: ["Weird", "Music", "Bats"]
+      "hartford": {
+        cityName: "Hartford",
+        nicknames: ["Insurance Capital", "New England's Rising Star"],
+        landmarks: ["Capitol", "Mark Twain House", "Bushnell Park"],
+        specialTerms: ["Capital", "Historic", "Insurance"]
       },
-      "dallas": {
-        cityName: "Dallas",
-        nicknames: ["Big D", "Triple D"],
-        landmarks: ["Reunion", "Dealey", "Uptown"],
-        specialTerms: ["Cowboys", "Stars", "Mavs"]
+      "new-haven": {
+        cityName: "New Haven",
+        nicknames: ["Elm City", "Cultural Capital"],
+        landmarks: ["Yale", "Green", "East Rock"],
+        specialTerms: ["Ivy", "Academic", "Coastal"]
       },
-      "houston": {
-        cityName: "Houston",
-        nicknames: ["H-Town", "Space City", "Bayou City"],
-        landmarks: ["NASA", "Galleria", "Bayou"],
-        specialTerms: ["Space", "Rockets", "Astros"]
+      "stamford": {
+        cityName: "Stamford",
+        nicknames: ["The City That Works", "Lock City"],
+        landmarks: ["Harbor Point", "Cove Island", "Mill River"],
+        specialTerms: ["Corporate", "Harbor", "Metro"]
+      }
+    }
+  },
+  "delaware": {
+    stateName: "Delaware",
+    stateNickname: "First State",
+    stateAbbreviation: "DE",
+    cities: {
+      "wilmington": {
+        cityName: "Wilmington",
+        nicknames: ["Chemical Capital", "Corporate Capital"],
+        landmarks: ["Brandywine", "Riverfront", "Grand Opera House"],
+        specialTerms: ["First", "River", "Corporate"]
+      },
+      "dover": {
+        cityName: "Dover",
+        nicknames: ["Capital City", "Chicken Capital"],
+        landmarks: ["Legislative Hall", "Dover Downs", "Air Force Base"],
+        specialTerms: ["Capital", "Historic", "Colonial"]
+      },
+      "newark": {
+        cityName: "Newark",
+        nicknames: ["College Town", "Chemical City"],
+        landmarks: ["University of Delaware", "Main Street", "White Clay Creek"],
+        specialTerms: ["College", "Academic", "Historic"]
       }
     }
   },
@@ -120,6 +245,81 @@ const locationData: { [key: string]: LocationData } = {
       }
     }
   },
+  "georgia": {
+    stateName: "Georgia",
+    stateNickname: "Peach State",
+    stateAbbreviation: "GA",
+    cities: {
+      "atlanta": {
+        cityName: "Atlanta",
+        nicknames: ["ATL", "The A", "Hotlanta"],
+        landmarks: ["Piedmont", "Centennial", "Beltline"],
+        specialTerms: ["Peach", "Southern", "Metro"]
+      },
+      "savannah": {
+        cityName: "Savannah",
+        nicknames: ["Hostess City", "Forest City"],
+        landmarks: ["Forsyth", "River Street", "Tybee"],
+        specialTerms: ["Historic", "Southern", "Coastal"]
+      },
+      "athens": {
+        cityName: "Athens",
+        nicknames: ["Classic City", "The Athens of the South"],
+        landmarks: ["UGA", "The Arch", "Georgia Theatre"],
+        specialTerms: ["Bulldog", "Music", "College"]
+      }
+    }
+  },
+  "hawaii": {
+    stateName: "Hawaii",
+    stateNickname: "Aloha State",
+    stateAbbreviation: "HI",
+    cities: {
+      "honolulu": {
+        cityName: "Honolulu",
+        nicknames: ["Sheltered Bay", "Crossroads of the Pacific"],
+        landmarks: ["Waikiki", "Diamond Head", "Pearl Harbor"],
+        specialTerms: ["Aloha", "Paradise", "Island"]
+      },
+      "hilo": {
+        cityName: "Hilo",
+        nicknames: ["Crescent City", "Gateway to Hawaii Volcanoes"],
+        landmarks: ["Mauna Loa", "Rainbow Falls", "Liliuokalani Gardens"],
+        specialTerms: ["Volcano", "Tropical", "Rainforest"]
+      },
+      "kailua": {
+        cityName: "Kailua",
+        nicknames: ["The Windward Side", "Beach Town"],
+        landmarks: ["Lanikai Beach", "Kailua Beach Park", "Pillbox Hike"],
+        specialTerms: ["Beach", "Paradise", "Coastal"]
+      }
+    }
+  },
+  "idaho": {
+    stateName: "Idaho",
+    stateNickname: "Gem State",
+    stateAbbreviation: "ID",
+    cities: {
+      "boise": {
+        cityName: "Boise",
+        nicknames: ["City of Trees", "Treasure Valley"],
+        landmarks: ["Capitol", "Boise River", "Table Rock"],
+        specialTerms: ["Mountain", "River", "Outdoor"]
+      },
+      "idaho-falls": {
+        cityName: "Idaho Falls",
+        nicknames: ["Gateway to Yellowstone", "The Falls"],
+        landmarks: ["Snake River", "Greenbelt", "Falls"],
+        specialTerms: ["Falls", "River", "Gateway"]
+      },
+      "coeur-dalene": {
+        cityName: "Coeur d'Alene",
+        nicknames: ["Lake City", "CDA"],
+        landmarks: ["Lake Coeur d'Alene", "Tubbs Hill", "Resort"],
+        specialTerms: ["Lake", "Resort", "Mountain"]
+      }
+    }
+  },
   "illinois": {
     stateName: "Illinois",
     stateNickname: "Prairie State",
@@ -142,6 +342,106 @@ const locationData: { [key: string]: LocationData } = {
         nicknames: ["Tree City", "The Nape"],
         landmarks: ["Riverwalk", "Centennial Beach", "Moser Tower"],
         specialTerms: ["River", "Suburb", "Historic"]
+      }
+    }
+  },
+  "indiana": {
+    stateName: "Indiana",
+    stateNickname: "Hoosier State",
+    stateAbbreviation: "IN",
+    cities: {
+      "indianapolis": {
+        cityName: "Indianapolis",
+        nicknames: ["Indy", "Circle City", "Naptown"],
+        landmarks: ["Speedway", "Monument Circle", "Canal"],
+        specialTerms: ["Racing", "Hoosier", "Circle"]
+      },
+      "fort-wayne": {
+        cityName: "Fort Wayne",
+        nicknames: ["Summit City", "City of Churches"],
+        landmarks: ["Riverfront", "Embassy Theatre", "Botanical Conservatory"],
+        specialTerms: ["Rivers", "Historic", "Summit"]
+      },
+      "bloomington": {
+        cityName: "Bloomington",
+        nicknames: ["B-town", "Bloomie"],
+        landmarks: ["IU", "Sample Gates", "Kirkwood"],
+        specialTerms: ["Hoosier", "College", "Arts"]
+      }
+    }
+  },
+  "iowa": {
+    stateName: "Iowa",
+    stateNickname: "Hawkeye State",
+    stateAbbreviation: "IA",
+    cities: {
+      "des-moines": {
+        cityName: "Des Moines",
+        nicknames: ["DSM", "Hartford of the West"],
+        landmarks: ["Capitol", "Pappajohn Sculpture Park", "East Village"],
+        specialTerms: ["Capital", "River", "Heartland"]
+      },
+      "iowa-city": {
+        cityName: "Iowa City",
+        nicknames: ["Athens of the Midwest", "Hawkeye City"],
+        landmarks: ["Old Capitol", "Pentacrest", "Kinnick Stadium"],
+        specialTerms: ["Hawkeye", "Literary", "College"]
+      },
+      "cedar-rapids": {
+        cityName: "Cedar Rapids",
+        nicknames: ["City of Five Seasons", "Cedar"],
+        landmarks: ["Czech Village", "NewBo", "Paramount Theatre"],
+        specialTerms: ["Cedar", "River", "Midwest"]
+      }
+    }
+  },
+  "kansas": {
+    stateName: "Kansas",
+    stateNickname: "Sunflower State",
+    stateAbbreviation: "KS",
+    cities: {
+      "wichita": {
+        cityName: "Wichita",
+        nicknames: ["Air Capital", "Doo-Dah"],
+        landmarks: ["Keeper of the Plains", "Old Town", "Arkansas River"],
+        specialTerms: ["Plains", "Sunflower", "Air"]
+      },
+      "kansas-city": {
+        cityName: "Kansas City",
+        nicknames: ["KCK", "Dot City"],
+        landmarks: ["Legends Outlets", "Kansas Speedway", "Children's Mercy Park"],
+        specialTerms: ["BBQ", "Heartland", "Metro"]
+      },
+      "topeka": {
+        cityName: "Topeka",
+        nicknames: ["Top City", "Capital City"],
+        landmarks: ["Capitol", "Brown v. Board", "Gage Park"],
+        specialTerms: ["Capital", "Heartland", "Historic"]
+      }
+    }
+  },
+  "kentucky": {
+    stateName: "Kentucky",
+    stateNickname: "Bluegrass State",
+    stateAbbreviation: "KY",
+    cities: {
+      "louisville": {
+        cityName: "Louisville",
+        nicknames: ["Derby City", "The Ville"],
+        landmarks: ["Churchill Downs", "Louisville Slugger", "Waterfront"],
+        specialTerms: ["Derby", "Bourbon", "River"]
+      },
+      "lexington": {
+        cityName: "Lexington",
+        nicknames: ["Horse Capital", "Athens of the West"],
+        landmarks: ["Keeneland", "Rupp Arena", "Kentucky Horse Park"],
+        specialTerms: ["Bluegrass", "Horses", "University"]
+      },
+      "bowling-green": {
+        cityName: "Bowling Green",
+        nicknames: ["BG", "Corvette City"],
+        landmarks: ["Corvette Museum", "Lost River Cave", "Fountain Square"],
+        specialTerms: ["Corvette", "Cave", "Southern"]
       }
     }
   }

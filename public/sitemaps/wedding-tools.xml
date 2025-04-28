@@ -21,6 +21,110 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+  <!-- alabama state page -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/alabama</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- alabama cities -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/alabama/birmingham</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/alabama/montgomery</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/alabama/mobile</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- alaska state page -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/alaska</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- alaska cities -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/alaska/anchorage</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/alaska/fairbanks</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/alaska/juneau</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- arizona state page -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/arizona</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- arizona cities -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/arizona/phoenix</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/arizona/tucson</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/arizona/scottsdale</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- arkansas state page -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/arkansas</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- arkansas cities -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/arkansas/little-rock</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/arkansas/fayetteville</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/arkansas/hot-springs</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <!-- california state page -->
   <url>
     <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/california</loc>
@@ -47,54 +151,80 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-  <!-- new-york state page -->
+  <!-- colorado state page -->
   <url>
-    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/new-york</loc>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/colorado</loc>
     <lastmod>2025-04-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-  <!-- new-york cities -->
+  <!-- colorado cities -->
   <url>
-    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/new-york/new-york-city</loc>
-    <lastmod>2025-04-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/new-york/buffalo</loc>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/colorado/denver</loc>
     <lastmod>2025-04-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/new-york/rochester</loc>
-    <lastmod>2025-04-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <!-- texas state page -->
-  <url>
-    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/texas</loc>
-    <lastmod>2025-04-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <!-- texas cities -->
-  <url>
-    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/texas/austin</loc>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/colorado/colorado-springs</loc>
     <lastmod>2025-04-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/texas/dallas</loc>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/colorado/boulder</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- connecticut state page -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/connecticut</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- connecticut cities -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/connecticut/hartford</loc>
     <lastmod>2025-04-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/texas/houston</loc>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/connecticut/new-haven</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/connecticut/stamford</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- delaware state page -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/delaware</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- delaware cities -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/delaware/wilmington</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/delaware/dover</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/delaware/newark</loc>
     <lastmod>2025-04-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -125,6 +255,84 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+  <!-- georgia state page -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/georgia</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- georgia cities -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/georgia/atlanta</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/georgia/savannah</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/georgia/athens</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- hawaii state page -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/hawaii</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- hawaii cities -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/hawaii/honolulu</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/hawaii/hilo</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/hawaii/kailua</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- idaho state page -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/idaho</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- idaho cities -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/idaho/boise</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/idaho/idaho-falls</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/idaho/coeur-dalene</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <!-- illinois state page -->
   <url>
     <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/illinois</loc>
@@ -151,6 +359,110 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+  <!-- indiana state page -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/indiana</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- indiana cities -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/indiana/indianapolis</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/indiana/fort-wayne</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/indiana/bloomington</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- iowa state page -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/iowa</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- iowa cities -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/iowa/des-moines</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/iowa/iowa-city</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/iowa/cedar-rapids</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- kansas state page -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/kansas</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- kansas cities -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/kansas/wichita</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/kansas/kansas-city</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/kansas/topeka</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- kentucky state page -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/kentucky</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- kentucky cities -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/kentucky/louisville</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/kentucky/lexington</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/kentucky/bowling-green</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <!-- Free Timeline Generator - Legacy URL -->
   <url>
     <loc>https://findmyweddingvendor.com/free-tools/timeline-generator</loc>
@@ -168,6 +480,110 @@
   <!-- Timeline Generator States listing page -->
   <url>
     <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- alabama state page for Timeline Generator -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/alabama</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- alabama cities for Timeline Generator -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/alabama/birmingham</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/alabama/montgomery</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/alabama/mobile</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- alaska state page for Timeline Generator -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/alaska</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- alaska cities for Timeline Generator -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/alaska/anchorage</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/alaska/fairbanks</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/alaska/juneau</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- arizona state page for Timeline Generator -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/arizona</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- arizona cities for Timeline Generator -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/arizona/phoenix</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/arizona/tucson</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/arizona/scottsdale</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- arkansas state page for Timeline Generator -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/arkansas</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- arkansas cities for Timeline Generator -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/arkansas/little-rock</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/arkansas/fayetteville</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/arkansas/hot-springs</loc>
     <lastmod>2025-04-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -198,54 +614,80 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-  <!-- new-york state page for Timeline Generator -->
+  <!-- colorado state page for Timeline Generator -->
   <url>
-    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/new-york</loc>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/colorado</loc>
     <lastmod>2025-04-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-  <!-- new-york cities for Timeline Generator -->
+  <!-- colorado cities for Timeline Generator -->
   <url>
-    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/new-york/new-york-city</loc>
-    <lastmod>2025-04-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/new-york/buffalo</loc>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/colorado/denver</loc>
     <lastmod>2025-04-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/new-york/rochester</loc>
-    <lastmod>2025-04-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <!-- texas state page for Timeline Generator -->
-  <url>
-    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/texas</loc>
-    <lastmod>2025-04-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <!-- texas cities for Timeline Generator -->
-  <url>
-    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/texas/austin</loc>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/colorado/colorado-springs</loc>
     <lastmod>2025-04-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/texas/dallas</loc>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/colorado/boulder</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- connecticut state page for Timeline Generator -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/connecticut</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- connecticut cities for Timeline Generator -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/connecticut/hartford</loc>
     <lastmod>2025-04-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/texas/houston</loc>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/connecticut/new-haven</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/connecticut/stamford</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- delaware state page for Timeline Generator -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/delaware</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- delaware cities for Timeline Generator -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/delaware/wilmington</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/delaware/dover</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/delaware/newark</loc>
     <lastmod>2025-04-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -276,6 +718,84 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+  <!-- georgia state page for Timeline Generator -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/georgia</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- georgia cities for Timeline Generator -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/georgia/atlanta</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/georgia/savannah</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/georgia/athens</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- hawaii state page for Timeline Generator -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/hawaii</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- hawaii cities for Timeline Generator -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/hawaii/honolulu</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/hawaii/hilo</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/hawaii/kailua</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- idaho state page for Timeline Generator -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/idaho</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- idaho cities for Timeline Generator -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/idaho/boise</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/idaho/idaho-falls</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/idaho/coeur-dalene</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <!-- illinois state page for Timeline Generator -->
   <url>
     <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/illinois</loc>
@@ -298,6 +818,110 @@
   </url>
   <url>
     <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/illinois/naperville</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- indiana state page for Timeline Generator -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/indiana</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- indiana cities for Timeline Generator -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/indiana/indianapolis</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/indiana/fort-wayne</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/indiana/bloomington</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- iowa state page for Timeline Generator -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/iowa</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- iowa cities for Timeline Generator -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/iowa/des-moines</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/iowa/iowa-city</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/iowa/cedar-rapids</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- kansas state page for Timeline Generator -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/kansas</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- kansas cities for Timeline Generator -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/kansas/wichita</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/kansas/kansas-city</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/kansas/topeka</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- kentucky state page for Timeline Generator -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/kentucky</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- kentucky cities for Timeline Generator -->
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/kentucky/louisville</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/kentucky/lexington</loc>
+    <lastmod>2025-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://findmyweddingvendor.com/tools/wedding-timeline-generator/states/kentucky/bowling-green</loc>
     <lastmod>2025-04-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
