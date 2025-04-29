@@ -1,7 +1,5 @@
 /**
  * Location-specific hashtag data and generation functions
- * 
- * This file contains data and functions for generating location-specific wedding hashtags
  */
 
 interface LocationData {
@@ -27,21 +25,21 @@ const locationData: { [key: string]: LocationData } = {
     cities: {
       "birmingham": {
         cityName: "Birmingham",
-        nicknames: ["Magic City", "The Ham"],
-        landmarks: ["Vulcan", "Railroad Park", "Sloss Furnaces"],
-        specialTerms: ["Southern", "Iron", "Magic"]
+        nicknames: ["Magic City"],
+        landmarks: ["Vulcan"],
+        specialTerms: ["Southern"]
       },
       "montgomery": {
         cityName: "Montgomery",
-        nicknames: ["Capital City", "Gump City"],
-        landmarks: ["Capitol", "Civil Rights Memorial", "Riverfront"],
-        specialTerms: ["Capital", "Historic", "River"]
+        nicknames: ["Capital City"],
+        landmarks: ["Capitol"],
+        specialTerms: ["Historic"]
       },
       "mobile": {
         cityName: "Mobile",
-        nicknames: ["Azalea City", "Port City"],
-        landmarks: ["Battleship", "Bellingrath", "Mardi Gras"],
-        specialTerms: ["Port", "Azalea", "Gulf"]
+        nicknames: ["Azalea City"],
+        landmarks: ["Battleship"],
+        specialTerms: ["Gulf"]
       }
     }
   },
@@ -52,21 +50,21 @@ const locationData: { [key: string]: LocationData } = {
     cities: {
       "anchorage": {
         cityName: "Anchorage",
-        nicknames: ["City of Lights", "Los Anchorage"],
-        landmarks: ["Denali", "Chugach", "Cook Inlet"],
-        specialTerms: ["Northern", "Wilderness", "Frontier"]
+        nicknames: ["City of Lights"],
+        landmarks: ["Denali"],
+        specialTerms: ["Northern"]
       },
       "fairbanks": {
         cityName: "Fairbanks",
-        nicknames: ["Golden Heart City", "The Interior"],
-        landmarks: ["Aurora", "Chena", "Pioneer Park"],
-        specialTerms: ["Northern", "Gold", "Lights"]
+        nicknames: ["Golden Heart"],
+        landmarks: ["Aurora"],
+        specialTerms: ["Northern"]
       },
       "juneau": {
         cityName: "Juneau",
-        nicknames: ["Capital City", "Little San Francisco"],
-        landmarks: ["Mendenhall", "Mount Roberts", "Glacier"],
-        specialTerms: ["Capital", "Glacier", "Coastal"]
+        nicknames: ["Capital City"],
+        landmarks: ["Mendenhall"],
+        specialTerms: ["Glacier"]
       }
     }
   },
@@ -77,21 +75,21 @@ const locationData: { [key: string]: LocationData } = {
     cities: {
       "phoenix": {
         cityName: "Phoenix",
-        nicknames: ["Valley of the Sun", "PHX"],
-        landmarks: ["Camelback", "Desert Botanical", "Papago"],
-        specialTerms: ["Desert", "Sun", "Cactus"]
+        nicknames: ["Valley of the Sun"],
+        landmarks: ["Camelback"],
+        specialTerms: ["Desert"]
       },
       "tucson": {
         cityName: "Tucson",
-        nicknames: ["Old Pueblo", "Optics Valley"],
-        landmarks: ["Saguaro", "Catalina", "Sabino Canyon"],
-        specialTerms: ["Desert", "Mountain", "Sunset"]
+        nicknames: ["Old Pueblo"],
+        landmarks: ["Saguaro"],
+        specialTerms: ["Desert"]
       },
       "scottsdale": {
         cityName: "Scottsdale",
-        nicknames: ["West's Most Western Town", "The West's Beverly Hills"],
-        landmarks: ["OldTown", "TPC", "Camelback"],
-        specialTerms: ["Resort", "Western", "Luxury"]
+        nicknames: ["West's Most Western Town"],
+        landmarks: ["OldTown"],
+        specialTerms: ["Resort"]
       }
     }
   },
@@ -102,21 +100,21 @@ const locationData: { [key: string]: LocationData } = {
     cities: {
       "little-rock": {
         cityName: "Little Rock",
-        nicknames: ["Rock Town", "The Rock"],
-        landmarks: ["Capitol", "Clinton Library", "River Market"],
-        specialTerms: ["Natural", "River", "Capital"]
+        nicknames: ["Rock Town"],
+        landmarks: ["Capitol"],
+        specialTerms: ["River"]
       },
       "fayetteville": {
         cityName: "Fayetteville",
-        nicknames: ["Athens of the Ozarks", "Track Capital"],
-        landmarks: ["Dickson", "Razorback Stadium", "Crystal Bridges"],
-        specialTerms: ["Ozark", "University", "Arts"]
+        nicknames: ["Athens of the Ozarks"],
+        landmarks: ["Razorback Stadium"],
+        specialTerms: ["University"]
       },
       "hot-springs": {
         cityName: "Hot Springs",
-        nicknames: ["Spa City", "Valley of the Vapors"],
-        landmarks: ["Bathhouse Row", "Hot Springs National Park", "Oaklawn"],
-        specialTerms: ["Thermal", "Historic", "Spa"]
+        nicknames: ["Spa City"],
+        landmarks: ["Bathhouse Row"],
+        specialTerms: ["Thermal"]
       }
     }
   },
@@ -127,21 +125,21 @@ const locationData: { [key: string]: LocationData } = {
     cities: {
       "los-angeles": {
         cityName: "Los Angeles",
-        nicknames: ["LA", "City of Angels"],
-        landmarks: ["Hollywood", "Sunset", "Venice"],
-        specialTerms: ["Angels", "Stars", "Palms"]
+        nicknames: ["LA"],
+        landmarks: ["Hollywood"],
+        specialTerms: ["Stars"]
       },
       "san-francisco": {
         cityName: "San Francisco",
-        nicknames: ["SF", "The City", "Frisco"],
-        landmarks: ["GoldenGate", "Bay", "Alcatraz"],
-        specialTerms: ["Fog", "Hills", "Bay"]
+        nicknames: ["SF"],
+        landmarks: ["GoldenGate"],
+        specialTerms: ["Fog"]
       },
       "san-diego": {
         cityName: "San Diego",
-        nicknames: ["SD", "America's Finest City"],
-        landmarks: ["Coronado", "Balboa", "LaJolla"],
-        specialTerms: ["Sunny", "Beach", "Coastal"]
+        nicknames: ["SD"],
+        landmarks: ["Coronado"],
+        specialTerms: ["Beach"]
       }
     }
   },
@@ -152,21 +150,21 @@ const locationData: { [key: string]: LocationData } = {
     cities: {
       "denver": {
         cityName: "Denver",
-        nicknames: ["Mile High City", "Queen City of the Plains"],
-        landmarks: ["RedRocks", "Union Station", "Larimer Square"],
-        specialTerms: ["Mountain", "Mile High", "Rocky"]
+        nicknames: ["Mile High City"],
+        landmarks: ["RedRocks"],
+        specialTerms: ["Mountain"]
       },
       "colorado-springs": {
         cityName: "Colorado Springs",
-        nicknames: ["Olympic City USA", "The Springs"],
-        landmarks: ["Garden of the Gods", "Pikes Peak", "Air Force Academy"],
-        specialTerms: ["Mountain", "Olympic", "Garden"]
+        nicknames: ["Olympic City"],
+        landmarks: ["Garden of the Gods"],
+        specialTerms: ["Mountain"]
       },
       "boulder": {
         cityName: "Boulder",
-        nicknames: ["People's Republic of Boulder", "The Bubble"],
-        landmarks: ["Flatirons", "Pearl Street", "Chautauqua"],
-        specialTerms: ["Mountain", "Flatiron", "Outdoor"]
+        nicknames: ["The Bubble"],
+        landmarks: ["Flatirons"],
+        specialTerms: ["Outdoor"]
       }
     }
   },
@@ -177,21 +175,21 @@ const locationData: { [key: string]: LocationData } = {
     cities: {
       "hartford": {
         cityName: "Hartford",
-        nicknames: ["Insurance Capital", "New England's Rising Star"],
-        landmarks: ["Capitol", "Mark Twain House", "Bushnell Park"],
-        specialTerms: ["Capital", "Historic", "Insurance"]
+        nicknames: ["Insurance Capital"],
+        landmarks: ["Capitol"],
+        specialTerms: ["Historic"]
       },
       "new-haven": {
         cityName: "New Haven",
-        nicknames: ["Elm City", "Cultural Capital"],
-        landmarks: ["Yale", "Green", "East Rock"],
-        specialTerms: ["Ivy", "Academic", "Coastal"]
+        nicknames: ["Elm City"],
+        landmarks: ["Yale"],
+        specialTerms: ["Academic"]
       },
       "stamford": {
         cityName: "Stamford",
-        nicknames: ["The City That Works", "Lock City"],
-        landmarks: ["Harbor Point", "Cove Island", "Mill River"],
-        specialTerms: ["Corporate", "Harbor", "Metro"]
+        nicknames: ["The City That Works"],
+        landmarks: ["Harbor Point"],
+        specialTerms: ["Corporate"]
       }
     }
   },
@@ -202,21 +200,21 @@ const locationData: { [key: string]: LocationData } = {
     cities: {
       "wilmington": {
         cityName: "Wilmington",
-        nicknames: ["Chemical Capital", "Corporate Capital"],
-        landmarks: ["Brandywine", "Riverfront", "Grand Opera House"],
-        specialTerms: ["First", "River", "Corporate"]
+        nicknames: ["Chemical Capital"],
+        landmarks: ["Riverfront"],
+        specialTerms: ["River"]
       },
       "dover": {
         cityName: "Dover",
-        nicknames: ["Capital City", "Chicken Capital"],
-        landmarks: ["Legislative Hall", "Dover Downs", "Air Force Base"],
-        specialTerms: ["Capital", "Historic", "Colonial"]
+        nicknames: ["Capital City"],
+        landmarks: ["Legislative Hall"],
+        specialTerms: ["Capital"]
       },
       "newark": {
         cityName: "Newark",
-        nicknames: ["College Town", "Chemical City"],
-        landmarks: ["University of Delaware", "Main Street", "White Clay Creek"],
-        specialTerms: ["College", "Academic", "Historic"]
+        nicknames: ["College Town"],
+        landmarks: ["University of Delaware"],
+        specialTerms: ["Academic"]
       }
     }
   },
@@ -227,21 +225,21 @@ const locationData: { [key: string]: LocationData } = {
     cities: {
       "miami": {
         cityName: "Miami",
-        nicknames: ["Magic City", "Vice City"],
-        landmarks: ["SouthBeach", "Wynwood", "Brickell"],
-        specialTerms: ["Heat", "Tropical", "Ocean"]
+        nicknames: ["Magic City"],
+        landmarks: ["SouthBeach"],
+        specialTerms: ["Tropical"]
       },
       "orlando": {
         cityName: "Orlando",
-        nicknames: ["O-Town", "The City Beautiful"],
-        landmarks: ["Disney", "Universal", "Epcot"],
-        specialTerms: ["Magic", "Theme", "Parks"]
+        nicknames: ["O-Town"],
+        landmarks: ["Disney"],
+        specialTerms: ["Magic"]
       },
       "tampa": {
         cityName: "Tampa",
-        nicknames: ["Cigar City", "Big Guava"],
-        landmarks: ["Bayshore", "Ybor", "Busch Gardens"],
-        specialTerms: ["Bay", "Pirate", "Gulf"]
+        nicknames: ["Cigar City"],
+        landmarks: ["Bayshore"],
+        specialTerms: ["Bay"]
       }
     }
   },
@@ -252,21 +250,21 @@ const locationData: { [key: string]: LocationData } = {
     cities: {
       "atlanta": {
         cityName: "Atlanta",
-        nicknames: ["ATL", "The A", "Hotlanta"],
-        landmarks: ["Piedmont", "Centennial", "Beltline"],
-        specialTerms: ["Peach", "Southern", "Metro"]
+        nicknames: ["ATL"],
+        landmarks: ["Piedmont"],
+        specialTerms: ["Peach"]
       },
       "savannah": {
         cityName: "Savannah",
-        nicknames: ["Hostess City", "Forest City"],
-        landmarks: ["Forsyth", "River Street", "Tybee"],
-        specialTerms: ["Historic", "Southern", "Coastal"]
+        nicknames: ["Hostess City"],
+        landmarks: ["Forsyth"],
+        specialTerms: ["Historic"]
       },
       "athens": {
         cityName: "Athens",
-        nicknames: ["Classic City", "The Athens of the South"],
-        landmarks: ["UGA", "The Arch", "Georgia Theatre"],
-        specialTerms: ["Bulldog", "Music", "College"]
+        nicknames: ["Classic City"],
+        landmarks: ["UGA"],
+        specialTerms: ["Bulldog"]
       }
     }
   },
@@ -277,21 +275,21 @@ const locationData: { [key: string]: LocationData } = {
     cities: {
       "honolulu": {
         cityName: "Honolulu",
-        nicknames: ["Sheltered Bay", "Crossroads of the Pacific"],
-        landmarks: ["Waikiki", "Diamond Head", "Pearl Harbor"],
-        specialTerms: ["Aloha", "Paradise", "Island"]
+        nicknames: ["Sheltered Bay"],
+        landmarks: ["Waikiki"],
+        specialTerms: ["Aloha"]
       },
       "hilo": {
         cityName: "Hilo",
-        nicknames: ["Crescent City", "Gateway to Hawaii Volcanoes"],
-        landmarks: ["Mauna Loa", "Rainbow Falls", "Liliuokalani Gardens"],
-        specialTerms: ["Volcano", "Tropical", "Rainforest"]
+        nicknames: ["Crescent City"],
+        landmarks: ["Mauna Loa"],
+        specialTerms: ["Volcano"]
       },
       "kailua": {
         cityName: "Kailua",
-        nicknames: ["The Windward Side", "Beach Town"],
-        landmarks: ["Lanikai Beach", "Kailua Beach Park", "Pillbox Hike"],
-        specialTerms: ["Beach", "Paradise", "Coastal"]
+        nicknames: ["The Windward Side"],
+        landmarks: ["Lanikai Beach"],
+        specialTerms: ["Beach"]
       }
     }
   },
@@ -302,21 +300,21 @@ const locationData: { [key: string]: LocationData } = {
     cities: {
       "boise": {
         cityName: "Boise",
-        nicknames: ["City of Trees", "Treasure Valley"],
-        landmarks: ["Capitol", "Boise River", "Table Rock"],
-        specialTerms: ["Mountain", "River", "Outdoor"]
+        nicknames: ["City of Trees"],
+        landmarks: ["Capitol"],
+        specialTerms: ["Mountain"]
       },
       "idaho-falls": {
         cityName: "Idaho Falls",
-        nicknames: ["Gateway to Yellowstone", "The Falls"],
-        landmarks: ["Snake River", "Greenbelt", "Falls"],
-        specialTerms: ["Falls", "River", "Gateway"]
+        nicknames: ["Gateway to Yellowstone"],
+        landmarks: ["Snake River"],
+        specialTerms: ["Falls"]
       },
       "coeur-dalene": {
         cityName: "Coeur d'Alene",
-        nicknames: ["Lake City", "CDA"],
-        landmarks: ["Lake Coeur d'Alene", "Tubbs Hill", "Resort"],
-        specialTerms: ["Lake", "Resort", "Mountain"]
+        nicknames: ["Lake City"],
+        landmarks: ["Lake Coeur d'Alene"],
+        specialTerms: ["Lake"]
       }
     }
   },
@@ -327,21 +325,21 @@ const locationData: { [key: string]: LocationData } = {
     cities: {
       "chicago": {
         cityName: "Chicago",
-        nicknames: ["Windy City", "Chi-Town", "Second City"],
-        landmarks: ["Willis", "Navy", "Millennium"],
-        specialTerms: ["Wind", "Lake", "Blues"]
+        nicknames: ["Windy City"],
+        landmarks: ["Willis"],
+        specialTerms: ["Wind"]
       },
       "springfield": {
         cityName: "Springfield",
-        nicknames: ["Flower City", "Lincoln's Home"],
-        landmarks: ["Capitol", "Lincoln Home", "Dana-Thomas"],
-        specialTerms: ["Capital", "Lincoln", "Prairie"]
+        nicknames: ["Flower City"],
+        landmarks: ["Capitol"],
+        specialTerms: ["Lincoln"]
       },
       "naperville": {
         cityName: "Naperville",
-        nicknames: ["Tree City", "The Nape"],
-        landmarks: ["Riverwalk", "Centennial Beach", "Moser Tower"],
-        specialTerms: ["River", "Suburb", "Historic"]
+        nicknames: ["Tree City"],
+        landmarks: ["Riverwalk"],
+        specialTerms: ["River"]
       }
     }
   },
@@ -352,21 +350,21 @@ const locationData: { [key: string]: LocationData } = {
     cities: {
       "indianapolis": {
         cityName: "Indianapolis",
-        nicknames: ["Indy", "Circle City", "Naptown"],
-        landmarks: ["Speedway", "Monument Circle", "Canal"],
-        specialTerms: ["Racing", "Hoosier", "Circle"]
+        nicknames: ["Indy"],
+        landmarks: ["Speedway"],
+        specialTerms: ["Racing"]
       },
       "fort-wayne": {
         cityName: "Fort Wayne",
-        nicknames: ["Summit City", "City of Churches"],
-        landmarks: ["Riverfront", "Embassy Theatre", "Botanical Conservatory"],
-        specialTerms: ["Rivers", "Historic", "Summit"]
+        nicknames: ["Summit City"],
+        landmarks: ["Riverfront"],
+        specialTerms: ["Rivers"]
       },
       "bloomington": {
         cityName: "Bloomington",
-        nicknames: ["B-town", "Bloomie"],
-        landmarks: ["IU", "Sample Gates", "Kirkwood"],
-        specialTerms: ["Hoosier", "College", "Arts"]
+        nicknames: ["B-town"],
+        landmarks: ["IU"],
+        specialTerms: ["Hoosier"]
       }
     }
   },
@@ -377,21 +375,21 @@ const locationData: { [key: string]: LocationData } = {
     cities: {
       "des-moines": {
         cityName: "Des Moines",
-        nicknames: ["DSM", "Hartford of the West"],
-        landmarks: ["Capitol", "Pappajohn Sculpture Park", "East Village"],
-        specialTerms: ["Capital", "River", "Heartland"]
+        nicknames: ["DSM"],
+        landmarks: ["Capitol"],
+        specialTerms: ["Capital"]
       },
       "iowa-city": {
         cityName: "Iowa City",
-        nicknames: ["Athens of the Midwest", "Hawkeye City"],
-        landmarks: ["Old Capitol", "Pentacrest", "Kinnick Stadium"],
-        specialTerms: ["Hawkeye", "Literary", "College"]
+        nicknames: ["Hawkeye City"],
+        landmarks: ["Old Capitol"],
+        specialTerms: ["Hawkeye"]
       },
       "cedar-rapids": {
         cityName: "Cedar Rapids",
-        nicknames: ["City of Five Seasons", "Cedar"],
-        landmarks: ["Czech Village", "NewBo", "Paramount Theatre"],
-        specialTerms: ["Cedar", "River", "Midwest"]
+        nicknames: ["City of Five Seasons"],
+        landmarks: ["Czech Village"],
+        specialTerms: ["Cedar"]
       }
     }
   },
@@ -402,21 +400,21 @@ const locationData: { [key: string]: LocationData } = {
     cities: {
       "wichita": {
         cityName: "Wichita",
-        nicknames: ["Air Capital", "Doo-Dah"],
-        landmarks: ["Keeper of the Plains", "Old Town", "Arkansas River"],
-        specialTerms: ["Plains", "Sunflower", "Air"]
+        nicknames: ["Air Capital"],
+        landmarks: ["Keeper of the Plains"],
+        specialTerms: ["Plains"]
       },
       "kansas-city": {
         cityName: "Kansas City",
-        nicknames: ["KCK", "Dot City"],
-        landmarks: ["Legends Outlets", "Kansas Speedway", "Children's Mercy Park"],
-        specialTerms: ["BBQ", "Heartland", "Metro"]
+        nicknames: ["KCK"],
+        landmarks: ["Legends Outlets"],
+        specialTerms: ["BBQ"]
       },
       "topeka": {
         cityName: "Topeka",
-        nicknames: ["Top City", "Capital City"],
-        landmarks: ["Capitol", "Brown v. Board", "Gage Park"],
-        specialTerms: ["Capital", "Heartland", "Historic"]
+        nicknames: ["Capital City"],
+        landmarks: ["Capitol"],
+        specialTerms: ["Capital"]
       }
     }
   },
@@ -427,301 +425,604 @@ const locationData: { [key: string]: LocationData } = {
     cities: {
       "louisville": {
         cityName: "Louisville",
-        nicknames: ["Derby City", "The Ville"],
-        landmarks: ["Churchill Downs", "Louisville Slugger", "Waterfront"],
-        specialTerms: ["Derby", "Bourbon", "River"]
+        nicknames: ["Derby City"],
+        landmarks: ["Churchill Downs"],
+        specialTerms: ["Derby"]
       },
       "lexington": {
         cityName: "Lexington",
-        nicknames: ["Horse Capital", "Athens of the West"],
-        landmarks: ["Keeneland", "Rupp Arena", "Kentucky Horse Park"],
-        specialTerms: ["Bluegrass", "Horses", "University"]
+        nicknames: ["Horse Capital"],
+        landmarks: ["Keeneland"],
+        specialTerms: ["Bluegrass"]
       },
       "bowling-green": {
         cityName: "Bowling Green",
-        nicknames: ["BG", "Corvette City"],
-        landmarks: ["Corvette Museum", "Lost River Cave", "Fountain Square"],
-        specialTerms: ["Corvette", "Cave", "Southern"]
+        nicknames: ["BG"],
+        landmarks: ["Corvette Museum"],
+        specialTerms: ["Corvette"]
       }
     }
-  }
-};
-
-/**
- * Generate location-specific hashtags based on state and city
- * 
- * @param stateSlug The state slug (e.g., "california")
- * @param citySlug The city slug (e.g., "los-angeles")
- * @param partner1FirstName First partner's first name
- * @param partner2FirstName Second partner's first name
- * @returns Array of location-specific hashtags
- */
-export function generateLocationHashtags(
-  stateSlug: string,
-  citySlug: string,
-  partner1FirstName: string,
-  partner2FirstName: string
-): string[] {
-  const hashtags: string[] = [];
-  
-  // Get location data
-  const state = locationData[stateSlug];
-  if (!state) return hashtags;
-  
-  const city = state.cities[citySlug];
-  if (!city) return hashtags;
-  
-  // Generate state-based hashtags
-  hashtags.push(`#${partner1FirstName}${partner2FirstName}${state.stateName}`);
-  hashtags.push(`#${state.stateName}Wedding`);
-  
-  if (state.stateNickname) {
-    hashtags.push(`#${state.stateNickname}Wedding`);
-  }
-  
-  // Generate city-based hashtags
-  hashtags.push(`#${partner1FirstName}${partner2FirstName}${city.cityName.replace(/\s+/g, "")}`);
-  hashtags.push(`#${city.cityName.replace(/\s+/g, "")}Wedding`);
-  
-  // Add nickname-based hashtags
-  if (city.nicknames && city.nicknames.length > 0) {
-    city.nicknames.forEach(nickname => {
-      hashtags.push(`#${nickname.replace(/\s+/g, "")}Wedding`);
-      hashtags.push(`#${partner1FirstName}${partner2FirstName}In${nickname.replace(/\s+/g, "")}`);
-    });
-  }
-  
-  // Add landmark-based hashtags
-  if (city.landmarks && city.landmarks.length > 0) {
-    city.landmarks.forEach(landmark => {
-      hashtags.push(`#${landmark}Wedding`);
-    });
-    
-    // Pick a random landmark for a more specific hashtag
-    const randomLandmark = city.landmarks[Math.floor(Math.random() * city.landmarks.length)];
-    hashtags.push(`#${partner1FirstName}${partner2FirstName}At${randomLandmark}`);
-  }
-  
-  // Add special term-based hashtags
-  if (city.specialTerms && city.specialTerms.length > 0) {
-    // Pick a random special term
-    const randomTerm = city.specialTerms[Math.floor(Math.random() * city.specialTerms.length)];
-    hashtags.push(`#${randomTerm}${partner1FirstName}${partner2FirstName}`);
-    hashtags.push(`#${randomTerm}Wedding`);
-  }
-  
-  // Add combined state abbreviation and city hashtags
-  hashtags.push(`#${partner1FirstName}${partner2FirstName}${state.stateAbbreviation}`);
-  
-  return hashtags;
-}
-
-/**
- * Get location data for a specific state and city
- * 
- * @param stateSlug The state slug (e.g., "california")
- * @param citySlug The city slug (e.g., "los-angeles")
- * @returns Location data or undefined if not found
- */
-export function getLocationData(stateSlug?: string, citySlug?: string): {
-  state?: LocationData,
-  city?: LocationData["cities"][string]
-} {
-  if (!stateSlug) return {};
-  
-  const state = locationData[stateSlug];
-  if (!state) return {};
-  
-  if (!citySlug) return { state };
-  
-  const city = state.cities[citySlug];
-  if (!city) return { state };
-  
-  return { state, city };
-}
-
-/**
- * Get all available state slugs
- */
-export function getAllStatesSlugs(): string[] {
-  return Object.keys(locationData);
-}
-
-/**
- * Get all available city slugs for a state
- */
-export function getCitySlugsForState(stateSlug: string): string[] {
-  const state = locationData[stateSlug];
-  if (!state) return [];
-  
-  return Object.keys(state.cities);
-}
-
-/**
- * Get wedding statistics for a location
- */
-export function getLocationWeddingStats(stateSlug: string, citySlug?: string): {
-  averageCost: string;
-  popularMonths: string[];
-  popularVenues: string[];
-  averageGuestCount: number;
-} {
-  // This would ideally come from a database, but for now we'll use static data
-  const defaultStats = {
-    averageCost: "$28,000",
-    popularMonths: ["June", "September", "October"],
-    popularVenues: ["Hotels", "Barns", "Gardens"],
-    averageGuestCount: 125
-  };
-  
-  // State-specific stats
-  const stateStats: Record<string, typeof defaultStats> = {
-    "california": {
-      averageCost: "$39,000",
-      popularMonths: ["May", "June", "September"],
-      popularVenues: ["Wineries", "Beaches", "Historic Estates"],
-      averageGuestCount: 130
-    },
-    "new-york": {
-      averageCost: "$48,000",
-      popularMonths: ["June", "September", "October"],
-      popularVenues: ["Lofts", "Hotels", "Rooftops"],
-      averageGuestCount: 135
-    },
-    "texas": {
-      averageCost: "$30,000",
-      popularMonths: ["April", "May", "October"],
-      popularVenues: ["Ranches", "Barns", "Ballrooms"],
-      averageGuestCount: 145
-    },
-    "florida": {
-      averageCost: "$35,000",
-      popularMonths: ["November", "February", "March"],
-      popularVenues: ["Beaches", "Resorts", "Gardens"],
-      averageGuestCount: 120
-    },
-    "illinois": {
-      averageCost: "$33,000",
-      popularMonths: ["June", "August", "September"],
-      popularVenues: ["Ballrooms", "Lofts", "Historic Buildings"],
-      averageGuestCount: 140
+  },
+  "louisiana": {
+    stateName: "Louisiana",
+    stateNickname: "Pelican State",
+    stateAbbreviation: "LA",
+    cities: {
+      "new-orleans": {
+        cityName: "New Orleans",
+        nicknames: ["NOLA"],
+        landmarks: ["French Quarter"],
+        specialTerms: ["Jazz"]
+      },
+      "baton-rouge": {
+        cityName: "Baton Rouge",
+        nicknames: ["Red Stick"],
+        landmarks: ["Capitol"],
+        specialTerms: ["Capital"]
+      },
+      "lafayette": {
+        cityName: "Lafayette",
+        nicknames: ["Hub City"],
+        landmarks: ["Vermilionville"],
+        specialTerms: ["Cajun"]
+      }
     }
-  };
-  
-  // City-specific stats
-  const cityStats: Record<string, Record<string, typeof defaultStats>> = {
-    "california": {
-      "los-angeles": {
-        averageCost: "$42,000",
-        popularMonths: ["May", "June", "October"],
-        popularVenues: ["Beachfront Estates", "Historic Theaters", "Luxury Hotels"],
-        averageGuestCount: 135
+  },
+  "maine": {
+    stateName: "Maine",
+    stateNickname: "Pine Tree State",
+    stateAbbreviation: "ME",
+    cities: {
+      "portland": {
+        cityName: "Portland",
+        nicknames: ["Forest City"],
+        landmarks: ["Old Port"],
+        specialTerms: ["Coastal"]
       },
-      "san-francisco": {
-        averageCost: "$45,000",
-        popularMonths: ["June", "September", "October"],
-        popularVenues: ["Wineries", "Historic Buildings", "Bay View Venues"],
-        averageGuestCount: 125
+      "bangor": {
+        cityName: "Bangor",
+        nicknames: ["Queen City"],
+        landmarks: ["Paul Bunyan"],
+        specialTerms: ["Northern"]
       },
-      "san-diego": {
-        averageCost: "$36,000",
-        popularMonths: ["April", "May", "October"],
-        popularVenues: ["Beaches", "Resorts", "Gardens"],
-        averageGuestCount: 130
+      "bar-harbor": {
+        cityName: "Bar Harbor",
+        nicknames: ["Gateway to Acadia"],
+        landmarks: ["Acadia"],
+        specialTerms: ["Coastal"]
       }
-    },
-    "new-york": {
-      "new-york-city": {
-        averageCost: "$55,000",
-        popularMonths: ["June", "September", "October"],
-        popularVenues: ["Rooftops", "Lofts", "Luxury Hotels"],
-        averageGuestCount: 130
+    }
+  },
+  "maryland": {
+    stateName: "Maryland",
+    stateNickname: "Old Line State",
+    stateAbbreviation: "MD",
+    cities: {
+      "baltimore": {
+        cityName: "Baltimore",
+        nicknames: ["Charm City"],
+        landmarks: ["Inner Harbor"],
+        specialTerms: ["Harbor"]
       },
-      "buffalo": {
-        averageCost: "$32,000",
-        popularMonths: ["June", "August", "September"],
-        popularVenues: ["Historic Mansions", "Waterfront", "Gardens"],
-        averageGuestCount: 125
+      "annapolis": {
+        cityName: "Annapolis",
+        nicknames: ["Sailing Capital"],
+        landmarks: ["Naval Academy"],
+        specialTerms: ["Capital"]
       },
-      "rochester": {
-        averageCost: "$30,000",
-        popularMonths: ["June", "July", "September"],
-        popularVenues: ["Museums", "Wineries", "Historic Buildings"],
-        averageGuestCount: 120
+      "frederick": {
+        cityName: "Frederick",
+        nicknames: ["Clustered Spires"],
+        landmarks: ["Carroll Creek"],
+        specialTerms: ["Historic"]
       }
-    },
-    "texas": {
-      "austin": {
-        averageCost: "$31,000",
-        popularMonths: ["April", "May", "October"],
-        popularVenues: ["Hill Country Venues", "Downtown Lofts", "Lakeside Estates"],
-        averageGuestCount: 140
+    }
+  },
+  "massachusetts": {
+    stateName: "Massachusetts",
+    stateNickname: "Bay State",
+    stateAbbreviation: "MA",
+    cities: {
+      "boston": {
+        cityName: "Boston",
+        nicknames: ["Beantown"],
+        landmarks: ["Fenway"],
+        specialTerms: ["Historic"]
       },
-      "dallas": {
-        averageCost: "$33,000",
-        popularMonths: ["April", "May", "October"],
-        popularVenues: ["Luxury Hotels", "Country Clubs", "Historic Venues"],
-        averageGuestCount: 150
+      "cambridge": {
+        cityName: "Cambridge",
+        nicknames: ["The People's Republic"],
+        landmarks: ["Harvard"],
+        specialTerms: ["Academic"]
       },
-      "houston": {
-        averageCost: "$35,000",
-        popularMonths: ["March", "April", "October"],
-        popularVenues: ["Downtown Hotels", "Country Clubs", "Gardens"],
-        averageGuestCount: 155
+      "cape-cod": {
+        cityName: "Cape Cod",
+        nicknames: ["The Cape"],
+        landmarks: ["Provincetown"],
+        specialTerms: ["Coastal"]
       }
-    },
-    "florida": {
-      "miami": {
-        averageCost: "$38,000",
-        popularMonths: ["November", "February", "March"],
-        popularVenues: ["Beachfront Resorts", "Luxury Hotels", "Waterfront Estates"],
-        averageGuestCount: 125
+    }
+  },
+  "michigan": {
+    stateName: "Michigan",
+    stateNickname: "Great Lakes State",
+    stateAbbreviation: "MI",
+    cities: {
+      "detroit": {
+        cityName: "Detroit",
+        nicknames: ["Motor City"],
+        landmarks: ["Renaissance Center"],
+        specialTerms: ["Motor"]
       },
-      "orlando": {
-        averageCost: "$33,000",
-        popularMonths: ["October", "November", "April"],
-        popularVenues: ["Theme Parks", "Resorts", "Gardens"],
-        averageGuestCount: 130
+      "grand-rapids": {
+        cityName: "Grand Rapids",
+        nicknames: ["Furniture City"],
+        landmarks: ["Frederik Meijer Gardens"],
+        specialTerms: ["River"]
       },
-      "tampa": {
-        averageCost: "$30,000",
-        popularMonths: ["October", "November", "April"],
-        popularVenues: ["Waterfront Venues", "Historic Buildings", "Gardens"],
-        averageGuestCount: 120
+      "ann-arbor": {
+        cityName: "Ann Arbor",
+        nicknames: ["A²"],
+        landmarks: ["Michigan Stadium"],
+        specialTerms: ["University"]
       }
-    },
-    "illinois": {
-      "chicago": {
-        averageCost: "$37,000",
-        popularMonths: ["June", "August", "September"],
-        popularVenues: ["Downtown Hotels", "Historic Buildings", "Waterfront Venues"],
-        averageGuestCount: 145
+    }
+  },
+  "minnesota": {
+    stateName: "Minnesota",
+    stateNickname: "North Star State",
+    stateAbbreviation: "MN",
+    cities: {
+      "minneapolis": {
+        cityName: "Minneapolis",
+        nicknames: ["City of Lakes"],
+        landmarks: ["Stone Arch Bridge"],
+        specialTerms: ["Lakes"]
+      },
+      "saint-paul": {
+        cityName: "Saint Paul",
+        nicknames: ["Capital City"],
+        landmarks: ["Cathedral"],
+        specialTerms: ["Capital"]
+      },
+      "duluth": {
+        cityName: "Duluth",
+        nicknames: ["Zenith City"],
+        landmarks: ["Aerial Lift Bridge"],
+        specialTerms: ["Lake"]
+      }
+    }
+  },
+  "mississippi": {
+    stateName: "Mississippi",
+    stateNickname: "Magnolia State",
+    stateAbbreviation: "MS",
+    cities: {
+      "jackson": {
+        cityName: "Jackson",
+        nicknames: ["Crossroads of the South"],
+        landmarks: ["Capitol"],
+        specialTerms: ["Capital"]
+      },
+      "biloxi": {
+        cityName: "Biloxi",
+        nicknames: ["Playground of the South"],
+        landmarks: ["Lighthouse"],
+        specialTerms: ["Gulf"]
+      },
+      "hattiesburg": {
+        cityName: "Hattiesburg",
+        nicknames: ["Hub City"],
+        landmarks: ["Southern Miss"],
+        specialTerms: ["Southern"]
+      }
+    }
+  },
+  "missouri": {
+    stateName: "Missouri",
+    stateNickname: "Show Me State",
+    stateAbbreviation: "MO",
+    cities: {
+      "kansas-city": {
+        cityName: "Kansas City",
+        nicknames: ["KC"],
+        landmarks: ["Country Club Plaza"],
+        specialTerms: ["BBQ"]
+      },
+      "saint-louis": {
+        cityName: "Saint Louis",
+        nicknames: ["Gateway City"],
+        landmarks: ["Gateway Arch"],
+        specialTerms: ["Arch"]
       },
       "springfield": {
-        averageCost: "$25,000",
-        popularMonths: ["May", "June", "September"],
-        popularVenues: ["Historic Sites", "Gardens", "Ballrooms"],
-        averageGuestCount: 130
-      },
-      "naperville": {
-        averageCost: "$28,000",
-        popularMonths: ["June", "August", "September"],
-        popularVenues: ["Riverwalk", "Country Clubs", "Historic Buildings"],
-        averageGuestCount: 135
+        cityName: "Springfield",
+        nicknames: ["Queen City of the Ozarks"],
+        landmarks: ["Bass Pro"],
+        specialTerms: ["Ozark"]
       }
     }
-  };
-  
-  // Return city-specific stats if available
-  if (stateSlug && citySlug && cityStats[stateSlug]?.[citySlug]) {
-    return cityStats[stateSlug][citySlug];
-  }
-  
-  // Return state-specific stats if available
-  if (stateSlug && stateStats[stateSlug]) {
-    return stateStats[stateSlug];
-  }
-  
-  // Return default stats
-  return defaultStats;
-}
+  },
+  "montana": {
+    stateName: "Montana",
+    stateNickname: "Treasure State",
+    stateAbbreviation: "MT",
+    cities: {
+      "billings": {
+        cityName: "Billings",
+        nicknames: ["Magic City"],
+        landmarks: ["Rimrocks"],
+        specialTerms: ["Mountain"]
+      },
+      "missoula": {
+        cityName: "Missoula",
+        nicknames: ["Garden City"],
+        landmarks: ["University of Montana"],
+        specialTerms: ["Mountain"]
+      },
+      "bozeman": {
+        cityName: "Bozeman",
+        nicknames: ["BZN"],
+        landmarks: ["Montana State"],
+        specialTerms: ["Mountain"]
+      }
+    }
+  },
+  "nebraska": {
+    stateName: "Nebraska",
+    stateNickname: "Cornhusker State",
+    stateAbbreviation: "NE",
+    cities: {
+      "omaha": {
+        cityName: "Omaha",
+        nicknames: ["Gateway to the West"],
+        landmarks: ["Old Market"],
+        specialTerms: ["River"]
+      },
+      "lincoln": {
+        cityName: "Lincoln",
+        nicknames: ["Star City"],
+        landmarks: ["Capitol"],
+        specialTerms: ["Capital"]
+      },
+      "grand-island": {
+        cityName: "Grand Island",
+        nicknames: ["GI"],
+        landmarks: ["Stuhr Museum"],
+        specialTerms: ["Prairie"]
+      }
+    }
+  },
+  "nevada": {
+    stateName: "Nevada",
+    stateNickname: "Silver State",
+    stateAbbreviation: "NV",
+    cities: {
+      "las-vegas": {
+        cityName: "Las Vegas",
+        nicknames: ["Sin City"],
+        landmarks: ["Strip"],
+        specialTerms: ["Casino"]
+      },
+      "reno": {
+        cityName: "Reno",
+        nicknames: ["Biggest Little City"],
+        landmarks: ["Truckee River"],
+        specialTerms: ["Sierra"]
+      },
+      "henderson": {
+        cityName: "Henderson",
+        nicknames: ["Hendo"],
+        landmarks: ["Lake Las Vegas"],
+        specialTerms: ["Desert"]
+      }
+    }
+  },
+  "new-hampshire": {
+    stateName: "New Hampshire",
+    stateNickname: "Granite State",
+    stateAbbreviation: "NH",
+    cities: {
+      "manchester": {
+        cityName: "Manchester",
+        nicknames: ["Queen City"],
+        landmarks: ["Millyard"],
+        specialTerms: ["Historic"]
+      },
+      "concord": {
+        cityName: "Concord",
+        nicknames: ["Capital City"],
+        landmarks: ["Capitol"],
+        specialTerms: ["Capital"]
+      },
+      "portsmouth": {
+        cityName: "Portsmouth",
+        nicknames: ["Port City"],
+        landmarks: ["Strawbery Banke"],
+        specialTerms: ["Coastal"]
+      }
+    }
+  },
+  "new-jersey": {
+    stateName: "New Jersey",
+    stateNickname: "Garden State",
+    stateAbbreviation: "NJ",
+    cities: {
+      "newark": {
+        cityName: "Newark",
+        nicknames: ["Brick City"],
+        landmarks: ["Prudential Center"],
+        specialTerms: ["Urban"]
+      },
+      "jersey-city": {
+        cityName: "Jersey City",
+        nicknames: ["JC"],
+        landmarks: ["Liberty State Park"],
+        specialTerms: ["Skyline"]
+      },
+      "atlantic-city": {
+        cityName: "Atlantic City",
+        nicknames: ["AC"],
+        landmarks: ["Boardwalk"],
+        specialTerms: ["Casino"]
+      }
+    }
+  },
+  "new-mexico": {
+    stateName: "New Mexico",
+    stateNickname: "Land of Enchantment",
+    stateAbbreviation: "NM",
+    cities: {
+      "albuquerque": {
+        cityName: "Albuquerque",
+        nicknames: ["ABQ"],
+        landmarks: ["Sandia Mountains"],
+        specialTerms: ["Desert"]
+      },
+      "santa-fe": {
+        cityName: "Santa Fe",
+        nicknames: ["The City Different"],
+        landmarks: ["Plaza"],
+        specialTerms: ["Adobe"]
+      },
+      "las-cruces": {
+        cityName: "Las Cruces",
+        nicknames: ["City of Crosses"],
+        landmarks: ["Organ Mountains"],
+        specialTerms: ["Desert"]
+      }
+    }
+  },
+  "new-york": {
+    stateName: "New York",
+    stateNickname: "Empire State",
+    stateAbbreviation: "NY",
+    cities: {
+      "new-york-city": {
+        cityName: "New York City",
+        nicknames: ["NYC"],
+        landmarks: ["Central Park"],
+        specialTerms: ["Metro"]
+      },
+      "buffalo": {
+        cityName: "Buffalo",
+        nicknames: ["Queen City"],
+        landmarks: ["Niagara Falls"],
+        specialTerms: ["Lakes"]
+      },
+      "rochester": {
+        cityName: "Rochester",
+        nicknames: ["Flower City"],
+        landmarks: ["High Falls"],
+        specialTerms: ["Lake"]
+      }
+    }
+  },
+  "north-carolina": {
+    stateName: "North Carolina",
+    stateNickname: "Tar Heel State",
+    stateAbbreviation: "NC",
+    cities: {
+      "charlotte": {
+        cityName: "Charlotte",
+        nicknames: ["Queen City"],
+        landmarks: ["Uptown"],
+        specialTerms: ["Banking"]
+      },
+      "raleigh": {
+        cityName: "Raleigh",
+        nicknames: ["City of Oaks"],
+        landmarks: ["Capitol"],
+        specialTerms: ["Capital"]
+      },
+      "asheville": {
+        cityName: "Asheville",
+        nicknames: ["Land of the Sky"],
+        landmarks: ["Biltmore"],
+        specialTerms: ["Mountain"]
+      }
+    }
+  },
+  "north-dakota": {
+    stateName: "North Dakota",
+    stateNickname: "Peace Garden State",
+    stateAbbreviation: "ND",
+    cities: {
+      "fargo": {
+        cityName: "Fargo",
+        nicknames: ["Gateway to the West"],
+        landmarks: ["Red River"],
+        specialTerms: ["Prairie"]
+      },
+      "bismarck": {
+        cityName: "Bismarck",
+        nicknames: ["Capital City"],
+        landmarks: ["Capitol"],
+        specialTerms: ["Capital"]
+      },
+      "grand-forks": {
+        cityName: "Grand Forks",
+        nicknames: ["The Grand Cities"],
+        landmarks: ["University of North Dakota"],
+        specialTerms: ["Northern"]
+      }
+    }
+  },
+  "ohio": {
+    stateName: "Ohio",
+    stateNickname: "Buckeye State",
+    stateAbbreviation: "OH",
+    cities: {
+      "columbus": {
+        cityName: "Columbus",
+        nicknames: ["Arch City"],
+        landmarks: ["Ohio State"],
+        specialTerms: ["Buckeye"]
+      },
+      "cleveland": {
+        cityName: "Cleveland",
+        nicknames: ["Forest City"],
+        landmarks: ["Rock Hall"],
+        specialTerms: ["Rock"]
+      },
+      "cincinnati": {
+        cityName: "Cincinnati",
+        nicknames: ["Queen City"],
+        landmarks: ["Fountain Square"],
+        specialTerms: ["River"]
+      }
+    }
+  },
+  "oklahoma": {
+    stateName: "Oklahoma",
+    stateNickname: "Sooner State",
+    stateAbbreviation: "OK",
+    cities: {
+      "oklahoma-city": {
+        cityName: "Oklahoma City",
+        nicknames: ["OKC"],
+        landmarks: ["Bricktown"],
+        specialTerms: ["Sooner"]
+      },
+      "tulsa": {
+        cityName: "Tulsa",
+        nicknames: ["Oil Capital"],
+        landmarks: ["Gathering Place"],
+        specialTerms: ["Oil"]
+      },
+      "norman": {
+        cityName: "Norman",
+        nicknames: ["City of Festivals"],
+        landmarks: ["University of Oklahoma"],
+        specialTerms: ["Sooner"]
+      }
+    }
+  },
+  "oregon": {
+    stateName: "Oregon",
+    stateNickname: "Beaver State",
+    stateAbbreviation: "OR",
+    cities: {
+      "portland": {
+        cityName: "Portland",
+        nicknames: ["PDX"],
+        landmarks: ["Powell's"],
+        specialTerms: ["Rose"]
+      },
+      "eugene": {
+        cityName: "Eugene",
+        nicknames: ["Emerald City"],
+        landmarks: ["University of Oregon"],
+        specialTerms: ["Green"]
+      },
+      "bend": {
+        cityName: "Bend",
+        nicknames: ["Outdoor Playground"],
+        landmarks: ["Deschutes River"],
+        specialTerms: ["Mountain"]
+      }
+    }
+  },
+  "pennsylvania": {
+    stateName: "Pennsylvania",
+    stateNickname: "Keystone State",
+    stateAbbreviation: "PA",
+    cities: {
+      "philadelphia": {
+        cityName: "Philadelphia",
+        nicknames: ["Philly"],
+        landmarks: ["Liberty Bell"],
+        specialTerms: ["Liberty"]
+      },
+      "pittsburgh": {
+        cityName: "Pittsburgh",
+        nicknames: ["Steel City"],
+        landmarks: ["Three Rivers"],
+        specialTerms: ["Steel"]
+      },
+      "harrisburg": {
+        cityName: "Harrisburg",
+        nicknames: ["Capital City"],
+        landmarks: ["Capitol"],
+        specialTerms: ["Capital"]
+      }
+    }
+  },
+  "rhode-island": {
+    stateName: "Rhode Island",
+    stateNickname: "Ocean State",
+    stateAbbreviation: "RI",
+    cities: {
+      "providence": {
+        cityName: "Providence",
+        nicknames: ["Creative Capital"],
+        landmarks: ["WaterFire"],
+        specialTerms: ["Creative"]
+      },
+      "newport": {
+        cityName: "Newport",
+        nicknames: ["City by the Sea"],
+        landmarks: ["Cliff Walk"],
+        specialTerms: ["Coastal"]
+      },
+      "warwick": {
+        cityName: "Warwick",
+        nicknames: ["The Crossroads"],
+        landmarks: ["Oakland Beach"],
+        specialTerms: ["Bay"]
+      }
+    }
+  },
+  "south-carolina": {
+    stateName: "South Carolina",
+    stateNickname: "Palmetto State",
+    stateAbbreviation: "SC",
+    cities: {
+      "charleston": {
+        cityName: "Charleston",
+        nicknames: ["Holy City"],
+        landmarks: ["Historic District"],
+        specialTerms: ["Historic"]
+      },
+      "columbia": {
+        cityName: "Columbia",
+        nicknames: ["Soda City"],
+        landmarks: ["Capitol"],
+        specialTerms: ["Capital"]
+      },
+      "greenville": {
+        cityName: "Greenville",
+        nicknames: ["G-Vegas"],
+        landmarks: ["Falls Park"],
+        specialTerms: ["Falls"]
+      }
+    }
+  },
+  "south-dakota": {
+    stateName: "South Dakota",
+    stateNickname: "Mount Rushmore State",
+    stateAbbreviation: "SD",
+    cities: {
+      "sioux-falls": {
+        cityName: "Sioux Falls",
+        nicknames: ["

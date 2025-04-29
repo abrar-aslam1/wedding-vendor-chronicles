@@ -3,7 +3,9 @@ import { Button } from "@/components/ui/button";
 import { TimelineWizard } from "@/components/portal/timeline/TimelineWizard";
 import { TimelineEventType } from "@/types/timeline";
 import { format, parseISO } from "date-fns";
-import { Calendar, Download, Printer, Share2, ArrowLeft } from "lucide-react";
+import { Calendar, Download, Printer, Share2, ArrowLeft, FileText } from "lucide-react";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Link, useParams } from "react-router-dom";
@@ -19,6 +21,7 @@ const FreeTimelineGenerator = () => {
   
   const [generatedEvents, setGeneratedEvents] = useState<Partial<TimelineEventType>[]>([]);
   const [showResults, setShowResults] = useState(false);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const { toast } = useToast();
   const isMobile = useIsMobile();
   
@@ -84,6 +87,92 @@ const FreeTimelineGenerator = () => {
     document.body.removeChild(link);
   };
 
+  const handleGeneratePDF = async () => {
+    if (generatedEvents.length === 0) {
+      toast({
+        title: "No events to export",
+        description: "Please generate a timeline first.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Show loading state
+    setIsGeneratingPDF(true);
+    
+    try {
+      // Get the timeline content element
+      const element = document.getElementById('timeline-content');
+      if (!element) {
+        throw new Error("Timeline content not found");
+      }
+      
+      // Capture the timeline content as an image
+      const canvas = await html2canvas(element, {
+        scale: 2, // Higher quality
+        useCORS: true,
+        logging: false,
+        backgroundColor: "#ffffff"
+      });
+      
+      // Create PDF
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      
+      // Add title
+      pdf.setFontSize(20);
+      pdf.setTextColor(33, 33, 33);
+      pdf.text('Your Wedding Timeline', pdf.internal.pageSize.getWidth() / 2, 20, { align: 'center' });
+      
+      // Add subtitle with location if available
+      if (stateSlug) {
+        const locationText = citySlug 
+          ? `${citySlug.replace(/-/g, ' ')}, ${stateSlug.replace(/-/g, ' ')}` 
+          : stateSlug.replace(/-/g, ' ');
+        
+        pdf.setFontSize(14);
+        pdf.setTextColor(100, 100, 100);
+        pdf.text(locationText, pdf.internal.pageSize.getWidth() / 2, 28, { align: 'center' });
+      }
+      
+      // Add timeline content
+      const imgData = canvas.toDataURL('image/png');
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth() - 20; // Margins
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      
+      pdf.addImage(imgData, 'PNG', 10, 35, pdfWidth, pdfHeight);
+      
+      // Add footer with branding
+      pdf.setFontSize(10);
+      pdf.setTextColor(100, 100, 100);
+      const footerText = "Created with FindMyWeddingVendor.com";
+      pdf.text(
+        footerText, 
+        pdf.internal.pageSize.getWidth() / 2, 
+        pdf.internal.pageSize.getHeight() - 10, 
+        { align: 'center' }
+      );
+      
+      // Save the PDF
+      pdf.save('Wedding-Timeline.pdf');
+      
+      // Show success message
+      toast({
+        title: "PDF Generated",
+        description: "Your wedding timeline PDF has been created successfully.",
+      });
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      toast({
+        title: "Error",
+        description: "Failed to generate PDF. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsGeneratingPDF(false);
+    }
+  };
+
   // Group events by month for display
   const eventsByMonth: Record<string, Partial<TimelineEventType>[]> = {};
   
@@ -135,11 +224,21 @@ const FreeTimelineGenerator = () => {
             <Download className="h-4 w-4" />
             Download CSV
           </Button>
+          
+          <Button 
+            variant="outline" 
+            onClick={handleGeneratePDF}
+            className="flex items-center gap-2"
+            disabled={isGeneratingPDF}
+          >
+            <FileText className="h-4 w-4" />
+            {isGeneratingPDF ? "Generating PDF..." : "Export PDF"}
+          </Button>
         </div>
       </div>
       
       <div className="bg-white rounded-lg shadow-md p-6">
-        <div className="print:text-black">
+        <div id="timeline-content" className="print:text-black">
           <h2 className="text-2xl font-bold text-center mb-6 print:text-black">Wedding Planning Timeline</h2>
           
           {generatedEvents.length === 0 ? (
