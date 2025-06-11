@@ -835,6 +835,12 @@ const locationData: { [key: string]: LocationData } = {
         landmarks: ["Capitol"],
         specialTerms: ["Capital"]
       },
+      "durham": {
+        cityName: "Durham",
+        nicknames: ["Bull City", "City of Medicine"],
+        landmarks: ["Duke University", "Research Triangle Park"],
+        specialTerms: ["Research", "Triangle", "Academic"]
+      },
       "asheville": {
         cityName: "Asheville",
         nicknames: ["Land of the Sky"],
@@ -1025,4 +1031,255 @@ const locationData: { [key: string]: LocationData } = {
     cities: {
       "sioux-falls": {
         cityName: "Sioux Falls",
-        nicknames: ["
+        nicknames: ["Falls City"],
+        landmarks: ["Falls Park"],
+        specialTerms: ["Falls"]
+      },
+      "rapid-city": {
+        cityName: "Rapid City",
+        nicknames: ["Gateway to the Black Hills"],
+        landmarks: ["Mount Rushmore"],
+        specialTerms: ["Black Hills"]
+      },
+      "aberdeen": {
+        cityName: "Aberdeen",
+        nicknames: ["Hub City"],
+        landmarks: ["Dacotah Prairie Museum"],
+        specialTerms: ["Prairie"]
+      }
+    }
+  },
+  "tennessee": {
+    stateName: "Tennessee",
+    stateNickname: "Volunteer State",
+    stateAbbreviation: "TN",
+    cities: {
+      "nashville": {
+        cityName: "Nashville",
+        nicknames: ["Music City"],
+        landmarks: ["Grand Ole Opry"],
+        specialTerms: ["Country"]
+      },
+      "memphis": {
+        cityName: "Memphis",
+        nicknames: ["Bluff City"],
+        landmarks: ["Graceland"],
+        specialTerms: ["Blues"]
+      },
+      "knoxville": {
+        cityName: "Knoxville",
+        nicknames: ["Marble City"],
+        landmarks: ["University of Tennessee"],
+        specialTerms: ["Volunteer"]
+      }
+    }
+  },
+  "texas": {
+    stateName: "Texas",
+    stateNickname: "Lone Star State",
+    stateAbbreviation: "TX",
+    cities: {
+      "dallas": {
+        cityName: "Dallas",
+        nicknames: ["Big D"],
+        landmarks: ["Reunion Tower"],
+        specialTerms: ["Cowboy"]
+      },
+      "houston": {
+        cityName: "Houston",
+        nicknames: ["Space City"],
+        landmarks: ["NASA"],
+        specialTerms: ["Space"]
+      },
+      "austin": {
+        cityName: "Austin",
+        nicknames: ["Live Music Capital"],
+        landmarks: ["State Capitol"],
+        specialTerms: ["Music"]
+      },
+      "san-antonio": {
+        cityName: "San Antonio",
+        nicknames: ["Alamo City"],
+        landmarks: ["River Walk"],
+        specialTerms: ["Alamo"]
+      }
+    }
+  },
+  "utah": {
+    stateName: "Utah",
+    stateNickname: "Beehive State",
+    stateAbbreviation: "UT",
+    cities: {
+      "salt-lake-city": {
+        cityName: "Salt Lake City",
+        nicknames: ["SLC"],
+        landmarks: ["Temple Square"],
+        specialTerms: ["Mountain"]
+      },
+      "provo": {
+        cityName: "Provo",
+        nicknames: ["Garden City"],
+        landmarks: ["BYU"],
+        specialTerms: ["University"]
+      },
+      "ogden": {
+        cityName: "Ogden",
+        nicknames: ["Junction City"],
+        landmarks: ["Historic 25th Street"],
+        specialTerms: ["Historic"]
+      }
+    }
+  },
+  "vermont": {
+    stateName: "Vermont",
+    stateNickname: "Green Mountain State",
+    stateAbbreviation: "VT",
+    cities: {
+      "burlington": {
+        cityName: "Burlington",
+        nicknames: ["Queen City"],
+        landmarks: ["Lake Champlain"],
+        specialTerms: ["Lake"]
+      },
+      "montpelier": {
+        cityName: "Montpelier",
+        nicknames: ["Capital City"],
+        landmarks: ["State House"],
+        specialTerms: ["Capital"]
+      },
+      "rutland": {
+        cityName: "Rutland",
+        nicknames: ["Marble City"],
+        landmarks: ["Paramount Theatre"],
+        specialTerms: ["Marble"]
+      }
+    }
+  },
+  "virginia": {
+    stateName: "Virginia",
+    stateNickname: "Old Dominion",
+    stateAbbreviation: "VA",
+    cities: {
+      "richmond": {
+        cityName: "Richmond",
+        nicknames: ["River City"],
+        landmarks: ["Capitol Square"],
+        specialTerms: ["Historic"]
+      },
+      "virginia-beach": {
+        cityName: "Virginia Beach",
+        nicknames: ["VB"],
+        landmarks: ["Boardwalk"],
+        specialTerms: ["Beach"]
+      },
+      "norfolk": {
+        cityName: "Norfolk",
+        nicknames: ["Mermaid City"],
+        landmarks: ["Norfolk Botanical Garden"],
+        specialTerms: ["Naval"]
+      }
+    }
+  },
+  "washington": {
+    stateName: "Washington",
+    stateNickname: "Evergreen State",
+    stateAbbreviation: "WA",
+    cities: {
+      "seattle": {
+        cityName: "Seattle",
+        nicknames: ["Emerald City"],
+        landmarks: ["Space Needle"],
+        specialTerms: ["Coffee"]
+      },
+      "spokane": {
+        cityName: "Spokane",
+        nicknames: ["Lilac City"],
+        landmarks: ["Riverfront Park"],
+        specialTerms: ["River"]
+      },
+      "tacoma": {
+        cityName: "Tacoma",
+        nicknames: ["City of Destiny"],
+        landmarks: ["Mount Rainier"],
+        specialTerms: ["Mountain"]
+      }
+    }
+  },
+  "west-virginia": {
+    stateName: "West Virginia",
+    stateNickname: "Mountain State",
+    stateAbbreviation: "WV",
+    cities: {
+      "charleston": {
+        cityName: "Charleston",
+        nicknames: ["Capital City"],
+        landmarks: ["State Capitol"],
+        specialTerms: ["Mountain"]
+      },
+      "huntington": {
+        cityName: "Huntington",
+        nicknames: ["Jewel City"],
+        landmarks: ["Marshall University"],
+        specialTerms: ["River"]
+      },
+      "morgantown": {
+        cityName: "Morgantown",
+        nicknames: ["Star City"],
+        landmarks: ["WVU"],
+        specialTerms: ["University"]
+      }
+    }
+  },
+  "wisconsin": {
+    stateName: "Wisconsin",
+    stateNickname: "Badger State",
+    stateAbbreviation: "WI",
+    cities: {
+      "milwaukee": {
+        cityName: "Milwaukee",
+        nicknames: ["Brew City"],
+        landmarks: ["Harley Davidson Museum"],
+        specialTerms: ["Beer"]
+      },
+      "madison": {
+        cityName: "Madison",
+        nicknames: ["Mad City"],
+        landmarks: ["State Capitol"],
+        specialTerms: ["University"]
+      },
+      "green-bay": {
+        cityName: "Green Bay",
+        nicknames: ["Titletown"],
+        landmarks: ["Lambeau Field"],
+        specialTerms: ["Packers"]
+      }
+    }
+  },
+  "wyoming": {
+    stateName: "Wyoming",
+    stateNickname: "Equality State",
+    stateAbbreviation: "WY",
+    cities: {
+      "cheyenne": {
+        cityName: "Cheyenne",
+        nicknames: ["Magic City of the Plains"],
+        landmarks: ["Frontier Days"],
+        specialTerms: ["Frontier"]
+      },
+      "casper": {
+        cityName: "Casper",
+        nicknames: ["Oil City"],
+        landmarks: ["Casper Mountain"],
+        specialTerms: ["Mountain"]
+      },
+      "laramie": {
+        cityName: "Laramie",
+        nicknames: ["Gem City"],
+        landmarks: ["University of Wyoming"],
+        specialTerms: ["University"]
+      }
+    }
+  }
+};
+
+export default locationData;
