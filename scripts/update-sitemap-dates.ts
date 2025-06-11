@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import zlib from 'zlib';
 import { DOMParser, XMLSerializer } from 'xmldom';
 
 /**
@@ -64,7 +65,6 @@ function updateSitemapIndex() {
     // Also update the gzipped version if it exists
     const gzippedPath = `${SITEMAP_INDEX_PATH}.gz`;
     if (fs.existsSync(gzippedPath)) {
-      const zlib = require('zlib');
       const compressed = zlib.gzipSync(updatedContent);
       fs.writeFileSync(gzippedPath, compressed);
     }
@@ -128,7 +128,6 @@ function updateIndividualSitemaps() {
       // Also update the gzipped version
       const gzippedPath = `${filePath}.gz`;
       if (fs.existsSync(gzippedPath)) {
-        const zlib = require('zlib');
         const compressed = zlib.gzipSync(updatedContent);
         fs.writeFileSync(gzippedPath, compressed);
       }
