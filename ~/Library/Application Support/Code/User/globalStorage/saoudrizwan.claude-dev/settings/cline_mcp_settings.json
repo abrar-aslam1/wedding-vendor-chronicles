@@ -6,7 +6,7 @@
         "/Users/abraraslam/Documents/Cline/MCP/google-maps/node_modules/@modelcontextprotocol/server-google-maps/dist/index.js"
       ],
       "env": {
-        "GOOGLE_MAPS_API_KEY": "AIzaSyBi9MdYauVRUtAOkbfGT7aduUA5dGL8Cso"
+        "GOOGLE_MAPS_API_KEY": ""
       },
       "disabled": false,
       "autoApprove": []
