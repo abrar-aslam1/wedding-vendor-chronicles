@@ -10,6 +10,13 @@ interface DirectoryPageSchema {
   totalListings?: number;
   isHomePage?: boolean;
   subcategory?: string;
+  eventDate?: string;
+  eventLocation?: string;
+  isArticle?: boolean;
+  articleAuthor?: string;
+  publishedDate?: string;
+  modifiedDate?: string;
+  articleSection?: string;
 }
 
 export const SchemaMarkup: FC<DirectoryPageSchema> = ({
@@ -20,7 +27,14 @@ export const SchemaMarkup: FC<DirectoryPageSchema> = ({
   vendors = [],
   totalListings,
   isHomePage = false,
-  subcategory
+  subcategory,
+  eventDate,
+  eventLocation,
+  isArticle = false,
+  articleAuthor,
+  publishedDate,
+  modifiedDate,
+  articleSection
 }) => {
   // Organization schema for the website itself
   const websiteSchema = {
@@ -481,8 +495,98 @@ export const SchemaMarkup: FC<DirectoryPageSchema> = ({
     ];
   };
   
+  // Generate Event schema for wedding-related events
+  const generateEventSchema = () => {
+    if (!eventDate || !eventLocation) return null;
+    
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'Event',
+      name: `Wedding Planning Event${city ? ` in ${city}, ${state}` : ''}`,
+      description: `Wedding planning and vendor showcase event${category ? ` featuring ${category.toLowerCase()}` : ''}`,
+      startDate: eventDate,
+      location: {
+        '@type': 'Place',
+        name: eventLocation,
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: city || '',
+          addressRegion: state || '',
+          addressCountry: 'US'
+        }
+      },
+      organizer: {
+        '@type': 'Organization',
+        name: 'Find My Wedding Vendor',
+        url: window.location.origin
+      },
+      eventStatus: 'https://schema.org/EventScheduled',
+      eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode'
+    };
+  };
+
+  // Generate Article schema for blog posts and guides
+  const generateArticleSchema = () => {
+    if (!isArticle) return null;
+    
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: document.title || 'Wedding Planning Guide',
+      description: document.querySelector('meta[name="description"]')?.getAttribute('content') || '',
+      author: {
+        '@type': 'Person',
+        name: articleAuthor || 'Find My Wedding Vendor Team'
+      },
+      publisher: {
+        '@type': 'Organization',
+        name: 'Find My Wedding Vendor',
+        logo: {
+          '@type': 'ImageObject',
+          url: `${window.location.origin}/Screenshot 2025-04-20 at 9.59.36 PM.png`
+        }
+      },
+      datePublished: publishedDate || new Date().toISOString(),
+      dateModified: modifiedDate || publishedDate || new Date().toISOString(),
+      mainEntityOfPage: {
+        '@type': 'WebPage',
+        '@id': window.location.href
+      },
+      articleSection: articleSection || 'Wedding Planning',
+      keywords: category ? `wedding planning, ${category.toLowerCase()}, wedding vendors` : 'wedding planning, wedding vendors'
+    };
+  };
+
+  // Generate Service schema for wedding services
+  const generateServiceSchema = () => {
+    if (!category) return null;
+    
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'Service',
+      name: `Wedding ${category} Services`,
+      description: `Professional ${category.toLowerCase()} services for weddings and special events`,
+      provider: {
+        '@type': 'Organization',
+        name: 'Find My Wedding Vendor'
+      },
+      areaServed: city && state ? {
+        '@type': 'Place',
+        name: `${city}, ${state}`
+      } : {
+        '@type': 'Country',
+        name: 'United States'
+      },
+      serviceType: `Wedding ${category}`,
+      category: 'Wedding Services'
+    };
+  };
+
   // Get location schema
   const locationSchema = generateLocationSchema();
+  const eventSchema = generateEventSchema();
+  const articleSchema = generateArticleSchema();
+  const serviceSchema = generateServiceSchema();
   
   // Add location-specific FAQs to the FAQ schema
   if (faqSchema && city && state) {
@@ -497,6 +601,9 @@ export const SchemaMarkup: FC<DirectoryPageSchema> = ({
     websiteStructuredData,
     directorySchema,
     ...(locationSchema ? [locationSchema] : []),
+    ...(eventSchema ? [eventSchema] : []),
+    ...(articleSchema ? [articleSchema] : []),
+    ...(serviceSchema ? [serviceSchema] : []),
     ...vendorSchemas,
     breadcrumbSchema,
     ...(faqSchema ? [faqSchema] : [])

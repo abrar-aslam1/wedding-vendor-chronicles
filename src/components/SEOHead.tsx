@@ -9,6 +9,14 @@ interface SEOHeadProps {
   subcategory?: string;
   imageUrl?: string;
   canonicalUrl?: string;
+  customTitle?: string;
+  customDescription?: string;
+  customKeywords?: string;
+  noIndex?: boolean;
+  publishedTime?: string;
+  modifiedTime?: string;
+  articleAuthor?: string;
+  articleSection?: string;
 }
 
 export const SEOHead: React.FC<SEOHeadProps> = ({
@@ -19,7 +27,15 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
   totalVendors,
   subcategory,
   imageUrl,
-  canonicalUrl
+  canonicalUrl,
+  customTitle,
+  customDescription,
+  customKeywords,
+  noIndex = false,
+  publishedTime,
+  modifiedTime,
+  articleAuthor,
+  articleSection
 }) => {
   useEffect(() => {
     const formatText = (text: string) => {
@@ -30,6 +46,16 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
     };
     
     const generateMetadata = () => {
+      // Use custom values if provided
+      if (customTitle && customDescription) {
+        return {
+          title: customTitle,
+          description: customDescription,
+          keywords: customKeywords || 'wedding vendors, wedding services, wedding planning',
+          type: articleSection ? 'article' : 'website'
+        };
+      }
+
       // Format category and subcategory if they exist
       const formattedCategory = category ? formatText(category) : '';
       const formattedSubcategory = subcategory ? formatText(subcategory) : '';
@@ -42,8 +68,8 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
       if (isHomePage) {
         return {
           title: 'Find My Wedding Vendor | Top Wedding Services Directory',
-          description: 'Discover and connect with the best wedding vendors in your area. Browse reviews, compare prices, and find the perfect match for your special day.',
-          keywords: 'wedding vendors, wedding services, wedding planning, wedding directory, find wedding vendors',
+          description: 'Discover and connect with the best wedding vendors in your area. Browse reviews, compare prices, and find photographers, venues, caterers, florists, and more for your perfect wedding day.',
+          keywords: 'wedding vendors, wedding services, wedding planning, wedding directory, wedding photographers, wedding venues, wedding caterers, wedding florists, find wedding vendors',
           type: 'website'
         };
       }
@@ -52,7 +78,7 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
         return {
           title: `${vendorCount} Best ${formattedSubcategory} ${formattedCategory} ${locationString} | Wedding Vendor Reviews`,
           description: `Compare the ${vendorCount} best ${formattedSubcategory.toLowerCase()} ${formattedCategory.toLowerCase()} ${locationString}. Read verified reviews, see pricing, and find the perfect ${formattedSubcategory.toLowerCase()} ${formattedCategory.toLowerCase().slice(0, -1)} for your wedding day.`,
-          keywords: `${formattedSubcategory.toLowerCase()}, ${formattedCategory.toLowerCase()}, wedding ${formattedCategory.toLowerCase()}, ${city} ${formattedCategory.toLowerCase()}, ${state} wedding vendors, ${formattedSubcategory.toLowerCase()} ${formattedCategory.toLowerCase()}`,
+          keywords: `${formattedSubcategory.toLowerCase()}, ${formattedCategory.toLowerCase()}, wedding ${formattedCategory.toLowerCase()}, ${city} ${formattedCategory.toLowerCase()}, ${state} wedding vendors, ${formattedSubcategory.toLowerCase()} ${formattedCategory.toLowerCase()}, ${city} wedding planning`,
           type: 'business.business'
         };
       }
@@ -61,7 +87,7 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
         return {
           title: `${vendorCount} Best ${formattedCategory} ${locationString} | Wedding Vendor Reviews`,
           description: `Compare the ${vendorCount} best ${formattedCategory.toLowerCase()} ${locationString}. Read verified reviews, see pricing, and find the perfect ${formattedCategory.toLowerCase().slice(0, -1)} for your wedding day.`,
-          keywords: `${formattedCategory.toLowerCase()}, wedding ${formattedCategory.toLowerCase()}, ${city} ${formattedCategory.toLowerCase()}, ${state} wedding vendors`,
+          keywords: `${formattedCategory.toLowerCase()}, wedding ${formattedCategory.toLowerCase()}, ${city} ${formattedCategory.toLowerCase()}, ${state} wedding vendors, ${city} wedding planning, ${state} wedding services`,
           type: 'business.business'
         };
       }
@@ -70,7 +96,7 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
         return {
           title: `Find Top ${formattedCategory} Near You | Wedding Vendor Directory`,
           description: `Search and compare the best ${formattedCategory.toLowerCase()} for your wedding. Browse verified reviews, pricing information, and availability in your area.`,
-          keywords: `${formattedCategory.toLowerCase()}, wedding ${formattedCategory.toLowerCase()}, find ${formattedCategory.toLowerCase()}, top ${formattedCategory.toLowerCase()}`,
+          keywords: `${formattedCategory.toLowerCase()}, wedding ${formattedCategory.toLowerCase()}, find ${formattedCategory.toLowerCase()}, top ${formattedCategory.toLowerCase()}, wedding vendor directory`,
           type: 'website'
         };
       }
@@ -79,7 +105,7 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
       return {
         title: 'Find My Wedding Vendor | Wedding Planning Made Easy',
         description: 'Plan your perfect wedding with our comprehensive directory of wedding vendors. Compare services, read reviews, and make informed decisions for your special day.',
-        keywords: 'wedding planning, wedding vendors, wedding services, wedding directory',
+        keywords: 'wedding planning, wedding vendors, wedding services, wedding directory, wedding planning tools',
         type: 'website'
       };
     };
@@ -87,8 +113,8 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
     const metadata = generateMetadata();
     const siteUrl = window.location.origin;
     const currentUrl = canonicalUrl || window.location.href;
-    // Always use the specified image for social sharing
-    const pageImage = `${siteUrl}/Screenshot 2025-04-20 at 9.59.36 PM.png`;
+    // Use custom image if provided, otherwise use default
+    const pageImage = imageUrl || `${siteUrl}/Screenshot 2025-04-20 at 9.59.36 PM.png`;
     
     // Set basic meta tags
     document.title = metadata.title;
@@ -184,12 +210,35 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
       document.title = `${metadata.title} | ${city}, ${state}`;
     }
     
+    // Add article-specific meta tags if this is an article
+    if (articleSection || publishedTime || modifiedTime || articleAuthor) {
+      const articleTags = {
+        ...(publishedTime && { 'article:published_time': publishedTime }),
+        ...(modifiedTime && { 'article:modified_time': modifiedTime }),
+        ...(articleAuthor && { 'article:author': articleAuthor }),
+        ...(articleSection && { 'article:section': articleSection })
+      };
+      
+      Object.entries(articleTags).forEach(([property, content]) => {
+        let tag = document.querySelector(`meta[property="${property}"]`);
+        if (!tag) {
+          tag = document.createElement('meta');
+          tag.setAttribute('property', property);
+          document.head.appendChild(tag);
+        }
+        tag.setAttribute('content', content);
+      });
+    }
+    
     // Add additional meta tags for better indexing
     const additionalTags = {
-      'robots': 'index, follow',
+      'robots': noIndex ? 'noindex, nofollow' : 'index, follow',
       'revisit-after': '7 days',
-      'author': 'Find My Wedding Vendor',
-      'viewport': 'width=device-width, initial-scale=1.0'
+      'author': articleAuthor || 'Find My Wedding Vendor',
+      'viewport': 'width=device-width, initial-scale=1.0',
+      'language': 'en-US',
+      'distribution': 'global',
+      'rating': 'general'
     };
     
     Object.entries(additionalTags).forEach(([name, content]) => {
@@ -202,7 +251,7 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
       tag.setAttribute('content', content);
     });
     
-  }, [category, city, state, isHomePage, totalVendors, subcategory, imageUrl, canonicalUrl]);
+  }, [category, city, state, isHomePage, totalVendors, subcategory, imageUrl, canonicalUrl, customTitle, customDescription, customKeywords, noIndex, publishedTime, modifiedTime, articleAuthor, articleSection]);
 
   return null;
 };
