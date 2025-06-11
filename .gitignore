@@ -19,6 +19,13 @@ dist-ssr
 .env.test.local
 .env.production.local
 
+# MCP Settings (contains API keys)
+**/cline_mcp_settings.json
+**/globalStorage/saoudrizwan.claude-dev/settings/
+~/Library/Application Support/Code/User/globalStorage/saoudrizwan.claude-dev/settings/
+~/Documents/Cline/MCP/
+../../Documents/Cline/MCP/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
