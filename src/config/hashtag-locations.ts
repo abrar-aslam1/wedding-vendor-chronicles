@@ -1282,4 +1282,130 @@ const locationData: { [key: string]: LocationData } = {
   }
 };
 
+// Function to get location data for a given state and city
+export const getLocationData = (stateSlug?: string, citySlug?: string) => {
+  if (!stateSlug) {
+    return { state: null, city: null };
+  }
+
+  const state = locationData[stateSlug];
+  if (!state) {
+    return { state: null, city: null };
+  }
+
+  if (!citySlug) {
+    return { state, city: null };
+  }
+
+  const city = state.cities[citySlug];
+  return { state, city: city || null };
+};
+
+// Function to get wedding statistics for a location
+export const getLocationWeddingStats = (stateSlug: string, citySlug?: string) => {
+  // This is mock data - in a real application, this would come from a database
+  const baseStats = {
+    popularMonths: ["June", "September", "October"],
+    popularVenues: ["Gardens", "Historic Venues", "Hotels"],
+    averageGuestCount: 120,
+    averageCost: "$35,000"
+  };
+
+  // Customize stats based on location
+  const { state, city } = getLocationData(stateSlug, citySlug);
+  
+  if (city) {
+    // City-specific customizations
+    if (city.specialTerms?.includes("Beach")) {
+      baseStats.popularVenues = ["Beach Resorts", "Waterfront Venues", "Coastal Gardens"];
+      baseStats.popularMonths = ["May", "June", "September"];
+    } else if (city.specialTerms?.includes("Mountain")) {
+      baseStats.popularVenues = ["Mountain Lodges", "Ski Resorts", "Outdoor Venues"];
+      baseStats.popularMonths = ["July", "August", "September"];
+    } else if (city.specialTerms?.includes("Desert")) {
+      baseStats.popularVenues = ["Desert Resorts", "Golf Clubs", "Outdoor Venues"];
+      baseStats.popularMonths = ["March", "April", "November"];
+    }
+  }
+
+  return baseStats;
+};
+
+// Function to get all state slugs
+export const getAllStatesSlugs = (): string[] => {
+  return Object.keys(locationData);
+};
+
+// Function to get city slugs for a specific state
+export const getCitySlugsForState = (stateSlug: string): string[] => {
+  const state = locationData[stateSlug];
+  if (!state) {
+    return [];
+  }
+  return Object.keys(state.cities);
+};
+
+// Function to generate location-specific hashtags
+export const generateLocationHashtags = (
+  bride: string,
+  groom: string,
+  stateSlug?: string,
+  citySlug?: string
+): string[] => {
+  const hashtags: string[] = [];
+  const { state, city } = getLocationData(stateSlug, citySlug);
+  
+  // Basic name combinations
+  const brideClean = bride.replace(/\s+/g, '');
+  const groomClean = groom.replace(/\s+/g, '');
+  
+  // Base hashtags
+  hashtags.push(`#${brideClean}And${groomClean}`);
+  hashtags.push(`#${groomClean}And${brideClean}`);
+  hashtags.push(`#${brideClean}${groomClean}Wedding`);
+  hashtags.push(`#${brideClean}${groomClean}2025`);
+  
+  // Location-specific hashtags
+  if (state) {
+    hashtags.push(`#${brideClean}${groomClean}${state.stateAbbreviation}`);
+    hashtags.push(`#${state.stateName.replace(/\s+/g, '')}Wedding`);
+    
+    if (state.stateNickname) {
+      hashtags.push(`#${state.stateNickname.replace(/\s+/g, '')}Wedding`);
+    }
+  }
+  
+  if (city) {
+    hashtags.push(`#${brideClean}${groomClean}${city.cityName.replace(/\s+/g, '')}`);
+    hashtags.push(`#${city.cityName.replace(/\s+/g, '')}Wedding`);
+    
+    // Add nickname-based hashtags
+    if (city.nicknames && city.nicknames.length > 0) {
+      city.nicknames.forEach(nickname => {
+        hashtags.push(`#${nickname.replace(/\s+/g, '')}Wedding`);
+        hashtags.push(`#${brideClean}${groomClean}${nickname.replace(/\s+/g, '')}`);
+      });
+    }
+    
+    // Add landmark-based hashtags
+    if (city.landmarks && city.landmarks.length > 0) {
+      city.landmarks.forEach(landmark => {
+        hashtags.push(`#${landmark}Wedding`);
+        hashtags.push(`#${brideClean}${groomClean}At${landmark}`);
+      });
+    }
+    
+    // Add special term hashtags
+    if (city.specialTerms && city.specialTerms.length > 0) {
+      city.specialTerms.forEach(term => {
+        hashtags.push(`#${term}Wedding`);
+        hashtags.push(`#${brideClean}${groomClean}${term}`);
+      });
+    }
+  }
+  
+  // Remove duplicates and return
+  return [...new Set(hashtags)];
+};
+
 export default locationData;
