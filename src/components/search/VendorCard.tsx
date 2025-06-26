@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Heart } from "lucide-react";
+import { Heart, Instagram, Users, CheckCircle } from "lucide-react";
 import { SearchResult } from "@/types/search";
 import { VendorContactInfo } from "./VendorContactInfo";
 import { RatingDisplay } from "./RatingDisplay";
@@ -75,8 +75,16 @@ export const VendorCard = ({
     <div className="relative flex w-full flex-col rounded-xl bg-white shadow-md transition-all duration-300 hover:shadow-lg">
       {/* Image Section */}
       <div className="relative mx-4 -mt-6 h-48 overflow-hidden rounded-xl shadow-lg">
+        {/* Instagram Badge */}
+        {vendor.vendor_source === 'instagram' && (
+          <div className="absolute top-2 left-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-2 py-1 rounded-full text-xs font-medium shadow-md z-10 flex items-center gap-1">
+            <Instagram className="h-3 w-3" />
+            <span>Instagram</span>
+          </div>
+        )}
+        
         {subcategory && (
-          <div className="absolute top-2 right-2 bg-wedding-primary text-white px-3 py-1 rounded-full text-xs font-medium shadow-md z-10">
+          <div className={`absolute top-2 ${vendor.vendor_source === 'instagram' ? 'right-2' : 'right-2'} bg-wedding-primary text-white px-3 py-1 rounded-full text-xs font-medium shadow-md z-10`}>
             {getSubcategoryLabel(subcategory)}
           </div>
         )}
@@ -105,6 +113,30 @@ export const VendorCard = ({
           <RatingDisplay rating={vendor.rating} className="mb-2" />
         )}
 
+        {/* Instagram-specific info */}
+        {vendor.vendor_source === 'instagram' && (
+          <div className="flex items-center gap-3 mb-3">
+            {vendor.instagram_handle && (
+              <div className="flex items-center gap-1 text-sm text-gray-600">
+                <Instagram className="h-4 w-4" />
+                <span>@{vendor.instagram_handle}</span>
+              </div>
+            )}
+            {vendor.follower_count && (
+              <div className="flex items-center gap-1 text-sm text-gray-600">
+                <Users className="h-4 w-4" />
+                <span>{vendor.follower_count.toLocaleString()} followers</span>
+              </div>
+            )}
+            {vendor.is_verified && (
+              <div className="flex items-center gap-1 text-sm text-blue-600">
+                <CheckCircle className="h-4 w-4 fill-current" />
+                <span>Verified</span>
+              </div>
+            )}
+          </div>
+        )}
+
         <p className="text-sm text-gray-600 mb-4 line-clamp-2">
           {vendor.snippet || "No description available"}
         </p>
@@ -113,7 +145,7 @@ export const VendorCard = ({
           phone={vendor.phone}
           address={vendor.address}
           url={vendor.url}
-          instagram={vendor.instagram}
+          instagram={vendor.instagram_handle || vendor.instagram}
           facebook={vendor.facebook}
           twitter={vendor.twitter}
         />

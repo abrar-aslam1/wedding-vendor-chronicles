@@ -1,5 +1,6 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1';
 import { locationCodes } from "../_shared/locationCodes.ts";
 
 const corsHeaders = {
@@ -288,6 +289,92 @@ serve(async (req) => {
     }
 
     console.log(`Transformed ${searchResults.length} results`);
+    
+    // Add Instagram vendors if searching for photographers
+    let instagramResults = [];
+    if (keyword.toLowerCase().includes('photographer')) {
+      try {
+        // Initialize Supabase client
+        const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+        const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+        const supabase = createClient(supabaseUrl, supabaseServiceKey);
+        
+        console.log('Fetching Instagram vendors for photographers...');
+        
+        // Build query for Instagram vendors
+        let query = supabase
+          .from('instagram_vendors')
+          .select('*')
+          .eq('category', 'photographers');
+        
+        // Add location filtering if we have city/state
+        if (city && state) {
+          query = query.or(`city.ilike.%${city}%,state.ilike.%${state}%,location.ilike.%${city}%`);
+        }
+        
+        // Add subcategory filtering if provided
+        if (subcategory) {
+          query = query.or(`subcategory.ilike.%${subcategory}%,bio.ilike.%${subcategory}%`);
+        }
+        
+        const { data: instagramVendors, error } = await query.limit(20);
+        
+        if (error) {
+          console.error('Error fetching Instagram vendors:', error);
+        } else if (instagramVendors && instagramVendors.length > 0) {
+          console.log(`Found ${instagramVendors.length} Instagram vendors`);
+          
+          // Transform Instagram vendors to SearchResult format
+          instagramResults = instagramVendors.map(vendor => ({
+            title: vendor.business_name || vendor.instagram_handle,
+            description: vendor.bio || `Wedding photographer on Instagram with ${vendor.follower_count || 0} followers`,
+            rating: undefined, // Instagram vendors don't have Google ratings
+            phone: vendor.phone,
+            address: vendor.location || `${vendor.city}, ${vendor.state}`,
+            url: vendor.website_url,
+            place_id: `instagram_${vendor.id}`, // Unique identifier for Instagram vendors
+            main_image: vendor.profile_image_url,
+            images: vendor.profile_image_url ? [vendor.profile_image_url] : [],
+            snippet: vendor.bio,
+            latitude: undefined,
+            longitude: undefined,
+            business_hours: undefined,
+            price_range: '$$-$$$', // Default for wedding photographers
+            payment_methods: undefined,
+            service_area: [vendor.city, vendor.state].filter(Boolean),
+            categories: ['Wedding Photography'],
+            reviews: undefined,
+            year_established: undefined,
+            email: vendor.email,
+            city: vendor.city,
+            state: vendor.state,
+            postal_code: undefined,
+            // Instagram-specific fields
+            instagram_handle: vendor.instagram_handle,
+            follower_count: vendor.follower_count,
+            post_count: vendor.post_count,
+            is_verified: vendor.is_verified,
+            is_business_account: vendor.is_business_account,
+            bio: vendor.bio,
+            profile_image_url: vendor.profile_image_url,
+            vendor_source: 'instagram' as const
+          }));
+          
+          console.log(`Transformed ${instagramResults.length} Instagram vendors`);
+        }
+      } catch (error) {
+        console.error('Error processing Instagram vendors:', error);
+        // Continue without Instagram results if there's an error
+      }
+    }
+    
+    // Combine Google Maps results with Instagram results
+    // Put Instagram results first as they're more wedding-focused
+    const combinedResults = [...instagramResults, ...searchResults];
+    console.log(`Combined results: ${combinedResults.length} total (${instagramResults.length} Instagram + ${searchResults.length} Google Maps)`);
+    
+    // Use combined results for further processing
+    searchResults = combinedResults;
     
     // Enhanced filtering for subcategory if provided
     if (subcategory) {

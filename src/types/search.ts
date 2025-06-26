@@ -56,6 +56,15 @@ export interface SearchResult {
   state?: string;
   postal_code?: string;
   snippet?: string;
+  // Instagram vendor specific fields
+  instagram_handle?: string;
+  follower_count?: number;
+  post_count?: number;
+  is_verified?: boolean;
+  is_business_account?: boolean;
+  bio?: string;
+  profile_image_url?: string;
+  vendor_source?: 'google_maps' | 'instagram';
 }
 
 export interface DataForSEOResponse {
