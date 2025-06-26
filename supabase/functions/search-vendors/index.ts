@@ -312,10 +312,10 @@ serve(async (req) => {
           query = query.or(`city.ilike.%${city}%,state.ilike.%${state}%,location.ilike.%${city}%`);
         }
         
-        // Add subcategory filtering if provided
-        if (subcategory) {
-          query = query.or(`subcategory.ilike.%${subcategory}%,bio.ilike.%${subcategory}%`);
-        }
+        // For subcategory filtering, we'll be more inclusive with Instagram vendors
+        // since most have empty subcategory fields. We'll get all photographers
+        // and filter them in the scoring logic later.
+        // This ensures Instagram photographers always appear in results.
         
         const { data: instagramVendors, error } = await query.limit(20);
         
