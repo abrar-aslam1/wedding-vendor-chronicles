@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Heart, Instagram, Users, CheckCircle } from "lucide-react";
+import { Heart, Instagram, Users, CheckCircle, MapPin } from "lucide-react";
 import { SearchResult } from "@/types/search";
 import { VendorContactInfo } from "./VendorContactInfo";
 import { RatingDisplay } from "./RatingDisplay";
@@ -75,11 +75,16 @@ export const VendorCard = ({
     <div className="relative flex w-full flex-col rounded-xl bg-white shadow-md transition-all duration-300 hover:shadow-lg">
       {/* Image Section */}
       <div className="relative mx-4 -mt-6 h-48 overflow-hidden rounded-xl shadow-lg">
-        {/* Instagram Badge */}
-        {vendor.vendor_source === 'instagram' && (
+        {/* Source Badge */}
+        {vendor.vendor_source === 'instagram' ? (
           <div className="absolute top-2 left-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-2 py-1 rounded-full text-xs font-medium shadow-md z-10 flex items-center gap-1">
             <Instagram className="h-3 w-3" />
             <span>Instagram</span>
+          </div>
+        ) : (
+          <div className="absolute top-2 left-2 bg-gradient-to-r from-blue-500 to-green-500 text-white px-2 py-1 rounded-full text-xs font-medium shadow-md z-10 flex items-center gap-1">
+            <MapPin className="h-3 w-3" />
+            <span>Google</span>
           </div>
         )}
         
