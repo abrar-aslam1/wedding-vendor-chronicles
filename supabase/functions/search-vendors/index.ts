@@ -320,7 +320,9 @@ serve(async (req) => {
         
         if (!supabaseUrl || !supabaseKey) {
           console.error('Missing Supabase credentials for Instagram vendor query');
-          console.log('Available env vars:', Object.keys(Deno.env.toObject()));
+          console.log('SUPABASE_URL:', supabaseUrl ? 'SET' : 'NOT SET');
+          console.log('SUPABASE_SERVICE_ROLE_KEY:', supabaseKey ? 'SET' : 'NOT SET');
+          // Continue without Instagram results if credentials are missing
         } else {
           console.log('Supabase credentials found, proceeding with Instagram query...');
         }
