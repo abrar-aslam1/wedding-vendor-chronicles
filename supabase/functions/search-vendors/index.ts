@@ -290,9 +290,29 @@ serve(async (req) => {
 
     console.log(`Transformed ${searchResults.length} results`);
     
-    // Add Instagram vendors if searching for photographers
+    // Add Instagram vendors for all vendor categories
     let instagramResults = [];
-    if (keyword.toLowerCase().includes('photographer')) {
+    
+    // Map keyword to Instagram vendor category
+    const getInstagramCategory = (keyword: string) => {
+      const keywordLower = keyword.toLowerCase();
+      if (keywordLower.includes('photographer')) return 'photographers';
+      if (keywordLower.includes('wedding planner') || keywordLower.includes('planner')) return 'wedding-planners';
+      if (keywordLower.includes('videographer')) return 'videographers';
+      if (keywordLower.includes('florist')) return 'florists';
+      if (keywordLower.includes('caterer')) return 'caterers';
+      if (keywordLower.includes('venue')) return 'venues';
+      if (keywordLower.includes('dj') || keywordLower.includes('band')) return 'djs-and-bands';
+      if (keywordLower.includes('cake')) return 'cake-designers';
+      if (keywordLower.includes('bridal')) return 'bridal-shops';
+      if (keywordLower.includes('makeup')) return 'makeup-artists';
+      if (keywordLower.includes('hair')) return 'hair-stylists';
+      return null;
+    };
+    
+    const instagramCategory = getInstagramCategory(keyword);
+    
+    if (instagramCategory) {
       try {
         // Initialize Supabase client
         const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
@@ -307,23 +327,43 @@ serve(async (req) => {
         
         const supabase = createClient(supabaseUrl, supabaseKey);
         
-        console.log('Fetching Instagram vendors for photographers...');
+        console.log(`Fetching Instagram vendors for category: ${instagramCategory}...`);
         
         // Build query for Instagram vendors
         let query = supabase
           .from('instagram_vendors')
           .select('*')
-          .eq('category', 'photographers');
+          .eq('category', instagramCategory);
         
-        // Add location filtering if we have city/state
+        // Simplified location filtering - only use city and state columns since location column was removed
         if (city && state) {
-          query = query.or(`city.ilike.%${city}%,state.ilike.%${state}%,location.ilike.%${city}%`);
+          const stateAbbreviations: Record<string, string> = {
+            'Alabama': 'AL', 'Alaska': 'AK', 'Arizona': 'AZ', 'Arkansas': 'AR', 'California': 'CA',
+            'Colorado': 'CO', 'Connecticut': 'CT', 'Delaware': 'DE', 'Florida': 'FL', 'Georgia': 'GA',
+            'Hawaii': 'HI', 'Idaho': 'ID', 'Illinois': 'IL', 'Indiana': 'IN', 'Iowa': 'IA',
+            'Kansas': 'KS', 'Kentucky': 'KY', 'Louisiana': 'LA', 'Maine': 'ME', 'Maryland': 'MD',
+            'Massachusetts': 'MA', 'Michigan': 'MI', 'Minnesota': 'MN', 'Mississippi': 'MS', 'Missouri': 'MO',
+            'Montana': 'MT', 'Nebraska': 'NE', 'Nevada': 'NV', 'New Hampshire': 'NH', 'New Jersey': 'NJ',
+            'New Mexico': 'NM', 'New York': 'NY', 'North Carolina': 'NC', 'North Dakota': 'ND', 'Ohio': 'OH',
+            'Oklahoma': 'OK', 'Oregon': 'OR', 'Pennsylvania': 'PA', 'Rhode Island': 'RI', 'South Carolina': 'SC',
+            'South Dakota': 'SD', 'Tennessee': 'TN', 'Texas': 'TX', 'Utah': 'UT', 'Vermont': 'VT',
+            'Virginia': 'VA', 'Washington': 'WA', 'West Virginia': 'WV', 'Wisconsin': 'WI', 'Wyoming': 'WY'
+          };
+          
+          // Get both full state name and abbreviation
+          const stateAbbr = stateAbbreviations[state] || state;
+          const stateFullName = Object.keys(stateAbbreviations).find(key => stateAbbreviations[key] === state) || state;
+          
+          // Location matching using only city and state columns
+          const locationConditions = [
+            `city.ilike.%${city}%`,
+            `state.ilike.%${state}%`,
+            `state.ilike.%${stateAbbr}%`,
+            `state.ilike.%${stateFullName}%`
+          ];
+          
+          query = query.or(locationConditions.join(','));
         }
-        
-        // For subcategory filtering, we'll be more inclusive with Instagram vendors
-        // since most have empty subcategory fields. We'll get all photographers
-        // and filter them in the scoring logic later.
-        // This ensures Instagram photographers always appear in results.
         
         const { data: instagramVendors, error } = await query.limit(20);
         
@@ -333,40 +373,63 @@ serve(async (req) => {
           console.log(`Found ${instagramVendors.length} Instagram vendors`);
           
           // Transform Instagram vendors to SearchResult format
-          instagramResults = instagramVendors.map(vendor => ({
-            title: vendor.business_name || vendor.instagram_handle,
-            description: vendor.bio || `Wedding photographer on Instagram with ${vendor.follower_count || 0} followers`,
-            rating: undefined, // Instagram vendors don't have Google ratings
-            phone: vendor.phone,
-            address: vendor.location || `${vendor.city}, ${vendor.state}`,
-            url: vendor.website_url,
-            place_id: `instagram_${vendor.id}`, // Unique identifier for Instagram vendors
-            main_image: vendor.profile_image_url,
-            images: vendor.profile_image_url ? [vendor.profile_image_url] : [],
-            snippet: vendor.bio,
-            latitude: undefined,
-            longitude: undefined,
-            business_hours: undefined,
-            price_range: '$$-$$$', // Default for wedding photographers
-            payment_methods: undefined,
-            service_area: [vendor.city, vendor.state].filter(Boolean),
-            categories: ['Wedding Photography'],
-            reviews: undefined,
-            year_established: undefined,
-            email: vendor.email,
-            city: vendor.city,
-            state: vendor.state,
-            postal_code: undefined,
-            // Instagram-specific fields
-            instagram_handle: vendor.instagram_handle,
-            follower_count: vendor.follower_count,
-            post_count: vendor.post_count,
-            is_verified: vendor.is_verified,
-            is_business_account: vendor.is_business_account,
-            bio: vendor.bio,
-            profile_image_url: vendor.profile_image_url,
-            vendor_source: 'instagram' as const
-          }));
+          instagramResults = instagramVendors.map(vendor => {
+            // Get vendor type for description
+            const getVendorType = (category: string) => {
+              const categoryMap: Record<string, string> = {
+                'photographers': 'photographer',
+                'wedding-planners': 'wedding planner',
+                'videographers': 'videographer',
+                'florists': 'florist',
+                'caterers': 'caterer',
+                'venues': 'venue',
+                'djs-and-bands': 'entertainment provider',
+                'cake-designers': 'cake designer',
+                'bridal-shops': 'bridal shop',
+                'makeup-artists': 'makeup artist',
+                'hair-stylists': 'hair stylist'
+              };
+              return categoryMap[category] || 'wedding vendor';
+            };
+            
+            const vendorType = getVendorType(vendor.category);
+            const categoryDisplay = vendor.category.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+            
+            return {
+              title: vendor.business_name || vendor.instagram_handle,
+              description: vendor.bio || `Wedding ${vendorType} on Instagram with ${vendor.follower_count || 0} followers`,
+              rating: undefined, // Instagram vendors don't have Google ratings
+              phone: vendor.phone,
+              address: vendor.location || `${vendor.city}, ${vendor.state}`,
+              url: vendor.website_url,
+              place_id: `instagram_${vendor.id}`, // Unique identifier for Instagram vendors
+              main_image: vendor.profile_image_url,
+              images: vendor.profile_image_url ? [vendor.profile_image_url] : [],
+              snippet: vendor.bio,
+              latitude: undefined,
+              longitude: undefined,
+              business_hours: undefined,
+              price_range: '$$-$$$', // Default for wedding vendors
+              payment_methods: undefined,
+              service_area: [vendor.city, vendor.state].filter(Boolean),
+              categories: [categoryDisplay],
+              reviews: undefined,
+              year_established: undefined,
+              email: vendor.email,
+              city: vendor.city,
+              state: vendor.state,
+              postal_code: undefined,
+              // Instagram-specific fields
+              instagram_handle: vendor.instagram_handle,
+              follower_count: vendor.follower_count,
+              post_count: vendor.post_count,
+              is_verified: vendor.is_verified,
+              is_business_account: vendor.is_business_account,
+              bio: vendor.bio,
+              profile_image_url: vendor.profile_image_url,
+              vendor_source: 'instagram' as const
+            };
+          });
           
           console.log(`Transformed ${instagramResults.length} Instagram vendors`);
         }
