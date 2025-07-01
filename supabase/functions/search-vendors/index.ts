@@ -357,14 +357,16 @@ serve(async (req) => {
           const stateFullName = Object.keys(stateAbbreviations).find(key => stateAbbreviations[key] === state) || state;
           
           // Location matching using only city and state columns
-          const locationConditions = [
-            `city.ilike.%${city}%`,
+          // Match city AND (state OR state abbreviation)
+          const stateConditions = [
             `state.ilike.%${state}%`,
             `state.ilike.%${stateAbbr}%`,
             `state.ilike.%${stateFullName}%`
           ];
           
-          query = query.or(locationConditions.join(','));
+          query = query
+            .ilike('city', `%${city}%`)
+            .or(stateConditions.join(','));
         }
         
         const { data: instagramVendors, error } = await query.limit(20);

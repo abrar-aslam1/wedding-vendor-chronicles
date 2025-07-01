@@ -1,4 +1,4 @@
-const { createClient } = require('@supabase/supabase-js');
+import { createClient } from '@supabase/supabase-js';
 
 // Test script to verify Instagram vendor functionality
 async function testInstagramVendorFix() {
@@ -35,8 +35,7 @@ async function testInstagramVendorFix() {
   try {
     const { data, error } = await supabase
       .from('instagram_vendors')
-      .select('count(*)')
-      .limit(1);
+      .select('*', { count: 'exact', head: true });
     
     if (error) {
       console.log('❌ Database connection failed:', error.message);
@@ -72,7 +71,7 @@ async function testInstagramVendorFix() {
     try {
       const { data, error } = await supabase
         .from('instagram_vendors')
-        .select('id, business_name, category, city, state, location')
+        .select('id, business_name, category, city, state')
         .eq('category', category)
         .limit(5);
       
@@ -131,15 +130,12 @@ async function testInstagramVendorFix() {
         `city.ilike.%${location.city}%`,
         `state.ilike.%${location.state}%`,
         `state.ilike.%${stateAbbr}%`,
-        `state.ilike.%${stateFullName}%`,
-        `location.ilike.%${location.city}%`,
-        `location.ilike.%${location.state}%`,
-        `location.ilike.%${stateAbbr}%`
+        `state.ilike.%${stateFullName}%`
       ];
       
       const { data, error } = await supabase
         .from('instagram_vendors')
-        .select('id, business_name, city, state, location')
+        .select('id, business_name, city, state')
         .eq('category', 'photographers') // Test with photographers
         .or(locationConditions.join(','))
         .limit(3);
@@ -152,7 +148,7 @@ async function testInstagramVendorFix() {
         
         if (count > 0 && data) {
           data.forEach(vendor => {
-            console.log(`   - ${vendor.business_name} (${vendor.city}, ${vendor.state}) [${vendor.location}]`);
+            console.log(`   - ${vendor.business_name} (${vendor.city}, ${vendor.state})`);
           });
         }
       }
