@@ -23,13 +23,26 @@ export const SearchResults = ({ results, isSearching, subcategory }: SearchResul
   const { toast } = useToast();
   const isMobile = useIsMobile();
 
-  // Separate results by source
-  const googleResults = results.filter(result => result.vendor_source !== 'instagram');
+  // Separate results by source - if vendor_source is not set, treat as Google results
+  const googleResults = results.filter(result => !result.vendor_source || result.vendor_source !== 'instagram');
   const instagramResults = results.filter(result => result.vendor_source === 'instagram');
 
   useEffect(() => {
-    console.log('Search Results component received:', { results, isSearching });
-    console.log('Separated results:', { googleResults: googleResults.length, instagramResults: instagramResults.length });
+    console.log('Search Results component received:', { 
+      resultsCount: results.length, 
+      isSearching,
+      sampleResult: results[0] ? {
+        title: results[0].title,
+        vendor_source: results[0].vendor_source,
+        hasVendorSource: 'vendor_source' in results[0]
+      } : null
+    });
+    console.log('Separated results:', { 
+      googleResults: googleResults.length, 
+      instagramResults: instagramResults.length,
+      googleSample: googleResults[0] ? googleResults[0].title : 'none',
+      instagramSample: instagramResults[0] ? instagramResults[0].title : 'none'
+    });
     fetchFavorites();
     if (isSearching) {
       setHasSearched(true);

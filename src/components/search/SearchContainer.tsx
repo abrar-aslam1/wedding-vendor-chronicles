@@ -75,10 +75,17 @@ export const SearchContainer = () => {
       const locationCode = 2840;
       console.log('Using fixed location code:', locationCode);
 
+      // Convert URL-formatted subcategory to proper format
+      const formattedSubcategory = subcategory 
+        ? subcategory.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+        : undefined;
+      
+      console.log('Formatted subcategory:', formattedSubcategory);
+
       // Fetch Google results and Instagram vendors in parallel
       const [googleResultsPromise, instagramResultsPromise] = await Promise.allSettled([
-        fetchGoogleResults(searchCategory, searchCity, searchState, locationCode, subcategory),
-        fetchInstagramVendors(searchCategory, searchCity, searchState, subcategory)
+        fetchGoogleResults(searchCategory, searchCity, searchState, locationCode, formattedSubcategory),
+        fetchInstagramVendors(searchCategory, searchCity, searchState, formattedSubcategory)
       ]);
 
       let googleResults: SearchResult[] = [];
@@ -127,8 +134,8 @@ export const SearchContainer = () => {
   };
 
   const fetchGoogleResults = async (searchCategory: string, searchCity: string, searchState: string, locationCode: number, subcategory?: string): Promise<SearchResult[]> => {
-    // Skip cache if subcategory is provided to ensure fresh, filtered results
-    if (!subcategory) {
+    // TEMPORARILY BYPASS CACHE FOR DEBUGGING - Skip cache if subcategory is provided to ensure fresh, filtered results
+    if (false && !subcategory) {
       const { data: cachedResults, error: cacheError } = await supabase
         .from('vendor_cache')
         .select('*')
@@ -161,18 +168,63 @@ export const SearchContainer = () => {
 
     console.log('No cache found, fetching from Google API...');
     
-    const { data: freshResults, error: searchError } = await supabase.functions.invoke('search-vendors', {
-      body: { 
-        keyword: searchCategory,
-        location: `${searchCity}, ${searchState}`,
-        subcategory: subcategory
-      }
-    });
+    // Convert state name to abbreviation for API consistency
+    const stateAbbreviations: { [key: string]: string } = {
+      'texas': 'TX',
+      'california': 'CA',
+      'florida': 'FL',
+      'new york': 'NY',
+      'illinois': 'IL',
+      'pennsylvania': 'PA',
+      'ohio': 'OH',
+      'georgia': 'GA',
+      'north carolina': 'NC',
+      'michigan': 'MI'
+    };
+    
+    const stateAbbr = stateAbbreviations[searchState.toLowerCase()] || searchState.toUpperCase();
+    const formattedLocation = `${searchCity.charAt(0).toUpperCase() + searchCity.slice(1)}, ${stateAbbr}`;
+    
+    console.log('Formatted location for API:', formattedLocation);
 
-    console.log('Google API search response:', { 
-      resultsCount: freshResults?.length,
-      searchError
+    // Enhanced logging for debugging
+    const requestPayload = { 
+      keyword: searchCategory,
+      location: formattedLocation,
+      subcategory: subcategory
+    };
+    
+    console.log('🚀 Frontend making request to search-vendors edge function');
+    console.log('📦 Request payload:', JSON.stringify(requestPayload, null, 2));
+    console.log('🔗 Supabase URL:', import.meta.env.VITE_SUPABASE_URL || 'using fallback');
+    console.log('🔑 Using anon key:', (import.meta.env.VITE_SUPABASE_ANON_KEY || 'using fallback').substring(0, 20) + '...');
+    
+    const requestStartTime = Date.now();
+    const { data: freshResults, error: searchError } = await supabase.functions.invoke('search-vendors', {
+      body: requestPayload
     });
+    const requestEndTime = Date.now();
+
+    console.log(`⏱️ Request completed in ${requestEndTime - requestStartTime}ms`);
+    console.log('📊 Google API search response:', { 
+      resultsCount: freshResults?.length,
+      searchError,
+      hasData: !!freshResults,
+      dataType: typeof freshResults,
+      isArray: Array.isArray(freshResults)
+    });
+    
+    if (searchError) {
+      console.error('❌ Search error details:', JSON.stringify(searchError, null, 2));
+    }
+    
+    if (freshResults && Array.isArray(freshResults) && freshResults.length > 0) {
+      console.log('✅ First result sample:', {
+        title: freshResults[0]?.title,
+        vendor_source: freshResults[0]?.vendor_source,
+        hasRating: !!freshResults[0]?.rating
+      });
+    }
 
     if (searchError) {
       console.error('Google search error:', searchError);
@@ -182,8 +234,18 @@ export const SearchContainer = () => {
     if (freshResults && Array.isArray(freshResults)) {
       console.log('Processing Google results...');
       
-      // Filter out any Instagram results that might have been returned by the API
-      const googleOnlyResults = freshResults.filter(result => result.vendor_source !== 'instagram');
+      // The edge function returns all results (Instagram, Google, database) - don't filter them here
+      // The separation happens in the SearchResults component for display purposes
+      const allResults = freshResults;
+      
+      console.log('🔍 Processing all results from edge function:', {
+        totalResults: freshResults.length,
+        sampleResult: freshResults[0] ? {
+          title: freshResults[0].title,
+          vendor_source: freshResults[0].vendor_source
+        } : null,
+        vendorSources: freshResults.map(r => r.vendor_source).filter((v, i, a) => a.indexOf(v) === i)
+      });
       
       // Only cache results if no subcategory is provided
       if (!subcategory) {
@@ -195,7 +257,7 @@ export const SearchContainer = () => {
               city: searchCity,
               state: searchState,
               location_code: locationCode,
-              search_results: googleOnlyResults,
+              search_results: allResults,
             },
             {
               onConflict: 'category,city,state,location_code'
@@ -212,7 +274,7 @@ export const SearchContainer = () => {
         }
       }
 
-      return googleOnlyResults as SearchResult[];
+      return allResults as SearchResult[];
     } else {
       console.log('No Google results or invalid results format:', freshResults);
       return [];
