@@ -346,7 +346,7 @@ async function insertIntoDatabase(vendors) {
     console.log(`Processing batch ${Math.floor(i/batchSize) + 1}/${Math.ceil(vendors.length/batchSize)}`);
     
     try {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('instagram_vendors')
         .upsert(batch, { 
           onConflict: 'instagram_handle,category',
