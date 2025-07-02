@@ -284,7 +284,7 @@ export const SearchResults = ({ results, isSearching, subcategory }: SearchResul
     );
   }
 
-  // If no results but we're on a search page, show mobile tabs or 2-column layout
+  // If no results but we're on a search page, show mobile tabs or smart layout
   if (results.length === 0 && !isSearching && !isFavoritesPage) {
     return (
       <div>
@@ -343,6 +343,15 @@ export const SearchResults = ({ results, isSearching, subcategory }: SearchResul
     );
   }
 
+  // Smart layout logic: if one source has significantly fewer results, adjust layout
+  const shouldUseSmartLayout = !isMobile && results.length > 0;
+  const hasGoogleResults = googleResults.length > 0;
+  const hasInstagramResults = instagramResults.length > 0;
+  const googleDominant = googleResults.length > instagramResults.length * 2;
+  const instagramDominant = instagramResults.length > googleResults.length * 2;
+  const oneSourceEmpty = (googleResults.length === 0 && instagramResults.length > 0) || 
+                         (instagramResults.length === 0 && googleResults.length > 0);
+
   return (
     <div>
       {/* Header with subcategory info */}
@@ -368,8 +377,63 @@ export const SearchResults = ({ results, isSearching, subcategory }: SearchResul
           subcategory={subcategory}
           vendorType={vendorType}
         />
+      ) : shouldUseSmartLayout && oneSourceEmpty ? (
+        /* Smart Single Column Layout when one source is empty */
+        <div className="max-w-4xl mx-auto">
+          {hasGoogleResults && (
+            <div className="space-y-6">
+              <div className="flex items-center gap-3 pb-4 border-b border-gray-200">
+                <div className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-green-500 text-white px-3 py-1.5 rounded-full text-sm font-medium">
+                  <MapPin className="h-4 w-4" />
+                  Google Results
+                </div>
+                <span className="text-sm text-gray-500">
+                  {googleResults.length} {googleResults.length === 1 ? 'result' : 'results'}
+                </span>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {googleResults.map((vendor, index) => (
+                  <VendorCard
+                    key={`google-${index}`}
+                    vendor={vendor}
+                    isFavorite={favorites.has(vendor.place_id || '')}
+                    isLoading={loading.has(vendor.place_id || '')}
+                    onToggleFavorite={toggleFavorite}
+                    subcategory={subcategory}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+          
+          {hasInstagramResults && (
+            <div className="space-y-6">
+              <div className="flex items-center gap-3 pb-4 border-b border-gray-200">
+                <div className="flex items-center gap-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-3 py-1.5 rounded-full text-sm font-medium">
+                  <Instagram className="h-4 w-4" />
+                  Instagram Results
+                </div>
+                <span className="text-sm text-gray-500">
+                  {instagramResults.length} {instagramResults.length === 1 ? 'result' : 'results'}
+                </span>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {instagramResults.map((vendor, index) => (
+                  <InstagramVendorCard
+                    key={`instagram-${index}`}
+                    vendor={vendor}
+                    isFavorite={favorites.has(vendor.place_id || '')}
+                    isLoading={loading.has(vendor.place_id || '')}
+                    onToggleFavorite={toggleFavorite}
+                    subcategory={subcategory}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       ) : (
-        /* Desktop 2-Column Layout */
+        /* Standard 2-Column Layout */
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Google Results Column */}
           <div className="space-y-6">

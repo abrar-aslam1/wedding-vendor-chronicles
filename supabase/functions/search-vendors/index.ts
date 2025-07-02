@@ -310,17 +310,44 @@ serve(async (req) => {
       const cacheKey = `${keyword.toLowerCase().trim()}|${location.toLowerCase().trim()}${subcategory ? '|' + subcategory.toLowerCase().trim() : ''}`;
       console.log(`[${requestId}] Cache key: ${cacheKey}`);
       
-      // Check cache first
+      // Check cache first - handle missing search_key column gracefully
       console.log(`[${requestId}] Checking cache for existing results...`);
-      const { data: cachedResult, error: cacheError } = await supabase
-        .from('vendor_cache')
-        .select('*')
-        .eq('search_key', cacheKey)
-        .gt('expires_at', new Date().toISOString())
-        .single();
+      let cachedResult = null;
+      let cacheError = null;
+      
+      try {
+        const cacheQuery = await supabase
+          .from('vendor_cache')
+          .select('*')
+          .eq('search_key', cacheKey)
+          .gt('expires_at', new Date().toISOString())
+          .single();
+        
+        cachedResult = cacheQuery.data;
+        cacheError = cacheQuery.error;
+      } catch (error) {
+        console.log(`[${requestId}] Cache table might not exist or search_key column missing, proceeding without cache:`, error);
+        // Try alternative cache lookup using individual fields
+        try {
+          const altCacheQuery = await supabase
+            .from('vendor_cache')
+            .select('*')
+            .eq('keyword', keyword)
+            .eq('location', location)
+            .eq('subcategory', subcategory || null)
+            .gt('expires_at', new Date().toISOString())
+            .single();
+          
+          cachedResult = altCacheQuery.data;
+          cacheError = altCacheQuery.error;
+          console.log(`[${requestId}] Alternative cache lookup successful`);
+        } catch (altError) {
+          console.log(`[${requestId}] Alternative cache lookup also failed, proceeding to API call`);
+        }
+      }
       
       if (cacheError && cacheError.code !== 'PGRST116') { // PGRST116 = no rows found
-        console.error(`[${requestId}] Cache lookup error:`, cacheError);
+        console.log(`[${requestId}] Cache lookup error (non-critical):`, cacheError.message);
       }
       
       if (cachedResult && cachedResult.results) {
@@ -464,14 +491,21 @@ serve(async (req) => {
     if (subcategory && searchResults.length > 0) {
       const subcategoryLower = subcategory.toLowerCase();
       
+      // Separate results by source for different filtering strategies
+      const googleResults = searchResults.filter(result => result.vendor_source === 'google');
+      const instagramResults = searchResults.filter(result => result.vendor_source === 'instagram');
+      const databaseResults = searchResults.filter(result => result.vendor_source === 'database');
+      
+      console.log(`Pre-filtering: Google: ${googleResults.length}, Instagram: ${instagramResults.length}, Database: ${databaseResults.length}`);
+      
       // Calculate relevance score for each result
       const scoredResults = searchResults.map(result => {
         const titleLower = result.title.toLowerCase();
         const descriptionLower = (result.description || '').toLowerCase();
         const snippetLower = (result.snippet || '').toLowerCase();
         
-        // Base score
-        let score = 0;
+        // Base score - start with 1 for Google results to ensure they're not completely filtered out
+        let score = result.vendor_source === 'google' ? 1 : 0;
         
         // Title matches are most important
         if (titleLower.includes(subcategoryLower)) {
@@ -510,52 +544,68 @@ serve(async (req) => {
           if (snippetLower.includes(term)) score += 2;
         }
         
+        // For photographers, give bonus points for wedding-related terms
+        if (keyword.toLowerCase().includes('photographer')) {
+          const weddingTerms = ['wedding', 'bride', 'groom', 'marriage', 'ceremony', 'reception'];
+          for (const term of weddingTerms) {
+            if (titleLower.includes(term) || descriptionLower.includes(term)) {
+              score += 2;
+            }
+          }
+        }
+        
         return { ...result, relevanceScore: score };
       });
       
       // Sort by relevance score (highest first)
       scoredResults.sort((a, b) => (b.relevanceScore || 0) - (a.relevanceScore || 0));
       
-      // Filter results, but with a very low threshold to include more businesses
+      // More lenient filtering - include results with score > 0 (which includes all Google results)
       const filteredResults = scoredResults.filter(result => (result.relevanceScore || 0) > 0);
       
-      // Ensure we have at least 5 results if possible
-      const MIN_RESULTS = 5;
+      // Ensure we maintain a good balance between sources
+      const MIN_GOOGLE_RESULTS = Math.min(5, googleResults.length); // At least 5 Google results if available
+      const MIN_TOTAL_RESULTS = 10;
+      
       let finalResults = filteredResults;
       
-      if (filteredResults.length < MIN_RESULTS && scoredResults.length > filteredResults.length) {
-        console.log(`Not enough filtered results (${filteredResults.length}), adding more to reach minimum ${MIN_RESULTS}`);
-        // Add more results to reach the minimum, taking the highest scored ones first
-        const additionalResults = scoredResults
-          .filter(result => (result.relevanceScore || 0) === 0) // Get the ones we filtered out
+      // Count results by source in filtered results
+      const filteredGoogle = filteredResults.filter(r => r.vendor_source === 'google');
+      const filteredInstagram = filteredResults.filter(r => r.vendor_source === 'instagram');
+      
+      console.log(`After filtering: Google: ${filteredGoogle.length}, Instagram: ${filteredInstagram.length}`);
+      
+      // If we don't have enough Google results, add more with lower scores
+      if (filteredGoogle.length < MIN_GOOGLE_RESULTS && googleResults.length > filteredGoogle.length) {
+        const additionalGoogle = googleResults
+          .filter(result => !filteredResults.some(fr => fr.place_id === result.place_id))
           .sort((a, b) => {
-            // If no relevance score, sort by rating if available
-            if (a.rating && b.rating) {
-              return (b.rating.value || 0) - (a.rating.value || 0);
-            }
-            return 0;
+            // Sort by rating if available
+            const aRating = a.rating?.value?.value || 0;
+            const bRating = b.rating?.value?.value || 0;
+            return bRating - aRating;
           })
-          .slice(0, MIN_RESULTS - filteredResults.length);
+          .slice(0, MIN_GOOGLE_RESULTS - filteredGoogle.length);
           
-        finalResults = [...filteredResults, ...additionalResults];
-        console.log(`Added ${additionalResults.length} additional results to reach ${finalResults.length} total`);
+        finalResults = [...filteredResults, ...additionalGoogle];
+        console.log(`Added ${additionalGoogle.length} additional Google results to maintain balance`);
       }
       
       // Log scoring information
       console.log(`Scored ${scoredResults.length} results for subcategory: ${subcategory}`);
-      console.log(`Top 3 scores:`, scoredResults.slice(0, 3).map(r => ({ 
+      console.log(`Top 5 scores:`, scoredResults.slice(0, 5).map(r => ({ 
         title: r.title, 
-        score: r.relevanceScore 
+        score: r.relevanceScore,
+        source: r.vendor_source 
       })));
       
-      // If we have filtered results, use them; otherwise fall back to all results
-      if (finalResults.length > 0) {
-        console.log(`Using ${finalResults.length} results for subcategory: ${subcategory}`);
-        // Remove the relevanceScore property before returning
-        searchResults = finalResults.map(({ relevanceScore, ...rest }) => rest);
-      } else {
-        console.log(`No results specifically matching subcategory: ${subcategory}, using all results`);
-      }
+      console.log(`Final results: ${finalResults.length} total`);
+      const finalGoogle = finalResults.filter(r => r.vendor_source === 'google');
+      const finalInstagram = finalResults.filter(r => r.vendor_source === 'instagram');
+      console.log(`Final breakdown: Google: ${finalGoogle.length}, Instagram: ${finalInstagram.length}`);
+      
+      // Remove the relevanceScore property before returning
+      searchResults = finalResults.map(({ relevanceScore, ...rest }) => rest);
     }
     
     // Helper function to get related terms for a subcategory
@@ -579,7 +629,7 @@ serve(async (req) => {
         'photojournalistic': ['candid', 'documentary', 'storytelling'],
         'fine art': ['artistic', 'editorial', 'creative'],
         'aerial photography': ['drone', 'aerial', 'birds eye'],
-        'engagement specialists': ['engagement', 'pre-wedding'],
+        'engagement specialists': ['engagement', 'pre-wedding', 'couples', 'proposal', 'engagement session', 'engagement photos', 'engagement photography'],
         
         // Planner types
         'full-service planning': ['full service', 'comprehensive', 'complete'],
