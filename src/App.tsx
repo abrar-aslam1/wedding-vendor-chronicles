@@ -13,6 +13,8 @@ import Privacy from "@/pages/Privacy";
 import NotFound from "@/pages/NotFound";
 import ListBusiness from "@/pages/ListBusiness";
 import States from "@/pages/States";
+import StateDetail from "@/pages/StateDetail";
+import CityDetail from "@/pages/CityDetail";
 import Blog from "@/pages/Blog";
 import UserPortal from "@/pages/UserPortal";
 import DemoPortal from "@/pages/DemoPortal";
@@ -28,9 +30,11 @@ function App() {
         <Route path="/" element={<Index />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/auth/callback" element={<AuthCallback />} />
-        <Route path="/search/:state" element={<Search />} />
-        <Route path="/search/:state/:city" element={<Search />} />
         <Route path="/states" element={<States />} />
+        <Route path="/states/:state/:city" element={<CityDetail />} />
+        <Route path="/states/:state" element={<StateDetail />} />
+        <Route path="/search/:state/:city" element={<Search />} />
+        <Route path="/search/:state" element={<Search />} />
         <Route path="/loading" element={<Loading />} />
         <Route path="/top-20/:category/:city/:state" element={<Search />} />
         <Route path="/top-20/:category/:subcategory/:city/:state" element={<Search />} />

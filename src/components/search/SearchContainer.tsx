@@ -1,5 +1,6 @@
 import { SearchResults } from "./SearchResults";
 import { SearchForm } from "./SearchForm";
+import { StateWideResults } from "./StateWideResults";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
@@ -36,8 +37,20 @@ export const SearchContainer = () => {
     
     if (city && state) {
       const cleanCategory = category ? category.replace('top-20/', '').replace(/-/g, ' ') : 'wedding vendors';
-      console.log('Initiating search for:', { cleanCategory, subcategory, city, state });
-      fetchResults(cleanCategory, city, state, subcategory);
+      
+      // Check if this is a state-wide search (city = "all-cities")
+      if (city === 'all-cities') {
+        console.log('Initiating state-wide search for:', { cleanCategory, subcategory, state });
+        fetchStateResults(cleanCategory, state, subcategory);
+      } else {
+        console.log('Initiating city-specific search for:', { cleanCategory, subcategory, city, state });
+        fetchResults(cleanCategory, city, state, subcategory);
+      }
+    } else if (state && !city) {
+      // Handle state-only searches (from states page)
+      const cleanCategory = category ? category.replace('top-20/', '').replace(/-/g, ' ') : 'wedding vendors';
+      console.log('Initiating state-only search for:', { cleanCategory, subcategory, state });
+      fetchStateResults(cleanCategory, state, subcategory);
     } else {
       // If we don't have city and state, we're not in a search context
       // Set empty results to ensure we don't show a loading state indefinitely
@@ -65,6 +78,87 @@ export const SearchContainer = () => {
       : `/top-20/${formattedCategory}/${selectedCity}/${selectedState}`;
     
     navigate(urlPath);
+  };
+
+  const fetchStateResults = async (searchCategory: string, searchState: string, subcategory?: string) => {
+    console.log('Starting fetchStateResults with:', { searchCategory, searchState, subcategory });
+    setIsSearching(true);
+    
+    try {
+      // For state-only searches, we'll query the vendors table directly
+      // since we want to show all vendors in the state regardless of city
+      console.log('Fetching vendors directly from database for state:', searchState);
+      
+      let query = supabase
+        .from('vendors')
+        .select('*')
+        .ilike('state', `%${searchState}%`);
+      
+      // Apply category filter if specified
+      if (searchCategory && searchCategory !== 'wedding vendors') {
+        query = query.ilike('category', `%${searchCategory}%`);
+      }
+      
+      const { data: vendors, error } = await query.limit(50);
+      
+      if (error) {
+        console.error('Error fetching vendors from database:', error);
+        throw error;
+      }
+      
+      if (!vendors || vendors.length === 0) {
+        console.log('No vendors found in database for state:', searchState);
+        setSearchResults([]);
+        toast({
+          title: "No Results",
+          description: `No vendors found in ${searchState}. Try browsing other states or use the search form.`,
+          variant: "default",
+        });
+        return;
+      }
+      
+      // Transform database vendors to SearchResult format
+      const vendorResults: SearchResult[] = vendors.map((vendor: any) => ({
+        title: vendor.business_name,
+        description: vendor.description,
+        rating: undefined,
+        phone: vendor.contact_info?.phone,
+        address: `${vendor.city}, ${vendor.state}`,
+        url: vendor.contact_info?.website,
+        place_id: `vendor_${vendor.id}`,
+        main_image: vendor.images?.[0],
+        images: vendor.images || [],
+        snippet: vendor.description,
+        latitude: undefined,
+        longitude: undefined,
+        business_hours: undefined,
+        price_range: undefined,
+        payment_methods: undefined,
+        service_area: [vendor.city, vendor.state],
+        categories: [vendor.category],
+        reviews: undefined,
+        year_established: undefined,
+        email: vendor.contact_info?.email,
+        city: vendor.city,
+        state: vendor.state,
+        postal_code: undefined,
+        vendor_source: 'database' as const
+      }));
+      
+      console.log(`✅ Found ${vendorResults.length} vendors in database for ${searchState}`);
+      setSearchResults(vendorResults);
+      
+    } catch (error) {
+      console.error('Error in fetchStateResults:', error);
+      toast({
+        title: "Error",
+        description: "Failed to fetch vendors. Please try again.",
+        variant: "destructive",
+      });
+      setSearchResults([]);
+    } finally {
+      setIsSearching(false);
+    }
   };
 
   const fetchResults = async (searchCategory: string, searchCity: string, searchState: string, subcategory?: string) => {
@@ -368,11 +462,14 @@ export const SearchContainer = () => {
     }
   };
 
+  // Check if this is a state-wide search
+  const isStateWideSearch = city === 'all-cities';
+  
   return (
     <div className="container mx-auto px-4 py-8 mt-16">
-      <SearchHeader subcategory={subcategory} />
+      {!isStateWideSearch && <SearchHeader subcategory={subcategory} />}
       
-      {(!city || !state) && (
+      {(!city || !state || city === 'all-cities') && !isStateWideSearch && (
         <div className="max-w-2xl mx-auto mb-8">
           <SearchForm 
             onSearch={handleSearch} 
@@ -384,6 +481,14 @@ export const SearchContainer = () => {
       
       {isSearching ? (
         <LoadingState />
+      ) : isStateWideSearch && state && category ? (
+        <StateWideResults 
+          results={searchResults}
+          isSearching={isSearching}
+          state={state}
+          category={category.replace('top-20/', '')}
+          subcategory={subcategory}
+        />
       ) : (
         <SearchResults results={searchResults} isSearching={isSearching} subcategory={subcategory} />
       )}

@@ -31,27 +31,21 @@ export const StateGrid = () => {
           .select('*')
           .is('city', null)
           .order('vendor_count', { ascending: false })
-          .limit(20);
+          .limit(50);
 
         if (error) {
-          console.error('Error fetching states:', error);
-          setError('Failed to load state data. Please try again later.');
-          toast({
-            title: "Error",
-            description: "Failed to load state data. Please try again later.",
-            variant: "destructive",
-          });
-          return;
+          console.error('Error fetching from location_metadata:', error);
+          // Fallback to vendors table if location_metadata fails
+          console.log('Falling back to vendors table...');
+          return await fetchStatesFromVendors();
         }
 
         if (!data || data.length === 0) {
-          console.log('No state data found in the database');
-          setError('No state data available.');
-          setLoading(false);
-          return;
+          console.log('No state data found in location_metadata, falling back to vendors table...');
+          return await fetchStatesFromVendors();
         }
 
-        console.log(`Successfully fetched ${data.length} states`);
+        console.log(`Successfully fetched ${data.length} states from location_metadata`);
 
         const transformedData = data.map(item => ({
           ...item,
@@ -66,14 +60,78 @@ export const StateGrid = () => {
         setError(null);
       } catch (err) {
         console.error('Unexpected error fetching state data:', err);
-        setError('An unexpected error occurred. Please try again later.');
-        toast({
-          title: "Error",
-          description: "An unexpected error occurred while loading states.",
-          variant: "destructive",
-        });
+        // Try fallback as last resort
+        await fetchStatesFromVendors();
       } finally {
         setLoading(false);
+      }
+    };
+
+    const fetchStatesFromVendors = async () => {
+      try {
+        console.log('Fetching states directly from vendors table...');
+        
+        const { data: vendors, error: vendorError } = await supabase
+          .from('vendors')
+          .select('state, city')
+          .not('state', 'is', null)
+          .not('city', 'is', null);
+
+        if (vendorError) {
+          throw vendorError;
+        }
+
+        if (!vendors || vendors.length === 0) {
+          setError('No vendor data available.');
+          return;
+        }
+
+        // Group vendors by state
+        const stateGroups = vendors.reduce((acc, vendor) => {
+          const state = vendor.state.trim();
+          const city = vendor.city.trim();
+          
+          if (!acc[state]) {
+            acc[state] = {
+              vendor_count: 0,
+              cities: new Set()
+            };
+          }
+          
+          acc[state].vendor_count++;
+          acc[state].cities.add(city);
+          
+          return acc;
+        }, {} as Record<string, { vendor_count: number; cities: Set<string> }>);
+
+        // Transform to LocationMetadata format
+        const stateData = Object.entries(stateGroups)
+          .map(([state, data]) => ({
+            id: `fallback-${state}`,
+            state,
+            city: null,
+            vendor_count: data.vendor_count,
+            popular_cities: Array.from(data.cities).slice(0, 5),
+            average_rating: 4.5,
+            seo_description: `Find wedding vendors in ${state}. Browse ${data.vendor_count} verified professionals.`,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          }))
+          .sort((a, b) => b.vendor_count - a.vendor_count)
+          .slice(0, 50);
+
+        console.log(`Generated ${stateData.length} states from vendors data`);
+        setStates(stateData);
+        setError(null);
+        
+      } catch (fallbackError) {
+        console.error('Fallback fetch also failed:', fallbackError);
+        setError('Unable to load state data. Please try again later.');
+        toast({
+          title: "Error",
+          description: "Unable to load state data. Please try again later.",
+          variant: "destructive",
+        });
       }
     };
 
@@ -120,6 +178,7 @@ export const StateGrid = () => {
           state={state.state}
           vendorCount={state.vendor_count || 0}
           popularCities={state.popular_cities}
+          averageRating={state.average_rating || 4.5}
         />
       ))}
     </div>

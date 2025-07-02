@@ -122,6 +122,13 @@ export function MainNav() {
             </Button>
             <Button
               variant="ghost"
+              onClick={() => navigate("/states")}
+              className="text-wedding-text hover:text-wedding-primary"
+            >
+              Browse by State
+            </Button>
+            <Button
+              variant="ghost"
               onClick={() => navigate("/blog")}
               className="text-wedding-text hover:text-wedding-primary"
             >
@@ -181,6 +188,13 @@ export function MainNav() {
                   >
                     <Search className="h-4 w-4 mr-2" />
                     Search Vendors
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    onClick={() => navigate("/states")}
+                    className="text-left text-wedding-text hover:text-wedding-primary"
+                  >
+                    Browse by State
                   </Button>
                   <Button
                     variant="ghost"
