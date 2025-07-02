@@ -487,16 +487,208 @@ serve(async (req) => {
     
     console.log(`Total search results: ${searchResults.length}`);
     
+    // Check if we need to expand Google search for better coverage
+    const googleResults = searchResults.filter(result => result.vendor_source === 'google');
+    const instagramResults = searchResults.filter(result => result.vendor_source === 'instagram');
+    
+    console.log(`Initial results: Google: ${googleResults.length}, Instagram: ${instagramResults.length}`);
+    
+    // If Google results are significantly fewer than Instagram OR if we have subcategory but no Google results, do a broader Google search
+    if ((googleResults.length < 3 && instagramResults.length > 0) || (subcategory && googleResults.length === 0)) {
+      console.log('Google results are low, performing broader search...');
+      
+      try {
+        // Generate broader cache key (without subcategory)
+        const broaderCacheKey = `${keyword.toLowerCase().trim()}|${location.toLowerCase().trim()}`;
+        console.log(`Broader cache key: ${broaderCacheKey}`);
+        
+        // Check cache for broader search
+        let broaderCachedResult = null;
+        try {
+          const broaderCacheQuery = await supabase
+            .from('vendor_cache')
+            .select('*')
+            .eq('search_key', broaderCacheKey)
+            .gt('expires_at', new Date().toISOString())
+            .single();
+          
+          broaderCachedResult = broaderCacheQuery.data;
+        } catch (error) {
+          // Try alternative cache lookup
+          try {
+            const altBroaderCacheQuery = await supabase
+              .from('vendor_cache')
+              .select('*')
+              .eq('keyword', keyword)
+              .eq('location', location)
+              .is('subcategory', null)
+              .gt('expires_at', new Date().toISOString())
+              .single();
+            
+            broaderCachedResult = altBroaderCacheQuery.data;
+          } catch (altError) {
+            console.log('No broader cache found');
+          }
+        }
+        
+        if (broaderCachedResult && broaderCachedResult.results) {
+          console.log(`Found broader cached results: ${broaderCachedResult.result_count} results`);
+          const broaderGoogleResults = Array.isArray(broaderCachedResult.results) ? broaderCachedResult.results : [];
+          
+          // Add broader results that aren't already in our results
+          const existingPlaceIds = new Set(searchResults.map(r => r.place_id));
+          const newGoogleResults = broaderGoogleResults.filter(result => 
+            !existingPlaceIds.has(result.place_id)
+          ).slice(0, 10); // Limit to 10 additional results
+          
+          searchResults.push(...newGoogleResults);
+          console.log(`Added ${newGoogleResults.length} broader Google results`);
+        } else if (dataForSeoLogin && dataForSeoPassword) {
+          // Make broader API call if no cache
+          console.log('Making broader DataForSEO API call...');
+          
+          const broaderSearchQuery = `${keyword} ${city} ${state}`;
+          const auth = btoa(`${dataForSeoLogin}:${dataForSeoPassword}`);
+          
+          const broaderRequestBody = [{
+            keyword: broaderSearchQuery,
+            location_code: 2840,
+            language_code: "en",
+            device: "desktop",
+            os: "windows",
+            depth: 20,
+            search_places: true
+          }];
+          
+          const broaderResponse = await fetch('https://api.dataforseo.com/v3/serp/google/maps/live/advanced', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Basic ${auth}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(broaderRequestBody)
+          });
+          
+          if (broaderResponse.ok) {
+            const broaderData = await broaderResponse.json();
+            console.log(`Broader API cost: $${broaderData.cost || 0}`);
+            
+            if (broaderData.tasks && broaderData.tasks[0] && broaderData.tasks[0].result && broaderData.tasks[0].result[0] && broaderData.tasks[0].result[0].items) {
+              const broaderGoogleResults = broaderData.tasks[0].result[0].items;
+              console.log(`Found ${broaderGoogleResults.length} broader Google Maps results`);
+              
+              // Transform and add broader results
+              const existingPlaceIds = new Set(searchResults.map(r => r.place_id));
+              const transformedBroaderResults = broaderGoogleResults
+                .filter(result => !existingPlaceIds.has(result.place_id))
+                .slice(0, 10)
+                .map((result: any) => {
+                  let rating = undefined;
+                  if (result.rating && result.rating.value) {
+                    rating = {
+                      value: {
+                        rating_type: "Max5",
+                        value: result.rating.value,
+                        votes_count: result.rating.votes_count || 0,
+                        rating_max: 5
+                      }
+                    };
+                  }
+                  
+                  return {
+                    title: result.title,
+                    description: result.description || result.address,
+                    rating: rating,
+                    phone: result.phone,
+                    address: result.address,
+                    place_id: result.place_id,
+                    main_image: result.main_image,
+                    images: result.images || [],
+                    snippet: result.description || result.address,
+                    latitude: result.latitude,
+                    longitude: result.longitude,
+                    business_hours: result.work_hours,
+                    price_range: result.price_range || '$$-$$$',
+                    payment_methods: result.payment_methods,
+                    service_area: [city, state],
+                    categories: result.categories || [keyword],
+                    reviews: result.reviews_count,
+                    year_established: result.year_established,
+                    email: result.email,
+                    city: city,
+                    state: state,
+                    postal_code: result.postal_code,
+                    vendor_source: 'google' as const
+                  };
+                });
+              
+              searchResults.push(...transformedBroaderResults);
+              console.log(`Added ${transformedBroaderResults.length} broader Google results from API`);
+              
+              // Cache the broader results
+              try {
+                await supabase
+                  .from('vendor_cache')
+                  .insert({
+                    keyword: keyword,
+                    location: location,
+                    subcategory: null,
+                    results: broaderGoogleResults.map((result: any) => ({
+                      title: result.title,
+                      description: result.description || result.address,
+                      rating: result.rating ? {
+                        value: {
+                          rating_type: "Max5",
+                          value: result.rating.value,
+                          votes_count: result.rating.votes_count || 0,
+                          rating_max: 5
+                        }
+                      } : undefined,
+                      phone: result.phone,
+                      address: result.address,
+                      place_id: result.place_id,
+                      main_image: result.main_image,
+                      images: result.images || [],
+                      snippet: result.description || result.address,
+                      latitude: result.latitude,
+                      longitude: result.longitude,
+                      business_hours: result.work_hours,
+                      price_range: result.price_range || '$$-$$$',
+                      payment_methods: result.payment_methods,
+                      service_area: [city, state],
+                      categories: result.categories || [keyword],
+                      reviews: result.reviews_count,
+                      year_established: result.year_established,
+                      email: result.email,
+                      city: city,
+                      state: state,
+                      postal_code: result.postal_code,
+                      vendor_source: 'google' as const
+                    })),
+                    api_cost: broaderData.cost || 0
+                  });
+                console.log('Successfully cached broader results');
+              } catch (cacheError) {
+                console.error('Error caching broader results:', cacheError);
+              }
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error in broader search:', error);
+      }
+    }
+    
     // Enhanced filtering for subcategory if provided
     if (subcategory && searchResults.length > 0) {
       const subcategoryLower = subcategory.toLowerCase();
       
       // Separate results by source for different filtering strategies
-      const googleResults = searchResults.filter(result => result.vendor_source === 'google');
-      const instagramResults = searchResults.filter(result => result.vendor_source === 'instagram');
+      const allGoogleResults = searchResults.filter(result => result.vendor_source === 'google');
+      const allInstagramResults = searchResults.filter(result => result.vendor_source === 'instagram');
       const databaseResults = searchResults.filter(result => result.vendor_source === 'database');
       
-      console.log(`Pre-filtering: Google: ${googleResults.length}, Instagram: ${instagramResults.length}, Database: ${databaseResults.length}`);
+      console.log(`Pre-filtering: Google: ${allGoogleResults.length}, Instagram: ${allInstagramResults.length}, Database: ${databaseResults.length}`);
       
       // Calculate relevance score for each result
       const scoredResults = searchResults.map(result => {
@@ -564,8 +756,7 @@ serve(async (req) => {
       const filteredResults = scoredResults.filter(result => (result.relevanceScore || 0) > 0);
       
       // Ensure we maintain a good balance between sources
-      const MIN_GOOGLE_RESULTS = Math.min(5, googleResults.length); // At least 5 Google results if available
-      const MIN_TOTAL_RESULTS = 10;
+      const MIN_GOOGLE_RESULTS = Math.min(8, allGoogleResults.length); // At least 8 Google results if available
       
       let finalResults = filteredResults;
       
@@ -576,8 +767,8 @@ serve(async (req) => {
       console.log(`After filtering: Google: ${filteredGoogle.length}, Instagram: ${filteredInstagram.length}`);
       
       // If we don't have enough Google results, add more with lower scores
-      if (filteredGoogle.length < MIN_GOOGLE_RESULTS && googleResults.length > filteredGoogle.length) {
-        const additionalGoogle = googleResults
+      if (filteredGoogle.length < MIN_GOOGLE_RESULTS && allGoogleResults.length > filteredGoogle.length) {
+        const additionalGoogle = allGoogleResults
           .filter(result => !filteredResults.some(fr => fr.place_id === result.place_id))
           .sort((a, b) => {
             // Sort by rating if available
