@@ -190,8 +190,7 @@ export const SearchContainer = () => {
     // Enhanced logging for debugging
     const requestPayload = { 
       keyword: searchCategory,
-      location: formattedLocation,
-      subcategory: subcategory
+      location: formattedLocation
     };
     
     console.log('🚀 Frontend making request to search-vendors edge function');
@@ -211,7 +210,13 @@ export const SearchContainer = () => {
       searchError,
       hasData: !!freshResults,
       dataType: typeof freshResults,
-      isArray: Array.isArray(freshResults)
+      isArray: Array.isArray(freshResults),
+      firstResult: freshResults?.[0] ? {
+        title: freshResults[0].title,
+        vendor_source: freshResults[0].vendor_source,
+        rating: freshResults[0].rating,
+        hasRating: !!freshResults[0].rating
+      } : null
     });
     
     if (searchError) {

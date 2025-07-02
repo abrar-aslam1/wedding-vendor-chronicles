@@ -358,45 +358,33 @@ serve(async (req) => {
       } else {
         console.log(`[${requestId}] No valid cache found, calling DataForSEO API...`);
         
-        // Get DataForSEO API credentials
-        const dataForSeoLogin = Deno.env.get('DATAFORSEO_LOGIN');
-        const dataForSeoPassword = Deno.env.get('DATAFORSEO_PASSWORD');
+        // Use hardcoded DataForSEO credentials for Google Maps API
+        const dataForSeoAuth = 'YWJyYXJAYW1hcm9zeXN0ZW1zLmNvbTo2OTA4NGQ4YzhkY2Y4MWNk';
         
-        console.log(`[${requestId}] DataForSEO credentials check:`, {
-          hasLogin: !!dataForSeoLogin,
-          hasPassword: !!dataForSeoPassword,
-          loginLength: dataForSeoLogin?.length || 0,
-          passwordLength: dataForSeoPassword?.length || 0
+        console.log(`[${requestId}] Making DataForSEO Google Maps API request...`);
+        
+        // Construct search query
+        const searchQuery = `${keyword} ${city} ${state}`;
+        console.log('Search query:', searchQuery);
+        
+        // DataForSEO Google Maps API request
+        const requestBody = [{
+          keyword: searchQuery,
+          location_code: 2840, // United States
+          language_code: "en",
+          device: "desktop",
+          os: "windows",
+          depth: 100
+        }];
+        
+        const response = await fetch('https://api.dataforseo.com/v3/serp/google/maps/live/advanced', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Basic ${dataForSeoAuth}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(requestBody)
         });
-        
-        if (dataForSeoLogin && dataForSeoPassword) {
-          console.log(`[${requestId}] Making DataForSEO API request...`);
-          
-          // Construct search query
-          const searchQuery = `${keyword} ${city} ${state}`;
-          console.log('Search query:', searchQuery);
-          
-          // DataForSEO API request
-          const auth = btoa(`${dataForSeoLogin}:${dataForSeoPassword}`);
-          
-          const requestBody = [{
-            keyword: searchQuery,
-            location_code: 2840, // United States
-            language_code: "en",
-            device: "desktop",
-            os: "windows",
-            depth: 20,
-            search_places: true
-          }];
-          
-          const response = await fetch('https://api.dataforseo.com/v3/serp/google/maps/live/advanced', {
-            method: 'POST',
-            headers: {
-              'Authorization': `Basic ${auth}`,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(requestBody)
-          });
           
           if (response.ok) {
             const data = await response.json();
@@ -409,16 +397,15 @@ serve(async (req) => {
               
               // Transform Google Maps results
               const transformedGoogleResults = googleResults.map((result: any) => {
-                // Parse rating
+                // Parse rating - fix structure to match TypeScript interface
                 let rating = undefined;
                 if (result.rating && result.rating.value) {
                   rating = {
-                    value: {
-                      rating_type: "Max5",
-                      value: result.rating.value,
-                      votes_count: result.rating.votes_count || 0,
-                      rating_max: 5
-                    }
+                    value: result.rating.value,
+                    rating_type: "Max5",
+                    votes_count: result.rating.votes_count || 0,
+                    rating_max: 5,
+                    count: result.rating.votes_count || 0
                   };
                 }
                 
@@ -477,9 +464,6 @@ serve(async (req) => {
           } else {
             console.error('DataForSEO API error:', response.status, response.statusText);
           }
-        } else {
-          console.log('DataForSEO credentials not available, skipping Google Maps search');
-        }
       }
     } catch (error) {
       console.error('Error fetching Google Maps results:', error);
@@ -591,12 +575,11 @@ serve(async (req) => {
                     let rating = undefined;
                     if (result.rating && result.rating.value) {
                       rating = {
-                        value: {
-                          rating_type: "Max5",
-                          value: result.rating.value,
-                          votes_count: result.rating.votes_count || 0,
-                          rating_max: 5
-                        }
+                        value: result.rating.value,
+                        rating_type: "Max5",
+                        votes_count: result.rating.votes_count || 0,
+                        rating_max: 5,
+                        count: result.rating.votes_count || 0
                       };
                     }
                     
@@ -642,12 +625,11 @@ serve(async (req) => {
                         title: result.title,
                         description: result.description || result.address,
                         rating: result.rating ? {
-                          value: {
-                            rating_type: "Max5",
-                            value: result.rating.value,
-                            votes_count: result.rating.votes_count || 0,
-                            rating_max: 5
-                          }
+                          value: result.rating.value,
+                          rating_type: "Max5",
+                          votes_count: result.rating.votes_count || 0,
+                          rating_max: 5,
+                          count: result.rating.votes_count || 0
                         } : undefined,
                         phone: result.phone,
                         address: result.address,
@@ -685,125 +667,12 @@ serve(async (req) => {
       }
     }
     
-    // Enhanced filtering for subcategory if provided
-    if (subcategory && searchResults.length > 0) {
-      const subcategoryLower = subcategory.toLowerCase();
-      
-      // Separate results by source for different filtering strategies
-      const allGoogleResults = searchResults.filter(result => result.vendor_source === 'google');
-      const allInstagramResults = searchResults.filter(result => result.vendor_source === 'instagram');
-      const databaseResults = searchResults.filter(result => result.vendor_source === 'database');
-      
-      console.log(`Pre-filtering: Google: ${allGoogleResults.length}, Instagram: ${allInstagramResults.length}, Database: ${databaseResults.length}`);
-      
-      // Calculate relevance score for each result
-      const scoredResults = searchResults.map(result => {
-        const titleLower = result.title.toLowerCase();
-        const descriptionLower = (result.description || '').toLowerCase();
-        const snippetLower = (result.snippet || '').toLowerCase();
-        
-        // Base score - start with 1 for Google results to ensure they're not completely filtered out
-        let score = result.vendor_source === 'google' ? 1 : 0;
-        
-        // Title matches are most important
-        if (titleLower.includes(subcategoryLower)) {
-          score += 10;
-          // Exact match or starts with the subcategory
-          if (titleLower === subcategoryLower || 
-              titleLower.startsWith(`${subcategoryLower} `) || 
-              titleLower.includes(` ${subcategoryLower} `)) {
-            score += 15;
-          }
-        }
-        
-        // Description matches
-        if (descriptionLower.includes(subcategoryLower)) {
-          score += 5;
-          // Phrase matches rather than just word fragments
-          if (descriptionLower.includes(` ${subcategoryLower} `)) {
-            score += 3;
-          }
-        }
-        
-        // Snippet matches
-        if (snippetLower.includes(subcategoryLower)) {
-          score += 5;
-          // Phrase matches rather than just word fragments
-          if (snippetLower.includes(` ${subcategoryLower} `)) {
-            score += 3;
-          }
-        }
-        
-        // Check for related terms based on subcategory
-        const relatedTerms = getRelatedTerms(subcategoryLower);
-        for (const term of relatedTerms) {
-          if (titleLower.includes(term)) score += 3;
-          if (descriptionLower.includes(term)) score += 2;
-          if (snippetLower.includes(term)) score += 2;
-        }
-        
-        // For photographers, give bonus points for wedding-related terms
-        if (keyword.toLowerCase().includes('photographer')) {
-          const weddingTerms = ['wedding', 'bride', 'groom', 'marriage', 'ceremony', 'reception'];
-          for (const term of weddingTerms) {
-            if (titleLower.includes(term) || descriptionLower.includes(term)) {
-              score += 2;
-            }
-          }
-        }
-        
-        return { ...result, relevanceScore: score };
-      });
-      
-      // Sort by relevance score (highest first)
-      scoredResults.sort((a, b) => (b.relevanceScore || 0) - (a.relevanceScore || 0));
-      
-      // More lenient filtering - include results with score > 0 (which includes all Google results)
-      const filteredResults = scoredResults.filter(result => (result.relevanceScore || 0) > 0);
-      
-      // Ensure we maintain a good balance between sources
-      const MIN_GOOGLE_RESULTS = Math.min(8, allGoogleResults.length); // At least 8 Google results if available
-      
-      let finalResults = filteredResults;
-      
-      // Count results by source in filtered results
-      const filteredGoogle = filteredResults.filter(r => r.vendor_source === 'google');
-      const filteredInstagram = filteredResults.filter(r => r.vendor_source === 'instagram');
-      
-      console.log(`After filtering: Google: ${filteredGoogle.length}, Instagram: ${filteredInstagram.length}`);
-      
-      // If we don't have enough Google results, add more with lower scores
-      if (filteredGoogle.length < MIN_GOOGLE_RESULTS && allGoogleResults.length > filteredGoogle.length) {
-        const additionalGoogle = allGoogleResults
-          .filter(result => !filteredResults.some(fr => fr.place_id === result.place_id))
-          .sort((a, b) => {
-            // Sort by rating if available
-            const aRating = a.rating?.value?.value || 0;
-            const bRating = b.rating?.value?.value || 0;
-            return bRating - aRating;
-          })
-          .slice(0, MIN_GOOGLE_RESULTS - filteredGoogle.length);
-          
-        finalResults = [...filteredResults, ...additionalGoogle];
-        console.log(`Added ${additionalGoogle.length} additional Google results to maintain balance`);
-      }
-      
-      // Log scoring information
-      console.log(`Scored ${scoredResults.length} results for subcategory: ${subcategory}`);
-      console.log(`Top 5 scores:`, scoredResults.slice(0, 5).map(r => ({ 
-        title: r.title, 
-        score: r.relevanceScore,
-        source: r.vendor_source 
-      })));
-      
-      console.log(`Final results: ${finalResults.length} total`);
-      const finalGoogle = finalResults.filter(r => r.vendor_source === 'google');
-      const finalInstagram = finalResults.filter(r => r.vendor_source === 'instagram');
-      console.log(`Final breakdown: Google: ${finalGoogle.length}, Instagram: ${finalInstagram.length}`);
-      
-      // Remove the relevanceScore property before returning
-      searchResults = finalResults.map(({ relevanceScore, ...rest }) => rest);
-    }
+    // Skip subcategory filtering for now - just return all results
+    console.log(`Skipping subcategory filtering. Total results: ${searchResults.length}`);
+    const googleResults = searchResults.filter(result => result.vendor_source === 'google');
+    const instagramResults = searchResults.filter(result => result.vendor_source === 'instagram');
+    const databaseResults = searchResults.filter(result => result.vendor_source === 'database');
+    console.log(`Final breakdown: Google: ${googleResults.length}, Instagram: ${instagramResults.length}, Database: ${databaseResults.length}`);
     
     // Helper function to get related terms for a subcategory
     function getRelatedTerms(subcategory: string): string[] {
