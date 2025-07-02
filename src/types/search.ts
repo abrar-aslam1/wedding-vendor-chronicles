@@ -64,7 +64,7 @@ export interface SearchResult {
   is_business_account?: boolean;
   bio?: string;
   profile_image_url?: string;
-  vendor_source?: 'google_maps' | 'instagram';
+  vendor_source?: 'google' | 'instagram' | 'database';
 }
 
 export interface DataForSEOResponse {

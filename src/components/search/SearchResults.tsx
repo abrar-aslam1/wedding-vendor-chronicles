@@ -23,8 +23,12 @@ export const SearchResults = ({ results, isSearching, subcategory }: SearchResul
   const { toast } = useToast();
   const isMobile = useIsMobile();
 
-  // Separate results by source - if vendor_source is not set, treat as Google results
-  const googleResults = results.filter(result => !result.vendor_source || result.vendor_source !== 'instagram');
+  // Separate results by source - Google and database vendors go in left column, Instagram in right
+  const googleResults = results.filter(result => 
+    result.vendor_source === 'google' || 
+    result.vendor_source === 'database' || 
+    !result.vendor_source // fallback for results without vendor_source
+  );
   const instagramResults = results.filter(result => result.vendor_source === 'instagram');
 
   useEffect(() => {
@@ -37,12 +41,22 @@ export const SearchResults = ({ results, isSearching, subcategory }: SearchResul
         hasVendorSource: 'vendor_source' in results[0]
       } : null
     });
+    
+    // Detailed breakdown by vendor source
+    const sourceBreakdown = results.reduce((acc, result) => {
+      const source = result.vendor_source || 'unknown';
+      acc[source] = (acc[source] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+    
+    console.log('Results by vendor source:', sourceBreakdown);
     console.log('Separated results:', { 
       googleResults: googleResults.length, 
       instagramResults: instagramResults.length,
-      googleSample: googleResults[0] ? googleResults[0].title : 'none',
-      instagramSample: instagramResults[0] ? instagramResults[0].title : 'none'
+      googleSample: googleResults[0] ? `${googleResults[0].title} (${googleResults[0].vendor_source})` : 'none',
+      instagramSample: instagramResults[0] ? `${instagramResults[0].title} (${instagramResults[0].vendor_source})` : 'none'
     });
+    
     fetchFavorites();
     if (isSearching) {
       setHasSearched(true);
