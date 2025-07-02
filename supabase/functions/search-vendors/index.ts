@@ -380,39 +380,60 @@ serve(async (req) => {
       const cacheKey = `${keyword.toLowerCase().trim()}|${location.toLowerCase().trim()}${subcategory ? '|' + subcategory.toLowerCase().trim() : ''}`;
       console.log(`[${requestId}] Cache key: ${cacheKey}`);
       
-      // Check cache first - handle missing search_key column gracefully
+      // Check cache first - try new cache table then fall back to old
       console.log(`[${requestId}] Checking cache for existing results...`);
       let cachedResult = null;
       let cacheError = null;
       
+      // Try new cache table first
       try {
-        const cacheQuery = await supabase
-          .from('vendor_cache')
+        const { data: newCacheData, error: newCacheError } = await supabase
+          .from('dataforseo_search_cache')
           .select('*')
           .eq('search_key', cacheKey)
+          .eq('is_successful', true)
           .gt('expires_at', new Date().toISOString())
           .single();
         
-        cachedResult = cacheQuery.data;
-        cacheError = cacheQuery.error;
+        if (newCacheData && !newCacheError) {
+          cachedResult = newCacheData;
+          console.log(`[${requestId}] Found results in new cache table`);
+        }
       } catch (error) {
-        console.log(`[${requestId}] Cache table might not exist or search_key column missing, proceeding without cache:`, error);
-        // Try alternative cache lookup using individual fields
+        console.log(`[${requestId}] New cache table not available`);
+      }
+      
+      // Fall back to old cache table if needed
+      if (!cachedResult) {
         try {
-          const altCacheQuery = await supabase
+          const cacheQuery = await supabase
             .from('vendor_cache')
             .select('*')
-            .eq('keyword', keyword)
-            .eq('location', location)
-            .eq('subcategory', subcategory || null)
+            .eq('search_key', cacheKey)
             .gt('expires_at', new Date().toISOString())
             .single();
           
-          cachedResult = altCacheQuery.data;
-          cacheError = altCacheQuery.error;
-          console.log(`[${requestId}] Alternative cache lookup successful`);
-        } catch (altError) {
-          console.log(`[${requestId}] Alternative cache lookup also failed, proceeding to API call`);
+          cachedResult = cacheQuery.data;
+          cacheError = cacheQuery.error;
+        } catch (error) {
+          console.log(`[${requestId}] Cache table might not exist or search_key column missing, proceeding without cache:`, error);
+          // Try alternative cache lookup using individual fields
+          try {
+            const altCacheQuery = await supabase
+              .from('vendor_cache')
+              .select('*')
+              .eq('keyword', keyword)
+              .eq('location', location)
+              .eq('subcategory', subcategory || null)
+              .gt('expires_at', new Date().toISOString())
+              .single();
+            
+            cachedResult = altCacheQuery.data;
+            cacheError = altCacheQuery.error;
+            console.log(`[${requestId}] Alternative cache lookup successful`);
+          } catch (altError) {
+            console.log(`[${requestId}] Alternative cache lookup also failed, proceeding to API call`);
+          }
         }
       }
       
@@ -428,6 +449,8 @@ serve(async (req) => {
       } else {
         console.log(`[${requestId}] No valid cache found, calling DataForSEO API...`);
         
+        const apiStartTime = Date.now(); // Track API response time
+        
         // Use hardcoded DataForSEO credentials for Google Maps API
         const dataForSeoAuth = 'YWJyYXJAYW1hcm9zeXN0ZW1zLmNvbTo2OTA4NGQ4YzhkY2Y4MWNk';
         
@@ -437,10 +460,43 @@ serve(async (req) => {
         const searchQuery = `${keyword} ${city} ${state}`;
         console.log('Search query:', searchQuery);
         
+        // Get location code from database
+        let locationCode = 2840; // Default to United States
+        try {
+          // Try to find specific city location code
+          const { data: cityLocation } = await supabase
+            .from('dataforseo_locations')
+            .select('location_code')
+            .eq('location_name', city)
+            .eq('state_name', state)
+            .eq('location_type', 'city')
+            .single();
+          
+          if (cityLocation) {
+            locationCode = cityLocation.location_code;
+            console.log(`[${requestId}] Found city location code: ${locationCode} for ${city}, ${state}`);
+          } else {
+            // Try state level
+            const { data: stateLocation } = await supabase
+              .from('dataforseo_locations')
+              .select('location_code')
+              .eq('location_name', state)
+              .eq('location_type', 'state')
+              .single();
+            
+            if (stateLocation) {
+              locationCode = stateLocation.location_code;
+              console.log(`[${requestId}] Found state location code: ${locationCode} for ${state}`);
+            }
+          }
+        } catch (error) {
+          console.log(`[${requestId}] Could not find location code, using default US code:`, error);
+        }
+        
         // DataForSEO Google Maps API request
         const requestBody = [{
           keyword: searchQuery,
-          location_code: 2840, // United States
+          location_code: locationCode,
           language_code: "en",
           device: "desktop",
           os: "windows",
@@ -509,15 +565,38 @@ serve(async (req) => {
               // Cache the results for future use
               console.log(`[${requestId}] Caching ${transformedGoogleResults.length} results...`);
               try {
-                const { error: insertError } = await supabase
-                  .from('vendor_cache')
-                  .insert({
-                    keyword: keyword,
-                    location: location,
-                    subcategory: subcategory || null,
-                    results: transformedGoogleResults,
-                    api_cost: data.cost || 0
-                  });
+                // Try new cache table first
+                const cacheData = {
+                  search_key: cacheKey,
+                  keyword: keyword,
+                  location_code: locationCode,
+                  location_name: location,
+                  subcategory: subcategory || null,
+                  search_type: 'google_maps',
+                  results: transformedGoogleResults,
+                  result_count: transformedGoogleResults.length,
+                  api_cost: data.cost || 0,
+                  api_response_time: Date.now() - apiStartTime,
+                  is_successful: true,
+                  expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() // 30 days
+                };
+                
+                const { error: newCacheError } = await supabase
+                  .from('dataforseo_search_cache')
+                  .insert(cacheData);
+                
+                if (newCacheError) {
+                  console.log(`[${requestId}] New cache table not available, using old cache`);
+                  // Fallback to old cache table
+                  const { error: insertError } = await supabase
+                    .from('vendor_cache')
+                    .insert({
+                      keyword: keyword,
+                      location: location,
+                      subcategory: subcategory || null,
+                      results: transformedGoogleResults,
+                      api_cost: data.cost || 0
+                    });
                 
                 if (insertError) {
                   console.error(`[${requestId}] Error caching results:`, insertError);
@@ -613,7 +692,7 @@ serve(async (req) => {
             
             const broaderRequestBody = [{
               keyword: broaderSearchQuery,
-              location_code: 2840,
+              location_code: locationCode, // Use the same location code we looked up earlier
               language_code: "en",
               device: "desktop",
               os: "windows",

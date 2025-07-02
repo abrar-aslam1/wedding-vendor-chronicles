@@ -5,7 +5,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { locationCodes } from "@/utils/dataForSeoApi";
+import { useStates, useCities } from "@/hooks/useLocations";
+import { Loader2 } from "lucide-react";
 
 interface LocationSelectsProps {
   selectedState: string;
@@ -22,6 +23,9 @@ export const LocationSelects = ({
   setSelectedCity,
   isSearching,
 }: LocationSelectsProps) => {
+  const { states, loading: statesLoading } = useStates();
+  const { cities, loading: citiesLoading } = useCities(selectedState);
+
   return (
     <>
       <Select
@@ -30,15 +34,22 @@ export const LocationSelects = ({
           setSelectedState(value);
           setSelectedCity("");
         }}
-        disabled={isSearching}
+        disabled={isSearching || statesLoading}
       >
         <SelectTrigger className="w-full h-12 rounded-xl border-wedding-primary/20">
-          <SelectValue placeholder="Select state" />
+          {statesLoading ? (
+            <div className="flex items-center gap-2">
+              <Loader2 className="h-4 w-4 animate-spin" />
+              <span>Loading states...</span>
+            </div>
+          ) : (
+            <SelectValue placeholder="Select state" />
+          )}
         </SelectTrigger>
         <SelectContent className="max-h-[300px]">
-          {Object.keys(locationCodes).map((state) => (
-            <SelectItem key={state} value={state}>
-              {state}
+          {states.map((state) => (
+            <SelectItem key={state.location_code} value={state.location_name}>
+              {state.location_name}
             </SelectItem>
           ))}
         </SelectContent>
@@ -47,18 +58,24 @@ export const LocationSelects = ({
       <Select
         value={selectedCity}
         onValueChange={setSelectedCity}
-        disabled={!selectedState || isSearching}
+        disabled={!selectedState || isSearching || citiesLoading}
       >
         <SelectTrigger className="w-full h-12 rounded-xl border-wedding-primary/20">
-          <SelectValue placeholder="Select city" />
+          {citiesLoading ? (
+            <div className="flex items-center gap-2">
+              <Loader2 className="h-4 w-4 animate-spin" />
+              <span>Loading cities...</span>
+            </div>
+          ) : (
+            <SelectValue placeholder={selectedState ? "Select city" : "Select state first"} />
+          )}
         </SelectTrigger>
         <SelectContent className="max-h-[300px]">
-          {selectedState &&
-            Object.keys(locationCodes[selectedState].cities).map((city) => (
-              <SelectItem key={city} value={city}>
-                {city}
-              </SelectItem>
-            ))}
+          {cities.map((city) => (
+            <SelectItem key={city.location_code} value={city.location_name}>
+              {city.location_name}
+            </SelectItem>
+          ))}
         </SelectContent>
       </Select>
     </>
