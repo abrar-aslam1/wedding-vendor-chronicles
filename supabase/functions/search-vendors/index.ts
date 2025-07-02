@@ -302,98 +302,157 @@ serve(async (req) => {
       console.error('Error processing regular vendors:', error);
     }
     
-    // 3. Search Google Maps API for additional results
-    console.log('Searching Google Maps API...');
+    // 3. Search Google Maps API with caching
+    console.log('Searching Google Maps API with caching...');
     
     try {
-      // Get DataForSEO API credentials
-      const dataForSeoLogin = Deno.env.get('DATAFORSEO_LOGIN');
-      const dataForSeoPassword = Deno.env.get('DATAFORSEO_PASSWORD');
+      // Generate cache key
+      const cacheKey = `${keyword.toLowerCase().trim()}|${location.toLowerCase().trim()}${subcategory ? '|' + subcategory.toLowerCase().trim() : ''}`;
+      console.log(`[${requestId}] Cache key: ${cacheKey}`);
       
-      if (dataForSeoLogin && dataForSeoPassword) {
-        console.log('Making DataForSEO API request...');
+      // Check cache first
+      console.log(`[${requestId}] Checking cache for existing results...`);
+      const { data: cachedResult, error: cacheError } = await supabase
+        .from('vendor_cache')
+        .select('*')
+        .eq('search_key', cacheKey)
+        .gt('expires_at', new Date().toISOString())
+        .single();
+      
+      if (cacheError && cacheError.code !== 'PGRST116') { // PGRST116 = no rows found
+        console.error(`[${requestId}] Cache lookup error:`, cacheError);
+      }
+      
+      if (cachedResult && cachedResult.results) {
+        console.log(`[${requestId}] Found cached results! ${cachedResult.result_count} results from ${cachedResult.created_at}`);
+        const cachedGoogleResults = Array.isArray(cachedResult.results) ? cachedResult.results : [];
+        searchResults.push(...cachedGoogleResults);
+        console.log(`[${requestId}] Added ${cachedGoogleResults.length} cached Google Maps results`);
+      } else {
+        console.log(`[${requestId}] No valid cache found, calling DataForSEO API...`);
         
-        // Construct search query
-        const searchQuery = `${keyword} ${city} ${state}`;
-        console.log('Search query:', searchQuery);
+        // Get DataForSEO API credentials
+        const dataForSeoLogin = Deno.env.get('DATAFORSEO_LOGIN');
+        const dataForSeoPassword = Deno.env.get('DATAFORSEO_PASSWORD');
         
-        // DataForSEO API request
-        const auth = btoa(`${dataForSeoLogin}:${dataForSeoPassword}`);
-        
-        const requestBody = [{
-          language_code: "en",
-          location_code: 2840, // United States
-          keyword: searchQuery,
-          limit: 20
-        }];
-        
-        const response = await fetch('https://api.dataforseo.com/v3/business_data/google/my_business/find/live', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Basic ${auth}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(requestBody)
+        console.log(`[${requestId}] DataForSEO credentials check:`, {
+          hasLogin: !!dataForSeoLogin,
+          hasPassword: !!dataForSeoPassword,
+          loginLength: dataForSeoLogin?.length || 0,
+          passwordLength: dataForSeoPassword?.length || 0
         });
         
-        if (response.ok) {
-          const data = await response.json();
-          console.log('DataForSEO API response status:', data.status_message);
+        if (dataForSeoLogin && dataForSeoPassword) {
+          console.log(`[${requestId}] Making DataForSEO API request...`);
           
-          if (data.tasks && data.tasks[0] && data.tasks[0].result) {
-            const googleResults = data.tasks[0].result;
-            console.log(`Found ${googleResults.length} Google Maps results`);
+          // Construct search query
+          const searchQuery = `${keyword} ${city} ${state}`;
+          console.log('Search query:', searchQuery);
+          
+          // DataForSEO API request
+          const auth = btoa(`${dataForSeoLogin}:${dataForSeoPassword}`);
+          
+          const requestBody = [{
+            keyword: searchQuery,
+            location_code: 2840, // United States
+            language_code: "en",
+            device: "desktop",
+            os: "windows",
+            depth: 20,
+            search_places: true
+          }];
+          
+          const response = await fetch('https://api.dataforseo.com/v3/serp/google/maps/live/advanced', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Basic ${auth}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody)
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            console.log('DataForSEO API response status:', data.status_message);
+            console.log(`[${requestId}] API cost: $${data.cost || 0}`);
             
-            // Transform Google Maps results
-            const transformedGoogleResults = googleResults.map((result: any) => {
-              // Parse rating
-              let rating = undefined;
-              if (result.rating && result.rating.value) {
-                rating = {
-                  value: {
-                    rating_type: "Max5",
-                    value: result.rating.value,
-                    votes_count: result.rating.votes_count || 0,
-                    rating_max: 5
-                  }
+            if (data.tasks && data.tasks[0] && data.tasks[0].result && data.tasks[0].result[0] && data.tasks[0].result[0].items) {
+              const googleResults = data.tasks[0].result[0].items;
+              console.log(`Found ${googleResults.length} Google Maps results`);
+              
+              // Transform Google Maps results
+              const transformedGoogleResults = googleResults.map((result: any) => {
+                // Parse rating
+                let rating = undefined;
+                if (result.rating && result.rating.value) {
+                  rating = {
+                    value: {
+                      rating_type: "Max5",
+                      value: result.rating.value,
+                      votes_count: result.rating.votes_count || 0,
+                      rating_max: 5
+                    }
+                  };
+                }
+                
+                return {
+                  title: result.title,
+                  description: result.description || result.address,
+                  rating: rating,
+                  phone: result.phone,
+                  address: result.address,
+                  place_id: result.place_id,
+                  main_image: result.main_image,
+                  images: result.images || [],
+                  snippet: result.description || result.address,
+                  latitude: result.latitude,
+                  longitude: result.longitude,
+                  business_hours: result.work_hours,
+                  price_range: result.price_range || '$$-$$$',
+                  payment_methods: result.payment_methods,
+                  service_area: [city, state],
+                  categories: result.categories || [keyword],
+                  reviews: result.reviews_count,
+                  year_established: result.year_established,
+                  email: result.email,
+                  city: city,
+                  state: state,
+                  postal_code: result.postal_code,
+                  vendor_source: 'google' as const
                 };
+              });
+              
+              // Cache the results for future use
+              console.log(`[${requestId}] Caching ${transformedGoogleResults.length} results...`);
+              try {
+                const { error: insertError } = await supabase
+                  .from('vendor_cache')
+                  .insert({
+                    keyword: keyword,
+                    location: location,
+                    subcategory: subcategory || null,
+                    results: transformedGoogleResults,
+                    api_cost: data.cost || 0
+                  });
+                
+                if (insertError) {
+                  console.error(`[${requestId}] Error caching results:`, insertError);
+                } else {
+                  console.log(`[${requestId}] Successfully cached results`);
+                }
+              } catch (cacheInsertError) {
+                console.error(`[${requestId}] Cache insert error:`, cacheInsertError);
               }
               
-              return {
-                title: result.title,
-                description: result.description || result.address,
-                rating: rating,
-                phone: result.phone,
-                address: result.address,
-                place_id: result.place_id,
-                main_image: result.main_image,
-                images: result.images || [],
-                snippet: result.description || result.address,
-                latitude: result.latitude,
-                longitude: result.longitude,
-                business_hours: result.work_hours,
-                price_range: result.price_range || '$$-$$$',
-                payment_methods: result.payment_methods,
-                service_area: [city, state],
-                categories: result.categories || [keyword],
-                reviews: result.reviews_count,
-                year_established: result.year_established,
-                email: result.email,
-                city: city,
-                state: state,
-                postal_code: result.postal_code,
-                vendor_source: 'google' as const
-              };
-            });
-            
-            searchResults.push(...transformedGoogleResults);
-            console.log(`Added ${transformedGoogleResults.length} Google Maps results`);
+              searchResults.push(...transformedGoogleResults);
+              console.log(`Added ${transformedGoogleResults.length} Google Maps results`);
+            }
+          } else {
+            console.error('DataForSEO API error:', response.status, response.statusText);
           }
         } else {
-          console.error('DataForSEO API error:', response.status, response.statusText);
+          console.log('DataForSEO credentials not available, skipping Google Maps search');
         }
-      } else {
-        console.log('DataForSEO credentials not available, skipping Google Maps search');
       }
     } catch (error) {
       console.error('Error fetching Google Maps results:', error);

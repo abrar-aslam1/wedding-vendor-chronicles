@@ -134,8 +134,8 @@ export const SearchContainer = () => {
   };
 
   const fetchGoogleResults = async (searchCategory: string, searchCity: string, searchState: string, locationCode: number, subcategory?: string): Promise<SearchResult[]> => {
-    // TEMPORARILY BYPASS CACHE FOR DEBUGGING - Skip cache if subcategory is provided to ensure fresh, filtered results
-    if (false && !subcategory) {
+    // Skip cache if subcategory is provided to ensure fresh, filtered results
+    if (!subcategory) {
       const { data: cachedResults, error: cacheError } = await supabase
         .from('vendor_cache')
         .select('*')
