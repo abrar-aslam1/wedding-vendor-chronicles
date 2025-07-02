@@ -210,8 +210,8 @@ serve(async (req) => {
       }
     }
     
-    // 2. Search regular vendors table
-    console.log('Searching regular vendors...');
+    // 2. Search vendors_google table (Google Maps data)
+    console.log('Searching Google vendors database...');
     
     try {
       // Map keyword to vendor category
@@ -231,6 +231,76 @@ serve(async (req) => {
         return null;
       };
       
+      const vendorCategory = getVendorCategory(keyword);
+      
+      // Build query for Google vendors
+      let googleVendorQuery = supabase
+        .from('vendors_google')
+        .select('*');
+      
+      // Filter by category if we can map it
+      if (vendorCategory) {
+        googleVendorQuery = googleVendorQuery.eq('category', vendorCategory);
+      } else {
+        // If we can't map the category, search in business_name and description
+        googleVendorQuery = googleVendorQuery.or(`business_name.ilike.%${keyword}%,description.ilike.%${keyword}%`);
+      }
+      
+      // Location filtering for Google vendors
+      if (city && state) {
+        googleVendorQuery = googleVendorQuery
+          .ilike('city', `%${city}%`)
+          .ilike('state', `%${state}%`);
+      }
+      
+      const { data: googleVendors, error: googleVendorError } = await googleVendorQuery.limit(30);
+      
+      if (googleVendorError) {
+        console.error('Error fetching Google vendors:', googleVendorError);
+      } else if (googleVendors && googleVendors.length > 0) {
+        console.log(`Found ${googleVendors.length} Google vendors`);
+        
+        // Transform Google vendors to SearchResult format
+        const googleResults = googleVendors.map(vendor => {
+          return {
+            title: vendor.business_name,
+            description: vendor.description,
+            rating: vendor.rating,
+            phone: vendor.phone,
+            address: vendor.address,
+            url: vendor.website_url,
+            place_id: vendor.place_id,
+            main_image: vendor.images?.[0],
+            images: vendor.images || [],
+            snippet: vendor.description,
+            latitude: vendor.latitude,
+            longitude: vendor.longitude,
+            business_hours: vendor.business_hours,
+            price_range: vendor.price_range || '$$-$$$',
+            payment_methods: vendor.payment_methods,
+            service_area: vendor.service_area || [vendor.city, vendor.state],
+            categories: vendor.categories || [vendor.category.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())],
+            reviews: vendor.reviews_count,
+            year_established: vendor.year_established,
+            email: vendor.email,
+            city: vendor.city,
+            state: vendor.state,
+            postal_code: vendor.postal_code,
+            vendor_source: 'google_database' as const
+          };
+        });
+        
+        searchResults.push(...googleResults);
+        console.log(`Added ${googleResults.length} Google vendors to results`);
+      }
+    } catch (error) {
+      console.error('Error processing Google vendors:', error);
+    }
+    
+    // 3. Search regular vendors table
+    console.log('Searching regular vendors...');
+    
+    try {
       const vendorCategory = getVendorCategory(keyword);
       
       // Build query for regular vendors
@@ -302,7 +372,7 @@ serve(async (req) => {
       console.error('Error processing regular vendors:', error);
     }
     
-    // 3. Search Google Maps API with caching
+    // 4. Search Google Maps API with caching
     console.log('Searching Google Maps API with caching...');
     
     try {
@@ -473,12 +543,14 @@ serve(async (req) => {
     
     // Check if we need to expand Google search for better coverage
     const googleResults = searchResults.filter(result => result.vendor_source === 'google');
+    const googleDatabaseResults = searchResults.filter(result => result.vendor_source === 'google_database');
     const instagramResults = searchResults.filter(result => result.vendor_source === 'instagram');
+    const databaseResults = searchResults.filter(result => result.vendor_source === 'database');
     
-    console.log(`Initial results: Google: ${googleResults.length}, Instagram: ${instagramResults.length}`);
+    console.log(`Initial results: Google API: ${googleResults.length}, Google DB: ${googleDatabaseResults.length}, Instagram: ${instagramResults.length}, Database: ${databaseResults.length}`);
     
     // Always do a broader Google search when we have subcategory and low Google results, or when we have subcategory at all
-    if (subcategory || (googleResults.length < 3 && instagramResults.length > 0)) {
+    if (subcategory || (googleResults.length + googleDatabaseResults.length < 5 && (instagramResults.length > 0 || databaseResults.length > 0))) {
       console.log('Google results are low, performing broader search...');
       
       try {
@@ -669,10 +741,11 @@ serve(async (req) => {
     
     // Skip subcategory filtering for now - just return all results
     console.log(`Skipping subcategory filtering. Total results: ${searchResults.length}`);
-    const googleResults = searchResults.filter(result => result.vendor_source === 'google');
-    const instagramResults = searchResults.filter(result => result.vendor_source === 'instagram');
-    const databaseResults = searchResults.filter(result => result.vendor_source === 'database');
-    console.log(`Final breakdown: Google: ${googleResults.length}, Instagram: ${instagramResults.length}, Database: ${databaseResults.length}`);
+    const finalGoogleResults = searchResults.filter(result => result.vendor_source === 'google');
+    const finalGoogleDatabaseResults = searchResults.filter(result => result.vendor_source === 'google_database');
+    const finalInstagramResults = searchResults.filter(result => result.vendor_source === 'instagram');
+    const finalDatabaseResults = searchResults.filter(result => result.vendor_source === 'database');
+    console.log(`Final breakdown: Google API: ${finalGoogleResults.length}, Google DB: ${finalGoogleDatabaseResults.length}, Instagram: ${finalInstagramResults.length}, Database: ${finalDatabaseResults.length}`);
     
     // Helper function to get related terms for a subcategory
     function getRelatedTerms(subcategory: string): string[] {
