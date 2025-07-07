@@ -61,6 +61,13 @@ const categories = [
     image: "https://images.unsplash.com/photo-1623428454614-abaf00244e52",
     slug: "cake-designers"
   },
+  {
+    id: 9,
+    name: "Wedding Decorators",
+    description: "Transform your venue with stunning decorations",
+    image: "https://images.unsplash.com/photo-1519225421980-715cb0215aed",
+    slug: "wedding-decorators"
+  },
 ];
 
 interface Subcategory {
@@ -113,31 +120,39 @@ export const CategoriesGrid = () => {
   };
 
   return (
-    <section className="py-8 px-4">
-      <div className="container mx-auto">
-        <h2 className="text-2xl font-bold text-center mb-8 text-wedding-text">Wedding Vendor Categories</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 max-w-5xl mx-auto">
+    <section className="py-6 px-6 md:py-12 md:bg-gray-50 lg:py-20">
+      <div className="max-w-md mx-auto md:max-w-3xl lg:max-w-7xl">
+        <div className="text-center lg:mb-16">
+          <h2 className="text-xl font-bold text-center mb-6 text-wedding-text md:text-3xl md:mb-8 lg:text-4xl lg:mb-4">Wedding Vendor Categories</h2>
+          <p className="hidden md:block text-base md:text-lg text-wedding-text/70 max-w-2xl mx-auto">
+            Browse through our curated selection of wedding professionals to find the perfect vendors for your special day
+          </p>
+        </div>
+        <div className="grid grid-cols-1 gap-4 max-w-lg mx-auto md:max-w-none md:grid-cols-2 md:gap-6 lg:grid-cols-3">
           {categories.map((category) => (
             <Card 
               key={category.id} 
-              className={`hover:shadow-lg transition-shadow group cursor-pointer ${
+              className={`hover:shadow-lg transition-all duration-300 group cursor-pointer md:hover:shadow-xl lg:hover:shadow-2xl md:hover:-translate-y-1 lg:hover:-translate-y-2 ${
                 selectedCategory === 'caterers' && category.slug !== 'caterers' ? 'opacity-50' : ''
               }`}
               onClick={() => handleCategoryClick(category.slug)}
             >
-              <div className="aspect-[4/3] w-full overflow-hidden rounded-t-lg relative">
-                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors" />
+              <div className="aspect-[5/3] md:aspect-[4/3] lg:aspect-[4/3] w-full overflow-hidden rounded-t-lg relative">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <img 
                   src={category.image} 
                   alt={category.name}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
+                <div className="absolute inset-0 flex items-end p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <h3 className="text-white font-bold text-lg">{category.name}</h3>
+                </div>
               </div>
-              <CardHeader className="p-4">
-                <CardTitle className="text-lg text-wedding-text">{category.name}</CardTitle>
-                <CardDescription className="text-sm">{category.description}</CardDescription>
+              <CardHeader className="p-3 md:p-4 lg:p-4">
+                <CardTitle className="text-base text-wedding-text md:text-lg lg:text-lg">{category.name}</CardTitle>
+                <CardDescription className="text-xs md:text-sm lg:text-sm">{category.description}</CardDescription>
               </CardHeader>
-              <CardContent className="p-4 pt-0">
+              <CardContent className="p-3 pt-0">
                 {selectedCategory === 'caterers' && category.slug === 'caterers' ? (
                   <div className="space-y-4">
                     <h3 className="font-medium text-sm text-gray-600">Select a Cuisine:</h3>
@@ -170,7 +185,7 @@ export const CategoriesGrid = () => {
                 ) : (
                   <Button 
                     variant="ghost" 
-                    className="w-full text-wedding-primary hover:text-wedding-accent"
+                    className="w-full text-wedding-primary hover:text-wedding-accent md:opacity-0 md:group-hover:opacity-100 md:transition-opacity md:duration-300 lg:opacity-0 lg:group-hover:opacity-100 lg:transition-opacity lg:duration-300"
                   >
                     Browse {category.name}
                   </Button>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { CategorySelect } from "./CategorySelect";
-import { LocationSelects } from "./LocationSelects";
+import { TempLocationSelects } from "./TempLocationSelects";
 import { SearchButton } from "./SearchButton";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -30,14 +30,33 @@ export const SearchForm = ({ onSearch, isSearching, preselectedCategory }: Searc
     return displayName.toLowerCase().replace(/\s+&\s+/g, '-and-').replace(/\s+/g, '-');
   };
 
+  // Helper function to normalize category names for subcategory lookup
+  const normalizeCategoryForSubcategories = (categoryName: string): string => {
+    const normalized = categoryName.toLowerCase();
+    // Handle common variations
+    if (normalized === 'photographer' || normalized === 'photographers') return 'photographers';
+    if (normalized === 'wedding planner' || normalized === 'wedding-planners' || normalized === 'wedding planners') return 'wedding-planners';
+    if (normalized === 'dj' || normalized === 'djs' || normalized === 'djs & bands' || normalized === 'djs and bands') return 'djs-and-bands';
+    if (normalized === 'videographer' || normalized === 'videographers') return 'videographers';
+    if (normalized === 'cake designer' || normalized === 'cake designers' || normalized === 'cake-designers') return 'cake-designers';
+    if (normalized === 'bridal shop' || normalized === 'bridal shops' || normalized === 'bridal-shops') return 'bridal-shops';
+    if (normalized === 'makeup artist' || normalized === 'makeup artists' || normalized === 'makeup-artists') return 'makeup-artists';
+    if (normalized === 'hair stylist' || normalized === 'hair stylists' || normalized === 'hair-stylists') return 'hair-stylists';
+    if (normalized === 'florist' || normalized === 'florists') return 'florists';
+    if (normalized === 'venue' || normalized === 'venues') return 'venues';
+    if (normalized === 'caterer' || normalized === 'caterers') return 'caterers';
+    if (normalized === 'wedding decorator' || normalized === 'wedding decorators' || normalized === 'wedding-decorators') return 'wedding-decorators';
+    return displayNameToSlug(categoryName);
+  };
+
   useEffect(() => {
     const fetchSubcategories = async () => {
       if (!selectedCategory) return;
       
-      // Convert display name to slug
-      const categorySlug = displayNameToSlug(selectedCategory);
+      // Use the normalized category name for subcategory lookup
+      const categoryKey = normalizeCategoryForSubcategories(selectedCategory);
       console.log('Category being checked:', selectedCategory);
-      console.log('Category slug:', categorySlug);
+      console.log('Normalized category key:', categoryKey);
       
       // Reset subcategories and selected subcategory
       setSubcategories([]);
@@ -47,14 +66,14 @@ export const SearchForm = ({ onSearch, isSearching, preselectedCategory }: Searc
       console.log('Available categories in hardcodedSubcategories:', Object.keys(hardcodedSubcategories));
       
       // Check if we have hardcoded subcategories for this category
-      if (categorySlug && hardcodedSubcategories[categorySlug]) {
-        console.log(`Setting subcategories for ${categorySlug}...`);
-        const categorySubcategories = hardcodedSubcategories[categorySlug];
-        console.log('Subcategories:', categorySubcategories);
+      if (categoryKey && hardcodedSubcategories[categoryKey]) {
+        console.log(`✅ Setting subcategories for ${categoryKey}...`);
+        const categorySubcategories = hardcodedSubcategories[categoryKey];
+        console.log('Subcategories found:', categorySubcategories.length);
         setSubcategories(categorySubcategories);
       } else {
-        console.log(`No subcategories found for category slug: ${categorySlug}`);
-        console.log('Is category slug in hardcodedSubcategories?', categorySlug in hardcodedSubcategories);
+        console.log(`❌ No subcategories found for category key: ${categoryKey}`);
+        console.log('Available keys:', Object.keys(hardcodedSubcategories));
       }
     };
 
@@ -95,23 +114,43 @@ export const SearchForm = ({ onSearch, isSearching, preselectedCategory }: Searc
         {subcategories.length > 0 && (
           <div className="space-y-3">
             <label className="block text-base font-medium text-wedding-text">
-              {selectedCategory.toLowerCase() === 'caterers' 
+              {selectedCategory.toLowerCase().includes('caterer') 
                 ? 'Select Cuisine Type for Catering'
-                : selectedCategory.toLowerCase() === 'wedding-planners'
+                : selectedCategory.toLowerCase().includes('wedding-planner') || selectedCategory.toLowerCase().includes('wedding planner')
                 ? 'Select Planning Service Type'
-                : selectedCategory.toLowerCase() === 'photographers'
+                : selectedCategory.toLowerCase().includes('photographer')
                 ? 'Select Photography Style'
-                : selectedCategory.toLowerCase() === 'florists'
+                : selectedCategory.toLowerCase().includes('videographer')
+                ? 'Select Videography Style'
+                : selectedCategory.toLowerCase().includes('florist')
                 ? 'Select Floral Style'
-                : selectedCategory.toLowerCase() === 'venues'
+                : selectedCategory.toLowerCase().includes('venue')
                 ? 'Select Venue Type'
-                : selectedCategory.toLowerCase() === 'djs-and-bands'
+                : selectedCategory.toLowerCase().includes('dj') || selectedCategory.toLowerCase().includes('band')
                 ? 'Select Entertainment Type'
+                : selectedCategory.toLowerCase().includes('cake')
+                ? 'Select Cake Style'
+                : selectedCategory.toLowerCase().includes('bridal')
+                ? 'Select Dress Type'
+                : selectedCategory.toLowerCase().includes('makeup')
+                ? 'Select Makeup Style'
+                : selectedCategory.toLowerCase().includes('hair')
+                ? 'Select Hair Style'
+                : selectedCategory.toLowerCase().includes('decorator') || selectedCategory.toLowerCase().includes('decoration')
+                ? 'Select Decoration Style'
                 : `Select ${selectedCategory} Type`}
             </label>
             <p className="text-sm text-gray-500 mb-2">
-              {selectedCategory.toLowerCase() === 'caterers' 
+              {selectedCategory.toLowerCase().includes('caterer') 
                 ? 'Choose a cuisine to see caterers specializing in that type of food'
+                : selectedCategory.toLowerCase().includes('photographer')
+                ? 'Choose a photography style to find photographers specializing in that approach'
+                : selectedCategory.toLowerCase().includes('videographer')
+                ? 'Choose a videography style to find videographers with that specialty'
+                : selectedCategory.toLowerCase().includes('venue')
+                ? 'Choose a venue type to find locations perfect for your wedding style'
+                : selectedCategory.toLowerCase().includes('florist')
+                ? 'Choose a floral style to find florists who match your wedding aesthetic'
                 : `Choose a type to see ${selectedCategory.toLowerCase()} specializing in that area`}
             </p>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
@@ -133,7 +172,7 @@ export const SearchForm = ({ onSearch, isSearching, preselectedCategory }: Searc
           </div>
         )}
         
-        <LocationSelects
+        <TempLocationSelects
           selectedState={selectedState}
           selectedCity={selectedCity}
           setSelectedState={setSelectedState}

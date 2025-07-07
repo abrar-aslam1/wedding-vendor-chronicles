@@ -53,5 +53,10 @@ export const categories = [
     name: "Hair Stylists",
     slug: "hair-stylists",
     description: "Expert hair styling for the wedding party"
+  },
+  {
+    name: "Wedding Decorators",
+    slug: "wedding-decorators",
+    description: "Transform your venue with stunning decorations"
   }
 ];

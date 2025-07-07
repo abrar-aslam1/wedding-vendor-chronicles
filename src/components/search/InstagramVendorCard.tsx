@@ -36,68 +36,95 @@ export const InstagramVendorCard = ({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden border border-gray-100 relative">
-      {/* Instagram Badge */}
-      <div className="absolute top-3 right-3 z-10">
-        <div className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
-          <Instagram className="h-3 w-3" />
-          Instagram
-        </div>
-      </div>
-
-      {/* Favorite Button */}
-      <button
-        onClick={() => onToggleFavorite(vendor)}
-        disabled={isLoading}
-        className="absolute top-3 left-3 z-10 p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-sm hover:bg-white transition-colors duration-200"
-        aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
-      >
-        <Heart 
-          className={`h-4 w-4 transition-colors duration-200 ${
-            isFavorite 
-              ? "fill-red-500 text-red-500" 
-              : "text-gray-600 hover:text-red-500"
-          } ${isLoading ? "animate-pulse" : ""}`}
-        />
-      </button>
-
+    <div className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 relative group">
       {/* Image */}
-      <div className="relative h-48 bg-gray-100">
+      <div className="relative h-56 bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
         {vendor.main_image && !imageError ? (
           <img
             src={vendor.main_image}
             alt={vendor.title}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             onError={handleImageError}
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-pink-50 to-purple-50">
-            <Instagram className="h-12 w-12 text-pink-400" />
+            <Instagram className="h-16 w-16 text-pink-400" />
+          </div>
+        )}
+        
+        {/* Overlay gradient for better text readability */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+
+        {/* Top badges row */}
+        <div className="absolute top-3 left-3 right-3 flex items-center justify-between z-10">
+          {/* Favorite Button */}
+          <button
+            onClick={() => onToggleFavorite(vendor)}
+            disabled={isLoading}
+            className="p-2.5 bg-white/95 backdrop-blur-sm rounded-full shadow-lg hover:bg-white hover:scale-110 transition-all duration-200"
+            aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+          >
+            <Heart 
+              className={`h-4 w-4 transition-colors duration-200 ${
+                isFavorite 
+                  ? "fill-red-500 text-red-500" 
+                  : "text-gray-600 hover:text-red-500"
+              } ${isLoading ? "animate-pulse" : ""}`}
+            />
+          </button>
+
+          {/* Instagram Badge */}
+          <div className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 shadow-lg">
+            <Instagram className="h-3 w-3" />
+            Instagram
+          </div>
+        </div>
+
+        {/* Subcategory Badge */}
+        {subcategory && (
+          <div className="absolute bottom-3 left-3 z-10">
+            <div className="bg-pink-500/95 backdrop-blur-sm text-white px-3 py-1.5 rounded-full text-xs font-medium shadow-lg">
+              {subcategory}
+            </div>
+          </div>
+        )}
+
+        {/* Follower count overlay */}
+        {vendor.follower_count && (
+          <div className="absolute bottom-3 right-3 z-10">
+            <div className="bg-white/95 backdrop-blur-sm rounded-full px-3 py-1.5 flex items-center gap-1.5 shadow-lg">
+              <Users className="h-3 w-3 text-pink-500" />
+              <span className="text-xs font-semibold text-gray-900">
+                {formatFollowerCount(vendor.follower_count)}
+              </span>
+            </div>
           </div>
         )}
       </div>
 
       {/* Content */}
-      <div className="p-4">
-        {/* Title and Verification */}
-        <div className="flex items-start justify-between mb-2">
-          <h3 className="text-lg font-semibold text-wedding-text line-clamp-2 flex-1">
-            {vendor.title}
-          </h3>
-          {vendor.is_verified && (
-            <CheckCircle className="h-5 w-5 text-blue-500 ml-2 flex-shrink-0" />
+      <div className="p-5">
+        {/* Title and Instagram Handle */}
+        <div className="mb-4">
+          <div className="flex items-start justify-between mb-2">
+            <h3 className="text-lg font-bold text-gray-900 line-clamp-2 flex-1">
+              {vendor.title}
+            </h3>
+            {vendor.is_verified && (
+              <CheckCircle className="h-5 w-5 text-blue-500 ml-2 flex-shrink-0" />
+            )}
+          </div>
+
+          {/* Instagram Handle */}
+          {vendor.instagram_handle && (
+            <div className="flex items-center gap-1.5">
+              <Instagram className="h-4 w-4 text-pink-500" />
+              <span className="text-sm text-pink-600 font-medium">
+                @{vendor.instagram_handle}
+              </span>
+            </div>
           )}
         </div>
-
-        {/* Instagram Handle */}
-        {vendor.instagram_handle && (
-          <div className="flex items-center gap-1 mb-2">
-            <Instagram className="h-4 w-4 text-pink-500" />
-            <span className="text-sm text-pink-600 font-medium">
-              @{vendor.instagram_handle}
-            </span>
-          </div>
-        )}
 
         {/* Enhanced Stats with Visual Appeal */}
         <div className="grid grid-cols-2 gap-2 mb-3">

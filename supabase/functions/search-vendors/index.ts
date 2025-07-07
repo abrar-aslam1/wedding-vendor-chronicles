@@ -69,233 +69,248 @@ serve(async (req) => {
     
     const supabase = createClient(supabaseUrl, supabaseKey);
     
-    // Search results array
-    let searchResults = [];
+    // Search results array with proper typing
+    let searchResults: any[] = [];
     
-    // 1. Search Instagram vendors first (they're more wedding-focused)
-    console.log('Searching Instagram vendors...');
+    const { page = 1, limit = 30 } = parsedBody;
+    const offset = (page - 1) * limit;
     
-    // Map keyword to Instagram vendor category
-    const getInstagramCategory = (keyword: string) => {
+    // Helper function to get vendor category
+    const getVendorCategory = (keyword: string) => {
       const keywordLower = keyword.toLowerCase();
-      if (keywordLower.includes('photographer')) return 'photographers';
+      // Enhanced photographer matching
+      if (keywordLower.includes('photographer') || keywordLower.includes('photography') || keywordLower.includes('photo')) return 'photographers';
       if (keywordLower.includes('wedding planner') || keywordLower.includes('planner')) return 'wedding-planners';
-      if (keywordLower.includes('videographer')) return 'videographers';
-      if (keywordLower.includes('florist')) return 'florists';
-      if (keywordLower.includes('caterer')) return 'caterers';
+      if (keywordLower.includes('videographer') || keywordLower.includes('videography') || keywordLower.includes('video')) return 'videographers';
+      if (keywordLower.includes('florist') || keywordLower.includes('floral')) return 'florists';
+      if (keywordLower.includes('caterer') || keywordLower.includes('catering')) return 'caterers';
       if (keywordLower.includes('venue')) return 'venues';
-      if (keywordLower.includes('dj') || keywordLower.includes('band')) return 'djs-and-bands';
+      if (keywordLower.includes('dj') || keywordLower.includes('band') || keywordLower.includes('music')) return 'djs-and-bands';
       if (keywordLower.includes('cake')) return 'cake-designers';
       if (keywordLower.includes('bridal')) return 'bridal-shops';
       if (keywordLower.includes('makeup')) return 'makeup-artists';
       if (keywordLower.includes('hair')) return 'hair-stylists';
       return null;
     };
-    
-    const instagramCategory = getInstagramCategory(keyword);
-    
-    if (instagramCategory) {
-      try {
-        console.log(`Fetching Instagram vendors for category: ${instagramCategory}...`);
+
+    const vendorCategory = getVendorCategory(keyword);
+    console.log(`[${requestId}] Vendor category mapping: ${keyword} -> ${vendorCategory}`);
+
+    // Execute all database queries in parallel for better performance
+    console.log(`[${requestId}] Executing parallel database queries...`);
+    const queryStartTime = Date.now();
+
+    const [instagramResults, googleDbResults, regularVendorResults] = await Promise.all([
+      // Instagram vendors query
+      (async () => {
+        console.log(`[${requestId}] Instagram query: vendorCategory=${vendorCategory}`);
         
-        // Build query for Instagram vendors
-        let instagramQuery = supabase
-          .from('instagram_vendors')
-          .select('*')
-          .eq('category', instagramCategory);
-        
-        // Location filtering for Instagram vendors
-        if (city && state) {
-          const stateAbbreviations: Record<string, string> = {
-            'Alabama': 'AL', 'Alaska': 'AK', 'Arizona': 'AZ', 'Arkansas': 'AR', 'California': 'CA',
-            'Colorado': 'CO', 'Connecticut': 'CT', 'Delaware': 'DE', 'Florida': 'FL', 'Georgia': 'GA',
-            'Hawaii': 'HI', 'Idaho': 'ID', 'Illinois': 'IL', 'Indiana': 'IN', 'Iowa': 'IA',
-            'Kansas': 'KS', 'Kentucky': 'KY', 'Louisiana': 'LA', 'Maine': 'ME', 'Maryland': 'MD',
-            'Massachusetts': 'MA', 'Michigan': 'MI', 'Minnesota': 'MN', 'Mississippi': 'MS', 'Missouri': 'MO',
-            'Montana': 'MT', 'Nebraska': 'NE', 'Nevada': 'NV', 'New Hampshire': 'NH', 'New Jersey': 'NJ',
-            'New Mexico': 'NM', 'New York': 'NY', 'North Carolina': 'NC', 'North Dakota': 'ND', 'Ohio': 'OH',
-            'Oklahoma': 'OK', 'Oregon': 'OR', 'Pennsylvania': 'PA', 'Rhode Island': 'RI', 'South Carolina': 'SC',
-            'South Dakota': 'SD', 'Tennessee': 'TN', 'Texas': 'TX', 'Utah': 'UT', 'Vermont': 'VT',
-            'Virginia': 'VA', 'Washington': 'WA', 'West Virginia': 'WV', 'Wisconsin': 'WI', 'Wyoming': 'WY'
-          };
+        // First, let's see what categories exist in the Instagram table
+        try {
+          const { data: categoryTest, error: categoryError } = await supabase
+            .from('instagram_vendors')
+            .select('category')
+            .limit(10);
           
-          // Get both full state name and abbreviation
-          const stateAbbr = stateAbbreviations[state] || state;
-          const stateFullName = Object.keys(stateAbbreviations).find(key => stateAbbreviations[key] === state) || state;
-          
-          // Location matching using city and state columns
-          const stateConditions = [
-            `state.ilike.%${state}%`,
-            `state.ilike.%${stateAbbr}%`,
-            `state.ilike.%${stateFullName}%`
-          ];
-          
-          instagramQuery = instagramQuery
-            .ilike('city', `%${city}%`)
-            .or(stateConditions.join(','));
+          if (categoryTest) {
+            const uniqueCategories = [...new Set(categoryTest.map(v => v.category))];
+            console.log(`[${requestId}] Available Instagram categories:`, uniqueCategories);
+          }
+        } catch (e) {
+          console.log(`[${requestId}] Could not fetch Instagram categories:`, e);
         }
         
-        const { data: instagramVendors, error: instagramError } = await instagramQuery.limit(20);
-        
-        if (instagramError) {
-          console.error('Error fetching Instagram vendors:', instagramError);
-        } else if (instagramVendors && instagramVendors.length > 0) {
-          console.log(`Found ${instagramVendors.length} Instagram vendors`);
-          
-          // Transform Instagram vendors to SearchResult format
-          const instagramResults = instagramVendors.map(vendor => {
-            // Get vendor type for description
-            const getVendorType = (category: string) => {
-              const categoryMap: Record<string, string> = {
-                'photographers': 'photographer',
-                'wedding-planners': 'wedding planner',
-                'videographers': 'videographer',
-                'florists': 'florist',
-                'caterers': 'caterer',
-                'venues': 'venue',
-                'djs-and-bands': 'entertainment provider',
-                'cake-designers': 'cake designer',
-                'bridal-shops': 'bridal shop',
-                'makeup-artists': 'makeup artist',
-                'hair-stylists': 'hair stylist'
-              };
-              return categoryMap[category] || 'wedding vendor';
-            };
-            
-            const vendorType = getVendorType(vendor.category);
-            const categoryDisplay = vendor.category.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-            
-            return {
-              title: vendor.business_name || vendor.instagram_handle,
-              description: vendor.bio || `Wedding ${vendorType} on Instagram with ${vendor.follower_count || 0} followers`,
-              rating: undefined, // Instagram vendors don't have Google ratings
-              phone: vendor.phone,
-              address: vendor.location || `${vendor.city}, ${vendor.state}`,
-              url: vendor.website_url,
-              place_id: `instagram_${vendor.id}`, // Unique identifier for Instagram vendors
-              main_image: vendor.profile_image_url,
-              images: vendor.profile_image_url ? [vendor.profile_image_url] : [],
-              snippet: vendor.bio,
-              latitude: undefined,
-              longitude: undefined,
-              business_hours: undefined,
-              price_range: '$$-$$$', // Default for wedding vendors
-              payment_methods: undefined,
-              service_area: [vendor.city, vendor.state].filter(Boolean),
-              categories: [categoryDisplay],
-              reviews: undefined,
-              year_established: undefined,
-              email: vendor.email,
-              city: vendor.city,
-              state: vendor.state,
-              postal_code: undefined,
-              // Instagram-specific fields
-              instagram_handle: vendor.instagram_handle,
-              follower_count: vendor.follower_count,
-              post_count: vendor.post_count,
-              is_verified: vendor.is_verified,
-              is_business_account: vendor.is_business_account,
-              bio: vendor.bio,
-              profile_image_url: vendor.profile_image_url,
-              vendor_source: 'instagram' as const
-            };
-          });
-          
-          searchResults.push(...instagramResults);
-          console.log(`Added ${instagramResults.length} Instagram vendors to results`);
+        if (!vendorCategory) {
+          console.log(`[${requestId}] No vendor category for Instagram query`);
+          return [];
         }
-      } catch (error) {
-        console.error('Error processing Instagram vendors:', error);
-        // Continue without Instagram results if there's an error
-      }
-    }
-    
-    // 2. Search vendors_google table (Google Maps data)
-    console.log('Searching Google vendors database...');
-    
-    try {
-      // Map keyword to vendor category
-      const getVendorCategory = (keyword: string) => {
-        const keywordLower = keyword.toLowerCase();
-        if (keywordLower.includes('photographer')) return 'photographers';
-        if (keywordLower.includes('wedding planner') || keywordLower.includes('planner')) return 'wedding-planners';
-        if (keywordLower.includes('videographer')) return 'videographers';
-        if (keywordLower.includes('florist')) return 'florists';
-        if (keywordLower.includes('caterer')) return 'caterers';
-        if (keywordLower.includes('venue')) return 'venues';
-        if (keywordLower.includes('dj') || keywordLower.includes('band')) return 'djs-and-bands';
-        if (keywordLower.includes('cake')) return 'cake-designers';
-        if (keywordLower.includes('bridal')) return 'bridal-shops';
-        if (keywordLower.includes('makeup')) return 'makeup-artists';
-        if (keywordLower.includes('hair')) return 'hair-stylists';
-        return null;
-      };
-      
-      const vendorCategory = getVendorCategory(keyword);
-      
-      // Build query for Google vendors
-      let googleVendorQuery = supabase
-        .from('vendors_google')
-        .select('*');
-      
-      // Filter by category if we can map it
-      if (vendorCategory) {
-        googleVendorQuery = googleVendorQuery.eq('category', vendorCategory);
-      } else {
-        // If we can't map the category, search in business_name and description
-        googleVendorQuery = googleVendorQuery.or(`business_name.ilike.%${keyword}%,description.ilike.%${keyword}%`);
-      }
-      
-      // Location filtering for Google vendors
-      if (city && state) {
-        googleVendorQuery = googleVendorQuery
-          .ilike('city', `%${city}%`)
-          .ilike('state', `%${state}%`);
-      }
-      
-      const { data: googleVendors, error: googleVendorError } = await googleVendorQuery.limit(30);
-      
-      if (googleVendorError) {
-        console.error('Error fetching Google vendors:', googleVendorError);
-      } else if (googleVendors && googleVendors.length > 0) {
-        console.log(`Found ${googleVendors.length} Google vendors`);
         
-        // Transform Google vendors to SearchResult format
-        const googleResults = googleVendors.map(vendor => {
-          return {
-            title: vendor.business_name,
-            description: vendor.description,
-            rating: vendor.rating,
-            phone: vendor.phone,
-            address: vendor.address,
-            url: vendor.website_url,
-            place_id: vendor.place_id,
-            main_image: vendor.images?.[0],
-            images: vendor.images || [],
-            snippet: vendor.description,
-            latitude: vendor.latitude,
-            longitude: vendor.longitude,
-            business_hours: vendor.business_hours,
-            price_range: vendor.price_range || '$$-$$$',
-            payment_methods: vendor.payment_methods,
-            service_area: vendor.service_area || [vendor.city, vendor.state],
-            categories: vendor.categories || [vendor.category.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())],
-            reviews: vendor.reviews_count,
-            year_established: vendor.year_established,
-            email: vendor.email,
-            city: vendor.city,
-            state: vendor.state,
-            postal_code: vendor.postal_code,
-            vendor_source: 'google_database' as const
-          };
-        });
-        
-        searchResults.push(...googleResults);
-        console.log(`Added ${googleResults.length} Google vendors to results`);
-      }
-    } catch (error) {
-      console.error('Error processing Google vendors:', error);
-    }
+        try {
+          let query = supabase
+            .from('instagram_vendors')
+            .select('*');
+          
+          // Enhanced category filtering for Instagram vendors
+          if (vendorCategory) {
+            // Try exact category match first
+            query = query.eq('category', vendorCategory);
+            console.log(`[${requestId}] Instagram query: Using exact category filter: ${vendorCategory}`);
+          } else {
+            // If no category mapping, search by bio/description
+            query = query.or(`bio.ilike.%${keyword}%,business_name.ilike.%${keyword}%`);
+            console.log(`[${requestId}] Instagram query: Using keyword search in bio/business_name: ${keyword}`);
+          }
+          
+          // Apply location filters
+          if (city && state) {
+            query = query
+              .ilike('city', `%${city}%`)
+              .ilike('state', `%${state}%`);
+            console.log(`[${requestId}] Instagram location filters: city ILIKE '%${city}%', state ILIKE '%${state}%'`);
+          }
+          
+          const { data, error } = await query.limit(20);
+          
+          console.log(`[${requestId}] Instagram query result: ${data?.length || 0} vendors found, error:`, error);
+          
+          // If exact category match returned no results, try fallback search
+          if ((!data || data.length === 0) && vendorCategory) {
+            console.log(`[${requestId}] No exact category match, trying fallback search with bio/description`);
+            
+            let fallbackQuery = supabase
+              .from('instagram_vendors')
+              .select('*')
+              .or(`bio.ilike.%${keyword}%,business_name.ilike.%${keyword}%,category.ilike.%${keyword}%`);
+            
+            if (city && state) {
+              fallbackQuery = fallbackQuery
+                .ilike('city', `%${city}%`)
+                .ilike('state', `%${state}%`);
+            }
+            
+            const { data: fallbackData, error: fallbackError } = await fallbackQuery.limit(20);
+            console.log(`[${requestId}] Instagram fallback query result: ${fallbackData?.length || 0} vendors found, error:`, fallbackError);
+            
+            if (fallbackData && fallbackData.length > 0) {
+              console.log(`[${requestId}] First Instagram fallback vendor:`, {
+                id: fallbackData[0].id,
+                category: fallbackData[0].category,
+                city: fallbackData[0].city,
+                state: fallbackData[0].state,
+                bio: fallbackData[0].bio?.substring(0, 50) + '...'
+              });
+              return fallbackData;
+            }
+          }
+          
+          if (data && data.length > 0) {
+            console.log(`[${requestId}] First Instagram vendor:`, {
+              id: data[0].id,
+              category: data[0].category,
+              city: data[0].city,
+              state: data[0].state
+            });
+          }
+          
+          return data || [];
+        } catch (error) {
+          console.error(`[${requestId}] Instagram query error:`, error);
+          return [];
+        }
+      })(),
+
+      // Google database vendors query
+      (async () => {
+        try {
+          let query = supabase
+            .from('vendors_google')
+            .select('*');
+          
+          if (vendorCategory) {
+            query = query.eq('category', vendorCategory);
+          } else {
+            query = query.or(`business_name.ilike.%${keyword}%,description.ilike.%${keyword}%`);
+          }
+          
+          if (city && state) {
+            query = query
+              .ilike('city', `%${city}%`)
+              .ilike('state', `%${state}%`);
+          }
+          
+          const { data } = await query.limit(30);
+          return data || [];
+        } catch (error) {
+          console.error(`[${requestId}] Google DB query error:`, error);
+          return [];
+        }
+      })(),
+
+      // Regular vendors table query
+      (async () => {
+        try {
+          let query = supabase
+            .from('vendors')
+            .select('*')
+            .or(`business_name.ilike.%${keyword}%,category.ilike.%${keyword}%`);
+          
+          if (city && state) {
+            query = query
+              .ilike('city', `%${city}%`)
+              .ilike('state', `%${state}%`);
+          }
+          
+          const { data } = await query.limit(20);
+          return data || [];
+        } catch (error) {
+          console.error(`[${requestId}] Vendors query error:`, error);
+          return [];
+        }
+      })()
+    ]);
+
+    const queryTime = Date.now() - queryStartTime;
+    console.log(`[${requestId}] Parallel queries completed in ${queryTime}ms`);
+    console.log(`[${requestId}] Results: Instagram=${instagramResults.length}, GoogleDB=${googleDbResults.length}, Regular=${regularVendorResults.length}`);
+
+    // Transform and combine results
+    const allDatabaseResults = [
+      // Transform Instagram vendors
+      ...instagramResults.map(vendor => ({
+        title: vendor.business_name || vendor.instagram_handle,
+        description: vendor.bio || `Wedding vendor on Instagram`,
+        rating: undefined,
+        phone: vendor.phone,
+        address: vendor.location || `${vendor.city}, ${vendor.state}`,
+        url: vendor.website_url,
+        place_id: `instagram_${vendor.id}`,
+        main_image: vendor.profile_image_url,
+        images: vendor.profile_image_url ? [vendor.profile_image_url] : [],
+        city: vendor.city,
+        state: vendor.state,
+        instagram_handle: vendor.instagram_handle,
+        follower_count: vendor.follower_count,
+        vendor_source: 'instagram' as const
+      })),
+
+      // Transform Google database vendors
+      ...googleDbResults.map(vendor => ({
+        title: vendor.business_name,
+        description: vendor.description,
+        rating: vendor.rating,
+        phone: vendor.phone,
+        address: vendor.address,
+        url: vendor.website_url,
+        place_id: vendor.place_id,
+        main_image: vendor.images?.[0],
+        images: vendor.images || [],
+        latitude: vendor.latitude,
+        longitude: vendor.longitude,
+        city: vendor.city,
+        state: vendor.state,
+        vendor_source: 'google_database' as const
+      })),
+
+      // Transform regular vendors
+      ...regularVendorResults.map(vendor => ({
+        title: vendor.business_name,
+        description: vendor.description || `${vendor.category} in ${vendor.city}, ${vendor.state}`,
+        rating: vendor.rating,
+        phone: vendor.phone,
+        address: vendor.address,
+        url: vendor.website,
+        place_id: `vendor_${vendor.id}`,
+        city: vendor.city,
+        state: vendor.state,
+        vendor_source: 'database' as const
+      }))
+    ];
+
+    console.log(`[${requestId}] Combined database results: ${allDatabaseResults.length} total`);
+
+    // Always include database results and continue with Google API call
+    searchResults.push(...allDatabaseResults);
+    console.log(`[${requestId}] Added ${allDatabaseResults.length} database results, continuing with Google API call`);
     
     // 3. Search regular vendors table
     console.log('Searching regular vendors...');
@@ -451,8 +466,20 @@ serve(async (req) => {
         
         const apiStartTime = Date.now(); // Track API response time
         
-        // Use hardcoded DataForSEO credentials for Google Maps API
-        const dataForSeoAuth = 'YWJyYXJAYW1hcm9zeXN0ZW1zLmNvbTo2OTA4NGQ4YzhkY2Y4MWNk';
+        // Get DataForSEO credentials from environment
+        const dataForSeoLogin = Deno.env.get('DATAFORSEO_LOGIN');
+        const dataForSeoPassword = Deno.env.get('DATAFORSEO_PASSWORD');
+        
+        if (!dataForSeoLogin || !dataForSeoPassword) {
+          console.log(`[${requestId}] DataForSEO credentials not found in environment, skipping Google API call`);
+          // Continue without Google results
+        } else {
+          console.log(`[${requestId}] Using DataForSEO credentials from environment`);
+        }
+        
+        const dataForSeoAuth = dataForSeoLogin && dataForSeoPassword ? 
+          btoa(`${dataForSeoLogin}:${dataForSeoPassword}`) : 
+          'YWJyYXJAYW1hcm9zeXN0ZW1zLmNvbTo2OTA4NGQ4YzhkY2Y4MWNk'; // fallback
         
         console.log(`[${requestId}] Making DataForSEO Google Maps API request...`);
         
@@ -503,14 +530,16 @@ serve(async (req) => {
           depth: 100
         }];
         
-        const response = await fetch('https://api.dataforseo.com/v3/serp/google/maps/live/advanced', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Basic ${dataForSeoAuth}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(requestBody)
-        });
+        // Only make API call if we have valid credentials
+        if (dataForSeoLogin && dataForSeoPassword) {
+          const response = await fetch('https://api.dataforseo.com/v3/serp/google/maps/live/advanced', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Basic ${dataForSeoAuth}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody)
+          });
           
           if (response.ok) {
             const data = await response.json();
@@ -598,10 +627,11 @@ serve(async (req) => {
                       api_cost: data.cost || 0
                     });
                 
-                if (insertError) {
-                  console.error(`[${requestId}] Error caching results:`, insertError);
-                } else {
-                  console.log(`[${requestId}] Successfully cached results`);
+                  if (insertError) {
+                    console.error(`[${requestId}] Error caching results:`, insertError);
+                  } else {
+                    console.log(`[${requestId}] Successfully cached results`);
+                  }
                 }
               } catch (cacheInsertError) {
                 console.error(`[${requestId}] Cache insert error:`, cacheInsertError);
@@ -613,9 +643,14 @@ serve(async (req) => {
           } else {
             console.error('DataForSEO API error:', response.status, response.statusText);
           }
+        } else {
+          console.log(`[${requestId}] DataForSEO credentials not available, skipping Google API call`);
+          // No fallback results - just continue with database results only
+        }
       }
     } catch (error) {
       console.error('Error fetching Google Maps results:', error);
+      // No fallback results - just log the error and continue with database results only
     }
     
     console.log(`Total search results: ${searchResults.length}`);
@@ -690,9 +725,27 @@ serve(async (req) => {
             const broaderSearchQuery = `${keyword} ${city} ${state}`;
             const auth = btoa(`${dataForSeoLogin}:${dataForSeoPassword}`);
             
+            // Get location code for broader search
+            let broaderLocationCode = 2840; // Default to United States
+            try {
+              const { data: cityLocation } = await supabase
+                .from('dataforseo_locations')
+                .select('location_code')
+                .eq('location_name', city)
+                .eq('state_name', state)
+                .eq('location_type', 'city')
+                .single();
+              
+              if (cityLocation) {
+                broaderLocationCode = cityLocation.location_code;
+              }
+            } catch (error) {
+              console.log(`Using default location code for broader search: ${broaderLocationCode}`);
+            }
+            
             const broaderRequestBody = [{
               keyword: broaderSearchQuery,
-              location_code: locationCode, // Use the same location code we looked up earlier
+              location_code: broaderLocationCode,
               language_code: "en",
               device: "desktop",
               os: "windows",
@@ -884,8 +937,24 @@ serve(async (req) => {
       return relatedTermsMap[subcategory] || [];
     }
 
+    // Return consistent response structure
+    const finalResponse = {
+      results: searchResults,
+      totalResults: searchResults.length,
+      hasMore: false, // No pagination for mixed results
+      source: 'mixed',
+      queryTime: Date.now() - queryStartTime
+    };
+    
+    console.log(`[${requestId}] Final response: ${searchResults.length} total results`);
+    const sourceCounts = searchResults.reduce((acc, r) => {
+      acc[r.vendor_source || 'unknown'] = (acc[r.vendor_source || 'unknown'] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+    console.log(`[${requestId}] Results by source:`, sourceCounts);
+    
     return new Response(
-      JSON.stringify(searchResults),
+      JSON.stringify(finalResponse),
       { 
         headers: { 
           ...corsHeaders,

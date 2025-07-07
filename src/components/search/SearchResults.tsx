@@ -23,15 +23,18 @@ export const SearchResults = ({ results, isSearching, subcategory }: SearchResul
   const { toast } = useToast();
   const isMobile = useIsMobile();
 
-  // Separate results by source - Google and database vendors go in left column, Instagram in right
+  // Separate results by source - Google, database, and sample vendors go in left column, Instagram in right
   const googleResults = results.filter(result => 
     result.vendor_source === 'google' || 
     result.vendor_source === 'database' || 
+    result.vendor_source === 'google_database' ||
+    result.vendor_source === 'sample' ||
     !result.vendor_source // fallback for results without vendor_source
   );
   const instagramResults = results.filter(result => result.vendor_source === 'instagram');
 
   useEffect(() => {
+    console.log('🔍 SearchResults useEffect triggered');
     console.log('Search Results component received:', { 
       resultsCount: results.length, 
       isSearching,
@@ -57,11 +60,24 @@ export const SearchResults = ({ results, isSearching, subcategory }: SearchResul
       instagramSample: instagramResults[0] ? `${instagramResults[0].title} (${instagramResults[0].vendor_source})` : 'none'
     });
     
+    console.log('🎯 Component render decision:', {
+      resultsLength: results.length,
+      isSearching,
+      googleResultsLength: googleResults.length,
+      instagramResultsLength: instagramResults.length,
+      willShowResults: results.length > 0,
+      willShowNoResults: results.length === 0 && !isSearching
+    });
+    
     fetchFavorites();
     if (isSearching) {
       setHasSearched(true);
     }
-  }, [results, isSearching]);
+    // Also set hasSearched to true when we receive results (including sample results)
+    if (results.length > 0) {
+      setHasSearched(true);
+    }
+  }, [results, isSearching, googleResults.length, instagramResults.length]);
 
   const fetchFavorites = async () => {
     try {
@@ -273,7 +289,17 @@ export const SearchResults = ({ results, isSearching, subcategory }: SearchResul
     return formattedSubcategory;
   };
 
+  console.log('🚨 RENDER DECISION:', 
+    'isSearching:', isSearching,
+    'resultsLength:', results.length,
+    'googleResultsLength:', googleResults.length,
+    'instagramResultsLength:', instagramResults.length,
+    'hasSearched:', hasSearched,
+    'isFavoritesPage:', window.location.pathname === '/favorites'
+  );
+
   if (isSearching) {
+    console.log('🔄 Rendering SearchSkeleton');
     return <SearchSkeleton />;
   }
 
@@ -281,6 +307,7 @@ export const SearchResults = ({ results, isSearching, subcategory }: SearchResul
 
   // If no results at all and we're on favorites page, show the old single-column layout
   if (results.length === 0 && !isSearching && isFavoritesPage) {
+    console.log('💔 Rendering favorites no results');
     return (
       <div className="mt-8 md:mt-12 text-center">
         <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md border border-gray-100">
@@ -299,7 +326,9 @@ export const SearchResults = ({ results, isSearching, subcategory }: SearchResul
   }
 
   // If no results but we're on a search page, show mobile tabs or smart layout
-  if (results.length === 0 && !isSearching && !isFavoritesPage) {
+  // Only show "No Results" if we've actually completed a search (hasSearched is true)
+  if (results.length === 0 && !isSearching && !isFavoritesPage && hasSearched) {
+    console.log('🚫 Rendering no results page');
     return (
       <div>
         {/* Header with subcategory info */}
@@ -357,6 +386,8 @@ export const SearchResults = ({ results, isSearching, subcategory }: SearchResul
     );
   }
 
+  console.log('✅ Rendering main results layout with', results.length, 'results');
+  
   return (
     <div>
       {/* Header with subcategory info */}
@@ -399,16 +430,22 @@ export const SearchResults = ({ results, isSearching, subcategory }: SearchResul
             
             {googleResults.length > 0 ? (
               <div className="space-y-6">
-                {googleResults.map((vendor, index) => (
-                  <VendorCard
-                    key={`google-${index}`}
-                    vendor={vendor}
-                    isFavorite={favorites.has(vendor.place_id || '')}
-                    isLoading={loading.has(vendor.place_id || '')}
-                    onToggleFavorite={toggleFavorite}
-                    subcategory={subcategory}
-                  />
-                ))}
+                {(() => {
+                  console.log('🎯 Rendering', googleResults.length, 'VendorCard components');
+                  return googleResults.map((vendor, index) => {
+                    console.log(`🏪 Rendering VendorCard ${index}:`, vendor.title, vendor.vendor_source);
+                    return (
+                      <VendorCard
+                        key={`google-${index}`}
+                        vendor={vendor}
+                        isFavorite={favorites.has(vendor.place_id || '')}
+                        isLoading={loading.has(vendor.place_id || '')}
+                        onToggleFavorite={toggleFavorite}
+                        subcategory={subcategory}
+                      />
+                    );
+                  });
+                })()}
               </div>
             ) : (
               <ComingSoonBanner type="google" vendorType={vendorType} />

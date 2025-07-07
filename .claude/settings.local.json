@@ -1,3 +1,13 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(supabase db push:*)",
+      "Bash(find:*)",
+      "mcp__ide__getDiagnostics",
+      "Bash(npm run dev:*)",
+      "Bash(supabase db:*)",
+      "Bash(supabase status:*)"
+    ]
+  },
   "enableAllProjectMcpServers": false
 }

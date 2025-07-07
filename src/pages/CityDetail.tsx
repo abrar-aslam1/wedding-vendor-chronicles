@@ -24,6 +24,7 @@ const vendorCategories = [
   { name: "Hair Stylists", icon: Scissors, slug: "hair-stylists", color: "bg-yellow-500" },
   { name: "Makeup Artists", icon: Heart, slug: "makeup-artists", color: "bg-red-500" },
   { name: "Wedding Planners", icon: Users, slug: "wedding-planners", color: "bg-indigo-500" },
+  { name: "Wedding Decorators", icon: Palette, slug: "wedding-decorators", color: "bg-teal-500" },
 ];
 
 export default function CityDetail() {

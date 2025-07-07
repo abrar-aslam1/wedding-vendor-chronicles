@@ -19,10 +19,11 @@ export const EnhancedStateGrid = () => {
       : getStatesByRegion(selectedRegion);
     
     if (searchTerm) {
+      const searchLower = searchTerm.toLowerCase();
       filteredStates = filteredStates.filter(state => 
-        state.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        state.name.toLowerCase().includes(searchLower) ||
         state.majorCities.some(city => 
-          city.toLowerCase().includes(searchTerm.toLowerCase())
+          city.toLowerCase().includes(searchLower)
         )
       );
     }
