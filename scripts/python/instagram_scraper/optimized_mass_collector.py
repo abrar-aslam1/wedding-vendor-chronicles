@@ -5,6 +5,7 @@ Maximizes data extraction from each Apify request to minimize API calls
 """
 
 from comprehensive_collection_plan import ComprehensiveWeddingVendorCollector
+from enterprise_collection import InstagramVendor
 import asyncio
 from typing import Dict, List, Tuple
 import logging

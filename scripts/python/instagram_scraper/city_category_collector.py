@@ -8,6 +8,7 @@ from comprehensive_collection_plan import ComprehensiveWeddingVendorCollector
 import asyncio
 from typing import Dict, List, Tuple
 import json
+import logging
 from datetime import datetime
 
 class CityByCategoryCollector(ComprehensiveWeddingVendorCollector):
