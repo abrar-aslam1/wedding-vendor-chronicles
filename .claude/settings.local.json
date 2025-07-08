@@ -6,7 +6,9 @@
       "mcp__ide__getDiagnostics",
       "Bash(npm run dev:*)",
       "Bash(supabase db:*)",
-      "Bash(supabase status:*)"
+      "Bash(supabase status:*)",
+      "Bash(source:*)",
+      "Bash(python:*)"
     ]
   },
   "enableAllProjectMcpServers": false

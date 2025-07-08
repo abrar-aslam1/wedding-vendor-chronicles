@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  instagram-scraper:
+    build: .
+    container_name: wedding-instagram-scraper
+    environment:
+      # Supabase Configuration
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+      - SUPABASE_SERVICE_KEY=${SUPABASE_SERVICE_KEY}
+      
+      # Apify Configuration
+      - APIFY_TOKEN=${APIFY_TOKEN}
+      
+      # Optional configurations
+      - ALERT_EMAIL=${ALERT_EMAIL}
+      - EMAIL_USER=${EMAIL_USER}
+      - EMAIL_PASS=${EMAIL_PASS}
+      - MAX_CONCURRENT_SCRAPES=${MAX_CONCURRENT_SCRAPES:-3}
+      - QUALITY_THRESHOLD=${QUALITY_THRESHOLD:-4}
+      - MIN_FOLLOWERS=${MIN_FOLLOWERS:-500}
+      
+    volumes:
+      - ./logs:/app/logs
+      - ./data:/app/data
+      
+    restart: unless-stopped
+    
+    # Health check
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys; sys.exit(0)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: Redis for distributed deployment
+  redis:
+    image: redis:7-alpine
+    container_name: wedding-scraper-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    profiles:
+      - distributed
+
+  # Optional: Monitoring with Grafana
+  grafana:
+    image: grafana/grafana:latest
+    container_name: wedding-scraper-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+    profiles:
+      - monitoring
+
+volumes:
+  redis_data:
+  grafana_data:
