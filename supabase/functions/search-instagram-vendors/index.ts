@@ -153,6 +153,7 @@ serve(async (req) => {
         state: vendor.state,
         postal_code: undefined,
         instagram_handle: vendor.instagram_handle,
+        instagram_url: vendor.instagram_url,
         follower_count: vendor.follower_count,
         post_count: vendor.post_count,
         is_verified: vendor.is_verified,

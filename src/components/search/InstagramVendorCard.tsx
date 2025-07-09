@@ -228,8 +228,12 @@ export const InstagramVendorCard = ({
         <Button 
           className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white"
           onClick={() => {
-            if (vendor.instagram_handle) {
-              window.open(`https://instagram.com/${vendor.instagram_handle}`, '_blank');
+            // Use stored instagram_url if available, otherwise construct from handle
+            const instagramUrl = vendor.instagram_url || 
+              (vendor.instagram_handle ? `https://www.instagram.com/${vendor.instagram_handle}` : null);
+            
+            if (instagramUrl) {
+              window.open(instagramUrl, '_blank');
             }
           }}
         >

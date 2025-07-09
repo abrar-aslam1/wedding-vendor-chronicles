@@ -126,7 +126,7 @@ async def populate_manual_seeds():
                     category=category,
                     subcategory=None,
                     bio=vendor_data["bio"],
-                    website_url=f"https://instagram.com/{vendor_data['handle']}",
+                    website_url=f"https://www.instagram.com/{vendor_data['handle']}",
                     email=None,
                     phone=None,
                     follower_count=vendor_data["estimated_followers"],

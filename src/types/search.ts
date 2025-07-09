@@ -58,6 +58,7 @@ export interface SearchResult {
   snippet?: string;
   // Instagram vendor specific fields
   instagram_handle?: string;
+  instagram_url?: string;
   follower_count?: number;
   post_count?: number;
   is_verified?: boolean;
