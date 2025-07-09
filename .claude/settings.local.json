@@ -8,7 +8,8 @@
       "Bash(supabase db:*)",
       "Bash(supabase status:*)",
       "Bash(source:*)",
-      "Bash(python:*)"
+      "Bash(python:*)",
+      "Bash(git add:*)"
     ]
   },
   "enableAllProjectMcpServers": false

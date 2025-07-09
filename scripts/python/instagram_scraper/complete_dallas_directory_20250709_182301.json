@@ -1,0 +1,468 @@
+{
+  "timestamp": "2025-07-09T18:23:01.450247",
+  "city": "Dallas",
+  "state": "TX",
+  "total_discovered": 43,
+  "categories": 9,
+  "vendors_by_category": {
+    "florists": 5,
+    "photographers": 5,
+    "makeup-artists": 4,
+    "hair-stylists": 4,
+    "wedding-planners": 4,
+    "videographers": 3,
+    "caterers": 3,
+    "venues": 12,
+    "cake-designers": 3
+  },
+  "detailed_vendors": {
+    "florists": [
+      {
+        "business_name": "Stems Floral Design",
+        "instagram_handle": "stemsfloral",
+        "instagram_url": "https://www.instagram.com/stemsfloral",
+        "category": "florists",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      },
+      {
+        "business_name": "Paisley Petals",
+        "instagram_handle": "paisleypetals",
+        "instagram_url": "https://www.instagram.com/paisleypetals",
+        "category": "florists",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      },
+      {
+        "business_name": "The Flower Studio",
+        "instagram_handle": "theflowerstudio",
+        "instagram_url": "https://www.instagram.com/theflowerstudio",
+        "category": "florists",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      },
+      {
+        "business_name": "Posh Floral Designs",
+        "instagram_handle": "poshfloraldesigns",
+        "instagram_url": "https://www.instagram.com/poshfloraldesigns",
+        "category": "florists",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      },
+      {
+        "business_name": "Blooming Gallery",
+        "instagram_handle": "bloominggallery",
+        "instagram_url": "https://www.instagram.com/bloominggallery",
+        "category": "florists",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      }
+    ],
+    "photographers": [
+      {
+        "business_name": "Amy Odom Photography",
+        "instagram_handle": "amyodomphotography",
+        "instagram_url": "https://www.instagram.com/amyodomphotography",
+        "category": "photographers",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      },
+      {
+        "business_name": "Shaun Menary Photography",
+        "instagram_handle": "shaunmenary",
+        "instagram_url": "https://www.instagram.com/shaunmenary",
+        "category": "photographers",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      },
+      {
+        "business_name": "Tracy Autem Photography",
+        "instagram_handle": "tracyautem",
+        "instagram_url": "https://www.instagram.com/tracyautem",
+        "category": "photographers",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      },
+      {
+        "business_name": "Kate Preftakes Photography",
+        "instagram_handle": "katepreftakes",
+        "instagram_url": "https://www.instagram.com/katepreftakes",
+        "category": "photographers",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      },
+      {
+        "business_name": "Lightly Photography",
+        "instagram_handle": "lightlyphotography",
+        "instagram_url": "https://www.instagram.com/lightlyphotography",
+        "category": "photographers",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      }
+    ],
+    "makeup-artists": [
+      {
+        "business_name": "Makeup by Liz",
+        "instagram_handle": "makeupbyliz",
+        "instagram_url": "https://www.instagram.com/makeupbyliz",
+        "category": "makeup-artists",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      },
+      {
+        "business_name": "Glam Squad Dallas",
+        "instagram_handle": "glamsquaddallas",
+        "instagram_url": "https://www.instagram.com/glamsquaddallas",
+        "category": "makeup-artists",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      },
+      {
+        "business_name": "Beauty by Ashley",
+        "instagram_handle": "beautybyashley",
+        "instagram_url": "https://www.instagram.com/beautybyashley",
+        "category": "makeup-artists",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      },
+      {
+        "business_name": "Dallas Makeup Collective",
+        "instagram_handle": "dallasmakeupcollective",
+        "instagram_url": "https://www.instagram.com/dallasmakeupcollective",
+        "category": "makeup-artists",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      }
+    ],
+    "hair-stylists": [
+      {
+        "business_name": "Hair by Sarah Kate",
+        "instagram_handle": "hairbysarahkate",
+        "instagram_url": "https://www.instagram.com/hairbysarahkate",
+        "category": "hair-stylists",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      },
+      {
+        "business_name": "Bridal Hair Co",
+        "instagram_handle": "bridalhairco",
+        "instagram_url": "https://www.instagram.com/bridalhairco",
+        "category": "hair-stylists",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      },
+      {
+        "business_name": "Styled by Sam",
+        "instagram_handle": "styledbysam",
+        "instagram_url": "https://www.instagram.com/styledbysam",
+        "category": "hair-stylists",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      },
+      {
+        "business_name": "Dallas Hair Artists",
+        "instagram_handle": "dallashairartists",
+        "instagram_url": "https://www.instagram.com/dallashairartists",
+        "category": "hair-stylists",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      }
+    ],
+    "wedding-planners": [
+      {
+        "business_name": "DFW Events",
+        "instagram_handle": "dfwevents",
+        "instagram_url": "https://www.instagram.com/dfwevents",
+        "category": "wedding-planners",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      },
+      {
+        "business_name": "Planned Perfectly",
+        "instagram_handle": "plannedperfectly",
+        "instagram_url": "https://www.instagram.com/plannedperfectly",
+        "category": "wedding-planners",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      },
+      {
+        "business_name": "Ivory & Bliss",
+        "instagram_handle": "ivoryandbliss",
+        "instagram_url": "https://www.instagram.com/ivoryandbliss",
+        "category": "wedding-planners",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      },
+      {
+        "business_name": "The Perfect Plan",
+        "instagram_handle": "theperfectplan",
+        "instagram_url": "https://www.instagram.com/theperfectplan",
+        "category": "wedding-planners",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      }
+    ],
+    "videographers": [
+      {
+        "business_name": "Whitten Films",
+        "instagram_handle": "whittenfilms",
+        "instagram_url": "https://www.instagram.com/whittenfilms",
+        "category": "videographers",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      },
+      {
+        "business_name": "Dallas Wedding Films",
+        "instagram_handle": "dallasweddingfilms",
+        "instagram_url": "https://www.instagram.com/dallasweddingfilms",
+        "category": "videographers",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      },
+      {
+        "business_name": "Momento Films",
+        "instagram_handle": "momentofilms",
+        "instagram_url": "https://www.instagram.com/momentofilms",
+        "category": "videographers",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      }
+    ],
+    "caterers": [
+      {
+        "business_name": "Culinaire Catering",
+        "instagram_handle": "culinairecatering",
+        "instagram_url": "https://www.instagram.com/culinairecatering",
+        "category": "caterers",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      },
+      {
+        "business_name": "Dallas Catering Company",
+        "instagram_handle": "dallascateringco",
+        "instagram_url": "https://www.instagram.com/dallascateringco",
+        "category": "caterers",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      },
+      {
+        "business_name": "Epicurean Events",
+        "instagram_handle": "epicureanevents",
+        "instagram_url": "https://www.instagram.com/epicureanevents",
+        "category": "caterers",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      }
+    ],
+    "venues": [
+      {
+        "business_name": "The Nasher Sculpture Center",
+        "instagram_handle": "nashersculpturecenter",
+        "instagram_url": "https://www.instagram.com/nashersculpturecenter",
+        "category": "venues",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      },
+      {
+        "business_name": "Trinity River Audubon Center",
+        "instagram_handle": "trinityriveraudubon",
+        "instagram_url": "https://www.instagram.com/trinityriveraudubon",
+        "category": "venues",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      },
+      {
+        "business_name": "The Dallas Arboretum",
+        "instagram_handle": "dallasarboretum",
+        "instagram_url": "https://www.instagram.com/dallasarboretum",
+        "category": "venues",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      },
+      {
+        "business_name": "Magnolia Hotel Dallas",
+        "instagram_handle": "magnoliahoteldallas",
+        "instagram_url": "https://www.instagram.com/magnoliahoteldallas",
+        "category": "venues",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      },
+      {
+        "business_name": "The Nasher Sculpture Center",
+        "instagram_handle": "nashersculpturecenter",
+        "instagram_url": "https://www.instagram.com/nashersculpturecenter",
+        "category": "venues",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      },
+      {
+        "business_name": "Trinity River Audubon Center",
+        "instagram_handle": "trinityriveraudubon",
+        "instagram_url": "https://www.instagram.com/trinityriveraudubon",
+        "category": "venues",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      },
+      {
+        "business_name": "The Dallas Arboretum",
+        "instagram_handle": "dallasarboretum",
+        "instagram_url": "https://www.instagram.com/dallasarboretum",
+        "category": "venues",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      },
+      {
+        "business_name": "Magnolia Hotel Dallas",
+        "instagram_handle": "magnoliahoteldallas",
+        "instagram_url": "https://www.instagram.com/magnoliahoteldallas",
+        "category": "venues",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      },
+      {
+        "business_name": "The Nasher Sculpture Center",
+        "instagram_handle": "nashersculpturecenter",
+        "instagram_url": "https://www.instagram.com/nashersculpturecenter",
+        "category": "venues",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      },
+      {
+        "business_name": "Trinity River Audubon Center",
+        "instagram_handle": "trinityriveraudubon",
+        "instagram_url": "https://www.instagram.com/trinityriveraudubon",
+        "category": "venues",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      },
+      {
+        "business_name": "The Dallas Arboretum",
+        "instagram_handle": "dallasarboretum",
+        "instagram_url": "https://www.instagram.com/dallasarboretum",
+        "category": "venues",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      },
+      {
+        "business_name": "Magnolia Hotel Dallas",
+        "instagram_handle": "magnoliahoteldallas",
+        "instagram_url": "https://www.instagram.com/magnoliahoteldallas",
+        "category": "venues",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      }
+    ],
+    "cake-designers": [
+      {
+        "business_name": "Creme de la Creme",
+        "instagram_handle": "cremedelacremetx",
+        "instagram_url": "https://www.instagram.com/cremedelacremetx",
+        "category": "cake-designers",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      },
+      {
+        "business_name": "Sweet by Design",
+        "instagram_handle": "sweetbydesign",
+        "instagram_url": "https://www.instagram.com/sweetbydesign",
+        "category": "cake-designers",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      },
+      {
+        "business_name": "The Cake Studio",
+        "instagram_handle": "thecakestudio",
+        "instagram_url": "https://www.instagram.com/thecakestudio",
+        "category": "cake-designers",
+        "city": "Dallas",
+        "state": "TX",
+        "verified": true,
+        "discovery_method": "automated_search"
+      }
+    ]
+  }
+}
