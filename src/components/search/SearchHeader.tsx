@@ -74,11 +74,11 @@ export const SearchHeader = ({ subcategory }: SearchHeaderProps) => {
   };
   
   return (
-    <div className="mb-8">
-      <h1 className="text-3xl font-bold text-wedding-text capitalize">
+    <div className="mb-8 text-center">
+      <h1 className="text-3xl md:text-4xl font-bold text-wedding-text capitalize mb-4">
         {getTitle()}
       </h1>
-      <p className="text-gray-600 mt-2">
+      <p className="text-gray-600 text-lg max-w-2xl mx-auto">
         {getSubtitle()}
       </p>
     </div>

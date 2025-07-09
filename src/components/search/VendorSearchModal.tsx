@@ -120,17 +120,18 @@ export const VendorSearchModal = ({
             {popularCities.length > 0 && (
               <div className="mb-4">
                 <p className="text-sm text-gray-600 mb-3">Popular cities in {stateName}:</p>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                   {popularCities.slice(0, 9).map((city) => (
                     <Button
                       key={city}
                       variant="outline"
                       size="sm"
                       onClick={() => handleCitySearch(city)}
-                      className="text-left justify-start hover:bg-wedding-primary/10"
+                      className="text-left justify-start hover:bg-wedding-primary/10 min-h-[44px] whitespace-nowrap overflow-hidden text-ellipsis"
+                      title={city}
                     >
-                      <MapPin className="h-3 w-3 mr-2" />
-                      {city}
+                      <MapPin className="h-3 w-3 mr-2 flex-shrink-0" />
+                      <span className="truncate">{city}</span>
                     </Button>
                   ))}
                 </div>
@@ -148,7 +149,7 @@ export const VendorSearchModal = ({
                       value={selectedCity}
                       onChange={(e) => setSelectedCity(e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-wedding-primary focus:border-transparent"
-                      onKeyPress={(e) => {
+                      onKeyDown={(e) => {
                         if (e.key === 'Enter') {
                           handleCustomCitySearch();
                         }

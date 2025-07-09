@@ -392,11 +392,11 @@ export const SearchResults = ({ results, isSearching, subcategory }: SearchResul
     <div>
       {/* Header with subcategory info */}
       {subcategory && (
-        <div className="mb-6 text-center">
-          <h2 className="text-xl font-semibold text-wedding-text">
-            Showing {vendorType} Specializing in {getSubcategoryDescription()}
+        <div className="mb-8 text-center">
+          <h2 className="text-2xl md:text-3xl font-bold text-wedding-text mb-3">
+            {vendorType} Specializing in {getSubcategoryDescription()}
           </h2>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-base text-gray-600 bg-gray-50 rounded-full px-4 py-2 inline-block">
             {results.length} {results.length === 1 ? getSingularVendorType() : vendorType.toLowerCase()} found
           </p>
         </div>
@@ -418,14 +418,14 @@ export const SearchResults = ({ results, isSearching, subcategory }: SearchResul
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Google Results Column */}
           <div className="space-y-6">
-            <div className="flex items-center gap-3 pb-4 border-b border-gray-200">
-              <div className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-green-500 text-white px-3 py-1.5 rounded-full text-sm font-medium">
-                <MapPin className="h-4 w-4" />
+            <div className="text-center pb-4 border-b border-gray-200">
+              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-green-500 text-white px-4 py-2 rounded-full text-base font-semibold shadow-lg">
+                <MapPin className="h-5 w-5" />
                 Google Results
               </div>
-              <span className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500 mt-2">
                 {googleResults.length} {googleResults.length === 1 ? 'result' : 'results'}
-              </span>
+              </p>
             </div>
             
             {googleResults.length > 0 ? (
@@ -454,14 +454,14 @@ export const SearchResults = ({ results, isSearching, subcategory }: SearchResul
 
           {/* Instagram Results Column */}
           <div className="space-y-6">
-            <div className="flex items-center gap-3 pb-4 border-b border-gray-200">
-              <div className="flex items-center gap-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-3 py-1.5 rounded-full text-sm font-medium">
-                <Instagram className="h-4 w-4" />
+            <div className="text-center pb-4 border-b border-gray-200">
+              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-full text-base font-semibold shadow-lg">
+                <Instagram className="h-5 w-5" />
                 Instagram Results
               </div>
-              <span className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500 mt-2">
                 {instagramResults.length} {instagramResults.length === 1 ? 'result' : 'results'}
-              </span>
+              </p>
             </div>
             
             {instagramResults.length > 0 ? (

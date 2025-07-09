@@ -153,17 +153,18 @@ export const SearchForm = ({ onSearch, isSearching, preselectedCategory }: Searc
                 ? 'Choose a floral style to find florists who match your wedding aesthetic'
                 : `Choose a type to see ${selectedCategory.toLowerCase()} specializing in that area`}
             </p>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {subcategories.map((subcategory) => (
                 <Button
                   key={subcategory.id}
                   variant={selectedSubcategory === subcategory.name ? "default" : "outline"}
-                  className={`w-full text-sm py-3 ${
+                  className={`w-full text-sm py-3 px-4 min-h-[44px] whitespace-nowrap overflow-hidden text-ellipsis ${
                     selectedSubcategory === subcategory.name 
                       ? "bg-wedding-primary text-white shadow-md" 
                       : "hover:bg-wedding-primary/10"
                   }`}
                   onClick={() => setSelectedSubcategory(subcategory.name)}
+                  title={subcategory.name}
                 >
                   {subcategory.name}
                 </Button>
