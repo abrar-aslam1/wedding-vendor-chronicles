@@ -1,0 +1,654 @@
+{
+  "summary": {
+    "totalVendors": 43,
+    "validProfiles": 0,
+    "invalidProfiles": 43,
+    "privateAccounts": 0,
+    "redirects": 0,
+    "errors": 0,
+    "validationRate": "0.0%"
+  },
+  "byCategory": {
+    "florists": {
+      "total": 5,
+      "valid": 0,
+      "invalid": 5,
+      "private": 0,
+      "vendors": [
+        {
+          "name": "Stems Floral Design",
+          "handle": "stemsfloral",
+          "status": "invalid",
+          "issue": "Profile not found"
+        },
+        {
+          "name": "Paisley Petals",
+          "handle": "paisleypetals",
+          "status": "invalid",
+          "issue": "Profile not found"
+        },
+        {
+          "name": "The Flower Studio",
+          "handle": "theflowerstudio",
+          "status": "invalid",
+          "issue": "Profile not found"
+        },
+        {
+          "name": "Posh Floral Designs",
+          "handle": "poshfloraldesigns",
+          "status": "invalid",
+          "issue": "Profile not found"
+        },
+        {
+          "name": "Blooming Gallery",
+          "handle": "bloominggallery",
+          "status": "invalid",
+          "issue": "Profile not found"
+        }
+      ]
+    },
+    "photographers": {
+      "total": 5,
+      "valid": 0,
+      "invalid": 5,
+      "private": 0,
+      "vendors": [
+        {
+          "name": "Amy Odom Photography",
+          "handle": "amyodomphotography",
+          "status": "invalid",
+          "issue": "Profile not found"
+        },
+        {
+          "name": "Shaun Menary Photography",
+          "handle": "shaunmenary",
+          "status": "invalid",
+          "issue": "Profile not found"
+        },
+        {
+          "name": "Tracy Autem Photography",
+          "handle": "tracyautem",
+          "status": "invalid",
+          "issue": "Profile not found"
+        },
+        {
+          "name": "Kate Preftakes Photography",
+          "handle": "katepreftakes",
+          "status": "invalid",
+          "issue": "Profile not found"
+        },
+        {
+          "name": "Lightly Photography",
+          "handle": "lightlyphotography",
+          "status": "invalid",
+          "issue": "Profile not found"
+        }
+      ]
+    },
+    "makeup artists": {
+      "total": 4,
+      "valid": 0,
+      "invalid": 4,
+      "private": 0,
+      "vendors": [
+        {
+          "name": "Makeup by Liz",
+          "handle": "makeupbyliz",
+          "status": "invalid",
+          "issue": "Profile not found"
+        },
+        {
+          "name": "Glam Squad Dallas",
+          "handle": "glamsquaddallas",
+          "status": "invalid",
+          "issue": "Profile not found"
+        },
+        {
+          "name": "Beauty by Ashley",
+          "handle": "beautybyashley",
+          "status": "invalid",
+          "issue": "Profile not found"
+        },
+        {
+          "name": "Dallas Makeup Collective",
+          "handle": "dallasmakeupcollective",
+          "status": "invalid",
+          "issue": "Profile not found"
+        }
+      ]
+    },
+    "hair stylists": {
+      "total": 4,
+      "valid": 0,
+      "invalid": 4,
+      "private": 0,
+      "vendors": [
+        {
+          "name": "Hair by Sarah Kate",
+          "handle": "hairbysarahkate",
+          "status": "invalid",
+          "issue": "Profile not found"
+        },
+        {
+          "name": "Bridal Hair Co",
+          "handle": "bridalhairco",
+          "status": "invalid",
+          "issue": "Profile not found"
+        },
+        {
+          "name": "Styled by Sam",
+          "handle": "styledbysam",
+          "status": "invalid",
+          "issue": "Profile not found"
+        },
+        {
+          "name": "Dallas Hair Artists",
+          "handle": "dallashairartists",
+          "status": "invalid",
+          "issue": "Profile not found"
+        }
+      ]
+    },
+    "wedding planners": {
+      "total": 4,
+      "valid": 0,
+      "invalid": 4,
+      "private": 0,
+      "vendors": [
+        {
+          "name": "DFW Events",
+          "handle": "dfwevents",
+          "status": "invalid",
+          "issue": "Profile not found"
+        },
+        {
+          "name": "Planned Perfectly",
+          "handle": "plannedperfectly",
+          "status": "invalid",
+          "issue": "Profile not found"
+        },
+        {
+          "name": "Ivory & Bliss",
+          "handle": "ivoryandbliss",
+          "status": "invalid",
+          "issue": "Profile not found"
+        },
+        {
+          "name": "The Perfect Plan",
+          "handle": "theperfectplan",
+          "status": "invalid",
+          "issue": "Profile not found"
+        }
+      ]
+    },
+    "videographers": {
+      "total": 3,
+      "valid": 0,
+      "invalid": 3,
+      "private": 0,
+      "vendors": [
+        {
+          "name": "Whitten Films",
+          "handle": "whittenfilms",
+          "status": "invalid",
+          "issue": "Profile not found"
+        },
+        {
+          "name": "Dallas Wedding Films",
+          "handle": "dallasweddingfilms",
+          "status": "invalid",
+          "issue": "Profile not found"
+        },
+        {
+          "name": "Momento Films",
+          "handle": "momentofilms",
+          "status": "invalid",
+          "issue": "Profile not found"
+        }
+      ]
+    },
+    "caterers": {
+      "total": 3,
+      "valid": 0,
+      "invalid": 3,
+      "private": 0,
+      "vendors": [
+        {
+          "name": "Culinaire Catering",
+          "handle": "culinairecatering",
+          "status": "invalid",
+          "issue": "Profile not found"
+        },
+        {
+          "name": "Dallas Catering Company",
+          "handle": "dallascateringco",
+          "status": "invalid",
+          "issue": "Profile not found"
+        },
+        {
+          "name": "Epicurean Events",
+          "handle": "epicureanevents",
+          "status": "invalid",
+          "issue": "Profile not found"
+        }
+      ]
+    },
+    "venues": {
+      "total": 12,
+      "valid": 0,
+      "invalid": 12,
+      "private": 0,
+      "vendors": [
+        {
+          "name": "The Nasher Sculpture Center",
+          "handle": "nashersculpturecenter",
+          "status": "invalid",
+          "issue": "Profile not found"
+        },
+        {
+          "name": "Trinity River Audubon Center",
+          "handle": "trinityriveraudubon",
+          "status": "invalid",
+          "issue": "Profile not found"
+        },
+        {
+          "name": "The Dallas Arboretum",
+          "handle": "dallasarboretum",
+          "status": "invalid",
+          "issue": "Profile not found"
+        },
+        {
+          "name": "Magnolia Hotel Dallas",
+          "handle": "magnoliahoteldallas",
+          "status": "invalid",
+          "issue": "Profile not found"
+        },
+        {
+          "name": "The Nasher Sculpture Center",
+          "handle": "nashersculpturecenter",
+          "status": "invalid",
+          "issue": "Profile not found"
+        },
+        {
+          "name": "Trinity River Audubon Center",
+          "handle": "trinityriveraudubon",
+          "status": "invalid",
+          "issue": "Profile not found"
+        },
+        {
+          "name": "The Dallas Arboretum",
+          "handle": "dallasarboretum",
+          "status": "invalid",
+          "issue": "Profile not found"
+        },
+        {
+          "name": "Magnolia Hotel Dallas",
+          "handle": "magnoliahoteldallas",
+          "status": "invalid",
+          "issue": "Profile not found"
+        },
+        {
+          "name": "The Nasher Sculpture Center",
+          "handle": "nashersculpturecenter",
+          "status": "invalid",
+          "issue": "Profile not found"
+        },
+        {
+          "name": "Trinity River Audubon Center",
+          "handle": "trinityriveraudubon",
+          "status": "invalid",
+          "issue": "Profile not found"
+        },
+        {
+          "name": "The Dallas Arboretum",
+          "handle": "dallasarboretum",
+          "status": "invalid",
+          "issue": "Profile not found"
+        },
+        {
+          "name": "Magnolia Hotel Dallas",
+          "handle": "magnoliahoteldallas",
+          "status": "invalid",
+          "issue": "Profile not found"
+        }
+      ]
+    },
+    "cake designers": {
+      "total": 3,
+      "valid": 0,
+      "invalid": 3,
+      "private": 0,
+      "vendors": [
+        {
+          "name": "Creme de la Creme",
+          "handle": "cremedelacremetx",
+          "status": "invalid",
+          "issue": "Profile not found"
+        },
+        {
+          "name": "Sweet by Design",
+          "handle": "sweetbydesign",
+          "status": "invalid",
+          "issue": "Profile not found"
+        },
+        {
+          "name": "The Cake Studio",
+          "handle": "thecakestudio",
+          "status": "invalid",
+          "issue": "Profile not found"
+        }
+      ]
+    }
+  },
+  "actionItems": {
+    "mustFix": [
+      {
+        "vendor": "Stems Floral Design",
+        "category": "florists",
+        "handle": "stemsfloral",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "Paisley Petals",
+        "category": "florists",
+        "handle": "paisleypetals",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "The Flower Studio",
+        "category": "florists",
+        "handle": "theflowerstudio",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "Posh Floral Designs",
+        "category": "florists",
+        "handle": "poshfloraldesigns",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "Blooming Gallery",
+        "category": "florists",
+        "handle": "bloominggallery",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "Amy Odom Photography",
+        "category": "photographers",
+        "handle": "amyodomphotography",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "Shaun Menary Photography",
+        "category": "photographers",
+        "handle": "shaunmenary",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "Tracy Autem Photography",
+        "category": "photographers",
+        "handle": "tracyautem",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "Kate Preftakes Photography",
+        "category": "photographers",
+        "handle": "katepreftakes",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "Lightly Photography",
+        "category": "photographers",
+        "handle": "lightlyphotography",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "Makeup by Liz",
+        "category": "makeup artists",
+        "handle": "makeupbyliz",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "Glam Squad Dallas",
+        "category": "makeup artists",
+        "handle": "glamsquaddallas",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "Beauty by Ashley",
+        "category": "makeup artists",
+        "handle": "beautybyashley",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "Dallas Makeup Collective",
+        "category": "makeup artists",
+        "handle": "dallasmakeupcollective",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "Hair by Sarah Kate",
+        "category": "hair stylists",
+        "handle": "hairbysarahkate",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "Bridal Hair Co",
+        "category": "hair stylists",
+        "handle": "bridalhairco",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "Styled by Sam",
+        "category": "hair stylists",
+        "handle": "styledbysam",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "Dallas Hair Artists",
+        "category": "hair stylists",
+        "handle": "dallashairartists",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "DFW Events",
+        "category": "wedding planners",
+        "handle": "dfwevents",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "Planned Perfectly",
+        "category": "wedding planners",
+        "handle": "plannedperfectly",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "Ivory & Bliss",
+        "category": "wedding planners",
+        "handle": "ivoryandbliss",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "The Perfect Plan",
+        "category": "wedding planners",
+        "handle": "theperfectplan",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "Whitten Films",
+        "category": "videographers",
+        "handle": "whittenfilms",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "Dallas Wedding Films",
+        "category": "videographers",
+        "handle": "dallasweddingfilms",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "Momento Films",
+        "category": "videographers",
+        "handle": "momentofilms",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "Culinaire Catering",
+        "category": "caterers",
+        "handle": "culinairecatering",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "Dallas Catering Company",
+        "category": "caterers",
+        "handle": "dallascateringco",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "Epicurean Events",
+        "category": "caterers",
+        "handle": "epicureanevents",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "The Nasher Sculpture Center",
+        "category": "venues",
+        "handle": "nashersculpturecenter",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "Trinity River Audubon Center",
+        "category": "venues",
+        "handle": "trinityriveraudubon",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "The Dallas Arboretum",
+        "category": "venues",
+        "handle": "dallasarboretum",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "Magnolia Hotel Dallas",
+        "category": "venues",
+        "handle": "magnoliahoteldallas",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "The Nasher Sculpture Center",
+        "category": "venues",
+        "handle": "nashersculpturecenter",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "Trinity River Audubon Center",
+        "category": "venues",
+        "handle": "trinityriveraudubon",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "The Dallas Arboretum",
+        "category": "venues",
+        "handle": "dallasarboretum",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "Magnolia Hotel Dallas",
+        "category": "venues",
+        "handle": "magnoliahoteldallas",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "The Nasher Sculpture Center",
+        "category": "venues",
+        "handle": "nashersculpturecenter",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "Trinity River Audubon Center",
+        "category": "venues",
+        "handle": "trinityriveraudubon",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "The Dallas Arboretum",
+        "category": "venues",
+        "handle": "dallasarboretum",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "Magnolia Hotel Dallas",
+        "category": "venues",
+        "handle": "magnoliahoteldallas",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "Creme de la Creme",
+        "category": "cake designers",
+        "handle": "cremedelacremetx",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "Sweet by Design",
+        "category": "cake designers",
+        "handle": "sweetbydesign",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      },
+      {
+        "vendor": "The Cake Studio",
+        "category": "cake designers",
+        "handle": "thecakestudio",
+        "issue": "Profile not found",
+        "suggestedAction": "Check if account was deleted or suspended"
+      }
+    ],
+    "shouldReview": []
+  },
+  "exportFormats": {
+    "csv": "Business Name,Category,Instagram Handle,Status,Issue,Status Code\n\"Stems Floral Design\",\"florists\",\"stemsfloral\",\"Invalid\",\"Profile not found\",\"200\"\n\"Paisley Petals\",\"florists\",\"paisleypetals\",\"Invalid\",\"Profile not found\",\"200\"\n\"The Flower Studio\",\"florists\",\"theflowerstudio\",\"Invalid\",\"Profile not found\",\"200\"\n\"Posh Floral Designs\",\"florists\",\"poshfloraldesigns\",\"Invalid\",\"Profile not found\",\"200\"\n\"Blooming Gallery\",\"florists\",\"bloominggallery\",\"Invalid\",\"Profile not found\",\"200\"\n\"Amy Odom Photography\",\"photographers\",\"amyodomphotography\",\"Invalid\",\"Profile not found\",\"200\"\n\"Shaun Menary Photography\",\"photographers\",\"shaunmenary\",\"Invalid\",\"Profile not found\",\"200\"\n\"Tracy Autem Photography\",\"photographers\",\"tracyautem\",\"Invalid\",\"Profile not found\",\"200\"\n\"Kate Preftakes Photography\",\"photographers\",\"katepreftakes\",\"Invalid\",\"Profile not found\",\"200\"\n\"Lightly Photography\",\"photographers\",\"lightlyphotography\",\"Invalid\",\"Profile not found\",\"200\"\n\"Makeup by Liz\",\"makeup artists\",\"makeupbyliz\",\"Invalid\",\"Profile not found\",\"200\"\n\"Glam Squad Dallas\",\"makeup artists\",\"glamsquaddallas\",\"Invalid\",\"Profile not found\",\"200\"\n\"Beauty by Ashley\",\"makeup artists\",\"beautybyashley\",\"Invalid\",\"Profile not found\",\"200\"\n\"Dallas Makeup Collective\",\"makeup artists\",\"dallasmakeupcollective\",\"Invalid\",\"Profile not found\",\"200\"\n\"Hair by Sarah Kate\",\"hair stylists\",\"hairbysarahkate\",\"Invalid\",\"Profile not found\",\"200\"\n\"Bridal Hair Co\",\"hair stylists\",\"bridalhairco\",\"Invalid\",\"Profile not found\",\"200\"\n\"Styled by Sam\",\"hair stylists\",\"styledbysam\",\"Invalid\",\"Profile not found\",\"200\"\n\"Dallas Hair Artists\",\"hair stylists\",\"dallashairartists\",\"Invalid\",\"Profile not found\",\"200\"\n\"DFW Events\",\"wedding planners\",\"dfwevents\",\"Invalid\",\"Profile not found\",\"200\"\n\"Planned Perfectly\",\"wedding planners\",\"plannedperfectly\",\"Invalid\",\"Profile not found\",\"200\"\n\"Ivory & Bliss\",\"wedding planners\",\"ivoryandbliss\",\"Invalid\",\"Profile not found\",\"200\"\n\"The Perfect Plan\",\"wedding planners\",\"theperfectplan\",\"Invalid\",\"Profile not found\",\"200\"\n\"Whitten Films\",\"videographers\",\"whittenfilms\",\"Invalid\",\"Profile not found\",\"200\"\n\"Dallas Wedding Films\",\"videographers\",\"dallasweddingfilms\",\"Invalid\",\"Profile not found\",\"200\"\n\"Momento Films\",\"videographers\",\"momentofilms\",\"Invalid\",\"Profile not found\",\"200\"\n\"Culinaire Catering\",\"caterers\",\"culinairecatering\",\"Invalid\",\"Profile not found\",\"200\"\n\"Dallas Catering Company\",\"caterers\",\"dallascateringco\",\"Invalid\",\"Profile not found\",\"200\"\n\"Epicurean Events\",\"caterers\",\"epicureanevents\",\"Invalid\",\"Profile not found\",\"200\"\n\"The Nasher Sculpture Center\",\"venues\",\"nashersculpturecenter\",\"Invalid\",\"Profile not found\",\"200\"\n\"Trinity River Audubon Center\",\"venues\",\"trinityriveraudubon\",\"Invalid\",\"Profile not found\",\"200\"\n\"The Dallas Arboretum\",\"venues\",\"dallasarboretum\",\"Invalid\",\"Profile not found\",\"200\"\n\"Magnolia Hotel Dallas\",\"venues\",\"magnoliahoteldallas\",\"Invalid\",\"Profile not found\",\"200\"\n\"The Nasher Sculpture Center\",\"venues\",\"nashersculpturecenter\",\"Invalid\",\"Profile not found\",\"200\"\n\"Trinity River Audubon Center\",\"venues\",\"trinityriveraudubon\",\"Invalid\",\"Profile not found\",\"200\"\n\"The Dallas Arboretum\",\"venues\",\"dallasarboretum\",\"Invalid\",\"Profile not found\",\"200\"\n\"Magnolia Hotel Dallas\",\"venues\",\"magnoliahoteldallas\",\"Invalid\",\"Profile not found\",\"200\"\n\"The Nasher Sculpture Center\",\"venues\",\"nashersculpturecenter\",\"Invalid\",\"Profile not found\",\"200\"\n\"Trinity River Audubon Center\",\"venues\",\"trinityriveraudubon\",\"Invalid\",\"Profile not found\",\"200\"\n\"The Dallas Arboretum\",\"venues\",\"dallasarboretum\",\"Invalid\",\"Profile not found\",\"200\"\n\"Magnolia Hotel Dallas\",\"venues\",\"magnoliahoteldallas\",\"Invalid\",\"Profile not found\",\"200\"\n\"Creme de la Creme\",\"cake designers\",\"cremedelacremetx\",\"Invalid\",\"Profile not found\",\"200\"\n\"Sweet by Design\",\"cake designers\",\"sweetbydesign\",\"Invalid\",\"Profile not found\",\"200\"\n\"The Cake Studio\",\"cake designers\",\"thecakestudio\",\"Invalid\",\"Profile not found\",\"200\"\n",
+    "markdown": "# Dallas Wedding Vendor Instagram Validation Report\n\nGenerated: 7/10/2025, 12:12:26 PM\n\n## Summary\n\n- **Total Vendors**: 43\n- **Valid Profiles**: 0 (0.0%)\n- **Invalid Profiles**: 43\n- **Private Accounts**: 0\n- **Redirects**: 0\n- **Errors**: 0\n\n## Invalid Profiles (Action Required)\n\n| Business Name | Category | Instagram Handle | Issue |\n|---------------|----------|------------------|-------|\n| Stems Floral Design | florists | @stemsfloral | Profile not found |\n| Paisley Petals | florists | @paisleypetals | Profile not found |\n| The Flower Studio | florists | @theflowerstudio | Profile not found |\n| Posh Floral Designs | florists | @poshfloraldesigns | Profile not found |\n| Blooming Gallery | florists | @bloominggallery | Profile not found |\n| Amy Odom Photography | photographers | @amyodomphotography | Profile not found |\n| Shaun Menary Photography | photographers | @shaunmenary | Profile not found |\n| Tracy Autem Photography | photographers | @tracyautem | Profile not found |\n| Kate Preftakes Photography | photographers | @katepreftakes | Profile not found |\n| Lightly Photography | photographers | @lightlyphotography | Profile not found |\n| Makeup by Liz | makeup artists | @makeupbyliz | Profile not found |\n| Glam Squad Dallas | makeup artists | @glamsquaddallas | Profile not found |\n| Beauty by Ashley | makeup artists | @beautybyashley | Profile not found |\n| Dallas Makeup Collective | makeup artists | @dallasmakeupcollective | Profile not found |\n| Hair by Sarah Kate | hair stylists | @hairbysarahkate | Profile not found |\n| Bridal Hair Co | hair stylists | @bridalhairco | Profile not found |\n| Styled by Sam | hair stylists | @styledbysam | Profile not found |\n| Dallas Hair Artists | hair stylists | @dallashairartists | Profile not found |\n| DFW Events | wedding planners | @dfwevents | Profile not found |\n| Planned Perfectly | wedding planners | @plannedperfectly | Profile not found |\n| Ivory & Bliss | wedding planners | @ivoryandbliss | Profile not found |\n| The Perfect Plan | wedding planners | @theperfectplan | Profile not found |\n| Whitten Films | videographers | @whittenfilms | Profile not found |\n| Dallas Wedding Films | videographers | @dallasweddingfilms | Profile not found |\n| Momento Films | videographers | @momentofilms | Profile not found |\n| Culinaire Catering | caterers | @culinairecatering | Profile not found |\n| Dallas Catering Company | caterers | @dallascateringco | Profile not found |\n| Epicurean Events | caterers | @epicureanevents | Profile not found |\n| The Nasher Sculpture Center | venues | @nashersculpturecenter | Profile not found |\n| Trinity River Audubon Center | venues | @trinityriveraudubon | Profile not found |\n| The Dallas Arboretum | venues | @dallasarboretum | Profile not found |\n| Magnolia Hotel Dallas | venues | @magnoliahoteldallas | Profile not found |\n| The Nasher Sculpture Center | venues | @nashersculpturecenter | Profile not found |\n| Trinity River Audubon Center | venues | @trinityriveraudubon | Profile not found |\n| The Dallas Arboretum | venues | @dallasarboretum | Profile not found |\n| Magnolia Hotel Dallas | venues | @magnoliahoteldallas | Profile not found |\n| The Nasher Sculpture Center | venues | @nashersculpturecenter | Profile not found |\n| Trinity River Audubon Center | venues | @trinityriveraudubon | Profile not found |\n| The Dallas Arboretum | venues | @dallasarboretum | Profile not found |\n| Magnolia Hotel Dallas | venues | @magnoliahoteldallas | Profile not found |\n| Creme de la Creme | cake designers | @cremedelacremetx | Profile not found |\n| Sweet by Design | cake designers | @sweetbydesign | Profile not found |\n| The Cake Studio | cake designers | @thecakestudio | Profile not found |\n\n",
+    "html": "<!DOCTYPE html>\n<html>\n<head>\n  <title>Dallas Vendor Validation Report</title>\n  <style>\n    body { font-family: Arial, sans-serif; margin: 20px; }\n    .summary { background: #f0f0f0; padding: 15px; border-radius: 5px; margin-bottom: 20px; }\n    .stats { display: flex; gap: 20px; margin-top: 10px; }\n    .stat { background: white; padding: 10px; border-radius: 3px; }\n    .invalid { color: #d32f2f; }\n    .valid { color: #388e3c; }\n    .warning { color: #f57c00; }\n    table { width: 100%; border-collapse: collapse; margin-top: 20px; }\n    th, td { padding: 8px; text-align: left; border-bottom: 1px solid #ddd; }\n    th { background: #f5f5f5; }\n    .category-header { background: #e0e0e0; font-weight: bold; }\n  </style>\n</head>\n<body>\n  <h1>Dallas Wedding Vendor Instagram Validation Report</h1>\n  <p>Generated: 7/10/2025, 12:12:26 PM</p>\n  \n  <div class=\"summary\">\n    <h2>Summary</h2>\n    <div class=\"stats\">\n      <div class=\"stat\">Total Vendors: <strong>43</strong></div>\n      <div class=\"stat valid\">Valid: <strong>0</strong> (0.0%)</div>\n      <div class=\"stat invalid\">Invalid: <strong>43</strong></div>\n      <div class=\"stat warning\">Private: <strong>0</strong></div>\n    </div>\n  </div>\n  \n  \n  <h2 class=\"invalid\">Invalid Profiles - Action Required</h2>\n  <table>\n    <thead>\n      <tr>\n        <th>Business Name</th>\n        <th>Category</th>\n        <th>Instagram Handle</th>\n        <th>Issue</th>\n        <th>Suggested Action</th>\n      </tr>\n    </thead>\n    <tbody>\n      \n      <tr>\n        <td>Stems Floral Design</td>\n        <td>florists</td>\n        <td>@stemsfloral</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>Paisley Petals</td>\n        <td>florists</td>\n        <td>@paisleypetals</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>The Flower Studio</td>\n        <td>florists</td>\n        <td>@theflowerstudio</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>Posh Floral Designs</td>\n        <td>florists</td>\n        <td>@poshfloraldesigns</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>Blooming Gallery</td>\n        <td>florists</td>\n        <td>@bloominggallery</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>Amy Odom Photography</td>\n        <td>photographers</td>\n        <td>@amyodomphotography</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>Shaun Menary Photography</td>\n        <td>photographers</td>\n        <td>@shaunmenary</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>Tracy Autem Photography</td>\n        <td>photographers</td>\n        <td>@tracyautem</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>Kate Preftakes Photography</td>\n        <td>photographers</td>\n        <td>@katepreftakes</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>Lightly Photography</td>\n        <td>photographers</td>\n        <td>@lightlyphotography</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>Makeup by Liz</td>\n        <td>makeup artists</td>\n        <td>@makeupbyliz</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>Glam Squad Dallas</td>\n        <td>makeup artists</td>\n        <td>@glamsquaddallas</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>Beauty by Ashley</td>\n        <td>makeup artists</td>\n        <td>@beautybyashley</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>Dallas Makeup Collective</td>\n        <td>makeup artists</td>\n        <td>@dallasmakeupcollective</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>Hair by Sarah Kate</td>\n        <td>hair stylists</td>\n        <td>@hairbysarahkate</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>Bridal Hair Co</td>\n        <td>hair stylists</td>\n        <td>@bridalhairco</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>Styled by Sam</td>\n        <td>hair stylists</td>\n        <td>@styledbysam</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>Dallas Hair Artists</td>\n        <td>hair stylists</td>\n        <td>@dallashairartists</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>DFW Events</td>\n        <td>wedding planners</td>\n        <td>@dfwevents</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>Planned Perfectly</td>\n        <td>wedding planners</td>\n        <td>@plannedperfectly</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>Ivory & Bliss</td>\n        <td>wedding planners</td>\n        <td>@ivoryandbliss</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>The Perfect Plan</td>\n        <td>wedding planners</td>\n        <td>@theperfectplan</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>Whitten Films</td>\n        <td>videographers</td>\n        <td>@whittenfilms</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>Dallas Wedding Films</td>\n        <td>videographers</td>\n        <td>@dallasweddingfilms</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>Momento Films</td>\n        <td>videographers</td>\n        <td>@momentofilms</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>Culinaire Catering</td>\n        <td>caterers</td>\n        <td>@culinairecatering</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>Dallas Catering Company</td>\n        <td>caterers</td>\n        <td>@dallascateringco</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>Epicurean Events</td>\n        <td>caterers</td>\n        <td>@epicureanevents</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>The Nasher Sculpture Center</td>\n        <td>venues</td>\n        <td>@nashersculpturecenter</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>Trinity River Audubon Center</td>\n        <td>venues</td>\n        <td>@trinityriveraudubon</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>The Dallas Arboretum</td>\n        <td>venues</td>\n        <td>@dallasarboretum</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>Magnolia Hotel Dallas</td>\n        <td>venues</td>\n        <td>@magnoliahoteldallas</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>The Nasher Sculpture Center</td>\n        <td>venues</td>\n        <td>@nashersculpturecenter</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>Trinity River Audubon Center</td>\n        <td>venues</td>\n        <td>@trinityriveraudubon</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>The Dallas Arboretum</td>\n        <td>venues</td>\n        <td>@dallasarboretum</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>Magnolia Hotel Dallas</td>\n        <td>venues</td>\n        <td>@magnoliahoteldallas</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>The Nasher Sculpture Center</td>\n        <td>venues</td>\n        <td>@nashersculpturecenter</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>Trinity River Audubon Center</td>\n        <td>venues</td>\n        <td>@trinityriveraudubon</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>The Dallas Arboretum</td>\n        <td>venues</td>\n        <td>@dallasarboretum</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>Magnolia Hotel Dallas</td>\n        <td>venues</td>\n        <td>@magnoliahoteldallas</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>Creme de la Creme</td>\n        <td>cake designers</td>\n        <td>@cremedelacremetx</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>Sweet by Design</td>\n        <td>cake designers</td>\n        <td>@sweetbydesign</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n      <tr>\n        <td>The Cake Studio</td>\n        <td>cake designers</td>\n        <td>@thecakestudio</td>\n        <td>Profile not found</td>\n        <td>Check account status</td>\n      </tr>\n      \n    </tbody>\n  </table>\n  \n  \n  \n</body>\n</html>"
+  }
+}

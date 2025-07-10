@@ -1,0 +1,662 @@
+{
+  "timestamp": "2025-07-10T16:12:26.300Z",
+  "totalVendors": 43,
+  "totalChecked": 43,
+  "results": {
+    "valid": 0,
+    "invalid": 43,
+    "redirect": 0,
+    "error": 0
+  },
+  "invalidVendors": [
+    {
+      "businessName": "Stems Floral Design",
+      "category": "florists",
+      "instagramHandle": "stemsfloral",
+      "instagramUrl": "https://www.instagram.com/stemsfloral",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "Paisley Petals",
+      "category": "florists",
+      "instagramHandle": "paisleypetals",
+      "instagramUrl": "https://www.instagram.com/paisleypetals",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "The Flower Studio",
+      "category": "florists",
+      "instagramHandle": "theflowerstudio",
+      "instagramUrl": "https://www.instagram.com/theflowerstudio",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "Posh Floral Designs",
+      "category": "florists",
+      "instagramHandle": "poshfloraldesigns",
+      "instagramUrl": "https://www.instagram.com/poshfloraldesigns",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "Blooming Gallery",
+      "category": "florists",
+      "instagramHandle": "bloominggallery",
+      "instagramUrl": "https://www.instagram.com/bloominggallery",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "Amy Odom Photography",
+      "category": "photographers",
+      "instagramHandle": "amyodomphotography",
+      "instagramUrl": "https://www.instagram.com/amyodomphotography",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "Shaun Menary Photography",
+      "category": "photographers",
+      "instagramHandle": "shaunmenary",
+      "instagramUrl": "https://www.instagram.com/shaunmenary",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "Tracy Autem Photography",
+      "category": "photographers",
+      "instagramHandle": "tracyautem",
+      "instagramUrl": "https://www.instagram.com/tracyautem",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "Kate Preftakes Photography",
+      "category": "photographers",
+      "instagramHandle": "katepreftakes",
+      "instagramUrl": "https://www.instagram.com/katepreftakes",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "Lightly Photography",
+      "category": "photographers",
+      "instagramHandle": "lightlyphotography",
+      "instagramUrl": "https://www.instagram.com/lightlyphotography",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "Makeup by Liz",
+      "category": "makeup artists",
+      "instagramHandle": "makeupbyliz",
+      "instagramUrl": "https://www.instagram.com/makeupbyliz",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "Glam Squad Dallas",
+      "category": "makeup artists",
+      "instagramHandle": "glamsquaddallas",
+      "instagramUrl": "https://www.instagram.com/glamsquaddallas",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "Beauty by Ashley",
+      "category": "makeup artists",
+      "instagramHandle": "beautybyashley",
+      "instagramUrl": "https://www.instagram.com/beautybyashley",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "Dallas Makeup Collective",
+      "category": "makeup artists",
+      "instagramHandle": "dallasmakeupcollective",
+      "instagramUrl": "https://www.instagram.com/dallasmakeupcollective",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "Hair by Sarah Kate",
+      "category": "hair stylists",
+      "instagramHandle": "hairbysarahkate",
+      "instagramUrl": "https://www.instagram.com/hairbysarahkate",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "Bridal Hair Co",
+      "category": "hair stylists",
+      "instagramHandle": "bridalhairco",
+      "instagramUrl": "https://www.instagram.com/bridalhairco",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "Styled by Sam",
+      "category": "hair stylists",
+      "instagramHandle": "styledbysam",
+      "instagramUrl": "https://www.instagram.com/styledbysam",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "Dallas Hair Artists",
+      "category": "hair stylists",
+      "instagramHandle": "dallashairartists",
+      "instagramUrl": "https://www.instagram.com/dallashairartists",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "DFW Events",
+      "category": "wedding planners",
+      "instagramHandle": "dfwevents",
+      "instagramUrl": "https://www.instagram.com/dfwevents",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "Planned Perfectly",
+      "category": "wedding planners",
+      "instagramHandle": "plannedperfectly",
+      "instagramUrl": "https://www.instagram.com/plannedperfectly",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "Ivory & Bliss",
+      "category": "wedding planners",
+      "instagramHandle": "ivoryandbliss",
+      "instagramUrl": "https://www.instagram.com/ivoryandbliss",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "The Perfect Plan",
+      "category": "wedding planners",
+      "instagramHandle": "theperfectplan",
+      "instagramUrl": "https://www.instagram.com/theperfectplan",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "Whitten Films",
+      "category": "videographers",
+      "instagramHandle": "whittenfilms",
+      "instagramUrl": "https://www.instagram.com/whittenfilms",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "Dallas Wedding Films",
+      "category": "videographers",
+      "instagramHandle": "dallasweddingfilms",
+      "instagramUrl": "https://www.instagram.com/dallasweddingfilms",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "Momento Films",
+      "category": "videographers",
+      "instagramHandle": "momentofilms",
+      "instagramUrl": "https://www.instagram.com/momentofilms",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "Culinaire Catering",
+      "category": "caterers",
+      "instagramHandle": "culinairecatering",
+      "instagramUrl": "https://www.instagram.com/culinairecatering",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "Dallas Catering Company",
+      "category": "caterers",
+      "instagramHandle": "dallascateringco",
+      "instagramUrl": "https://www.instagram.com/dallascateringco",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "Epicurean Events",
+      "category": "caterers",
+      "instagramHandle": "epicureanevents",
+      "instagramUrl": "https://www.instagram.com/epicureanevents",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "The Nasher Sculpture Center",
+      "category": "venues",
+      "instagramHandle": "nashersculpturecenter",
+      "instagramUrl": "https://www.instagram.com/nashersculpturecenter",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "Trinity River Audubon Center",
+      "category": "venues",
+      "instagramHandle": "trinityriveraudubon",
+      "instagramUrl": "https://www.instagram.com/trinityriveraudubon",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "The Dallas Arboretum",
+      "category": "venues",
+      "instagramHandle": "dallasarboretum",
+      "instagramUrl": "https://www.instagram.com/dallasarboretum",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "Magnolia Hotel Dallas",
+      "category": "venues",
+      "instagramHandle": "magnoliahoteldallas",
+      "instagramUrl": "https://www.instagram.com/magnoliahoteldallas",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "The Nasher Sculpture Center",
+      "category": "venues",
+      "instagramHandle": "nashersculpturecenter",
+      "instagramUrl": "https://www.instagram.com/nashersculpturecenter",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "Trinity River Audubon Center",
+      "category": "venues",
+      "instagramHandle": "trinityriveraudubon",
+      "instagramUrl": "https://www.instagram.com/trinityriveraudubon",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "The Dallas Arboretum",
+      "category": "venues",
+      "instagramHandle": "dallasarboretum",
+      "instagramUrl": "https://www.instagram.com/dallasarboretum",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "Magnolia Hotel Dallas",
+      "category": "venues",
+      "instagramHandle": "magnoliahoteldallas",
+      "instagramUrl": "https://www.instagram.com/magnoliahoteldallas",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "The Nasher Sculpture Center",
+      "category": "venues",
+      "instagramHandle": "nashersculpturecenter",
+      "instagramUrl": "https://www.instagram.com/nashersculpturecenter",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "Trinity River Audubon Center",
+      "category": "venues",
+      "instagramHandle": "trinityriveraudubon",
+      "instagramUrl": "https://www.instagram.com/trinityriveraudubon",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "The Dallas Arboretum",
+      "category": "venues",
+      "instagramHandle": "dallasarboretum",
+      "instagramUrl": "https://www.instagram.com/dallasarboretum",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "Magnolia Hotel Dallas",
+      "category": "venues",
+      "instagramHandle": "magnoliahoteldallas",
+      "instagramUrl": "https://www.instagram.com/magnoliahoteldallas",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "Creme de la Creme",
+      "category": "cake designers",
+      "instagramHandle": "cremedelacremetx",
+      "instagramUrl": "https://www.instagram.com/cremedelacremetx",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "Sweet by Design",
+      "category": "cake designers",
+      "instagramHandle": "sweetbydesign",
+      "instagramUrl": "https://www.instagram.com/sweetbydesign",
+      "status": "valid",
+      "statusCode": 200
+    },
+    {
+      "businessName": "The Cake Studio",
+      "category": "cake designers",
+      "instagramHandle": "thecakestudio",
+      "instagramUrl": "https://www.instagram.com/thecakestudio",
+      "status": "valid",
+      "statusCode": 200
+    }
+  ],
+  "privateAccounts": [],
+  "redirects": [],
+  "detailedResults": [
+    {
+      "url": "https://www.instagram.com/stemsfloral/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 981
+    },
+    {
+      "url": "https://www.instagram.com/paisleypetals/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 431
+    },
+    {
+      "url": "https://www.instagram.com/theflowerstudio/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 428
+    },
+    {
+      "url": "https://www.instagram.com/poshfloraldesigns/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 377
+    },
+    {
+      "url": "https://www.instagram.com/bloominggallery/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 316
+    },
+    {
+      "url": "https://www.instagram.com/amyodomphotography/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 349
+    },
+    {
+      "url": "https://www.instagram.com/shaunmenary/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 247
+    },
+    {
+      "url": "https://www.instagram.com/tracyautem/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 223
+    },
+    {
+      "url": "https://www.instagram.com/katepreftakes/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 336
+    },
+    {
+      "url": "https://www.instagram.com/lightlyphotography/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 254
+    },
+    {
+      "url": "https://www.instagram.com/makeupbyliz/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 282
+    },
+    {
+      "url": "https://www.instagram.com/glamsquaddallas/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 274
+    },
+    {
+      "url": "https://www.instagram.com/beautybyashley/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 465
+    },
+    {
+      "url": "https://www.instagram.com/dallasmakeupcollective/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 332
+    },
+    {
+      "url": "https://www.instagram.com/hairbysarahkate/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 398
+    },
+    {
+      "url": "https://www.instagram.com/bridalhairco/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 250
+    },
+    {
+      "url": "https://www.instagram.com/styledbysam/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 423
+    },
+    {
+      "url": "https://www.instagram.com/dallashairartists/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 326
+    },
+    {
+      "url": "https://www.instagram.com/dfwevents/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 264
+    },
+    {
+      "url": "https://www.instagram.com/plannedperfectly/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 251
+    },
+    {
+      "url": "https://www.instagram.com/ivoryandbliss/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 326
+    },
+    {
+      "url": "https://www.instagram.com/theperfectplan/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 245
+    },
+    {
+      "url": "https://www.instagram.com/whittenfilms/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 311
+    },
+    {
+      "url": "https://www.instagram.com/dallasweddingfilms/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 282
+    },
+    {
+      "url": "https://www.instagram.com/momentofilms/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 293
+    },
+    {
+      "url": "https://www.instagram.com/culinairecatering/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 362
+    },
+    {
+      "url": "https://www.instagram.com/dallascateringco/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 321
+    },
+    {
+      "url": "https://www.instagram.com/epicureanevents/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 441
+    },
+    {
+      "url": "https://www.instagram.com/nashersculpturecenter/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 624
+    },
+    {
+      "url": "https://www.instagram.com/trinityriveraudubon/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 439
+    },
+    {
+      "url": "https://www.instagram.com/dallasarboretum/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 572
+    },
+    {
+      "url": "https://www.instagram.com/magnoliahoteldallas/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 682
+    },
+    {
+      "url": "https://www.instagram.com/nashersculpturecenter/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 540
+    },
+    {
+      "url": "https://www.instagram.com/trinityriveraudubon/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 474
+    },
+    {
+      "url": "https://www.instagram.com/dallasarboretum/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 474
+    },
+    {
+      "url": "https://www.instagram.com/magnoliahoteldallas/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 436
+    },
+    {
+      "url": "https://www.instagram.com/nashersculpturecenter/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 375
+    },
+    {
+      "url": "https://www.instagram.com/trinityriveraudubon/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 424
+    },
+    {
+      "url": "https://www.instagram.com/dallasarboretum/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 474
+    },
+    {
+      "url": "https://www.instagram.com/magnoliahoteldallas/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 390
+    },
+    {
+      "url": "https://www.instagram.com/cremedelacremetx/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 429
+    },
+    {
+      "url": "https://www.instagram.com/sweetbydesign/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 708
+    },
+    {
+      "url": "https://www.instagram.com/thecakestudio/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 551
+    }
+  ]
+}

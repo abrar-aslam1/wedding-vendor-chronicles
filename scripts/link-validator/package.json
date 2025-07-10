@@ -1,0 +1,24 @@
+{
+  "name": "wedding-vendor-link-validator",
+  "version": "1.0.0",
+  "description": "Link validation tools for wedding vendor directories",
+  "main": "index.js",
+  "scripts": {
+    "test:dallas": "tsx testDallasVendors.ts",
+    "test:all": "tsx testAllVendors.ts",
+    "build": "tsc",
+    "dev": "tsx watch"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.1",
+    "axios": "^1.6.2",
+    "cheerio": "^1.0.0-rc.12",
+    "dotenv": "^16.3.1",
+    "p-limit": "^3.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.5",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  }
+}

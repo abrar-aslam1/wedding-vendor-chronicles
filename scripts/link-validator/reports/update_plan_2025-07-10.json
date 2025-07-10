@@ -1,0 +1,346 @@
+[
+  {
+    "businessName": "Stems Floral Design",
+    "category": "florists",
+    "oldHandle": "stemsfloral",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "Paisley Petals",
+    "category": "florists",
+    "oldHandle": "paisleypetals",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "The Flower Studio",
+    "category": "florists",
+    "oldHandle": "theflowerstudio",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "Posh Floral Designs",
+    "category": "florists",
+    "oldHandle": "poshfloraldesigns",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "Blooming Gallery",
+    "category": "florists",
+    "oldHandle": "bloominggallery",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "Amy Odom Photography",
+    "category": "photographers",
+    "oldHandle": "amyodomphotography",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "Shaun Menary Photography",
+    "category": "photographers",
+    "oldHandle": "shaunmenary",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "Tracy Autem Photography",
+    "category": "photographers",
+    "oldHandle": "tracyautem",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "Kate Preftakes Photography",
+    "category": "photographers",
+    "oldHandle": "katepreftakes",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "Lightly Photography",
+    "category": "photographers",
+    "oldHandle": "lightlyphotography",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "Makeup by Liz",
+    "category": "makeup artists",
+    "oldHandle": "makeupbyliz",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "Glam Squad Dallas",
+    "category": "makeup artists",
+    "oldHandle": "glamsquaddallas",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "Beauty by Ashley",
+    "category": "makeup artists",
+    "oldHandle": "beautybyashley",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "Dallas Makeup Collective",
+    "category": "makeup artists",
+    "oldHandle": "dallasmakeupcollective",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "Hair by Sarah Kate",
+    "category": "hair stylists",
+    "oldHandle": "hairbysarahkate",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "Bridal Hair Co",
+    "category": "hair stylists",
+    "oldHandle": "bridalhairco",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "Styled by Sam",
+    "category": "hair stylists",
+    "oldHandle": "styledbysam",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "Dallas Hair Artists",
+    "category": "hair stylists",
+    "oldHandle": "dallashairartists",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "DFW Events",
+    "category": "wedding planners",
+    "oldHandle": "dfwevents",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "Planned Perfectly",
+    "category": "wedding planners",
+    "oldHandle": "plannedperfectly",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "Ivory & Bliss",
+    "category": "wedding planners",
+    "oldHandle": "ivoryandbliss",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "The Perfect Plan",
+    "category": "wedding planners",
+    "oldHandle": "theperfectplan",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "Whitten Films",
+    "category": "videographers",
+    "oldHandle": "whittenfilms",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "Dallas Wedding Films",
+    "category": "videographers",
+    "oldHandle": "dallasweddingfilms",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "Momento Films",
+    "category": "videographers",
+    "oldHandle": "momentofilms",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "Culinaire Catering",
+    "category": "caterers",
+    "oldHandle": "culinairecatering",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "Dallas Catering Company",
+    "category": "caterers",
+    "oldHandle": "dallascateringco",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "Epicurean Events",
+    "category": "caterers",
+    "oldHandle": "epicureanevents",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "The Nasher Sculpture Center",
+    "category": "venues",
+    "oldHandle": "nashersculpturecenter",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "Trinity River Audubon Center",
+    "category": "venues",
+    "oldHandle": "trinityriveraudubon",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "The Dallas Arboretum",
+    "category": "venues",
+    "oldHandle": "dallasarboretum",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "Magnolia Hotel Dallas",
+    "category": "venues",
+    "oldHandle": "magnoliahoteldallas",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "The Nasher Sculpture Center",
+    "category": "venues",
+    "oldHandle": "nashersculpturecenter",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "Trinity River Audubon Center",
+    "category": "venues",
+    "oldHandle": "trinityriveraudubon",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "The Dallas Arboretum",
+    "category": "venues",
+    "oldHandle": "dallasarboretum",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "Magnolia Hotel Dallas",
+    "category": "venues",
+    "oldHandle": "magnoliahoteldallas",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "The Nasher Sculpture Center",
+    "category": "venues",
+    "oldHandle": "nashersculpturecenter",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "Trinity River Audubon Center",
+    "category": "venues",
+    "oldHandle": "trinityriveraudubon",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "The Dallas Arboretum",
+    "category": "venues",
+    "oldHandle": "dallasarboretum",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "Magnolia Hotel Dallas",
+    "category": "venues",
+    "oldHandle": "magnoliahoteldallas",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "Creme de la Creme",
+    "category": "cake designers",
+    "oldHandle": "cremedelacremetx",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "Sweet by Design",
+    "category": "cake designers",
+    "oldHandle": "sweetbydesign",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  },
+  {
+    "businessName": "The Cake Studio",
+    "category": "cake designers",
+    "oldHandle": "thecakestudio",
+    "action": "remove",
+    "reason": "No valid Instagram account found after checking variations",
+    "confidence": "high"
+  }
+]
