@@ -127,13 +127,6 @@ export function MainNav() {
             >
               Browse by State
             </Button>
-            <Button
-              variant="ghost"
-              onClick={() => navigate("/blog")}
-              className="text-wedding-text hover:text-wedding-primary"
-            >
-              Blog
-            </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -195,13 +188,6 @@ export function MainNav() {
                     className="text-left text-wedding-text hover:text-wedding-primary"
                   >
                     Browse by State
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    onClick={() => navigate("/blog")}
-                    className="text-left text-wedding-text hover:text-wedding-primary"
-                  >
-                    Blog
                   </Button>
                   <div className="space-y-1">
                     <div className="px-2 py-1.5">
