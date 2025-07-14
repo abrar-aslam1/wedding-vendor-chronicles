@@ -1,5 +1,5 @@
 # Find My Wedding Vendor - robots.txt
-# Updated: April 2025
+# Updated: July 2025
 
 # Default rules for all web crawlers
 User-agent: *
@@ -26,15 +26,12 @@ Disallow: /loading/
 Disallow: /api/
 Crawl-delay: 5
 
-# Rules for Google Image
+# Rules for Google Image - Allow image crawling for SEO
 User-agent: Googlebot-Image
-Disallow: /
-Allow: /lovable-uploads/
-Allow: /*.jpg$
-Allow: /*.jpeg$
-Allow: /*.png$
-Allow: /*.webp$
-Allow: /*.svg$
+Allow: /
+Disallow: /auth/
+Disallow: /loading/
+Disallow: /api/
 
 # Rules for mobile Googlebot
 User-agent: Googlebot-Mobile
@@ -43,13 +40,14 @@ Disallow: /auth/
 Disallow: /loading/
 Disallow: /api/
 
-# Prevent indexing of duplicate content
+# Allow important query parameters but block problematic ones
 User-agent: *
-Disallow: /*?*
-
-
-# Host directive (only supported by Yandex, not Google)
-# Host: findmyweddingvendor.com
+Disallow: /*?*utm_*
+Disallow: /*?*session*
+Disallow: /*?*token*
+Allow: /*?*page*
+Allow: /*?*category*
+Allow: /*?*location*
 
 # Sitemaps
 Sitemap: https://findmyweddingvendor.com/sitemap.xml
