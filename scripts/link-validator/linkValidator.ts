@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { createClient } from '@supabase/supabase-js';
-import * as cheerio from 'cheerio';
 import { config } from 'dotenv';
 import pLimit from 'p-limit';
 
@@ -86,26 +85,27 @@ export class LinkValidator {
   }
 
   async validateInstagramProfile(handle: string): Promise<InstagramValidationResult> {
-    const url = `https://www.instagram.com/${handle.replace('@', '')}/`;
+    const cleanHandle = handle.replace('@', '');
+    const url = `https://www.instagram.com/${cleanHandle}/`;
     const startTime = Date.now();
     
     try {
-      const response = await axios.get(url, {
+      // Use Instagram's GraphQL API endpoint for more reliable results
+      const apiResponse = await axios.get(`https://www.instagram.com/api/v1/users/web_profile_info/?username=${cleanHandle}`, {
         headers: {
           'User-Agent': this.userAgent,
-          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-          'Accept-Language': 'en-US,en;q=0.5',
-          'Accept-Encoding': 'gzip, deflate, br',
-          'Connection': 'keep-alive',
-          'Upgrade-Insecure-Requests': '1',
+          'X-IG-App-ID': '936619743392459',
+          'X-Requested-With': 'XMLHttpRequest',
+          'Accept': '*/*'
         },
-        timeout: 15000,
-        validateStatus: (status) => true,
+        timeout: 10000,
+        validateStatus: (status) => true
       });
 
       const responseTime = Date.now() - startTime;
 
-      if (response.status === 404) {
+      // Handle 404 - profile doesn't exist
+      if (apiResponse.status === 404) {
         return {
           url,
           status: 'invalid',
@@ -116,53 +116,65 @@ export class LinkValidator {
         };
       }
 
-      if (response.status !== 200) {
+      // Handle rate limiting
+      if (apiResponse.status === 429) {
         return {
           url,
           status: 'error',
-          statusCode: response.status,
+          statusCode: 429,
           profileExists: false,
           responseTime,
-          error: `HTTP ${response.status}`,
+          error: 'Rate limited by Instagram',
         };
       }
 
-      // Parse Instagram page to extract profile data
-      const $ = cheerio.load(response.data);
-      
-      // Check if profile exists by looking for specific meta tags
-      const profileExists = $('meta[property="og:url"]').attr('content')?.includes('instagram.com') || false;
-      
-      // Extract additional profile information if available
-      const description = $('meta[property="og:description"]').attr('content');
-      const title = $('meta[property="og:title"]').attr('content');
-      const image = $('meta[property="og:image"]').attr('content');
-      
-      // Parse follower count from description
-      let followerCount: number | undefined;
-      if (description) {
-        const followerMatch = description.match(/(\d+(?:,\d+)*(?:\.\d+)?[KMB]?)\s+Followers/i);
-        if (followerMatch) {
-          followerCount = this.parseFollowerCount(followerMatch[1]);
+      // Handle successful response
+      if (apiResponse.status === 200) {
+        const userData = apiResponse.data?.data?.user;
+        
+        if (!userData) {
+          // No user data means profile doesn't exist
+          return {
+            url,
+            status: 'invalid',
+            statusCode: 200,
+            profileExists: false,
+            responseTime,
+            error: 'Profile not found',
+          };
         }
+
+        // Extract profile information from API response
+        const followerCount = userData.edge_followed_by?.count || 0;
+        const isPrivate = userData.is_private || false;
+        const bio = userData.biography || '';
+        const profileImageUrl = userData.profile_pic_url_hd || userData.profile_pic_url;
+
+        return {
+          url,
+          status: 'valid',
+          statusCode: 200,
+          profileExists: true,
+          isPrivate,
+          followerCount,
+          bio,
+          profileImageUrl,
+          responseTime,
+        };
       }
 
-      // Check if account is private
-      const isPrivate = response.data.includes('"is_private":true') || 
-                       description?.includes('This Account is Private');
-
+      // Handle other status codes
       return {
         url,
-        status: 'valid',
-        statusCode: 200,
-        profileExists,
-        isPrivate,
-        followerCount,
-        bio: title,
-        profileImageUrl: image,
+        status: 'error',
+        statusCode: apiResponse.status,
+        profileExists: false,
         responseTime,
+        error: `HTTP ${apiResponse.status}`,
       };
+      
     } catch (error: any) {
+      // Network errors usually mean profile doesn't exist or there's a connection issue
       return {
         url,
         status: 'error',
@@ -173,23 +185,6 @@ export class LinkValidator {
     }
   }
 
-  private parseFollowerCount(countStr: string): number {
-    const cleanStr = countStr.replace(/,/g, '');
-    const multipliers: { [key: string]: number } = {
-      'K': 1000,
-      'M': 1000000,
-      'B': 1000000000,
-    };
-    
-    const match = cleanStr.match(/^([\d.]+)([KMB]?)$/i);
-    if (match) {
-      const num = parseFloat(match[1]);
-      const multiplier = multipliers[match[2].toUpperCase()] || 1;
-      return Math.round(num * multiplier);
-    }
-    
-    return parseInt(cleanStr) || 0;
-  }
 
   async validateWebsite(url: string): Promise<LinkValidationResult> {
     // Handle relative URLs or missing protocols

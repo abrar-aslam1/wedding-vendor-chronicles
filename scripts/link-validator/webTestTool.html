@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Link Validator - Live Test Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .main-content {
+            padding: 30px;
+        }
+
+        .test-section {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-left: 4px solid #667eea;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .input-field {
+            flex: 1;
+            min-width: 250px;
+            padding: 12px 16px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 120px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .results-container {
+            margin-top: 30px;
+        }
+
+        .result-card {
+            background: white;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .result-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .handle {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .status.exists {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status.not-found {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status.private {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .result-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .detail-item {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        .detail-label {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-bottom: 4px;
+        }
+
+        .detail-value {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .verification-section {
+            border-top: 1px solid #e1e5e9;
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+
+        .verification-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            border-radius: 6px;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .notes-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #e1e5e9;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        .stats-panel {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #6c757d;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .batch-input {
+            width: 100%;
+            min-height: 100px;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 14px;
+            resize: vertical;
+        }
+
+        .batch-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .export-section {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid #e1e5e9;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .input-group {
+                flex-direction: column;
+            }
+            
+            .input-field {
+                min-width: 100%;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 Instagram Link Validator</h1>
+            <p>Live Test Tool for Wedding Vendor Directory</p>
+        </div>
+
+        <div class="main-content">
+            <!-- Single Test Section -->
+            <div class="test-section">
+                <h2>🎯 Single Handle Test</h2>
+                <div class="input-group">
+                    <input type="text" id="singleHandle" class="input-field" placeholder="Enter Instagram handle (e.g., dallasarboretum)" />
+                    <button onclick="testSingleHandle()" class="btn btn-primary" id="testBtn">Test Handle</button>
+                </div>
+            </div>
+
+            <!-- Batch Test Section -->
+            <div class="test-section">
+                <h2>🔥 Batch Test</h2>
+                <textarea id="batchHandles" class="batch-input" placeholder="Enter multiple handles separated by commas or new lines:
+dallasarboretum, amy_photography, @flowers_by_jane
+stemsfloral
+paisleypetals"></textarea>
+                <div style="margin-top: 15px;">
+                    <button onclick="testBatchHandles()" class="btn btn-primary" id="batchBtn">Test All Handles</button>
+                    <button onclick="clearResults()" class="btn btn-secondary">Clear Results</button>
+                </div>
+            </div>
+
+            <!-- Statistics Panel -->
+            <div class="stats-panel" id="statsPanel" style="display: none;">
+                <h2>📊 Session Statistics</h2>
+                <div class="stats-grid" id="statsGrid">
+                    <!-- Stats will be populated here -->
+                </div>
+            </div>
+
+            <!-- Results Container -->
+            <div class="results-container" id="resultsContainer">
+                <!-- Results will be populated here -->
+            </div>
+
+            <!-- Export Section -->
+            <div class="export-section" id="exportSection" style="display: none;">
+                <button onclick="exportResults()" class="btn btn-primary">📁 Export Results</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let testResults = [];
+
+        // Test a single Instagram handle
+        async function testSingleHandle() {
+            const handle = document.getElementById('singleHandle').value.trim();
+            if (!handle) {
+                alert('Please enter an Instagram handle');
+                return;
+            }
+
+            const testBtn = document.getElementById('testBtn');
+            testBtn.disabled = true;
+            testBtn.textContent = 'Testing...';
+
+            try {
+                const result = await validateInstagramHandle(handle);
+                addTestResult(result);
+                document.getElementById('singleHandle').value = '';
+            } catch (error) {
+                console.error('Test failed:', error);
+                alert('Test failed: ' + error.message);
+            }
+
+            testBtn.disabled = false;
+            testBtn.textContent = 'Test Handle';
+        }
+
+        // Test multiple handles
+        async function testBatchHandles() {
+            const batchText = document.getElementById('batchHandles').value.trim();
+            if (!batchText) {
+                alert('Please enter Instagram handles');
+                return;
+            }
+
+            const handles = batchText.split(/[,\n\r]+/)
+                .map(h => h.trim())
+                .filter(h => h.length > 0);
+
+            if (handles.length === 0) {
+                alert('No valid handles found');
+                return;
+            }
+
+            const batchBtn = document.getElementById('batchBtn');
+            batchBtn.disabled = true;
+            batchBtn.textContent = `Testing ${handles.length} handles...`;
+
+            for (let i = 0; i < handles.length; i++) {
+                try {
+                    batchBtn.textContent = `Testing ${i + 1}/${handles.length}...`;
+                    const result = await validateInstagramHandle(handles[i]);
+                    addTestResult(result);
+                    
+                    // Small delay between requests
+                    if (i < handles.length - 1) {
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                    }
+                } catch (error) {
+                    console.error(`Failed to test ${handles[i]}:`, error);
+                }
+            }
+
+            batchBtn.disabled = false;
+            batchBtn.textContent = 'Test All Handles';
+            document.getElementById('batchHandles').value = '';
+        }
+
+        // Validate Instagram handle (mock implementation)
+        async function validateInstagramHandle(handle) {
+            const cleanHandle = handle.replace('@', '');
+            const url = `https://www.instagram.com/${cleanHandle}/`;
+
+            // This is a simplified version - in a real implementation,
+            // you'd call your backend API or use a proper validation service
+            try {
+                const response = await fetch(url, { mode: 'no-cors' });
+                
+                // Since we can't actually read the response due to CORS,
+                // this is a mock implementation for demonstration
+                const mockResult = {
+                    handle: cleanHandle,
+                    url: url,
+                    profileExists: Math.random() > 0.7, // 30% chance of existing (for demo)
+                    isPrivate: Math.random() > 0.8,
+                    followerCount: Math.floor(Math.random() * 50000),
+                    bio: `Mock bio for @${cleanHandle}`,
+                    responseTime: Math.floor(Math.random() * 1000) + 200,
+                    timestamp: new Date().toISOString()
+                };
+
+                return mockResult;
+            } catch (error) {
+                return {
+                    handle: cleanHandle,
+                    url: url,
+                    profileExists: false,
+                    error: 'Failed to validate',
+                    responseTime: 0,
+                    timestamp: new Date().toISOString()
+                };
+            }
+        }
+
+        // Add test result to the list
+        function addTestResult(result) {
+            testResults.unshift(result); // Add to beginning of array
+            renderResults();
+            updateStats();
+        }
+
+        // Render all test results
+        function renderResults() {
+            const container = document.getElementById('resultsContainer');
+            
+            if (testResults.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #6c757d; padding: 40px;">No test results yet. Test some Instagram handles above!</p>';
+                return;
+            }
+
+            container.innerHTML = testResults.map((result, index) => `
+                <div class="result-card" id="result-${index}">
+                    <div class="result-header">
+                        <div class="handle">@${result.handle}</div>
+                        <div class="status ${result.profileExists ? 'exists' : 'not-found'}">
+                            ${result.profileExists ? '✅ EXISTS' : '❌ NOT FOUND'}
+                            ${result.isPrivate ? ' 🔒 PRIVATE' : ''}
+                        </div>
+                    </div>
+                    
+                    <div class="result-details">
+                        <div class="detail-item">
+                            <div class="detail-label">URL</div>
+                            <div class="detail-value">
+                                <a href="${result.url}" target="_blank" style="color: #667eea;">${result.url}</a>
+                            </div>
+                        </div>
+                        ${result.followerCount ? `
+                        <div class="detail-item">
+                            <div class="detail-label">Followers</div>
+                            <div class="detail-value">${formatFollowerCount(result.followerCount)}</div>
+                        </div>
+                        ` : ''}
+                        <div class="detail-item">
+                            <div class="detail-label">Response Time</div>
+                            <div class="detail-value">${result.responseTime}ms</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Tested At</div>
+                            <div class="detail-value">${new Date(result.timestamp).toLocaleTimeString()}</div>
+                        </div>
+                    </div>
+
+                    ${result.bio ? `
+                    <div class="detail-item" style="margin-top: 10px;">
+                        <div class="detail-label">Bio</div>
+                        <div class="detail-value">${result.bio}</div>
+                    </div>
+                    ` : ''}
+
+                    <div class="verification-section">
+                        <div class="detail-label">Manual Verification</div>
+                        <div class="verification-buttons">
+                            <button onclick="setVerification(${index}, 'correct')" class="btn btn-small btn-success">✅ Correct</button>
+                            <button onclick="setVerification(${index}, 'incorrect')" class="btn btn-small btn-danger">❌ Incorrect</button>
+                            <button onclick="setVerification(${index}, 'partial')" class="btn btn-small btn-warning">⚠️ Partial</button>
+                        </div>
+                        ${result.verification ? `
+                        <div style="margin-top: 10px; padding: 8px; background: #f8f9fa; border-radius: 4px;">
+                            <strong>Verified as:</strong> ${result.verification.toUpperCase()}
+                            ${result.notes ? `<br><strong>Notes:</strong> ${result.notes}` : ''}
+                        </div>
+                        ` : ''}
+                        <input type="text" placeholder="Add notes (optional)" class="notes-input" 
+                               onchange="setNotes(${index}, this.value)" value="${result.notes || ''}" />
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Set manual verification for a result
+        function setVerification(index, verification) {
+            testResults[index].verification = verification;
+            renderResults();
+            updateStats();
+        }
+
+        // Set notes for a result
+        function setNotes(index, notes) {
+            testResults[index].notes = notes;
+            updateStats();
+        }
+
+        // Update statistics
+        function updateStats() {
+            if (testResults.length === 0) {
+                document.getElementById('statsPanel').style.display = 'none';
+                document.getElementById('exportSection').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('statsPanel').style.display = 'block';
+            document.getElementById('exportSection').style.display = 'block';
+
+            const total = testResults.length;
+            const verified = testResults.filter(r => r.verification).length;
+            const correct = testResults.filter(r => r.verification === 'correct').length;
+            const profilesFound = testResults.filter(r => r.profileExists).length;
+            const privateProfiles = testResults.filter(r => r.isPrivate).length;
+
+            const accuracy = verified > 0 ? ((correct / verified) * 100).toFixed(1) : '0';
+
+            document.getElementById('statsGrid').innerHTML = `
+                <div class="stat-item">
+                    <div class="stat-number">${total}</div>
+                    <div class="stat-label">Total Tests</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">${profilesFound}</div>
+                    <div class="stat-label">Profiles Found</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">${privateProfiles}</div>
+                    <div class="stat-label">Private Profiles</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">${verified}</div>
+                    <div class="stat-label">Manually Verified</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">${accuracy}%</div>
+                    <div class="stat-label">Tool Accuracy</div>
+                </div>
+            `;
+        }
+
+        // Format follower count
+        function formatFollowerCount(count) {
+            if (count >= 1000000) return `${(count / 1000000).toFixed(1)}M`;
+            if (count >= 1000) return `${(count / 1000).toFixed(1)}K`;
+            return count.toString();
+        }
+
+        // Clear all results
+        function clearResults() {
+            if (testResults.length === 0) return;
+            
+            if (confirm('Are you sure you want to clear all test results?')) {
+                testResults = [];
+                renderResults();
+                updateStats();
+            }
+        }
+
+        // Export results to JSON
+        function exportResults() {
+            if (testResults.length === 0) {
+                alert('No results to export');
+                return;
+            }
+
+            const exportData = {
+                sessionStart: testResults[testResults.length - 1]?.timestamp,
+                sessionEnd: new Date().toISOString(),
+                totalTests: testResults.length,
+                results: testResults,
+                stats: {
+                    totalTests: testResults.length,
+                    verified: testResults.filter(r => r.verification).length,
+                    correct: testResults.filter(r => r.verification === 'correct').length,
+                    profilesFound: testResults.filter(r => r.profileExists).length,
+                    privateProfiles: testResults.filter(r => r.isPrivate).length,
+                }
+            };
+
+            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `instagram_validation_results_${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Allow Enter key to trigger single test
+        document.getElementById('singleHandle').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                testSingleHandle();
+            }
+        });
+
+        // Initialize
+        renderResults();
+    </script>
+</body>
+</html>

@@ -1,0 +1,562 @@
+{
+  "timestamp": "2025-07-14T00:50:35.495Z",
+  "totalVendors": 43,
+  "totalChecked": 43,
+  "results": {
+    "valid": 32,
+    "invalid": 11,
+    "redirect": 0,
+    "error": 0
+  },
+  "invalidVendors": [
+    {
+      "businessName": "Glam Squad Dallas",
+      "category": "makeup artists",
+      "instagramHandle": "glamsquaddallas",
+      "instagramUrl": "https://www.instagram.com/glamsquaddallas",
+      "status": "invalid",
+      "error": "Profile not found",
+      "statusCode": 404
+    },
+    {
+      "businessName": "Dallas Makeup Collective",
+      "category": "makeup artists",
+      "instagramHandle": "dallasmakeupcollective",
+      "instagramUrl": "https://www.instagram.com/dallasmakeupcollective",
+      "status": "invalid",
+      "error": "Profile not found",
+      "statusCode": 404
+    },
+    {
+      "businessName": "Bridal Hair Co",
+      "category": "hair stylists",
+      "instagramHandle": "bridalhairco",
+      "instagramUrl": "https://www.instagram.com/bridalhairco",
+      "status": "invalid",
+      "error": "Profile not found",
+      "statusCode": 404
+    },
+    {
+      "businessName": "Dallas Hair Artists",
+      "category": "hair stylists",
+      "instagramHandle": "dallashairartists",
+      "instagramUrl": "https://www.instagram.com/dallashairartists",
+      "status": "invalid",
+      "error": "Profile not found",
+      "statusCode": 404
+    },
+    {
+      "businessName": "Whitten Films",
+      "category": "videographers",
+      "instagramHandle": "whittenfilms",
+      "instagramUrl": "https://www.instagram.com/whittenfilms",
+      "status": "invalid",
+      "error": "Profile not found",
+      "statusCode": 404
+    },
+    {
+      "businessName": "Dallas Catering Company",
+      "category": "caterers",
+      "instagramHandle": "dallascateringco",
+      "instagramUrl": "https://www.instagram.com/dallascateringco",
+      "status": "invalid",
+      "error": "Profile not found",
+      "statusCode": 404
+    },
+    {
+      "businessName": "Epicurean Events",
+      "category": "caterers",
+      "instagramHandle": "epicureanevents",
+      "instagramUrl": "https://www.instagram.com/epicureanevents",
+      "status": "invalid",
+      "error": "Profile not found",
+      "statusCode": 200
+    },
+    {
+      "businessName": "Trinity River Audubon Center",
+      "category": "venues",
+      "instagramHandle": "trinityriveraudubon",
+      "instagramUrl": "https://www.instagram.com/trinityriveraudubon",
+      "status": "invalid",
+      "error": "Profile not found",
+      "statusCode": 404
+    },
+    {
+      "businessName": "Trinity River Audubon Center",
+      "category": "venues",
+      "instagramHandle": "trinityriveraudubon",
+      "instagramUrl": "https://www.instagram.com/trinityriveraudubon",
+      "status": "invalid",
+      "error": "Profile not found",
+      "statusCode": 404
+    },
+    {
+      "businessName": "Trinity River Audubon Center",
+      "category": "venues",
+      "instagramHandle": "trinityriveraudubon",
+      "instagramUrl": "https://www.instagram.com/trinityriveraudubon",
+      "status": "invalid",
+      "error": "Profile not found",
+      "statusCode": 404
+    },
+    {
+      "businessName": "Creme de la Creme",
+      "category": "cake designers",
+      "instagramHandle": "cremedelacremetx",
+      "instagramUrl": "https://www.instagram.com/cremedelacremetx",
+      "status": "invalid",
+      "error": "Profile not found",
+      "statusCode": 404
+    }
+  ],
+  "privateAccounts": [
+    {
+      "businessName": "Kate Preftakes Photography",
+      "category": "photographers",
+      "instagramHandle": "katepreftakes"
+    }
+  ],
+  "redirects": [],
+  "detailedResults": [
+    {
+      "url": "https://www.instagram.com/stemsfloral/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": true,
+      "isPrivate": false,
+      "followerCount": 1361,
+      "bio": "Florist Windsor.                                      Luxury flowers/plants.                          \nOrder online",
+      "profileImageUrl": "https://scontent-dfw5-1.cdninstagram.com/v/t51.2885-19/172551687_2798575760393305_8311308255307948908_n.jpg?stp=dst-jpg_s320x320_tt6&_nc_ht=scontent-dfw5-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2QFJ2ZNxSRhaUnDVMilKNPWDk7jOU2AsKBLqC-ctO9jBklPv5B0UTlO2HWkGgsbJnWE&_nc_ohc=FhNfZ2sDTFoQ7kNvwH_3Zi6&_nc_gid=qHxu1rZVmL7rW1sJKjvasQ&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfTX7Un3Xz3e7NhiXqZAMHmoxhW_jhydTNbLK3DNRLIlzg&oe=687A2E1E&_nc_sid=8b3546",
+      "responseTime": 1428
+    },
+    {
+      "url": "https://www.instagram.com/paisleypetals/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": true,
+      "isPrivate": false,
+      "followerCount": 2118,
+      "bio": "Heartfelt florals for awesome couples.\nTap the link to inquire ⬇️",
+      "profileImageUrl": "https://scontent-dfw5-2.cdninstagram.com/v/t51.2885-19/163965700_211637743889034_3739085948445001974_n.jpg?stp=dst-jpg_s320x320_tt6&_nc_ht=scontent-dfw5-2.cdninstagram.com&_nc_cat=106&_nc_oc=Q6cZ2QFxaVZKPUx5C6q7wRtNQrX3FtgoCcnkQPG-37EX734XA5ttIuq60H5_BOSyRL3FWpU&_nc_ohc=xET_mKCIfCsQ7kNvwFe6Mpx&_nc_gid=d6nLOVnebzSDbtKYUDd8qg&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfTR01u7rRZQNi5HWFj-W8EwTUcivejv4RgKe7PttHhzjw&oe=687A17ED&_nc_sid=8b3546",
+      "responseTime": 1057
+    },
+    {
+      "url": "https://www.instagram.com/theflowerstudio/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": true,
+      "isPrivate": false,
+      "followerCount": 29,
+      "bio": "Located at 3035 Washington road Pittsburgh pa",
+      "profileImageUrl": "https://scontent-dfw5-2.cdninstagram.com/v/t51.2885-19/69934294_461367034460808_278406420146159616_n.jpg?stp=dst-jpg_s320x320_tt6&_nc_ht=scontent-dfw5-2.cdninstagram.com&_nc_cat=100&_nc_oc=Q6cZ2QFTB_R84vp3ag45KD1RMD6B2V62SgkgeazpyC-b5fV-_Qoz2FkIaRXp3eImNl1p6ts&_nc_ohc=Jv8dcyk6XrcQ7kNvwHoyjk3&_nc_gid=-_YsRyDIoegqrPJchRgPnQ&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfR4oZubKxANR86vTvJwoW5wqsf5yXDdZZKUA_0v3_VXkQ&oe=687A3A9F&_nc_sid=8b3546",
+      "responseTime": 611
+    },
+    {
+      "url": "https://www.instagram.com/poshfloraldesigns/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": true,
+      "isPrivate": false,
+      "followerCount": 1385,
+      "bio": "𝐖𝐞𝐝𝐝𝐢𝐧𝐠 𝐅𝐥𝐨𝐫𝐢𝐬𝐭  Oakdale, NY 📍Long Island\n2022 The Knot 𝔹𝕖𝕤𝕥 𝕠𝕗 𝕎𝕖𝕕𝕕𝕚𝕟𝕘𝕤 👰🏻 631-319-6600\nSpecializing in Weddings 💍 & Events 🌸",
+      "profileImageUrl": "https://scontent-dfw5-1.cdninstagram.com/v/t51.2885-19/66387825_371064270514769_1979528161615937536_n.jpg?stp=dst-jpg_s320x320_tt6&_nc_ht=scontent-dfw5-1.cdninstagram.com&_nc_cat=105&_nc_oc=Q6cZ2QGHhHwE_szJWCFUFgOuCA_pXiF4QSQakTc68faM5MOMDO_RhqVkSweXWYiyRXMaZt8&_nc_ohc=HKjNpUVgntsQ7kNvwG4dyBK&_nc_gid=5B4rcWuQpZ6IFKEuefCKzw&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfRFP0Y6JQT_A8Uad3i7LkhhuG02cfa-mK9rN453kLlCBw&oe=687A1F68&_nc_sid=8b3546",
+      "responseTime": 1149
+    },
+    {
+      "url": "https://www.instagram.com/bloominggallery/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": true,
+      "isPrivate": false,
+      "followerCount": 8665,
+      "bio": "Interior Design team & Creative Direction for events and weddings\nFloral | Textiles | High-End Rentals | Full Design | Custom Fabrication",
+      "profileImageUrl": "https://scontent-dfw5-2.cdninstagram.com/v/t51.2885-19/26869742_1766071687033050_6447984236266782720_n.jpg?stp=dst-jpg_s320x320_tt6&_nc_ht=scontent-dfw5-2.cdninstagram.com&_nc_cat=106&_nc_oc=Q6cZ2QFtPLFukG_VL8UicEbzvA5ahvDX0pCS89oq5e1Di7TkPjtq66Nd5zq5EI6VnEwTRmk&_nc_ohc=9tn8DvY7YHIQ7kNvwGeGJDm&_nc_gid=C0HSca8JdZ1lW5PyGKZ30w&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfSGtVMSNU1eS9Q4MeUgRq4XC_9MPXlDCddlPt0wOAJYmg&oe=687A1754&_nc_sid=8b3546",
+      "responseTime": 1768
+    },
+    {
+      "url": "https://www.instagram.com/amyodomphotography/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": true,
+      "isPrivate": false,
+      "followerCount": 254,
+      "bio": "Austin Texas Newborn & Motherhood Photographer. Documenting your motherhood journey. Maternity & Newborn. Fine Art Photography.\nWeddings: @amy_odom",
+      "profileImageUrl": "https://scontent-dfw5-1.cdninstagram.com/v/t51.2885-19/54447349_372014716725562_6322084562839011328_n.jpg?stp=dst-jpg_s320x320_tt6&_nc_ht=scontent-dfw5-1.cdninstagram.com&_nc_cat=110&_nc_oc=Q6cZ2QEOsA02Jk34l8q3pUJq8stVMJ20xynOVCpuqnIr5bArlS6Px3mXlIfKRk4EtPec84I&_nc_ohc=FB1jS7Eoe0sQ7kNvwFxVkwk&_nc_gid=FOCj8Wd5ZYmXGRdxFnejiA&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfTOd417x1rRd-Zvgz2EypG4zU5tzE8ptH0K3XkaLAhScg&oe=687A15A6&_nc_sid=8b3546",
+      "responseTime": 324
+    },
+    {
+      "url": "https://www.instagram.com/shaunmenary/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": true,
+      "isPrivate": false,
+      "followerCount": 2056,
+      "bio": "Hey you, it's me, I’m hungry.\n•\nFor wedding work: @themenarys\nFor commercial work: @menarystudio\n•",
+      "profileImageUrl": "https://scontent-dfw5-1.cdninstagram.com/v/t51.2885-19/319726431_903843994325242_6473335735942364198_n.jpg?stp=dst-jpg_s320x320_tt6&_nc_ht=scontent-dfw5-1.cdninstagram.com&_nc_cat=110&_nc_oc=Q6cZ2QEL1qSGAngWfm6U1EKYIxlnH0NXdpAbIuoxrzd9-SpV8eba7P_r5cgp9H9bvZbDPBg&_nc_ohc=v5b9_7RuwckQ7kNvwEF4PK4&_nc_gid=womB_MyNNkSoXdGLAKefrA&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfSKTe3Fko07mqpoJvfBfDRTFbi-aLhKGVwC5Tq-zpFSyA&oe=687A32F3&_nc_sid=8b3546",
+      "responseTime": 538
+    },
+    {
+      "url": "https://www.instagram.com/tracyautem/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": true,
+      "isPrivate": false,
+      "followerCount": 1902,
+      "bio": "Texas based, Enneagram 3, wife to my best friend, @tracyautemphotography & @lightlyphoto , 3 kids that keep me on my toes & a few 🐶🐱\nI LOVE:✈️📸🌊⛰️📚🎨🎥🏡",
+      "profileImageUrl": "https://scontent-dfw5-3.cdninstagram.com/v/t51.2885-19/469597602_481922291575148_3437347997252052076_n.jpg?stp=dst-jpg_s320x320_tt6&_nc_ht=scontent-dfw5-3.cdninstagram.com&_nc_cat=108&_nc_oc=Q6cZ2QE2JZIkKZPYYEvomlZ1g18T4AbYQUUzmGfHzPOISqWGOQiCDYGgyQsQegd3zGrd7j8&_nc_ohc=NmcbxRYDgVwQ7kNvwHZiM93&_nc_gid=inKMjcRdqpcRjD5Xri1ltQ&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfTsLEWU4rG5gQWlt-CV0j4hsahasNUiMMSybOHJl9P5pA&oe=687A2C79&_nc_sid=8b3546",
+      "responseTime": 739
+    },
+    {
+      "url": "https://www.instagram.com/katepreftakes/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": true,
+      "isPrivate": true,
+      "followerCount": 2,
+      "bio": "",
+      "profileImageUrl": "https://scontent-atl3-2.cdninstagram.com/v/t51.2885-19/464760996_1254146839119862_3605321457742435801_n.png?stp=dst-jpg_e0_s150x150_tt6&cb=8577c754-c2464923&_nc_ht=scontent-atl3-2.cdninstagram.com&_nc_cat=1&_nc_oc=Q6cZ2QFruFDbU9NteBVDCZd0VBXf8bSKE_EPC1s9SH9wElSV4TrdorhefvfaqViejDlXXXAK04F6kkdZU0HVrpecHOoH&_nc_ohc=cpuRypEf_aQQ7kNvwF3Pv-L&_nc_gid=HyO1SYrYym-_Wv1U8bhDzg&edm=AJ9x6zYBAAAA&ccb=7-5&ig_cache_key=YW5vbnltb3VzX3Byb2ZpbGVfcGlj.3-ccb7-5-cb8577c754-c2464923&oh=00_AfSVuAokp7kaR67wViRVZnaljtuBXK8K9pJk06MSPNt6rA&oe=687A2A68&_nc_sid=65462d",
+      "responseTime": 187
+    },
+    {
+      "url": "https://www.instagram.com/lightlyphotography/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": true,
+      "isPrivate": false,
+      "followerCount": 15,
+      "bio": "Wedding & Portraiture\nBased in Kedah",
+      "profileImageUrl": "https://scontent-dfw5-1.cdninstagram.com/v/t51.2885-19/30078833_771416746401095_2371873325321289728_n.jpg?stp=dst-jpg_s320x320_tt6&_nc_ht=scontent-dfw5-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2QHKOIot06gk1wjk01NiSuxscSFKzSDgOHBQDGfklCXG7N3DYgwwQpS7sVg-qlUc2ew&_nc_ohc=QX42hFHAjr8Q7kNvwH_7QJr&_nc_gid=q34Uu164UbNgYoNYtQtnVA&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfReKt-lfDnjQalahPc_RG-ja7oP99uFyIEC8DNQo1XC0A&oe=687A1A9D&_nc_sid=8b3546",
+      "responseTime": 188
+    },
+    {
+      "url": "https://www.instagram.com/makeupbyliz/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": true,
+      "isPrivate": false,
+      "followerCount": 69721,
+      "bio": "Los Angeles 🇲🇽🇺🇸\nRepresented by: @dewbeautyagency\n• Local 706 •\nLashes: @lashesbyliz",
+      "profileImageUrl": "https://scontent-dfw5-2.cdninstagram.com/v/t51.2885-19/474690144_1944270926096412_5863657574625484888_n.jpg?stp=dst-jpg_s320x320_tt6&_nc_ht=scontent-dfw5-2.cdninstagram.com&_nc_cat=1&_nc_oc=Q6cZ2QH8N4LhRSa8KZu6gpb1-koRKae1Nq3ArOKXKrnUuZdbe70Nx9HKcVQO-JFEgQF3Lqg&_nc_ohc=JM5fPn4Fw48Q7kNvwGeeBjd&_nc_gid=W_BXI9SzKmQReu4dhnIe4g&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfQYHmI97xVf_P1mvKupaSInEkvzRLxfh_S9gfF9GWPw6Q&oe=687A1E24&_nc_sid=8b3546",
+      "responseTime": 2258
+    },
+    {
+      "url": "https://www.instagram.com/glamsquaddallas/",
+      "status": "invalid",
+      "statusCode": 404,
+      "profileExists": false,
+      "responseTime": 118,
+      "error": "Profile not found"
+    },
+    {
+      "url": "https://www.instagram.com/beautybyashley/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": true,
+      "isPrivate": false,
+      "followerCount": 6491,
+      "bio": "I empower clients through transformative hair extensions.\n🏳️‍🌈Safe space ♻️Eco friendly ✨Community driven\nHazleton, PA and wherever you want me.",
+      "profileImageUrl": "https://scontent-dfw5-1.cdninstagram.com/v/t51.2885-19/329583511_572349634564793_705110057658708801_n.jpg?stp=dst-jpg_s320x320_tt6&_nc_ht=scontent-dfw5-1.cdninstagram.com&_nc_cat=105&_nc_oc=Q6cZ2QFFtnvF7d9UYrbKiK2EwkfEwtJufYcgShw4S3GIQoOOYVEZFgAfeGjB8HSk4MN8bhE&_nc_ohc=DRjokdMBaQwQ7kNvwGfT3ke&_nc_gid=MJpNvhRbBu-AYYiWER7uCg&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfQvO6Px2pnDC89hzN5Y5FQ45hnbQ1AFkB5uNVMpzgLjQQ&oe=687A3332&_nc_sid=8b3546",
+      "responseTime": 1102
+    },
+    {
+      "url": "https://www.instagram.com/dallasmakeupcollective/",
+      "status": "invalid",
+      "statusCode": 404,
+      "profileExists": false,
+      "responseTime": 102,
+      "error": "Profile not found"
+    },
+    {
+      "url": "https://www.instagram.com/hairbysarahkate/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": true,
+      "isPrivate": false,
+      "followerCount": 273,
+      "bio": "Stylist 💇🏼‍♀️.                                                      Trained with Alfaparf Milano🙌🏼",
+      "profileImageUrl": "https://scontent-dfw5-2.cdninstagram.com/v/t51.2885-19/285364009_1174451016675208_4994828824625884344_n.jpg?stp=dst-jpg_s320x320_tt6&_nc_ht=scontent-dfw5-2.cdninstagram.com&_nc_cat=104&_nc_oc=Q6cZ2QGOp60gkSULXvSAJJjwa2YVECJkI6EUVQCFR8n9EWT8BbLjWqy0hCrGvGu1xPGbloA&_nc_ohc=cbukOrlC9-sQ7kNvwEhzB3F&_nc_gid=R6HDtIPBC4MfQNDAU3O4RQ&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfQmfuy2Pin_Rir-KbZV-_whkvfCs1vBtyicIkDaY78ktw&oe=687A3F44&_nc_sid=8b3546",
+      "responseTime": 1631
+    },
+    {
+      "url": "https://www.instagram.com/bridalhairco/",
+      "status": "invalid",
+      "statusCode": 404,
+      "profileExists": false,
+      "responseTime": 134,
+      "error": "Profile not found"
+    },
+    {
+      "url": "https://www.instagram.com/styledbysam/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": true,
+      "isPrivate": false,
+      "followerCount": 2178,
+      "bio": "Wedding & Extension Specialist 516-641-0570 styledbysam@yahoo.com NY CT NJ",
+      "profileImageUrl": "https://scontent-dfw5-3.cdninstagram.com/v/t51.2885-19/292795518_512585313966429_613814346480882989_n.jpg?stp=dst-jpg_s320x320_tt6&_nc_ht=scontent-dfw5-3.cdninstagram.com&_nc_cat=109&_nc_oc=Q6cZ2QGdBYoANNLuCxv6CF3ccvy7fdKh7skjKtVfsYDilmVC59BDuRuQTnv9cuYP56yssRQ&_nc_ohc=i3_0CdRVlmQQ7kNvwFsrLbh&_nc_gid=SKNXt1Ss112LHx1ywgDFpw&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfSY-z5S8inbVc61ilkXOea6Lxp_m_4nh4phJNIgBtMEPQ&oe=687A2A0B&_nc_sid=8b3546",
+      "responseTime": 1035
+    },
+    {
+      "url": "https://www.instagram.com/dallashairartists/",
+      "status": "invalid",
+      "statusCode": 404,
+      "profileExists": false,
+      "responseTime": 104,
+      "error": "Profile not found"
+    },
+    {
+      "url": "https://www.instagram.com/dfwevents/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": true,
+      "isPrivate": false,
+      "followerCount": 20064,
+      "bio": "Destinations • Fêtes • Weddings\nLuxury event planning team dedicated to orchestrating the unforgettable worldwide. All work featured is our own.",
+      "profileImageUrl": "https://scontent-dfw5-1.cdninstagram.com/v/t51.2885-19/10932178_344465322403309_1353995681_a.jpg?stp=dst-jpg_s150x150_tt6&_nc_ht=scontent-dfw5-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2QF37ZvXKQz0o3dK43Ve-eolR_soynnX0OlPERSIMOCjkhFESD2mkflahoef8Kx-btk&_nc_ohc=A-WH7nH7s-0Q7kNvwHczplL&_nc_gid=oIs79mVVk-RkN1WqBqk2EQ&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfRrSuhfX-I9ciXW4Bitxnq8KCi--12PUXRamwL1WhkNMg&oe=687A253F&_nc_sid=8b3546",
+      "responseTime": 762
+    },
+    {
+      "url": "https://www.instagram.com/plannedperfectly/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": true,
+      "isPrivate": false,
+      "followerCount": 4566,
+      "bio": "Offering specialty linens & chairs, chair covers, backdrops, draping & high end rentals for weddings, galas & everything between✨\nNo DM inquiries pls🤍",
+      "profileImageUrl": "https://scontent-dfw5-1.cdninstagram.com/v/t51.2885-19/11821305_1627633784181214_1353771936_a.jpg?stp=dst-jpg_s150x150_tt6&_nc_ht=scontent-dfw5-1.cdninstagram.com&_nc_cat=110&_nc_oc=Q6cZ2QF9BRmTSwQ6rKUcn8DfzCqtrtHIq3qqaA5uUerFJEzCdNUKuKw2HpTFadMrYNuNmpA&_nc_ohc=9aFqeUEuZ7UQ7kNvwHCcVBi&_nc_gid=LvqhsC7ENZdLQjNSO86KHw&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfRlC4z4HNIPrl-3G6nYhU3mdCZ87IitgEA9x2AeMyOTlg&oe=687A3E5A&_nc_sid=8b3546",
+      "responseTime": 1149
+    },
+    {
+      "url": "https://www.instagram.com/ivoryandbliss/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": true,
+      "isPrivate": false,
+      "followerCount": 7041,
+      "bio": "✺ wedding + lifestyle photography team \n✺ for the bright, unposed + timeless lover\n✺ @theprettygoldenco @ivoryandbliss.studios \n✺ set up a consult👇🏼",
+      "profileImageUrl": "https://scontent-dfw5-3.cdninstagram.com/v/t51.2885-19/187345383_265736598573728_7055916065102742026_n.jpg?stp=dst-jpg_s320x320_tt6&_nc_ht=scontent-dfw5-3.cdninstagram.com&_nc_cat=108&_nc_oc=Q6cZ2QHhezMP36Rg_hapA17eMssgI0bSORpIgQA-Ivfyi1FmE7-xQL998hUo5BOIJ4b-EhA&_nc_ohc=RF3hrhUjN6YQ7kNvwG-y66C&_nc_gid=N2jakSOV3PM-mlpp6DwffQ&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfRKQe2jRJFvJTQM_ZBrp3xFTZh1AdSOrNr73D0UmpfEng&oe=687A3748&_nc_sid=8b3546",
+      "responseTime": 1972
+    },
+    {
+      "url": "https://www.instagram.com/theperfectplan/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": true,
+      "isPrivate": false,
+      "followerCount": 1375,
+      "bio": "Believer-Wife- Mommy to Brian Patrick and Brielle Peliage\nNOLA Raised⚜️💜💛💚⚜️HOUSTON Living",
+      "profileImageUrl": "https://scontent-dfw5-1.cdninstagram.com/v/t51.2885-19/70653835_1148601635530247_1385714096464199680_n.jpg?stp=dst-jpg_s320x320_tt6&_nc_ht=scontent-dfw5-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2QE49Z95zjcXGqN-9fkDby-Z2cyet8Wnc1vSkGHQip_07NNYAhmygYae6N2Ld3jAVCs&_nc_ohc=Nwq1fLrRggkQ7kNvwE44Jbd&_nc_gid=5ytMG65ze0autL0mpt1FOA&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfQTjCs2ueHEUEucAYiPsOfAK1oV6Y7WstB_q9t7cl32qQ&oe=687A3643&_nc_sid=8b3546",
+      "responseTime": 879
+    },
+    {
+      "url": "https://www.instagram.com/whittenfilms/",
+      "status": "invalid",
+      "statusCode": 404,
+      "profileExists": false,
+      "responseTime": 90,
+      "error": "Profile not found"
+    },
+    {
+      "url": "https://www.instagram.com/dallasweddingfilms/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": true,
+      "isPrivate": false,
+      "followerCount": 254,
+      "bio": "RELIVE EVERY MOMENT 🎥\nDocumentary-style wedding videography serving DFW.",
+      "profileImageUrl": "https://scontent-dfw5-1.cdninstagram.com/v/t51.2885-19/339515891_1664048060732917_5078904284406715958_n.jpg?stp=dst-jpg_s320x320_tt6&_nc_ht=scontent-dfw5-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2QG5CzjzqhsqXl_gSnEYO8y5t1nt_rRArh9zTmqil1uXieaMsWufyKsqNsDaLr_eF_s&_nc_ohc=xBaa6y5ZAIAQ7kNvwEYj0UT&_nc_gid=kr6ARKlWzQTzOVeon6785w&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfTAF8g7Ta_h3VKZPwhg6Ur_MkWzprOPCQ7w-r_NYpe-Ow&oe=687A2DDF&_nc_sid=8b3546",
+      "responseTime": 591
+    },
+    {
+      "url": "https://www.instagram.com/momentofilms/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": true,
+      "isPrivate": false,
+      "followerCount": 1,
+      "bio": "",
+      "profileImageUrl": "https://instagram.fpbc4-1.fna.fbcdn.net/v/t51.2885-19/464760996_1254146839119862_3605321457742435801_n.png?stp=dst-jpg_e0_s150x150_tt6&cb=8577c754-c2464923&_nc_ht=instagram.fpbc4-1.fna.fbcdn.net&_nc_cat=1&_nc_oc=Q6cZ2QEZwOngcjXunjaXowz9LdHvim5M0EjWDPui-R5aYosmrmW1zdTNos5A9g7b2FsUbYk-FMXCZxAum9akJRsJJ2gk&_nc_ohc=cpuRypEf_aQQ7kNvwErAurS&_nc_gid=Ymn3XNhflq-_kwX-bPumDw&edm=AB11_MABAAAA&ccb=7-5&ig_cache_key=YW5vbnltb3VzX3Byb2ZpbGVfcGlj.3-ccb7-5-cb8577c754-c2464923&oh=00_AfSDYBN3W4X-wHGxOWdViJlp7pZ-GzKhHzrfnIzUW6V4rQ&oe=687A2A68&_nc_sid=dc5e7f",
+      "responseTime": 158
+    },
+    {
+      "url": "https://www.instagram.com/culinairecatering/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": true,
+      "isPrivate": false,
+      "followerCount": 379,
+      "bio": "#Houston event catering + design",
+      "profileImageUrl": "https://scontent-dfw5-1.cdninstagram.com/v/t51.2885-19/40170129_2201887966735085_8965144386677506048_n.jpg?stp=dst-jpg_s150x150_tt6&_nc_ht=scontent-dfw5-1.cdninstagram.com&_nc_cat=105&_nc_oc=Q6cZ2QH-9bIGKCFGPL6sJqLInzUX8JStsQXjDSlmcMDzBz6FsWnRIO1IJe74aI05EtbmkTU&_nc_ohc=TRtH4FCsXq4Q7kNvwEq2SXd&_nc_gid=1NGS0cXdOxUrZa3a_j2-eg&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfQwOd2j9i3GfP1_-bw8cTYbf1GXLb609c-ijxfl8S-vRw&oe=687A104F&_nc_sid=8b3546",
+      "responseTime": 755
+    },
+    {
+      "url": "https://www.instagram.com/dallascateringco/",
+      "status": "invalid",
+      "statusCode": 404,
+      "profileExists": false,
+      "responseTime": 100,
+      "error": "Profile not found"
+    },
+    {
+      "url": "https://www.instagram.com/epicureanevents/",
+      "status": "invalid",
+      "statusCode": 200,
+      "profileExists": false,
+      "responseTime": 118,
+      "error": "Profile not found"
+    },
+    {
+      "url": "https://www.instagram.com/nashersculpturecenter/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": true,
+      "isPrivate": false,
+      "followerCount": 65744,
+      "bio": "A museum dedicated to the display and study of modern and contemporary sculpture.\nElsewhere: @nasherevents",
+      "profileImageUrl": "https://scontent-dfw5-2.cdninstagram.com/v/t51.2885-19/440848139_490246869994360_4428249112090502537_n.jpg?stp=dst-jpg_s320x320_tt6&_nc_ht=scontent-dfw5-2.cdninstagram.com&_nc_cat=104&_nc_oc=Q6cZ2QGfBzrDXskDBVyvE-Azez09JwufczFpNau8fRFr1pBukBHCAv7GEOWFjwDkZVdDURE&_nc_ohc=ewxO-7UjpUIQ7kNvwExIl9Q&_nc_gid=3IzJfkkXHZz4znFdHJ8Nqw&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfQw4IFm_g1pUVhGC4hC3nZbbgb8fwNqRe6ZGzW_Q2hCBg&oe=687A3B38&_nc_sid=8b3546",
+      "responseTime": 1583
+    },
+    {
+      "url": "https://www.instagram.com/trinityriveraudubon/",
+      "status": "invalid",
+      "statusCode": 404,
+      "profileExists": false,
+      "responseTime": 103,
+      "error": "Profile not found"
+    },
+    {
+      "url": "https://www.instagram.com/dallasarboretum/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": true,
+      "isPrivate": false,
+      "followerCount": 390,
+      "bio": "",
+      "profileImageUrl": "https://instagram.fnva1-1.fna.fbcdn.net/v/t51.2885-19/464760996_1254146839119862_3605321457742435801_n.png?stp=dst-jpg_e0_s150x150_tt6&cb=8577c754-c2464923&_nc_ht=instagram.fnva1-1.fna.fbcdn.net&_nc_cat=1&_nc_oc=Q6cZ2QGbH91NzzwRRdFjlfbq3M9jqUJ7CTtEIpVgHRGsWnmB-0u4YtuF6Uy6_oy2rvzBeQs&_nc_ohc=cpuRypEf_aQQ7kNvwGzcpfC&_nc_gid=EGYUy5-nIeWMe_5pfU68Tg&edm=AJFGJLkBAAAA&ccb=7-5&ig_cache_key=YW5vbnltb3VzX3Byb2ZpbGVfcGlj.3-ccb7-5-cb8577c754-c2464923&oh=00_AfRf05vzNmZo-4FGgXQlkKJL7726bvOwbveHJj_aZaZMoA&oe=687A2A68&_nc_sid=2c2bc7",
+      "responseTime": 168
+    },
+    {
+      "url": "https://www.instagram.com/magnoliahoteldallas/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": true,
+      "isPrivate": false,
+      "followerCount": 111,
+      "bio": "An icon of Dallas, Magnolia Hotel Dallas Downtown is a conveniently located and uniquely warm reflection of this Texas destination",
+      "profileImageUrl": "https://scontent-dfw5-1.cdninstagram.com/v/t51.2885-19/219371356_352093146440905_2495257600234808636_n.jpg?stp=dst-jpg_s320x320_tt6&_nc_ht=scontent-dfw5-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2QEI1-8pbFjpEOX9OMwdpRKd3N9xlD-E33xyls9PdZLRRhZCA6VrknhVtDr7nEQU8ag&_nc_ohc=fVHTiYTUmkEQ7kNvwHgu01i&_nc_gid=KbnGzyHIlQ-wFQE41pX2jw&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfTtqCGTLZOD4qdQOm3x8GCb11bOYePaqf6ZB0S20640pQ&oe=687A16ED&_nc_sid=8b3546",
+      "responseTime": 205
+    },
+    {
+      "url": "https://www.instagram.com/nashersculpturecenter/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": true,
+      "isPrivate": false,
+      "followerCount": 65744,
+      "bio": "A museum dedicated to the display and study of modern and contemporary sculpture.\nElsewhere: @nasherevents",
+      "profileImageUrl": "https://scontent-dfw5-2.cdninstagram.com/v/t51.2885-19/440848139_490246869994360_4428249112090502537_n.jpg?stp=dst-jpg_s320x320_tt6&_nc_ht=scontent-dfw5-2.cdninstagram.com&_nc_cat=104&_nc_oc=Q6cZ2QEGjBjtohc5ppB3gcCCHYFkQ2ncKjBxxAKXfDR9rBhv3loO_Bz0zvOZOvJSjzwHQWg&_nc_ohc=ewxO-7UjpUIQ7kNvwExIl9Q&_nc_gid=EtpDSIXvII4YTH6goUTksw&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfRPy2zs3HDGgy1DJ2AxDo91oJLxXo9nXZAyRGnrCwqZOQ&oe=687A3B38&_nc_sid=8b3546",
+      "responseTime": 907
+    },
+    {
+      "url": "https://www.instagram.com/trinityriveraudubon/",
+      "status": "invalid",
+      "statusCode": 404,
+      "profileExists": false,
+      "responseTime": 96,
+      "error": "Profile not found"
+    },
+    {
+      "url": "https://www.instagram.com/dallasarboretum/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": true,
+      "isPrivate": false,
+      "followerCount": 390,
+      "bio": "",
+      "profileImageUrl": "https://instagram.fccp1-1.fna.fbcdn.net/v/t51.2885-19/464760996_1254146839119862_3605321457742435801_n.png?stp=dst-jpg_e0_s150x150_tt6&cb=8577c754-c2464923&_nc_ht=instagram.fccp1-1.fna.fbcdn.net&_nc_cat=1&_nc_oc=Q6cZ2QHmnNSsd7Urc383f9vveJEfuBjvIRZWvJIA-iCwLR36M4DNSCn4AYjU0VgFZjPEPWk&_nc_ohc=cpuRypEf_aQQ7kNvwFnOFe2&_nc_gid=ZeWP08o6UDjxdjmDCPw-Rw&edm=AB11_MABAAAA&ccb=7-5&ig_cache_key=YW5vbnltb3VzX3Byb2ZpbGVfcGlj.3-ccb7-5-cb8577c754-c2464923&oh=00_AfRIvEgIt2nrnVKRgRZjx5PNCFIdL5Pdp5hEgUvGmxUYag&oe=687A2A68&_nc_sid=dc5e7f",
+      "responseTime": 137
+    },
+    {
+      "url": "https://www.instagram.com/magnoliahoteldallas/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": true,
+      "isPrivate": false,
+      "followerCount": 111,
+      "bio": "An icon of Dallas, Magnolia Hotel Dallas Downtown is a conveniently located and uniquely warm reflection of this Texas destination",
+      "profileImageUrl": "https://scontent-dfw5-1.cdninstagram.com/v/t51.2885-19/219371356_352093146440905_2495257600234808636_n.jpg?stp=dst-jpg_s320x320_tt6&_nc_ht=scontent-dfw5-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2QEMXDdDKtxeWLpUGsOSgMLmKx9pRXZbkZImd5lD0khuFfC70pFv2qc_xyfraO4zcrA&_nc_ohc=fVHTiYTUmkEQ7kNvwHgu01i&_nc_gid=dT1ZQGjd2dZQ-67TYdcf2g&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfQLu3y_yDvDw4xO5sLc08DZxOIcixtI72N0F_1WOy6hqQ&oe=687A16ED&_nc_sid=8b3546",
+      "responseTime": 146
+    },
+    {
+      "url": "https://www.instagram.com/nashersculpturecenter/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": true,
+      "isPrivate": false,
+      "followerCount": 65744,
+      "bio": "A museum dedicated to the display and study of modern and contemporary sculpture.\nElsewhere: @nasherevents",
+      "profileImageUrl": "https://scontent-dfw5-2.cdninstagram.com/v/t51.2885-19/440848139_490246869994360_4428249112090502537_n.jpg?stp=dst-jpg_s320x320_tt6&_nc_ht=scontent-dfw5-2.cdninstagram.com&_nc_cat=104&_nc_oc=Q6cZ2QHtH18Dfo3bFHRgMiKEQEdqlPemkyREoRRMv6TwBSXvHkrdJKsaIeTWlDHlNK9Vhn8&_nc_ohc=ewxO-7UjpUIQ7kNvwExIl9Q&_nc_gid=yph92YM1MkhKLUZEfKjWZA&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfQD6niidUTdZCf2nSCNJ3T4jTI7Hi4f3yP0b-2rU0xfmw&oe=687A3B38&_nc_sid=8b3546",
+      "responseTime": 1541
+    },
+    {
+      "url": "https://www.instagram.com/trinityriveraudubon/",
+      "status": "invalid",
+      "statusCode": 404,
+      "profileExists": false,
+      "responseTime": 109,
+      "error": "Profile not found"
+    },
+    {
+      "url": "https://www.instagram.com/dallasarboretum/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": true,
+      "isPrivate": false,
+      "followerCount": 390,
+      "bio": "",
+      "profileImageUrl": "https://scontent-dfw5-2.cdninstagram.com/v/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?stp=dst-jpg_s150x150_tt6&_nc_ht=scontent-dfw5-2.cdninstagram.com&_nc_cat=1&_nc_oc=Q6cZ2QFuz6zl_-b1CKO-w3BCb5BzmJqgw0Lp23EBSB6Ri0SPW6aHlmiRoRKCou4EAbSxh-0&_nc_ohc=O7EetbGuvRAQ7kNvwGdG0c4&_nc_gid=4M-9g3KS0aV2algOEYLN2Q&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=YW5vbnltb3VzX3Byb2ZpbGVfcGlj.3-ccb7-5&oh=00_AfQc29mwIz25Ikwfb-BVdl2Lk8-GeBLGsAgU0qCdZ_4z9Q&oe=687A1E8F&_nc_sid=8b3546",
+      "responseTime": 152
+    },
+    {
+      "url": "https://www.instagram.com/magnoliahoteldallas/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": true,
+      "isPrivate": false,
+      "followerCount": 111,
+      "bio": "An icon of Dallas, Magnolia Hotel Dallas Downtown is a conveniently located and uniquely warm reflection of this Texas destination",
+      "profileImageUrl": "https://scontent-dfw5-1.cdninstagram.com/v/t51.2885-19/219371356_352093146440905_2495257600234808636_n.jpg?stp=dst-jpg_s320x320_tt6&_nc_ht=scontent-dfw5-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2QFFl-6oE5F6t9NoRtcu_Rw32YutZToBbtJlSm-RdteGQlaFlSXMM_qs0naVOVudeDA&_nc_ohc=fVHTiYTUmkEQ7kNvwHgu01i&_nc_gid=EZHJZ3nIE9rEN4B-u30HgQ&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfQiMGSS_EFVwwNS-ltuFL9eQlJT_dfrGdo4dZV0NvgnLg&oe=687A16ED&_nc_sid=8b3546",
+      "responseTime": 146
+    },
+    {
+      "url": "https://www.instagram.com/cremedelacremetx/",
+      "status": "invalid",
+      "statusCode": 404,
+      "profileExists": false,
+      "responseTime": 93,
+      "error": "Profile not found"
+    },
+    {
+      "url": "https://www.instagram.com/sweetbydesign/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": true,
+      "isPrivate": false,
+      "followerCount": 686,
+      "bio": "",
+      "profileImageUrl": "https://scontent-dfw5-1.cdninstagram.com/v/t51.2885-19/467693866_888871220022927_8544147363470510393_n.jpg?stp=dst-jpg_s320x320_tt6&_nc_ht=scontent-dfw5-1.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2QG8YsvWpk_uJPvYzIzXrUeY2FjS1Oivn-FK_IRkqw_Hmn5tVPRgfasd6CgEo_cY-6E&_nc_ohc=HAcQVhCJN1YQ7kNvwGTyfdv&_nc_gid=bg42I_ND8nQkpqHf3_la5w&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfSd5rlMAvTRtVHAZDW6GMHr3IsLs7gHGDKwt7JPUVQTOw&oe=687A27AD&_nc_sid=8b3546",
+      "responseTime": 619
+    },
+    {
+      "url": "https://www.instagram.com/thecakestudio/",
+      "status": "valid",
+      "statusCode": 200,
+      "profileExists": true,
+      "isPrivate": false,
+      "followerCount": 521,
+      "bio": "'Baking the world a better place'\nWedding cakes, desserts and everything in between.",
+      "profileImageUrl": "https://scontent-dfw5-2.cdninstagram.com/v/t51.2885-19/151065907_771648243450619_5817546064602503364_n.jpg?stp=dst-jpg_s320x320_tt6&_nc_ht=scontent-dfw5-2.cdninstagram.com&_nc_cat=107&_nc_oc=Q6cZ2QHaUJfaLGhaeQzJH_dLjcN5N8wKWJscb8ETz5uBZ6Xk9xIuP34hC2UQEhkBFtbi0fE&_nc_ohc=bLWQm_ylMNgQ7kNvwGRnNkh&_nc_gid=5JQSyWiZS2YG-qxhQ220qA&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfQ3P4ITT3Y-TY0VlsbkO2bN2bz3EI_vx_CBvqpzsTGVJw&oe=687A14B8&_nc_sid=8b3546",
+      "responseTime": 501
+    }
+  ]
+}

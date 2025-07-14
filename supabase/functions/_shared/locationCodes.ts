@@ -12,7 +12,17 @@ export const locationCodes: {
       "Dallas": 1003735,
       "Houston": 1003811,
       "Austin": 1003550,
-      "San Antonio": 1004100
+      "San Antonio": 1004100,
+      "Fort Worth": 1026411,
+      "El Paso": 1026376,
+      "Plano": 1026695,
+      "Corpus Christi": 1026319,
+      "Arlington": 1026194,
+      "Garland": 1026419,
+      "Irving": 1026497,
+      "Lubbock": 1026578,
+      "Amarillo": 1026182,
+      "Galveston": 1026415
     }
   },
   "California": {

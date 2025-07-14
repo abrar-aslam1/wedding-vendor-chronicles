@@ -6,6 +6,8 @@
   "scripts": {
     "test:dallas": "tsx testDallasVendors.ts",
     "test:all": "tsx testAllVendors.ts",
+    "live": "tsx liveTestTool.ts",
+    "web": "open webTestTool.html",
     "build": "tsc",
     "dev": "tsx watch"
   },
