@@ -11,7 +11,9 @@
       "Bash(python:*)",
       "Bash(git add:*)",
       "Bash(node:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(npm run lint)",
+      "Bash(npx tsc:*)"
     ]
   },
   "enableAllProjectMcpServers": false

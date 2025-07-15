@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { lazy, Suspense } from "react";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { CookieConsent } from "@/components/CookieConsent";
+import { TermsPopup } from "@/components/TermsPopup";
 
 // Lazy load components for better performance
 const Index = lazy(() => import("@/pages/Index"));
@@ -86,6 +88,8 @@ function App() {
         </Routes>
       </Suspense>
       <Toaster />
+      <CookieConsent />
+      <TermsPopup />
     </BrowserRouter>
   );
 }
