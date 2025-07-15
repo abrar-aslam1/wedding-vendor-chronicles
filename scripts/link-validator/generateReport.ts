@@ -212,7 +212,7 @@ function generateMarkdown(report: ValidationReport): string {
 }
 
 function generateHTML(report: ValidationReport): string {
-  let html = `<!DOCTYPE html>
+  const html = `<!DOCTYPE html>
 <html>
 <head>
   <title>Dallas Vendor Validation Report</title>

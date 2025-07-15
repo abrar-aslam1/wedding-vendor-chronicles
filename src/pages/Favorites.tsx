@@ -5,6 +5,7 @@ import { SearchResult } from "@/types/search";
 import { SearchResults } from "@/components/search/SearchResults";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { AuthErrorBoundary } from "@/components/ErrorBoundaries";
 
 const Favorites = () => {
   const [favorites, setFavorites] = useState<SearchResult[]>([]);
@@ -134,25 +135,27 @@ const Favorites = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <MainNav />
-      <div className="container mx-auto px-4 pt-24">
-        <h1 className="text-3xl font-bold text-wedding-primary mb-8">My Favorite Vendors</h1>
-        
-        {isLoading ? (
-          <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-wedding-primary"></div>
-          </div>
-        ) : favorites.length === 0 ? (
-          <div className="mt-4 md:mt-8 text-center text-gray-500 p-8 bg-gray-50 rounded-lg">
-            <p className="text-lg mb-4">You don't have any favorites yet.</p>
-            <p>Browse vendors and click the heart icon to add them to your favorites.</p>
-          </div>
-        ) : (
-          <SearchResults results={favorites} isSearching={false} />
-        )}
+    <AuthErrorBoundary onAuthError={() => navigate('/auth')}>
+      <div className="min-h-screen bg-white">
+        <MainNav />
+        <div className="container mx-auto px-4 pt-24">
+          <h1 className="text-3xl font-bold text-wedding-primary mb-8">My Favorite Vendors</h1>
+          
+          {isLoading ? (
+            <div className="flex justify-center items-center h-64">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-wedding-primary"></div>
+            </div>
+          ) : favorites.length === 0 ? (
+            <div className="mt-4 md:mt-8 text-center text-gray-500 p-8 bg-gray-50 rounded-lg">
+              <p className="text-lg mb-4">You don't have any favorites yet.</p>
+              <p>Browse vendors and click the heart icon to add them to your favorites.</p>
+            </div>
+          ) : (
+            <SearchResults results={favorites} isSearching={false} />
+          )}
+        </div>
       </div>
-    </div>
+    </AuthErrorBoundary>
   );
 };
 

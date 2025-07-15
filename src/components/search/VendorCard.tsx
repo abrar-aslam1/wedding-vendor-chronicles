@@ -4,6 +4,7 @@ import { SearchResult } from "@/types/search";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
+import { VendorErrorBoundary } from "@/components/ErrorBoundaries";
 
 interface VendorCardProps {
   vendor: SearchResult;
@@ -104,7 +105,8 @@ export const VendorCard = ({
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 relative group">
+    <VendorErrorBoundary vendorId={vendor.place_id}>
+      <div className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 relative group">
       {/* Image */}
       <div className="relative h-56 bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
         {vendor.main_image && !imageError ? (
@@ -282,5 +284,6 @@ export const VendorCard = ({
         </div>
       </div>
     </div>
+    </VendorErrorBoundary>
   );
 };

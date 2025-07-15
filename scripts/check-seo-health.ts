@@ -219,7 +219,7 @@ function checkImportantPages() {
       .filter(file => file.endsWith('.xml') && !file.endsWith('.gz'));
     
     // Combine all URLs from all sitemaps
-    let allUrls: string[] = [];
+    const allUrls: string[] = [];
     
     for (const file of sitemapFiles) {
       const filePath = path.join(SITEMAPS_DIR, file);

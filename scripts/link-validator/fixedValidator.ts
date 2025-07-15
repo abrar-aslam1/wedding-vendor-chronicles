@@ -137,7 +137,7 @@ export class FixedInstagramValidator {
 
       // Scoring system
       let confidenceScore = 0;
-      let detectionMethods: string[] = [];
+      const detectionMethods: string[] = [];
 
       if (titleContainsHandle) { 
         confidenceScore += 3; 

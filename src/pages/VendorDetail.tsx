@@ -21,9 +21,59 @@ const VendorDetail = () => {
   const { toast } = useToast();
   const [vendor, setVendor] = useState<SearchResult | null>(location.state?.vendor || null);
   const [suggestedVendors, setSuggestedVendors] = useState<SearchResult[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(!location.state?.vendor);
+  const [isLoadingVendor, setIsLoadingVendor] = useState(false);
   const [session, setSession] = useState<any>(null);
   const [isFavorite, setIsFavorite] = useState(false);
+
+  // Fetch vendor data if not available from navigation state
+  useEffect(() => {
+    const fetchVendorData = async () => {
+      if (!vendorId || vendor) return;
+      
+      setIsLoadingVendor(true);
+      try {
+        // Try to fetch from vendor_cache first
+        const { data: cachedData, error: cacheError } = await supabase
+          .from('vendor_cache')
+          .select('search_results')
+          .limit(10);
+        
+        if (cachedData && !cacheError) {
+          // Search through all cached results for the vendor
+          for (const cache of cachedData) {
+            const results = cache.search_results as SearchResult[];
+            const foundVendor = results.find(v => v.place_id === vendorId);
+            if (foundVendor) {
+              setVendor(foundVendor);
+              break;
+            }
+          }
+        }
+        
+        // If still not found, try vendor_favorites table
+        if (!vendor) {
+          const { data: favoriteData } = await supabase
+            .from('vendor_favorites')
+            .select('vendor_data')
+            .eq('vendor_id', vendorId)
+            .limit(1)
+            .single();
+          
+          if (favoriteData?.vendor_data) {
+            setVendor(favoriteData.vendor_data as SearchResult);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching vendor data:', error);
+      } finally {
+        setIsLoadingVendor(false);
+        setIsLoading(false);
+      }
+    };
+    
+    fetchVendorData();
+  }, [vendorId, vendor]);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -52,6 +102,8 @@ const VendorDetail = () => {
     const fetchSuggestedVendors = async () => {
       if (!vendor?.category) return;
       
+      try {
+      
       const { data: cachedResults } = await supabase
         .from('vendor_cache')
         .select('search_results')
@@ -59,11 +111,14 @@ const VendorDetail = () => {
         .limit(1)
         .single();
 
-      if (cachedResults?.search_results) {
-        const filtered = (cachedResults.search_results as SearchResult[])
-          .filter(v => v.place_id !== vendor.place_id)
-          .slice(0, 3);
-        setSuggestedVendors(filtered);
+        if (cachedResults?.search_results) {
+          const filtered = (cachedResults.search_results as SearchResult[])
+            .filter(v => v.place_id !== vendor.place_id)
+            .slice(0, 3);
+          setSuggestedVendors(filtered);
+        }
+      } catch (error) {
+        console.error('Error fetching suggested vendors:', error);
       }
     };
 
@@ -134,6 +189,21 @@ const VendorDetail = () => {
     }
   };
 
+  if (isLoading || isLoadingVendor) {
+    return (
+      <div className="min-h-screen bg-wedding-light">
+        <SEOHead />
+        <SchemaMarkup isHomePage={true} />
+        <MainNav />
+        <div className="container mx-auto px-4 py-8 mt-16">
+          <div className="flex justify-center items-center min-h-[400px]">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-wedding-primary"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (!vendor) {
     return (
       <div className="min-h-screen bg-wedding-light">
@@ -143,6 +213,7 @@ const VendorDetail = () => {
         <div className="container mx-auto px-4 py-8 mt-16">
           <div className="text-center">
             <h1 className="text-2xl font-semibold mb-4">Vendor Not Found</h1>
+            <p className="text-gray-600 mb-6">Sorry, we couldn't find the vendor you're looking for.</p>
             <Button onClick={() => navigate(-1)}>
               <ArrowLeft className="mr-2 h-4 w-4" />
               Go Back
@@ -173,11 +244,13 @@ const VendorDetail = () => {
             <BreadcrumbItem>
               <BreadcrumbLink href="/">Home</BreadcrumbLink>
             </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbLink href={`/top-20/${vendor.category?.toLowerCase().replace(/ /g, '-')}`}>
-                {vendor.category}
-              </BreadcrumbLink>
-            </BreadcrumbItem>
+            {vendor.category && (
+              <BreadcrumbItem>
+                <BreadcrumbLink href={`/top-20/${vendor.category.toLowerCase().replace(/ /g, '-')}`}>
+                  {vendor.category}
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+            )}
             <BreadcrumbItem>
               <BreadcrumbPage>{vendor.title}</BreadcrumbPage>
             </BreadcrumbItem>

@@ -5,6 +5,7 @@ import { lazy, Suspense } from "react";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { CookieConsent } from "@/components/CookieConsent";
 import { TermsPopup } from "@/components/TermsPopup";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 // Lazy load components for better performance
 const Index = lazy(() => import("@/pages/Index"));
@@ -38,9 +39,10 @@ const PageLoader = () => (
 
 function App() {
   return (
-    <BrowserRouter>
-      <Suspense fallback={<PageLoader />}>
-        <Routes>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/auth/callback" element={<AuthCallback />} />
@@ -86,11 +88,12 @@ function App() {
           <Route path="/tools/wedding-hashtag-generator/states/:state/:city" element={<WeddingHashtagGenerator />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </Suspense>
-      <Toaster />
-      <CookieConsent />
-      <TermsPopup />
-    </BrowserRouter>
+        </Suspense>
+        <Toaster />
+        <CookieConsent />
+        <TermsPopup />
+      </BrowserRouter>
+    </ErrorBoundary>
   );
 }
 

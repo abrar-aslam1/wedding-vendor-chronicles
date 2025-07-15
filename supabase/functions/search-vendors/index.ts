@@ -70,7 +70,7 @@ serve(async (req) => {
     const supabase = createClient(supabaseUrl, supabaseKey);
     
     // Search results array with proper typing
-    let searchResults: any[] = [];
+    const searchResults: any[] = [];
     
     const { page = 1, limit = 30 } = parsedBody;
     const offset = (page - 1) * limit;
