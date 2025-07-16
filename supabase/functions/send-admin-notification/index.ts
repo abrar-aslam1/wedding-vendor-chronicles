@@ -19,15 +19,15 @@ serve(async (req) => {
   try {
     const { type, data }: EmailRequest = await req.json();
     
-    // SMTP Configuration - Add these to your Supabase project secrets
-    const SMTP_HOST = Deno.env.get('SMTP_HOST') || 'smtp.gmail.com';
-    const SMTP_PORT = parseInt(Deno.env.get('SMTP_PORT') || '587');
-    const SMTP_USER = Deno.env.get('SMTP_USER'); // Your email
-    const SMTP_PASS = Deno.env.get('SMTP_PASS'); // Your app password
+    const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
     const ADMIN_EMAIL = 'abrar@amarosystems.com';
 
-    if (!SMTP_USER || !SMTP_PASS) {
-      throw new Error('SMTP credentials not configured');
+    console.log('Checking environment variables...');
+    console.log('RESEND_API_KEY present:', !!RESEND_API_KEY);
+
+    if (!RESEND_API_KEY) {
+      console.error('RESEND_API_KEY not found in environment variables');
+      throw new Error('RESEND_API_KEY not configured');
     }
 
     // Generate email content based on type
@@ -51,17 +51,16 @@ serve(async (req) => {
         throw new Error('Invalid email type');
     }
 
-    // Send email using fetch to a mail service
+    // Send email using Resend
     const emailPayload = {
-      to: ADMIN_EMAIL,
+      from: 'Wedding Vendor Notifications <onboarding@resend.dev>',
+      to: [ADMIN_EMAIL],
       subject: subject,
-      html: htmlContent,
-      from: SMTP_USER
+      html: htmlContent
     };
 
-    // Using a simple SMTP service like EmailJS or similar
-    // For this example, I'll create a simple email sender
-    await sendEmail(emailPayload, SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS);
+    console.log('Sending email via Resend...');
+    await sendEmail(emailPayload, RESEND_API_KEY);
 
     return new Response(
       JSON.stringify({ success: true, message: 'Email sent successfully' }),
@@ -83,45 +82,40 @@ serve(async (req) => {
   }
 });
 
-async function sendEmail(payload: any, host: string, port: number, user: string, pass: string) {
-  // Simple email sending using fetch to a mail service
-  // You can replace this with your preferred email service
+async function sendEmail(payload: any, apiKey: string) {
+  console.log('Calling Resend API...');
   
-  // Using Resend API as an example (you can change this to your preferred service)
-  const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
-  
-  if (RESEND_API_KEY) {
-    const response = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${RESEND_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        from: 'Wedding Vendor Notifications <noreply@findmyweddingvendor.com>',
-        to: [payload.to],
-        subject: payload.subject,
-        html: payload.html,
-      }),
-    });
+  const response = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
 
-    if (!response.ok) {
-      throw new Error(`Email service error: ${response.status}`);
-    }
-  } else {
-    console.log('No email service configured, logging email content:');
-    console.log('To:', payload.to);
-    console.log('Subject:', payload.subject);
-    console.log('HTML:', payload.html);
+  console.log('Resend API response status:', response.status);
+  
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error('Resend API error:', errorText);
+    throw new Error(`Resend API error: ${response.status} - ${errorText}`);
   }
+
+  const result = await response.json();
+  console.log('Email sent successfully:', result);
+  return result;
 }
 
 function generateBusinessSubmissionEmail(data: any): string {
   return `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
       <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 8px 8px 0 0;">
-        <h1 style="margin: 0; font-size: 24px;">🏢 New Business Submission</h1>
-        <p style="margin: 10px 0 0 0; opacity: 0.9;">Find My Wedding Vendor Admin Panel</p>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+          <img src="https://findmyweddingvendor.com/Find-My Wedding-Favicon/favicon-32x32.png" alt="Find My Wedding Vendor" style="width: 32px; height: 32px;" />
+          <h1 style="margin: 0; font-size: 24px;">🏢 New Business Submission</h1>
+        </div>
+        <p style="margin: 0; opacity: 0.9;">Find My Wedding Vendor Admin Panel</p>
       </div>
       
       <div style="background: #f8f9fa; padding: 20px; border-radius: 0 0 8px 8px; border: 1px solid #e9ecef;">
@@ -161,8 +155,11 @@ function generateUserRegistrationEmail(data: any): string {
   return `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
       <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 8px 8px 0 0;">
-        <h1 style="margin: 0; font-size: 24px;">👤 New User Registration</h1>
-        <p style="margin: 10px 0 0 0; opacity: 0.9;">Find My Wedding Vendor</p>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+          <img src="https://findmyweddingvendor.com/Find-My Wedding-Favicon/favicon-32x32.png" alt="Find My Wedding Vendor" style="width: 32px; height: 32px;" />
+          <h1 style="margin: 0; font-size: 24px;">👤 New User Registration</h1>
+        </div>
+        <p style="margin: 0; opacity: 0.9;">Find My Wedding Vendor</p>
       </div>
       
       <div style="background: #f8f9fa; padding: 20px; border-radius: 0 0 8px 8px; border: 1px solid #e9ecef;">
@@ -191,8 +188,11 @@ function generateVendorStatusChangeEmail(data: any): string {
   return `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
       <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 8px 8px 0 0;">
-        <h1 style="margin: 0; font-size: 24px;">📋 Vendor Status Changed</h1>
-        <p style="margin: 10px 0 0 0; opacity: 0.9;">Find My Wedding Vendor</p>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+          <img src="https://findmyweddingvendor.com/Find-My Wedding-Favicon/favicon-32x32.png" alt="Find My Wedding Vendor" style="width: 32px; height: 32px;" />
+          <h1 style="margin: 0; font-size: 24px;">📋 Vendor Status Changed</h1>
+        </div>
+        <p style="margin: 0; opacity: 0.9;">Find My Wedding Vendor</p>
       </div>
       
       <div style="background: #f8f9fa; padding: 20px; border-radius: 0 0 8px 8px; border: 1px solid #e9ecef;">
