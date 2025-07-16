@@ -76,7 +76,7 @@ class DirectCartVendorCollector {
         language_code: "en",
         device: "desktop",
         os: "windows",
-        depth: 5,
+        depth: 20,
         search_places: true
       }]);
 

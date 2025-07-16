@@ -233,7 +233,13 @@ serve(async (req) => {
           let query = supabase
             .from('vendors')
             .select('*')
-            .or(`business_name.ilike.%${keyword}%,category.ilike.%${keyword}%`);
+            .eq('status', 'approved');
+          
+          if (vendorCategory) {
+            query = query.eq('category', vendorCategory);
+          } else {
+            query = query.or(`business_name.ilike.%${keyword}%,category.ilike.%${keyword}%,description.ilike.%${keyword}%`);
+          }
           
           if (city && state) {
             query = query
@@ -322,14 +328,15 @@ serve(async (req) => {
       // Build query for regular vendors
       let vendorQuery = supabase
         .from('vendors')
-        .select('*');
+        .select('*')
+        .eq('status', 'approved');
       
       // Filter by category if we can map it
       if (vendorCategory) {
         vendorQuery = vendorQuery.eq('category', vendorCategory);
       } else {
-        // If we can't map the category, search in business_name and description
-        vendorQuery = vendorQuery.or(`business_name.ilike.%${keyword}%,description.ilike.%${keyword}%`);
+        // If we can't map the category, search in business_name, description, and category
+        vendorQuery = vendorQuery.or(`business_name.ilike.%${keyword}%,description.ilike.%${keyword}%,category.ilike.%${keyword}%`);
       }
       
       // Location filtering for regular vendors

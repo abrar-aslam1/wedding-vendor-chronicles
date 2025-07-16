@@ -29,6 +29,7 @@ const DemoPortal = lazy(() => import("@/pages/DemoPortal"));
 const TestAuth = lazy(() => import("@/pages/TestAuth"));
 const FreeTimelineGenerator = lazy(() => import("@/pages/FreeTimelineGenerator"));
 const WeddingHashtagGenerator = lazy(() => import("@/pages/WeddingHashtagGenerator").then(module => ({ default: module.WeddingHashtagGenerator })));
+const AdminPanel = lazy(() => import("@/pages/AdminPanel"));
 
 // Simple loading component
 const PageLoader = () => (
@@ -122,6 +123,11 @@ function App() {
           <Route path="/tools/wedding-hashtag-generator/states" element={<WeddingHashtagGenerator />} />
           <Route path="/tools/wedding-hashtag-generator/states/:state" element={<WeddingHashtagGenerator />} />
           <Route path="/tools/wedding-hashtag-generator/states/:state/:city" element={<WeddingHashtagGenerator />} />
+          <Route path="/admin" element={
+            <ProtectedRoute>
+              <AdminPanel />
+            </ProtectedRoute>
+          } />
           <Route path="*" element={<NotFound />} />
         </Routes>
         </Suspense>

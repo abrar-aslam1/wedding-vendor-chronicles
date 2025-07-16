@@ -136,6 +136,7 @@ export default function ListBusiness() {
           contact_info,
           images: imageUrls,
           owner_id: user.id,
+          status: 'pending'
         });
 
       if (insertError) {
@@ -144,7 +145,7 @@ export default function ListBusiness() {
 
       toast({
         title: "Success!",
-        description: "Your business has been listed successfully.",
+        description: "Your business has been submitted for review. It will appear in search results once approved.",
       });
 
       navigate("/");

@@ -58,5 +58,10 @@ export const categories = [
     name: "Wedding Decorators",
     slug: "wedding-decorators",
     description: "Transform your venue with stunning decorations"
+  },
+  {
+    name: "Carts",
+    slug: "carts",
+    description: "Mobile carts for coffee, matcha, cocktails & more"
   }
 ];
