@@ -104,6 +104,42 @@ export const CategoriesGrid = () => {
 
         console.log('Fetched subcategories:', data);
         setSubcategories(data);
+      } else if (selectedCategory === 'carts') {
+        console.log('Using static cart subcategories...');
+        // Static cart subcategories until they are added to the database
+        const cartSubcategories = [
+          {
+            id: '1',
+            name: 'Coffee Carts',
+            description: 'Mobile coffee stations with barista service for ceremonies and receptions'
+          },
+          {
+            id: '2',
+            name: 'Matcha Carts',
+            description: 'Specialty matcha and tea service carts for unique wedding experiences'
+          },
+          {
+            id: '3',
+            name: 'Cocktail Carts',
+            description: 'Mobile bar carts with bartender service for cocktail hour and reception'
+          },
+          {
+            id: '4',
+            name: 'Dessert Carts',
+            description: 'Mobile dessert stations with ice cream, pastries, and sweet treats'
+          },
+          {
+            id: '5',
+            name: 'Flower Carts',
+            description: 'Mobile floral arrangements and flower crown stations'
+          },
+          {
+            id: '6',
+            name: 'Champagne Carts',
+            description: 'Elegant champagne service carts for toasts and celebrations'
+          }
+        ];
+        setSubcategories(cartSubcategories);
       } else {
         setSubcategories([]);
       }
@@ -114,7 +150,7 @@ export const CategoriesGrid = () => {
 
   const handleCategoryClick = (slug: string) => {
     console.log('Category clicked:', slug);
-    if (slug === 'caterers') {
+    if (slug === 'caterers' || slug === 'carts') {
       setSelectedCategory(slug);
     } else {
       navigate(`/search/${slug}`);
@@ -123,7 +159,11 @@ export const CategoriesGrid = () => {
 
   const handleSubcategoryClick = (subcategoryName: string) => {
     console.log('Subcategory clicked:', subcategoryName);
-    navigate(`/search/caterers?cuisine=${encodeURIComponent(subcategoryName)}`);
+    if (selectedCategory === 'caterers') {
+      navigate(`/search/caterers?cuisine=${encodeURIComponent(subcategoryName)}`);
+    } else if (selectedCategory === 'carts') {
+      navigate(`/search/carts?subcategory=${encodeURIComponent(subcategoryName)}`);
+    }
   };
 
   return (
@@ -140,7 +180,7 @@ export const CategoriesGrid = () => {
             <Card 
               key={category.id} 
               className={`hover:shadow-lg transition-all duration-300 group cursor-pointer md:hover:shadow-xl lg:hover:shadow-2xl md:hover:-translate-y-1 lg:hover:-translate-y-2 ${
-                selectedCategory === 'caterers' && category.slug !== 'caterers' ? 'opacity-50' : ''
+                selectedCategory && category.slug !== selectedCategory ? 'opacity-50' : ''
               }`}
               onClick={() => handleCategoryClick(category.slug)}
             >
@@ -160,9 +200,11 @@ export const CategoriesGrid = () => {
                 <CardDescription className="text-xs md:text-sm lg:text-sm">{category.description}</CardDescription>
               </CardHeader>
               <CardContent className="p-3 pt-0">
-                {selectedCategory === 'caterers' && category.slug === 'caterers' ? (
+                {selectedCategory && category.slug === selectedCategory ? (
                   <div className="space-y-4">
-                    <h3 className="font-medium text-sm text-gray-600">Select a Cuisine:</h3>
+                    <h3 className="font-medium text-sm text-gray-600">
+                      {selectedCategory === 'caterers' ? 'Select a Cuisine:' : 'Select a Cart Type:'}
+                    </h3>
                     <div className="grid grid-cols-2 gap-3">
                       {subcategories.map((subcategory) => (
                         <Button

@@ -418,6 +418,14 @@ export const subcategories: Record<string, SubcategoryData[]> = {
     { id: '4', name: 'Lighting Design', description: 'Professional lighting design to create ambiance and highlight key areas' },
     { id: '5', name: 'Draping & Linens', description: 'Fabric draping, specialty linens, and textile decoration services' },
     { id: '6', name: 'Themed Decor', description: 'Specialized decoration for themed weddings and cultural celebrations' }
+  ],
+  'carts': [
+    { id: '1', name: 'Coffee Carts', description: 'Mobile coffee stations with barista service for ceremonies and receptions' },
+    { id: '2', name: 'Matcha Carts', description: 'Specialty matcha and tea service carts for unique wedding experiences' },
+    { id: '3', name: 'Cocktail Carts', description: 'Mobile bar carts with bartender service for cocktail hour and reception' },
+    { id: '4', name: 'Dessert Carts', description: 'Mobile dessert stations with ice cream, pastries, and sweet treats' },
+    { id: '5', name: 'Flower Carts', description: 'Mobile floral arrangements and flower crown stations' },
+    { id: '6', name: 'Champagne Carts', description: 'Elegant champagne service carts for toasts and celebrations' }
   ]
 };
 
