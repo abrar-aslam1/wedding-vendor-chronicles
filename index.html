@@ -8,6 +8,12 @@
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
+      // Default to denied state for analytics storage
+      gtag('consent', 'default', {
+        'analytics_storage': 'denied'
+      });
+
+      // Configure Google Analytics
       gtag('config', 'G-FL048TNQ0D');
     </script>
     

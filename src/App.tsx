@@ -1,7 +1,7 @@
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { CookieConsent } from "@/components/CookieConsent";
 import { TermsPopup } from "@/components/TermsPopup";
@@ -38,6 +38,42 @@ const PageLoader = () => (
 );
 
 function App() {
+  // Handle cookie consent for Google Analytics
+  const handleCookieAccept = () => {
+    // Update Google Analytics consent state
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('consent', 'update', {
+        'analytics_storage': 'granted'
+      });
+    }
+  };
+
+  const handleCookieReject = () => {
+    // Keep analytics storage denied
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('consent', 'update', {
+        'analytics_storage': 'denied'
+      });
+    }
+  };
+
+  // Check for existing consent on mount
+  useEffect(() => {
+    const consentData = localStorage.getItem('wedding-vendor-cookie-consent');
+    if (consentData) {
+      try {
+        const consent = JSON.parse(consentData);
+        if (consent.accepted && typeof window !== 'undefined' && (window as any).gtag) {
+          (window as any).gtag('consent', 'update', {
+            'analytics_storage': 'granted'
+          });
+        }
+      } catch (error) {
+        console.error('Error parsing consent data:', error);
+      }
+    }
+  }, []);
+
   return (
     <ErrorBoundary>
       <BrowserRouter>
@@ -90,7 +126,7 @@ function App() {
         </Routes>
         </Suspense>
         <Toaster />
-        <CookieConsent />
+        <CookieConsent onAccept={handleCookieAccept} onReject={handleCookieReject} />
         <TermsPopup />
       </BrowserRouter>
     </ErrorBoundary>
