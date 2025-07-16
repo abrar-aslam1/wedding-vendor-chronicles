@@ -53,13 +53,16 @@ RESEND_API_KEY=your_resend_key (optional)
 
 The system uses a queue to reliably send emails. Set up a cron job to process the queue:
 
-**Every 5 minutes:**
+**Every 5 minutes (WITH AUTHENTICATION):**
 ```bash
-curl -X POST 'https://wpbdveyuuudhmwflrmqw.supabase.co/functions/v1/process-notification-queue'
+curl -X POST 'https://wpbdveyuuudhmwflrmqw.supabase.co/functions/v1/process-notification-queue' \
+  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndwYmR2ZXl1dXVkaG13ZmxybXF3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc4NDMyNjYsImV4cCI6MjA1MzQxOTI2Nn0.zjyA1hS9Da2tXEuUu7W44tCMGSIp2ZTpK3RpJXQdL4A' \
+  -H 'Content-Type: application/json' \
+  -H 'apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndwYmR2ZXl1dXVkaG13ZmxybXF3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc4NDMyNjYsImV4cCI6MjA1MzQxOTI2Nn0.zjyA1hS9Da2tXEuUu7W44tCMGSIp2ZTpK3RpJXQdL4A'
 ```
 
-**Or use a service like:**
-- [Cron-job.org](https://cron-job.org)
+**Use a service like:**
+- [Cron-job.org](https://cron-job.org) ⭐ **RECOMMENDED**
 - [EasyCron](https://www.easycron.com)
 - Your server's crontab
 
@@ -86,13 +89,27 @@ The system sends beautiful HTML emails with:
 
 ## 🔍 Troubleshooting
 
+**❌ 401 Unauthorized Error (MOST COMMON)**
+- **Cause**: Cron job missing authentication headers
+- **Solution**: Use the authenticated curl command above with Authorization header
+- **Test**: Run `./scripts/test-notification-queue.sh` to verify
+
+**❌ 500 Server Error - Table Does Not Exist**
+- **Cause**: `admin_notification_queue` table not created
+- **Solution**: Run the migration in Supabase Dashboard > SQL Editor:
+  ```sql
+  -- Copy and paste the content from:
+  -- supabase/migrations/20250716000001_create_email_notifications.sql
+  ```
+- **Test**: Run `node scripts/apply-notification-migration.js` for instructions
+
 **No emails received?**
 - Check environment variables are set correctly
 - Verify Gmail app password is valid
 - Check Supabase Edge Function logs
 
 **Queue not processing?**
-- Ensure cron job is running
+- Ensure cron job is running with authentication
 - Check `process-notification-queue` function logs
 - Verify queue table has unprocessed items
 

@@ -19,6 +19,7 @@ const categories = [
   "Makeup Artists",
   "Hair Stylists",
   "Wedding Decorators",
+  "Carts",
 ];
 
 interface CategorySelectProps {

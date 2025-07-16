@@ -4,7 +4,7 @@ import { Footer } from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { MapPin, Users, Camera, Home, Utensils, Music, Palette, Scissors, Heart } from "lucide-react";
+import { MapPin, Users, Camera, Home, Utensils, Music, Palette, Scissors, Heart, Coffee } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -25,6 +25,7 @@ const vendorCategories = [
   { name: "Makeup Artists", icon: Heart, slug: "makeup-artists", color: "bg-red-500" },
   { name: "Wedding Planners", icon: Users, slug: "wedding-planners", color: "bg-indigo-500" },
   { name: "Wedding Decorators", icon: Palette, slug: "wedding-decorators", color: "bg-teal-500" },
+  { name: "Carts", icon: Coffee, slug: "carts", color: "bg-amber-500" },
 ];
 
 // Fallback cities for common states

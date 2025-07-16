@@ -46,6 +46,7 @@ export const SearchForm = ({ onSearch, isSearching, preselectedCategory }: Searc
     if (normalized === 'venue' || normalized === 'venues') return 'venues';
     if (normalized === 'caterer' || normalized === 'caterers') return 'caterers';
     if (normalized === 'wedding decorator' || normalized === 'wedding decorators' || normalized === 'wedding-decorators') return 'wedding-decorators';
+    if (normalized === 'cart' || normalized === 'carts' || normalized === 'mobile carts') return 'carts';
     return displayNameToSlug(categoryName);
   };
 
@@ -116,6 +117,8 @@ export const SearchForm = ({ onSearch, isSearching, preselectedCategory }: Searc
             <label className="block text-base font-medium text-wedding-text">
               {selectedCategory.toLowerCase().includes('caterer') 
                 ? 'Select Cuisine Type for Catering'
+                : selectedCategory.toLowerCase().includes('cart')
+                ? 'Select Cart Type'
                 : selectedCategory.toLowerCase().includes('wedding-planner') || selectedCategory.toLowerCase().includes('wedding planner')
                 ? 'Select Planning Service Type'
                 : selectedCategory.toLowerCase().includes('photographer')
@@ -143,6 +146,8 @@ export const SearchForm = ({ onSearch, isSearching, preselectedCategory }: Searc
             <p className="text-sm text-gray-500 mb-2">
               {selectedCategory.toLowerCase().includes('caterer') 
                 ? 'Choose a cuisine to see caterers specializing in that type of food'
+                : selectedCategory.toLowerCase().includes('cart')
+                ? 'Choose a cart type to find mobile services perfect for your wedding'
                 : selectedCategory.toLowerCase().includes('photographer')
                 ? 'Choose a photography style to find photographers specializing in that approach'
                 : selectedCategory.toLowerCase().includes('videographer')
