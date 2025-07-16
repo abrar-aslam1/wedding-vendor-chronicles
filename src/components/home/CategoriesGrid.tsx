@@ -68,6 +68,13 @@ const categories = [
     image: "https://images.unsplash.com/photo-1519225421980-715cb0215aed",
     slug: "wedding-decorators"
   },
+  {
+    id: 10,
+    name: "Carts",
+    description: "Mobile carts for coffee, matcha, cocktails & more",
+    image: "https://images.unsplash.com/photo-1545558014-8692077e9b5c",
+    slug: "carts"
+  },
 ];
 
 interface Subcategory {

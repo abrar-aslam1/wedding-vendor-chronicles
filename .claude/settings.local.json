@@ -14,7 +14,9 @@
       "Bash(rm:*)",
       "Bash(npm run lint)",
       "Bash(npx tsc:*)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(chmod:*)",
+      "Bash(npx supabase functions deploy:*)"
     ]
   },
   "enableAllProjectMcpServers": false

@@ -90,6 +90,7 @@ serve(async (req) => {
       if (keywordLower.includes('bridal')) return 'bridal-shops';
       if (keywordLower.includes('makeup')) return 'makeup-artists';
       if (keywordLower.includes('hair')) return 'hair-stylists';
+      if (keywordLower.includes('cart') || keywordLower.includes('mobile bar') || keywordLower.includes('coffee cart') || keywordLower.includes('matcha cart')) return 'carts';
       return null;
     };
 

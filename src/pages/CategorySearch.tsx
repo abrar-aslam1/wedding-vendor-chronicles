@@ -63,6 +63,12 @@ const categoryInfo: { [key: string]: { title: string; description: string; image
     description: "Transform your venue with stunning decorations that bring your vision to life",
     image: "https://images.unsplash.com/photo-1519225421980-715cb0215aed",
     tips: ["Book early for peak season", "Discuss venue restrictions", "Consider lighting and ambiance", "Ask about setup and breakdown services"]
+  },
+  "carts": {
+    title: "Mobile Carts",
+    description: "Add a unique touch with mobile carts - coffee, matcha, cocktails, and more",
+    image: "https://images.unsplash.com/photo-1545558014-8692077e9b5c",
+    tips: ["Ask about power and space requirements", "Confirm service duration and staff", "Check for any venue restrictions", "Inquire about customization options"]
   }
 };
 

@@ -94,7 +94,7 @@ select
   category,
   city,
   state,
-  location as address,
+  city || ', ' || state as address,
   phone,
   website_url as url,
   email,
