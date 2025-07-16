@@ -64,18 +64,27 @@ Headers:
   apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndwYmR2ZXl1dXVkaG13ZmxybXF3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc4NDMyNjYsImV4cCI6MjA1MzQxOTI2Nn0.zjyA1hS9Da2tXEuUu7W44tCMGSIp2ZTpK3RpJXQdL4A
 ```
 
-### 3. **Detailed Steps for Cron-job.org**
+### 3. **Actual Steps for Cron-job.org**
 
-1. **Login** to your cron-job.org account
-2. **Find** the disabled job (should be listed as "Disabled")
-3. **Click Edit** or **Settings** for that job
-4. **Navigate to** "Advanced" or "Headers" section
-5. **Add these headers:**
-   - **Header 1**: `Authorization` = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndwYmR2ZXl1dXVkaG13ZmxybXF3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc4NDMyNjYsImV4cCI6MjA1MzQxOTI2Nn0.zjyA1hS9Da2tXEuUu7W44tCMGSIp2ZTpK3RpJXQdL4A`
-   - **Header 2**: `Content-Type` = `application/json`
-   - **Header 3**: `apikey` = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndwYmR2ZXl1dXVkaG13ZmxybXF3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc4NDMyNjYsImV4cCI6MjA1MzQxOTI2Nn0.zjyA1hS9Da2tXEuUu7W44tCMGSIp2ZTpK3RpJXQdL4A`
-6. **Save** the configuration
-7. **Re-enable** the cron job
+**❌ PROBLEM**: Cron-job.org free tier doesn't support custom headers!
+
+**✅ SOLUTION**: We need to modify the Supabase function to accept a secret parameter instead.
+
+**Option A - Use a Different Cron Service (Recommended)**:
+1. **Switch to EasyCron** (supports headers) or **GitHub Actions**
+2. **Use the authenticated curl command** as provided above
+
+**Option B - Modify the Function for Cron-job.org**:
+1. **Add a secret parameter** to the function for authentication
+2. **Use this URL** in cron-job.org:
+   ```
+   https://wpbdveyuuudhmwflrmqw.supabase.co/functions/v1/process-notification-queue?secret=your_secret_key_here
+   ```
+
+**Option C - Use GitHub Actions (Free & Reliable)**:
+1. **Create** `.github/workflows/process-notifications.yml` in your repo
+2. **Add the authenticated curl command** to run every 5 minutes
+3. **GitHub Actions supports headers** and is completely free
 
 ### 4. **Test Before Re-enabling**
 
