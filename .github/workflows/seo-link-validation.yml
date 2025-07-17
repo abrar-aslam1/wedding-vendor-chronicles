@@ -54,8 +54,8 @@ jobs:
         id: seo
         run: |
           cat > scripts/seo-check.js << 'EOF'
-          const fs = require('fs');
-          const path = require('path');
+          import fs from 'fs';
+          import path from 'path';
           
           async function checkSEO() {
             const results = {
@@ -153,10 +153,10 @@ jobs:
           
           # Create link checker script
           cat > scripts/check-links.js << 'EOF'
-          const { createClient } = require('@supabase/supabase-js');
-          const https = require('https');
-          const http = require('http');
-          const url = require('url');
+          import { createClient } from '@supabase/supabase-js';
+          import https from 'https';
+          import http from 'http';
+          import url from 'url';
           
           const supabase = createClient(
             process.env.VITE_SUPABASE_URL || 'placeholder',
@@ -244,8 +244,8 @@ jobs:
         if: github.event.inputs.check_type == 'sitemap' || github.event.inputs.check_type == 'all'
         run: |
           cat > scripts/generate-sitemap.js << 'EOF'
-          const fs = require('fs');
-          const { createClient } = require('@supabase/supabase-js');
+          import fs from 'fs';
+          import { createClient } from '@supabase/supabase-js';
           
           const supabase = createClient(
             process.env.VITE_SUPABASE_URL || 'placeholder',

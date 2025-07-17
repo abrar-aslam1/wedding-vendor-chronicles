@@ -64,9 +64,9 @@ jobs:
           
           # Create performance monitoring script
           cat > scripts/performance-monitor.js << 'EOF'
-          const fs = require('fs');
-          const { exec } = require('child_process');
-          const { promisify } = require('util');
+          import fs from 'fs';
+          import { exec } from 'child_process';
+          import { promisify } from 'util';
           const execAsync = promisify(exec);
           
           async function measurePerformance(url) {
@@ -163,8 +163,8 @@ jobs:
         id: bundle
         run: |
           cat > scripts/bundle-analyzer.js << 'EOF'
-          const fs = require('fs');
-          const path = require('path');
+          import fs from 'fs';
+          import path from 'path';
           
           function getDirectorySize(dir) {
             let size = 0;
@@ -252,8 +252,8 @@ jobs:
         id: api
         run: |
           cat > scripts/api-monitor.js << 'EOF'
-          const https = require('https');
-          const { createClient } = require('@supabase/supabase-js');
+          import https from 'https';
+          import { createClient } from '@supabase/supabase-js';
           
           const supabase = createClient(
             process.env.VITE_SUPABASE_URL,

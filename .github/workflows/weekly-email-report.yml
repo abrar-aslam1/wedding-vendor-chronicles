@@ -40,7 +40,7 @@ jobs:
         id: metrics
         run: |
           cat > scripts/collect-weekly-metrics.js << 'EOF'
-          const { createClient } = require('@supabase/supabase-js');
+          import { createClient } from '@supabase/supabase-js';
           
           const supabase = createClient(
             process.env.VITE_SUPABASE_URL,
@@ -176,8 +176,8 @@ jobs:
         run: |
           # Get latest performance metrics from recent workflow runs
           cat > scripts/get-performance-summary.js << 'EOF'
-          const fs = require('fs');
-          const path = require('path');
+          import fs from 'fs';
+          import path from 'path';
           
           function getPerformanceSummary() {
             const summary = {
@@ -226,7 +226,7 @@ jobs:
         id: seo
         run: |
           cat > scripts/get-seo-summary.js << 'EOF'
-          const { createClient } = require('@supabase/supabase-js');
+          import { createClient } from '@supabase/supabase-js';
           
           const supabase = createClient(
             process.env.VITE_SUPABASE_URL,
@@ -446,7 +446,7 @@ jobs:
           
           # Create email sending script using existing notification system
           cat > scripts/send-weekly-email.js << 'EOF'
-          const { createClient } = require('@supabase/supabase-js');
+          import { createClient } from '@supabase/supabase-js';
           
           const supabase = createClient(
             process.env.VITE_SUPABASE_URL,
