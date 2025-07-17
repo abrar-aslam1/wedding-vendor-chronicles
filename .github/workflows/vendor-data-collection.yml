@@ -1,0 +1,89 @@
+name: Vendor Data Collection
+
+on:
+  schedule:
+    # Run every Sunday at 2 AM EST
+    - cron: '0 7 * * 0'
+  workflow_dispatch: # Allow manual triggering
+    inputs:
+      vendor_type:
+        description: 'Specific vendor type to collect (leave empty for all)'
+        required: false
+        type: choice
+        options:
+          - ''
+          - 'photographers'
+          - 'florists'
+          - 'caterers'
+          - 'venues'
+          - 'planners'
+          - 'djs'
+
+jobs:
+  collect-vendors:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Set up environment
+        run: |
+          echo "VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }}" >> $GITHUB_ENV
+          echo "VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }}" >> $GITHUB_ENV
+          echo "DATAFORSEO_LOGIN=${{ secrets.DATAFORSEO_LOGIN }}" >> $GITHUB_ENV
+          echo "DATAFORSEO_PASSWORD=${{ secrets.DATAFORSEO_PASSWORD }}" >> $GITHUB_ENV
+      
+      - name: Run vendor collection
+        run: |
+          if [ "${{ github.event.inputs.vendor_type }}" != "" ]; then
+            echo "🎯 Collecting specific vendor type: ${{ github.event.inputs.vendor_type }}"
+            node scripts/data-collection/collect-vendors-by-type.js ${{ github.event.inputs.vendor_type }}
+          else
+            echo "🌍 Collecting all vendor types"
+            node scripts/collect-all-vendors-optimized.js
+          fi
+      
+      - name: Generate collection report
+        id: report
+        run: |
+          echo "📊 Generating collection report..."
+          REPORT=$(node scripts/generate-collection-report.js)
+          echo "report<<EOF" >> $GITHUB_OUTPUT
+          echo "$REPORT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+      
+      - name: Send notification
+        if: always()
+        run: |
+          STATUS="${{ job.status }}"
+          if [ "$STATUS" == "success" ]; then
+            EMOJI="✅"
+            COLOR="good"
+          else
+            EMOJI="❌"
+            COLOR="danger"
+          fi
+          
+          # Call your notification function
+          curl -X POST ${{ secrets.VITE_SUPABASE_URL }}/functions/v1/send-admin-notification \
+            -H "Authorization: Bearer ${{ secrets.VITE_SUPABASE_ANON_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "type": "vendor_collection_complete",
+              "data": {
+                "status": "'$STATUS'",
+                "report": "${{ steps.report.outputs.report }}",
+                "timestamp": "'$(date -u +"%Y-%m-%d %H:%M:%S UTC")'"
+              }
+            }'
