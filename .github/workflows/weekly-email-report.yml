@@ -35,6 +35,17 @@ jobs:
           echo "VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }}" >> $GITHUB_ENV
           echo "VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }}" >> $GITHUB_ENV
           echo "SUPABASE_SERVICE_KEY=${{ secrets.SUPABASE_SERVICE_KEY }}" >> $GITHUB_ENV
+          
+          # Check if secrets are available
+          if [ -z "${{ secrets.VITE_SUPABASE_URL }}" ]; then
+            echo "❌ Missing VITE_SUPABASE_URL secret - Please add to GitHub repository secrets"
+            exit 1
+          fi
+          
+          if [ -z "${{ secrets.VITE_SUPABASE_ANON_KEY }}" ]; then
+            echo "❌ Missing VITE_SUPABASE_ANON_KEY secret - Please add to GitHub repository secrets"
+            exit 1
+          fi
       
       - name: Collect weekly metrics
         id: metrics
