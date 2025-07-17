@@ -39,7 +39,7 @@ jobs:
       - name: Collect weekly metrics
         id: metrics
         run: |
-          cat > scripts/collect-weekly-metrics.js << 'EOF'
+          cat > scripts/collect-weekly-metrics.mjs << 'EOF'
           import { createClient } from '@supabase/supabase-js';
           
           const supabase = createClient(
@@ -166,7 +166,7 @@ jobs:
           collectWeeklyMetrics().then(process.exit);
           EOF
           
-          METRICS=$(node scripts/collect-weekly-metrics.js)
+          METRICS=$(node scripts/collect-weekly-metrics.mjs)
           echo "metrics<<EOF" >> $GITHUB_OUTPUT
           echo "$METRICS" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
@@ -175,7 +175,7 @@ jobs:
         id: performance
         run: |
           # Get latest performance metrics from recent workflow runs
-          cat > scripts/get-performance-summary.js << 'EOF'
+          cat > scripts/get-performance-summary.mjs << 'EOF'
           import fs from 'fs';
           import path from 'path';
           
@@ -217,7 +217,7 @@ jobs:
           getPerformanceSummary();
           EOF
           
-          PERF_DATA=$(node scripts/get-performance-summary.js)
+          PERF_DATA=$(node scripts/get-performance-summary.mjs)
           echo "performance<<EOF" >> $GITHUB_OUTPUT
           echo "$PERF_DATA" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
@@ -225,7 +225,7 @@ jobs:
       - name: Get SEO status
         id: seo
         run: |
-          cat > scripts/get-seo-summary.js << 'EOF'
+          cat > scripts/get-seo-summary.mjs << 'EOF'
           import { createClient } from '@supabase/supabase-js';
           
           const supabase = createClient(
@@ -274,7 +274,7 @@ jobs:
           getSEOSummary().then(process.exit);
           EOF
           
-          SEO_DATA=$(node scripts/get-seo-summary.js)
+          SEO_DATA=$(node scripts/get-seo-summary.mjs)
           echo "seo<<EOF" >> $GITHUB_OUTPUT
           echo "$SEO_DATA" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
@@ -445,7 +445,7 @@ jobs:
           TEST_MODE="${{ github.event.inputs.test_mode || 'false' }}"
           
           # Create email sending script using existing notification system
-          cat > scripts/send-weekly-email.js << 'EOF'
+          cat > scripts/send-weekly-email.mjs << 'EOF'
           import { createClient } from '@supabase/supabase-js';
           
           const supabase = createClient(
@@ -538,7 +538,7 @@ jobs:
           sendWeeklyReport().then(process.exit);
           EOF
           
-          node scripts/send-weekly-email.js
+          node scripts/send-weekly-email.mjs
       
       - name: Create summary
         if: always()
