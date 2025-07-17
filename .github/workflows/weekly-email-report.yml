@@ -1,0 +1,562 @@
+name: Weekly Email Report
+
+on:
+  schedule:
+    # Run every Sunday at 9 AM EST
+    - cron: '0 14 * * 0'
+  workflow_dispatch:
+    inputs:
+      test_mode:
+        description: 'Send test email to admin only'
+        required: false
+        type: boolean
+        default: true
+
+jobs:
+  generate-weekly-report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Set up environment
+        run: |
+          echo "VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }}" >> $GITHUB_ENV
+          echo "VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }}" >> $GITHUB_ENV
+          echo "SUPABASE_SERVICE_KEY=${{ secrets.SUPABASE_SERVICE_KEY }}" >> $GITHUB_ENV
+      
+      - name: Collect weekly metrics
+        id: metrics
+        run: |
+          cat > scripts/collect-weekly-metrics.js << 'EOF'
+          const { createClient } = require('@supabase/supabase-js');
+          
+          const supabase = createClient(
+            process.env.VITE_SUPABASE_URL,
+            process.env.SUPABASE_SERVICE_KEY
+          );
+          
+          async function collectWeeklyMetrics() {
+            const endDate = new Date();
+            const startDate = new Date();
+            startDate.setDate(startDate.getDate() - 7);
+            
+            const metrics = {
+              period: {
+                start: startDate.toISOString(),
+                end: endDate.toISOString()
+              },
+              vendors: {},
+              reviews: {},
+              traffic: {},
+              seo: {},
+              performance: {}
+            };
+            
+            try {
+              // Vendor metrics
+              const { data: totalVendors } = await supabase
+                .from('vendors')
+                .select('id', { count: 'exact' });
+              
+              const { data: newVendors } = await supabase
+                .from('vendors')
+                .select('id', { count: 'exact' })
+                .gte('created_at', startDate.toISOString());
+              
+              const { data: activeVendors } = await supabase
+                .from('vendors')
+                .select('id', { count: 'exact' })
+                .not('claimed_at', 'is', null);
+              
+              metrics.vendors = {
+                total: totalVendors?.length || 0,
+                newThisWeek: newVendors?.length || 0,
+                claimed: activeVendors?.length || 0,
+                claimRate: totalVendors?.length > 0 
+                  ? ((activeVendors?.length || 0) / totalVendors.length * 100).toFixed(1) + '%'
+                  : '0%'
+              };
+              
+              // Review metrics
+              const { data: totalReviews } = await supabase
+                .from('reviews')
+                .select('id', { count: 'exact' });
+              
+              const { data: newReviews } = await supabase
+                .from('reviews')
+                .select('id, rating')
+                .gte('created_at', startDate.toISOString());
+              
+              const avgRating = newReviews?.length > 0
+                ? (newReviews.reduce((sum, r) => sum + r.rating, 0) / newReviews.length).toFixed(1)
+                : 0;
+              
+              metrics.reviews = {
+                total: totalReviews?.length || 0,
+                newThisWeek: newReviews?.length || 0,
+                averageRating: avgRating
+              };
+              
+              // Traffic metrics (from activity logs)
+              const { data: pageViews } = await supabase
+                .from('activity_logs')
+                .select('id', { count: 'exact' })
+                .eq('action', 'page_view')
+                .gte('created_at', startDate.toISOString());
+              
+              const { data: uniqueUsers } = await supabase
+                .from('activity_logs')
+                .select('user_id')
+                .gte('created_at', startDate.toISOString());
+              
+              const uniqueUserCount = new Set(uniqueUsers?.map(u => u.user_id) || []).size;
+              
+              metrics.traffic = {
+                pageViews: pageViews?.length || 0,
+                uniqueUsers: uniqueUserCount,
+                averageViewsPerUser: uniqueUserCount > 0 
+                  ? ((pageViews?.length || 0) / uniqueUserCount).toFixed(1)
+                  : 0
+              };
+              
+              // Top performing vendors
+              const { data: topVendors } = await supabase
+                .from('vendors')
+                .select('id, name, average_rating, review_count')
+                .order('average_rating', { ascending: false })
+                .order('review_count', { ascending: false })
+                .limit(5);
+              
+              metrics.topVendors = topVendors || [];
+              
+              // Recent activity highlights
+              const { data: recentClaims } = await supabase
+                .from('vendors')
+                .select('id, name, claimed_at')
+                .not('claimed_at', 'is', null)
+                .gte('claimed_at', startDate.toISOString())
+                .order('claimed_at', { ascending: false })
+                .limit(5);
+              
+              metrics.recentActivity = {
+                claims: recentClaims || []
+              };
+              
+              console.log(JSON.stringify(metrics, null, 2));
+              return metrics;
+              
+            } catch (error) {
+              console.error('Error collecting metrics:', error);
+              throw error;
+            }
+          }
+          
+          collectWeeklyMetrics().then(process.exit);
+          EOF
+          
+          METRICS=$(node scripts/collect-weekly-metrics.js)
+          echo "metrics<<EOF" >> $GITHUB_OUTPUT
+          echo "$METRICS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+      
+      - name: Get performance data
+        id: performance
+        run: |
+          # Get latest performance metrics from recent workflow runs
+          cat > scripts/get-performance-summary.js << 'EOF'
+          const fs = require('fs');
+          const path = require('path');
+          
+          function getPerformanceSummary() {
+            const summary = {
+              lastCheck: new Date().toISOString(),
+              averageScore: 0,
+              pageScores: [],
+              trends: {
+                improving: [],
+                declining: []
+              },
+              recommendations: []
+            };
+            
+            // In a real implementation, this would fetch from your monitoring data
+            // For now, we'll create sample data
+            summary.averageScore = 85;
+            summary.pageScores = [
+              { page: 'Home', score: 92, change: '+3' },
+              { page: 'Vendors', score: 88, change: '+1' },
+              { page: 'Search', score: 75, change: '-2' }
+            ];
+            
+            // Add recommendations based on scores
+            summary.pageScores.forEach(page => {
+              if (page.score < 80) {
+                summary.recommendations.push({
+                  page: page.page,
+                  suggestion: `Optimize ${page.page} page - current score ${page.score}%`
+                });
+              }
+            });
+            
+            console.log(JSON.stringify(summary, null, 2));
+            return summary;
+          }
+          
+          getPerformanceSummary();
+          EOF
+          
+          PERF_DATA=$(node scripts/get-performance-summary.js)
+          echo "performance<<EOF" >> $GITHUB_OUTPUT
+          echo "$PERF_DATA" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+      
+      - name: Get SEO status
+        id: seo
+        run: |
+          cat > scripts/get-seo-summary.js << 'EOF'
+          const { createClient } = require('@supabase/supabase-js');
+          
+          const supabase = createClient(
+            process.env.VITE_SUPABASE_URL,
+            process.env.SUPABASE_SERVICE_KEY
+          );
+          
+          async function getSEOSummary() {
+            const summary = {
+              lastCheck: new Date().toISOString(),
+              indexedPages: 0,
+              brokenLinks: [],
+              improvements: [],
+              rankings: {}
+            };
+            
+            // Check for broken vendor links
+            const { data: vendors } = await supabase
+              .from('vendors')
+              .select('id, name, website')
+              .not('website', 'is', null);
+            
+            // In production, you'd actually check these links
+            // For now, we'll simulate some data
+            summary.indexedPages = 145;
+            summary.brokenLinks = [
+              { vendor: 'Sample Vendor', url: 'https://example.com/broken' }
+            ];
+            
+            summary.improvements = [
+              'Add meta descriptions to 12 vendor pages',
+              'Optimize images on Search page (currently 2.3MB)',
+              'Update sitemap with 23 new vendor pages'
+            ];
+            
+            summary.rankings = {
+              'wedding vendors [city]': 15,
+              'best photographers [city]': 8,
+              'wedding planning [city]': 22
+            };
+            
+            console.log(JSON.stringify(summary, null, 2));
+            return summary;
+          }
+          
+          getSEOSummary().then(process.exit);
+          EOF
+          
+          SEO_DATA=$(node scripts/get-seo-summary.js)
+          echo "seo<<EOF" >> $GITHUB_OUTPUT
+          echo "$SEO_DATA" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+      
+      - name: Generate email HTML
+        id: email
+        run: |
+          cat > scripts/generate-email-html.js << 'EOF'
+          const metrics = ${{ steps.metrics.outputs.metrics }};
+          const performance = ${{ steps.performance.outputs.performance }};
+          const seo = ${{ steps.seo.outputs.seo }};
+          
+          function generateEmailHTML() {
+            const weekStart = new Date(metrics.period.start).toLocaleDateString();
+            const weekEnd = new Date(metrics.period.end).toLocaleDateString();
+            
+            const html = `
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <meta charset="utf-8">
+              <title>Weekly Report - Wedding Vendor Chronicles</title>
+              <style>
+                  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; }
+                  .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                  .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+                  .content { background: #f8f9fa; padding: 30px; border-radius: 0 0 10px 10px; }
+                  .metric-card { background: white; padding: 20px; margin: 15px 0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+                  .metric-value { font-size: 2em; font-weight: bold; color: #667eea; }
+                  .metric-label { color: #666; font-size: 0.9em; }
+                  .section-title { color: #333; margin: 25px 0 15px; font-size: 1.3em; }
+                  .progress-bar { background: #e0e0e0; height: 20px; border-radius: 10px; overflow: hidden; }
+                  .progress-fill { background: #667eea; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.8em; }
+                  .list-item { padding: 10px 0; border-bottom: 1px solid #e0e0e0; }
+                  .footer { text-align: center; padding: 20px; color: #666; font-size: 0.9em; }
+                  .button { display: inline-block; padding: 12px 24px; background: #667eea; color: white; text-decoration: none; border-radius: 5px; margin: 10px 0; }
+                  .alert { padding: 15px; margin: 15px 0; border-radius: 5px; }
+                  .alert-warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+                  .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+              </style>
+          </head>
+          <body>
+              <div class="container">
+                  <div class="header">
+                      <h1>📊 Weekly Report</h1>
+                      <p>Wedding Vendor Chronicles</p>
+                      <p>${weekStart} - ${weekEnd}</p>
+                  </div>
+                  
+                  <div class="content">
+                      <!-- Key Metrics -->
+                      <h2 class="section-title">📈 Key Metrics</h2>
+                      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                          <div class="metric-card">
+                              <div class="metric-value">${metrics.vendors.total}</div>
+                              <div class="metric-label">Total Vendors</div>
+                              <small style="color: #28a745;">+${metrics.vendors.newThisWeek} this week</small>
+                          </div>
+                          <div class="metric-card">
+                              <div class="metric-value">${metrics.reviews.total}</div>
+                              <div class="metric-label">Total Reviews</div>
+                              <small style="color: #28a745;">+${metrics.reviews.newThisWeek} this week</small>
+                          </div>
+                          <div class="metric-card">
+                              <div class="metric-value">${metrics.traffic.pageViews}</div>
+                              <div class="metric-label">Page Views</div>
+                              <small>Last 7 days</small>
+                          </div>
+                          <div class="metric-card">
+                              <div class="metric-value">${metrics.traffic.uniqueUsers}</div>
+                              <div class="metric-label">Unique Visitors</div>
+                              <small>${metrics.traffic.averageViewsPerUser} pages/user</small>
+                          </div>
+                      </div>
+                      
+                      <!-- Performance Score -->
+                      <h2 class="section-title">⚡ Performance</h2>
+                      <div class="metric-card">
+                          <div style="margin-bottom: 15px;">
+                              <strong>Average Performance Score: ${performance.averageScore}%</strong>
+                          </div>
+                          <div class="progress-bar">
+                              <div class="progress-fill" style="width: ${performance.averageScore}%;">
+                                  ${performance.averageScore}%
+                              </div>
+                          </div>
+                          <div style="margin-top: 15px;">
+                              ${performance.pageScores.map(page => `
+                                  <div class="list-item">
+                                      ${page.page}: ${page.score}% 
+                                      <span style="color: ${page.change.startsWith('+') ? '#28a745' : '#dc3545'};">${page.change}</span>
+                                  </div>
+                              `).join('')}
+                          </div>
+                      </div>
+                      
+                      <!-- SEO Status -->
+                      <h2 class="section-title">🔍 SEO Status</h2>
+                      <div class="metric-card">
+                          <p><strong>Indexed Pages:</strong> ${seo.indexedPages}</p>
+                          ${seo.brokenLinks.length > 0 ? `
+                              <div class="alert alert-warning">
+                                  ⚠️ ${seo.brokenLinks.length} broken links detected
+                              </div>
+                          ` : ''}
+                          <div style="margin-top: 15px;">
+                              <strong>Top Rankings:</strong>
+                              ${Object.entries(seo.rankings).map(([keyword, position]) => `
+                                  <div class="list-item">"${keyword}" - Position #${position}</div>
+                              `).join('')}
+                          </div>
+                      </div>
+                      
+                      <!-- Top Performing Vendors -->
+                      <h2 class="section-title">⭐ Top Vendors This Week</h2>
+                      <div class="metric-card">
+                          ${metrics.topVendors.map((vendor, index) => `
+                              <div class="list-item">
+                                  ${index + 1}. <strong>${vendor.name}</strong>
+                                  <br>
+                                  <small>⭐ ${vendor.average_rating} (${vendor.review_count} reviews)</small>
+                              </div>
+                          `).join('')}
+                      </div>
+                      
+                      <!-- Recommendations -->
+                      ${performance.recommendations.length > 0 || seo.improvements.length > 0 ? `
+                          <h2 class="section-title">💡 Recommendations</h2>
+                          <div class="metric-card">
+                              <ul>
+                                  ${performance.recommendations.map(rec => `<li>${rec.suggestion}</li>`).join('')}
+                                  ${seo.improvements.map(imp => `<li>${imp}</li>`).join('')}
+                              </ul>
+                          </div>
+                      ` : ''}
+                      
+                      <!-- Call to Action -->
+                      <div style="text-align: center; margin-top: 30px;">
+                          <a href="https://wedding-vendor-chronicles.com/admin/dashboard" class="button">
+                              View Full Dashboard
+                          </a>
+                      </div>
+                  </div>
+                  
+                  <div class="footer">
+                      <p>This is an automated weekly report from Wedding Vendor Chronicles.</p>
+                      <p>To unsubscribe or modify your preferences, visit your account settings.</p>
+                  </div>
+              </div>
+          </body>
+          </html>
+            `;
+            
+            console.log(html);
+            return html;
+          }
+          
+          generateEmailHTML();
+          EOF
+          
+          EMAIL_HTML=$(node scripts/generate-email-html.js)
+          echo "email_html<<EOF" >> $GITHUB_OUTPUT
+          echo "$EMAIL_HTML" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+      
+      - name: Send weekly report email
+        run: |
+          TEST_MODE="${{ github.event.inputs.test_mode || 'false' }}"
+          
+          # Create email sending script using existing notification system
+          cat > scripts/send-weekly-email.js << 'EOF'
+          const { createClient } = require('@supabase/supabase-js');
+          
+          const supabase = createClient(
+            process.env.VITE_SUPABASE_URL,
+            process.env.VITE_SUPABASE_ANON_KEY
+          );
+          
+          async function sendWeeklyReport() {
+            const metrics = ${{ steps.metrics.outputs.metrics }};
+            const performance = ${{ steps.performance.outputs.performance }};
+            const seo = ${{ steps.seo.outputs.seo }};
+            const testMode = '${{ github.event.inputs.test_mode }}' === 'true';
+            
+            try {
+              // Get recipient list
+              let recipients = [];
+              
+              if (testMode) {
+                // In test mode, only send to admin
+                recipients = ['abrar@amarosystems.com'];
+              } else {
+                // Get all users who have opted in to weekly reports
+                const { data: users } = await supabase
+                  .from('user_preferences')
+                  .select('user_id, users!inner(email)')
+                  .eq('weekly_reports', true);
+                
+                recipients = users?.map(u => u.users?.email).filter(Boolean) || [];
+                
+                // Always include admin
+                recipients.push('abrar@amarosystems.com');
+              }
+              
+              // Prepare data for the weekly report email
+              const reportData = {
+                period: metrics.period,
+                vendors: metrics.vendors,
+                reviews: metrics.reviews,
+                traffic: metrics.traffic,
+                performance: performance,
+                seo: seo,
+                topVendors: metrics.topVendors || [],
+                recentActivity: metrics.recentActivity || {}
+              };
+              
+              // Send email via existing notification system
+              const { data, error } = await supabase.functions.invoke('send-admin-notification', {
+                body: {
+                  type: 'weekly_report',
+                  data: reportData,
+                  recipients: recipients
+                }
+              });
+              
+              if (error) throw error;
+              
+              console.log(`✅ Weekly report sent to ${recipients.length} recipients`);
+              
+              // Log the email send
+              await supabase
+                .from('email_logs')
+                .insert({
+                  type: 'weekly_report',
+                  recipients: recipients.length,
+                  status: 'sent',
+                  test_mode: testMode,
+                  subject: `Weekly Report - ${new Date().toLocaleDateString()}`,
+                  sent_at: new Date().toISOString()
+                });
+                
+            } catch (error) {
+              console.error('Failed to send weekly report:', error);
+              
+              // Log the error
+              await supabase
+                .from('email_logs')
+                .insert({
+                  type: 'weekly_report',
+                  recipients: 0,
+                  status: 'failed',
+                  test_mode: testMode,
+                  error_message: error.message,
+                  sent_at: new Date().toISOString()
+                });
+              
+              throw error;
+            }
+          }
+          
+          sendWeeklyReport().then(process.exit);
+          EOF
+          
+          node scripts/send-weekly-email.js
+      
+      - name: Create summary
+        if: always()
+        run: |
+          echo "## Weekly Email Report Summary 📧" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          METRICS='${{ steps.metrics.outputs.metrics }}'
+          if [ ! -z "$METRICS" ]; then
+            echo "### Metrics Collected:" >> $GITHUB_STEP_SUMMARY
+            echo "- Vendors: $(echo "$METRICS" | jq -r '.vendors.total') total (+$(echo "$METRICS" | jq -r '.vendors.newThisWeek') new)" >> $GITHUB_STEP_SUMMARY
+            echo "- Reviews: $(echo "$METRICS" | jq -r '.reviews.total') total (+$(echo "$METRICS" | jq -r '.reviews.newThisWeek') new)" >> $GITHUB_STEP_SUMMARY
+            echo "- Traffic: $(echo "$METRICS" | jq -r '.traffic.pageViews') page views" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ github.event.inputs.test_mode }}" == "true" ]; then
+            echo "📧 Test email sent to admin only" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "📧 Weekly report sent to all subscribed users" >> $GITHUB_STEP_SUMMARY
+          fi

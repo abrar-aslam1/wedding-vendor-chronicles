@@ -7,8 +7,9 @@ const corsHeaders = {
 };
 
 interface EmailRequest {
-  type: 'business_submission' | 'user_registration' | 'vendor_status_change';
+  type: 'business_submission' | 'user_registration' | 'vendor_status_change' | 'weekly_report' | 'vendor_collection_complete' | 'database_maintenance_complete' | 'performance_alert';
   data: any;
+  recipients?: string[];
 }
 
 serve(async (req) => {
@@ -17,7 +18,7 @@ serve(async (req) => {
   }
 
   try {
-    const { type, data }: EmailRequest = await req.json();
+    const { type, data, recipients }: EmailRequest = await req.json();
     
     const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
     const ADMIN_EMAIL = 'abrar@amarosystems.com';
@@ -47,6 +48,22 @@ serve(async (req) => {
         subject = '📋 Vendor Status Changed - Find My Wedding Vendor';
         htmlContent = generateVendorStatusChangeEmail(data);
         break;
+      case 'weekly_report':
+        subject = `📊 Weekly Report - ${new Date().toLocaleDateString()}`;
+        htmlContent = generateWeeklyReportEmail(data);
+        break;
+      case 'vendor_collection_complete':
+        subject = '🎯 Vendor Collection Complete - Find My Wedding Vendor';
+        htmlContent = generateVendorCollectionEmail(data);
+        break;
+      case 'database_maintenance_complete':
+        subject = '🔧 Database Maintenance Complete - Find My Wedding Vendor';
+        htmlContent = generateMaintenanceEmail(data);
+        break;
+      case 'performance_alert':
+        subject = '⚠️ Performance Alert - Find My Wedding Vendor';
+        htmlContent = generatePerformanceAlertEmail(data);
+        break;
       default:
         throw new Error('Invalid email type');
     }
@@ -54,7 +71,7 @@ serve(async (req) => {
     // Send email using Resend
     const emailPayload = {
       from: 'Wedding Vendor Notifications <onboarding@resend.dev>',
-      to: [ADMIN_EMAIL],
+      to: recipients || [ADMIN_EMAIL],
       subject: subject,
       html: htmlContent
     };
@@ -201,6 +218,119 @@ function generateVendorStatusChangeEmail(data: any): string {
           <p><strong>New Status:</strong> <span style="background: ${statusColor}; color: white; padding: 2px 8px; border-radius: 4px;">${statusEmoji} ${data.status.toUpperCase()}</span></p>
           <p><strong>Changed By:</strong> ${data.admin_email}</p>
           <p><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function generateWeeklyReportEmail(data: any): string {
+  const weekStart = new Date(data.period?.start || Date.now() - 7 * 24 * 60 * 60 * 1000).toLocaleDateString();
+  const weekEnd = new Date(data.period?.end || Date.now()).toLocaleDateString();
+  
+  return `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+      <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
+        <h1 style="margin: 0; font-size: 28px;">📊 Weekly Report</h1>
+        <p style="margin: 10px 0 0; opacity: 0.9;">Wedding Vendor Chronicles</p>
+        <p style="margin: 5px 0 0; opacity: 0.8;">${weekStart} - ${weekEnd}</p>
+      </div>
+      
+      <div style="background: #f8f9fa; padding: 30px; border-radius: 0 0 10px 10px;">
+        <h2 style="color: #333; margin: 0 0 20px; font-size: 1.3em;">📈 Key Metrics</h2>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px;">
+          <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <div style="font-size: 2em; font-weight: bold; color: #667eea;">${data.vendors?.total || 0}</div>
+            <div style="color: #666; font-size: 0.9em;">Total Vendors</div>
+            <small style="color: #28a745;">+${data.vendors?.newThisWeek || 0} this week</small>
+          </div>
+          <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <div style="font-size: 2em; font-weight: bold; color: #667eea;">${data.reviews?.total || 0}</div>
+            <div style="color: #666; font-size: 0.9em;">Total Reviews</div>
+            <small style="color: #28a745;">+${data.reviews?.newThisWeek || 0} this week</small>
+          </div>
+        </div>
+        
+        <h2 style="color: #333; margin: 25px 0 15px; font-size: 1.3em;">⚡ Performance</h2>
+        <div style="background: white; padding: 20px; margin: 15px 0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+          <div style="margin-bottom: 15px;">
+            <strong>Average Performance Score: ${data.performance?.averageScore || 0}%</strong>
+          </div>
+          <div style="background: #e0e0e0; height: 20px; border-radius: 10px; overflow: hidden;">
+            <div style="background: #667eea; height: 100%; width: ${data.performance?.averageScore || 0}%; color: white; font-size: 0.8em; text-align: center; line-height: 20px;">
+              ${data.performance?.averageScore || 0}%
+            </div>
+          </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+          <a href="https://wedding-vendor-chronicles.com/admin/dashboard" 
+             style="display: inline-block; padding: 12px 24px; background: #667eea; color: white; text-decoration: none; border-radius: 5px;">
+            View Full Dashboard
+          </a>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function generateVendorCollectionEmail(data: any): string {
+  const status = data.status || 'unknown';
+  const statusEmoji = status === 'success' ? '✅' : '❌';
+  const statusColor = status === 'success' ? '#28a745' : '#dc3545';
+  
+  return `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+      <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 8px 8px 0 0;">
+        <h1 style="margin: 0; font-size: 24px;">🎯 Vendor Collection Complete</h1>
+        <p style="margin: 10px 0 0; opacity: 0.9;">Wedding Vendor Chronicles</p>
+      </div>
+      
+      <div style="background: #f8f9fa; padding: 20px; border-radius: 0 0 8px 8px; border: 1px solid #e9ecef;">
+        <div style="background: white; padding: 15px; border-radius: 6px; margin: 15px 0;">
+          <p><strong>Status:</strong> <span style="background: ${statusColor}; color: white; padding: 2px 8px; border-radius: 4px;">${statusEmoji} ${status.toUpperCase()}</span></p>
+          <p><strong>Timestamp:</strong> ${data.timestamp || new Date().toLocaleString()}</p>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function generateMaintenanceEmail(data: any): string {
+  const status = data.status || 'unknown';
+  const statusEmoji = status === 'success' ? '✅' : '❌';
+  const statusColor = status === 'success' ? '#28a745' : '#dc3545';
+  
+  return `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+      <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 8px 8px 0 0;">
+        <h1 style="margin: 0; font-size: 24px;">🔧 Database Maintenance Complete</h1>
+        <p style="margin: 10px 0 0; opacity: 0.9;">Wedding Vendor Chronicles</p>
+      </div>
+      
+      <div style="background: #f8f9fa; padding: 20px; border-radius: 0 0 8px 8px; border: 1px solid #e9ecef;">
+        <div style="background: white; padding: 15px; border-radius: 6px; margin: 15px 0;">
+          <p><strong>Status:</strong> <span style="background: ${statusColor}; color: white; padding: 2px 8px; border-radius: 4px;">${statusEmoji} ${status.toUpperCase()}</span></p>
+          <p><strong>Timestamp:</strong> ${data.timestamp || new Date().toLocaleString()}</p>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function generatePerformanceAlertEmail(data: any): string {
+  return `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+      <div style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); color: white; padding: 20px; border-radius: 8px 8px 0 0;">
+        <h1 style="margin: 0; font-size: 24px;">⚠️ Performance Alert</h1>
+        <p style="margin: 10px 0 0; opacity: 0.9;">Wedding Vendor Chronicles</p>
+      </div>
+      
+      <div style="background: #f8f9fa; padding: 20px; border-radius: 0 0 8px 8px; border: 1px solid #e9ecef;">
+        <div style="background: #fff3cd; color: #856404; padding: 15px; border-radius: 6px; margin: 15px 0; border: 1px solid #ffeaa7;">
+          <p><strong>Alert:</strong> ${data.message || 'Critical performance issues detected'}</p>
+          <p><strong>Priority:</strong> ${data.priority || 'High'}</p>
+          <p><strong>Timestamp:</strong> ${data.timestamp || new Date().toLocaleString()}</p>
         </div>
       </div>
     </div>

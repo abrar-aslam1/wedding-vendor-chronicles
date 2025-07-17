@@ -1,0 +1,341 @@
+name: SEO and Link Validation
+
+on:
+  schedule:
+    # Run every Monday at 4 AM EST
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+    inputs:
+      check_type:
+        description: 'Type of check to perform'
+        required: false
+        type: choice
+        options:
+          - 'all'
+          - 'seo-only'
+          - 'links-only'
+          - 'sitemap'
+  pull_request:
+    paths:
+      - 'src/**/*.tsx'
+      - 'src/**/*.ts'
+      - 'public/**'
+
+jobs:
+  seo-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: |
+          npm ci
+          npm install -g lighthouse broken-link-checker
+      
+      - name: Build application
+        run: npm run build
+      
+      - name: Start preview server
+        run: |
+          npm run preview &
+          sleep 10
+      
+      - name: Run SEO checks
+        if: github.event.inputs.check_type != 'links-only'
+        id: seo
+        run: |
+          cat > scripts/seo-check.js << 'EOF'
+          const fs = require('fs');
+          const path = require('path');
+          
+          async function checkSEO() {
+            const results = {
+              timestamp: new Date().toISOString(),
+              pages: [],
+              issues: []
+            };
+            
+            // Define pages to check
+            const pages = [
+              { url: 'http://localhost:4173/', name: 'Home' },
+              { url: 'http://localhost:4173/vendors', name: 'Vendors' },
+              { url: 'http://localhost:4173/search', name: 'Search' },
+              { url: 'http://localhost:4173/about', name: 'About' }
+            ];
+            
+            // Check meta tags in build files
+            const indexHtml = fs.readFileSync('./dist/index.html', 'utf8');
+            
+            // Check for essential meta tags
+            const metaChecks = [
+              { tag: '<meta name="description"', name: 'Meta Description' },
+              { tag: '<meta property="og:title"', name: 'Open Graph Title' },
+              { tag: '<meta property="og:description"', name: 'Open Graph Description' },
+              { tag: '<meta property="og:image"', name: 'Open Graph Image' },
+              { tag: '<meta name="twitter:card"', name: 'Twitter Card' },
+              { tag: '<link rel="canonical"', name: 'Canonical URL' }
+            ];
+            
+            metaChecks.forEach(check => {
+              if (!indexHtml.includes(check.tag)) {
+                results.issues.push({
+                  type: 'missing-meta',
+                  severity: 'warning',
+                  message: `Missing ${check.name}`
+                });
+              }
+            });
+            
+            // Check for structured data
+            if (!indexHtml.includes('application/ld+json')) {
+              results.issues.push({
+                type: 'missing-structured-data',
+                severity: 'warning',
+                message: 'No structured data found'
+              });
+            }
+            
+            // Check robots.txt
+            if (!fs.existsSync('./dist/robots.txt')) {
+              results.issues.push({
+                type: 'missing-file',
+                severity: 'error',
+                message: 'Missing robots.txt'
+              });
+            }
+            
+            // Check sitemap
+            if (!fs.existsSync('./dist/sitemap.xml')) {
+              results.issues.push({
+                type: 'missing-file',
+                severity: 'warning',
+                message: 'Missing sitemap.xml'
+              });
+            }
+            
+            console.log(JSON.stringify(results, null, 2));
+            return results;
+          }
+          
+          checkSEO().then(process.exit);
+          EOF
+          
+          SEO_REPORT=$(node scripts/seo-check.js)
+          echo "seo_report<<EOF" >> $GITHUB_OUTPUT
+          echo "$SEO_REPORT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+      
+      - name: Run Lighthouse
+        if: github.event.inputs.check_type != 'links-only'
+        run: |
+          lighthouse http://localhost:4173/ \
+            --output=json \
+            --output-path=./lighthouse-report.json \
+            --chrome-flags="--headless" \
+            --preset=desktop \
+            --only-categories=seo,best-practices,accessibility
+      
+      - name: Check broken links
+        if: github.event.inputs.check_type != 'seo-only'
+        id: links
+        continue-on-error: true
+        run: |
+          echo "🔍 Checking for broken links..."
+          
+          # Create link checker script
+          cat > scripts/check-links.js << 'EOF'
+          const { createClient } = require('@supabase/supabase-js');
+          const https = require('https');
+          const http = require('http');
+          const url = require('url');
+          
+          const supabase = createClient(
+            process.env.VITE_SUPABASE_URL || 'placeholder',
+            process.env.VITE_SUPABASE_ANON_KEY || 'placeholder'
+          );
+          
+          async function checkLink(linkUrl) {
+            return new Promise((resolve) => {
+              const parsedUrl = url.parse(linkUrl);
+              const protocol = parsedUrl.protocol === 'https:' ? https : http;
+              
+              const req = protocol.get(linkUrl, (res) => {
+                resolve({
+                  url: linkUrl,
+                  status: res.statusCode,
+                  valid: res.statusCode >= 200 && res.statusCode < 400
+                });
+              });
+              
+              req.on('error', () => {
+                resolve({
+                  url: linkUrl,
+                  status: 0,
+                  valid: false
+                });
+              });
+              
+              req.setTimeout(5000, () => {
+                req.destroy();
+                resolve({
+                  url: linkUrl,
+                  status: 0,
+                  valid: false
+                });
+              });
+            });
+          }
+          
+          async function checkAllLinks() {
+            const results = {
+              timestamp: new Date().toISOString(),
+              totalLinks: 0,
+              brokenLinks: [],
+              checkedLinks: []
+            };
+            
+            // Get all vendor websites from database
+            const { data: vendors } = await supabase
+              .from('vendors')
+              .select('id, name, website')
+              .not('website', 'is', null);
+            
+            if (vendors) {
+              for (const vendor of vendors) {
+                if (vendor.website) {
+                  const linkResult = await checkLink(vendor.website);
+                  results.totalLinks++;
+                  results.checkedLinks.push(linkResult);
+                  
+                  if (!linkResult.valid) {
+                    results.brokenLinks.push({
+                      vendorId: vendor.id,
+                      vendorName: vendor.name,
+                      url: vendor.website,
+                      status: linkResult.status
+                    });
+                  }
+                }
+              }
+            }
+            
+            console.log(JSON.stringify(results, null, 2));
+            return results;
+          }
+          
+          checkAllLinks().then(process.exit);
+          EOF
+          
+          LINKS_REPORT=$(node scripts/check-links.js)
+          echo "links_report<<EOF" >> $GITHUB_OUTPUT
+          echo "$LINKS_REPORT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+      
+      - name: Generate sitemap
+        if: github.event.inputs.check_type == 'sitemap' || github.event.inputs.check_type == 'all'
+        run: |
+          cat > scripts/generate-sitemap.js << 'EOF'
+          const fs = require('fs');
+          const { createClient } = require('@supabase/supabase-js');
+          
+          const supabase = createClient(
+            process.env.VITE_SUPABASE_URL || 'placeholder',
+            process.env.VITE_SUPABASE_ANON_KEY || 'placeholder'
+          );
+          
+          async function generateSitemap() {
+            const baseUrl = 'https://wedding-vendor-chronicles.com';
+            const staticPages = [
+              { url: '/', priority: 1.0, changefreq: 'daily' },
+              { url: '/vendors', priority: 0.9, changefreq: 'daily' },
+              { url: '/search', priority: 0.8, changefreq: 'weekly' },
+              { url: '/about', priority: 0.5, changefreq: 'monthly' },
+              { url: '/contact', priority: 0.5, changefreq: 'monthly' }
+            ];
+            
+            let sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n';
+            sitemap += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+            
+            // Add static pages
+            staticPages.forEach(page => {
+              sitemap += '  <url>\n';
+              sitemap += `    <loc>${baseUrl}${page.url}</loc>\n`;
+              sitemap += `    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>\n`;
+              sitemap += `    <changefreq>${page.changefreq}</changefreq>\n`;
+              sitemap += `    <priority>${page.priority}</priority>\n`;
+              sitemap += '  </url>\n';
+            });
+            
+            // Add vendor pages
+            const { data: vendors } = await supabase
+              .from('vendors')
+              .select('id, updated_at');
+            
+            if (vendors) {
+              vendors.forEach(vendor => {
+                sitemap += '  <url>\n';
+                sitemap += `    <loc>${baseUrl}/vendor/${vendor.id}</loc>\n`;
+                sitemap += `    <lastmod>${new Date(vendor.updated_at).toISOString().split('T')[0]}</lastmod>\n`;
+                sitemap += '    <changefreq>weekly</changefreq>\n';
+                sitemap += '    <priority>0.7</priority>\n';
+                sitemap += '  </url>\n';
+              });
+            }
+            
+            sitemap += '</urlset>';
+            
+            fs.writeFileSync('./dist/sitemap.xml', sitemap);
+            console.log('✅ Sitemap generated successfully');
+          }
+          
+          generateSitemap().then(process.exit);
+          EOF
+          
+          node scripts/generate-sitemap.js
+      
+      - name: Create summary report
+        if: always()
+        run: |
+          echo "## SEO and Link Validation Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f lighthouse-report.json ]; then
+            echo "### Lighthouse Scores" >> $GITHUB_STEP_SUMMARY
+            echo "- SEO: $(jq -r '.categories.seo.score * 100' lighthouse-report.json)%" >> $GITHUB_STEP_SUMMARY
+            echo "- Accessibility: $(jq -r '.categories.accessibility.score * 100' lighthouse-report.json)%" >> $GITHUB_STEP_SUMMARY
+            echo "- Best Practices: $(jq -r '.categories["best-practices"].score * 100' lighthouse-report.json)%" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### SEO Issues" >> $GITHUB_STEP_SUMMARY
+          echo '```json' >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps.seo.outputs.seo_report }}" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Link Validation" >> $GITHUB_STEP_SUMMARY
+          echo '```json' >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps.links.outputs.links_report }}" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+      
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: seo-reports
+          path: |
+            lighthouse-report.json
+            dist/sitemap.xml
+      
+      - name: Stop preview server
+        if: always()
+        run: pkill -f "npm run preview" || true

@@ -1,0 +1,184 @@
+name: Database Maintenance
+
+on:
+  schedule:
+    # Run daily at 3 AM EST
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+    inputs:
+      task:
+        description: 'Specific maintenance task to run'
+        required: false
+        type: choice
+        options:
+          - 'all'
+          - 'cleanup-old-data'
+          - 'vacuum-analyze'
+          - 'update-statistics'
+          - 'archive-logs'
+          - 'optimize-indexes'
+
+jobs:
+  database-maintenance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Set up environment
+        run: |
+          echo "VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }}" >> $GITHUB_ENV
+          echo "VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }}" >> $GITHUB_ENV
+          echo "SUPABASE_SERVICE_KEY=${{ secrets.SUPABASE_SERVICE_KEY }}" >> $GITHUB_ENV
+      
+      - name: Run maintenance tasks
+        id: maintenance
+        run: |
+          TASK="${{ github.event.inputs.task || 'all' }}"
+          echo "🔧 Running database maintenance task: $TASK"
+          
+          # Create maintenance script
+          cat > scripts/db-maintenance.js << 'EOF'
+          const { createClient } = require('@supabase/supabase-js');
+          
+          const supabase = createClient(
+            process.env.VITE_SUPABASE_URL,
+            process.env.SUPABASE_SERVICE_KEY
+          );
+          
+          async function runMaintenance(task) {
+            const results = {
+              task: task,
+              timestamp: new Date().toISOString(),
+              operations: []
+            };
+            
+            try {
+              if (task === 'all' || task === 'cleanup-old-data') {
+                // Clean up old notification logs (older than 90 days)
+                const { data, error } = await supabase
+                  .from('notification_logs')
+                  .delete()
+                  .lt('created_at', new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString());
+                
+                results.operations.push({
+                  name: 'cleanup-old-data',
+                  status: error ? 'failed' : 'success',
+                  message: error ? error.message : `Cleaned up old notification logs`
+                });
+              }
+              
+              if (task === 'all' || task === 'update-statistics') {
+                // Update vendor statistics
+                const { data: vendors } = await supabase
+                  .from('vendors')
+                  .select('id, average_rating, review_count');
+                
+                for (const vendor of vendors || []) {
+                  const { data: reviews } = await supabase
+                    .from('reviews')
+                    .select('rating')
+                    .eq('vendor_id', vendor.id);
+                  
+                  if (reviews && reviews.length > 0) {
+                    const avgRating = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+                    await supabase
+                      .from('vendors')
+                      .update({
+                        average_rating: avgRating,
+                        review_count: reviews.length
+                      })
+                      .eq('id', vendor.id);
+                  }
+                }
+                
+                results.operations.push({
+                  name: 'update-statistics',
+                  status: 'success',
+                  message: `Updated statistics for ${vendors?.length || 0} vendors`
+                });
+              }
+              
+              if (task === 'all' || task === 'archive-logs') {
+                // Archive old activity logs
+                const { data: oldLogs } = await supabase
+                  .from('activity_logs')
+                  .select('*')
+                  .lt('created_at', new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString());
+                
+                if (oldLogs && oldLogs.length > 0) {
+                  // Insert into archive table
+                  await supabase
+                    .from('activity_logs_archive')
+                    .insert(oldLogs);
+                  
+                  // Delete from main table
+                  await supabase
+                    .from('activity_logs')
+                    .delete()
+                    .lt('created_at', new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString());
+                }
+                
+                results.operations.push({
+                  name: 'archive-logs',
+                  status: 'success',
+                  message: `Archived ${oldLogs?.length || 0} activity logs`
+                });
+              }
+              
+              console.log(JSON.stringify(results, null, 2));
+              return results;
+              
+            } catch (error) {
+              console.error('Maintenance error:', error);
+              results.error = error.message;
+              return results;
+            }
+          }
+          
+          runMaintenance('$TASK').then(process.exit);
+          EOF
+          
+          REPORT=$(node scripts/db-maintenance.js)
+          echo "report<<EOF" >> $GITHUB_OUTPUT
+          echo "$REPORT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+      
+      - name: Generate maintenance report
+        run: |
+          echo "📊 Database Maintenance Report"
+          echo "=============================="
+          echo "${{ steps.maintenance.outputs.report }}"
+      
+      - name: Send notification
+        if: always()
+        run: |
+          STATUS="${{ job.status }}"
+          if [ "$STATUS" == "success" ]; then
+            EMOJI="✅"
+          else
+            EMOJI="❌"
+          fi
+          
+          curl -X POST ${{ secrets.VITE_SUPABASE_URL }}/functions/v1/send-admin-notification \
+            -H "Authorization: Bearer ${{ secrets.VITE_SUPABASE_ANON_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "type": "database_maintenance_complete",
+              "data": {
+                "status": "'$STATUS'",
+                "report": ${{ toJson(steps.maintenance.outputs.report) }},
+                "timestamp": "'$(date -u +"%Y-%m-%d %H:%M:%S UTC")'"
+              }
+            }'

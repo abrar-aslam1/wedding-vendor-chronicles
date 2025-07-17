@@ -1,0 +1,445 @@
+name: Performance Monitoring
+
+on:
+  schedule:
+    # Run every 6 hours
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to monitor'
+        required: false
+        type: choice
+        options:
+          - 'production'
+          - 'staging'
+          - 'preview'
+        default: 'production'
+  push:
+    branches:
+      - main
+
+jobs:
+  performance-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: |
+          npm ci
+          npm install -g @sitespeed.io/sitespeed.io
+      
+      - name: Set up environment
+        run: |
+          echo "VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }}" >> $GITHUB_ENV
+          echo "VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }}" >> $GITHUB_ENV
+      
+      - name: Build application
+        run: npm run build
+      
+      - name: Start preview server
+        run: |
+          npm run preview &
+          sleep 10
+      
+      - name: Run performance tests
+        id: performance
+        run: |
+          # Define URLs to test
+          URLS=(
+            "http://localhost:4173/"
+            "http://localhost:4173/vendors"
+            "http://localhost:4173/search"
+          )
+          
+          # Create performance monitoring script
+          cat > scripts/performance-monitor.js << 'EOF'
+          const fs = require('fs');
+          const { exec } = require('child_process');
+          const { promisify } = require('util');
+          const execAsync = promisify(exec);
+          
+          async function measurePerformance(url) {
+            try {
+              // Run Lighthouse for performance metrics
+              const { stdout } = await execAsync(`lighthouse ${url} --output=json --chrome-flags="--headless" --only-categories=performance --quiet`);
+              const results = JSON.parse(stdout);
+              
+              return {
+                url: url,
+                score: results.categories.performance.score * 100,
+                metrics: {
+                  firstContentfulPaint: results.audits['first-contentful-paint'].numericValue,
+                  largestContentfulPaint: results.audits['largest-contentful-paint'].numericValue,
+                  totalBlockingTime: results.audits['total-blocking-time'].numericValue,
+                  cumulativeLayoutShift: results.audits['cumulative-layout-shift'].numericValue,
+                  speedIndex: results.audits['speed-index'].numericValue
+                }
+              };
+            } catch (error) {
+              console.error(`Error measuring ${url}:`, error);
+              return null;
+            }
+          }
+          
+          async function runPerformanceChecks() {
+            const urls = process.argv.slice(2);
+            const results = {
+              timestamp: new Date().toISOString(),
+              environment: process.env.ENVIRONMENT || 'preview',
+              pages: []
+            };
+            
+            for (const url of urls) {
+              console.log(`Testing ${url}...`);
+              const pageResult = await measurePerformance(url);
+              if (pageResult) {
+                results.pages.push(pageResult);
+              }
+            }
+            
+            // Calculate average score
+            if (results.pages.length > 0) {
+              results.averageScore = results.pages.reduce((sum, page) => sum + page.score, 0) / results.pages.length;
+            }
+            
+            // Check for performance regressions
+            results.regressions = [];
+            results.pages.forEach(page => {
+              if (page.score < 80) {
+                results.regressions.push({
+                  url: page.url,
+                  score: page.score,
+                  severity: page.score < 50 ? 'critical' : 'warning'
+                });
+              }
+              
+              // Check specific metrics
+              if (page.metrics.largestContentfulPaint > 2500) {
+                results.regressions.push({
+                  url: page.url,
+                  metric: 'LCP',
+                  value: page.metrics.largestContentfulPaint,
+                  threshold: 2500,
+                  severity: 'warning'
+                });
+              }
+              
+              if (page.metrics.totalBlockingTime > 300) {
+                results.regressions.push({
+                  url: page.url,
+                  metric: 'TBT',
+                  value: page.metrics.totalBlockingTime,
+                  threshold: 300,
+                  severity: 'warning'
+                });
+              }
+            });
+            
+            console.log(JSON.stringify(results, null, 2));
+            return results;
+          }
+          
+          runPerformanceChecks().then(process.exit);
+          EOF
+          
+          # Run performance tests
+          PERF_REPORT=$(node scripts/performance-monitor.js "${URLS[@]}")
+          echo "performance_report<<EOF" >> $GITHUB_OUTPUT
+          echo "$PERF_REPORT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+      
+      - name: Check bundle size
+        id: bundle
+        run: |
+          cat > scripts/bundle-analyzer.js << 'EOF'
+          const fs = require('fs');
+          const path = require('path');
+          
+          function getDirectorySize(dir) {
+            let size = 0;
+            const files = fs.readdirSync(dir);
+            
+            for (const file of files) {
+              const filePath = path.join(dir, file);
+              const stat = fs.statSync(filePath);
+              
+              if (stat.isDirectory()) {
+                size += getDirectorySize(filePath);
+              } else {
+                size += stat.size;
+              }
+            }
+            
+            return size;
+          }
+          
+          function analyzeBundle() {
+            const distPath = './dist';
+            const results = {
+              timestamp: new Date().toISOString(),
+              totalSize: 0,
+              assets: []
+            };
+            
+            if (fs.existsSync(distPath)) {
+              results.totalSize = getDirectorySize(distPath);
+              
+              // Get individual asset sizes
+              const assetsPath = path.join(distPath, 'assets');
+              if (fs.existsSync(assetsPath)) {
+                const files = fs.readdirSync(assetsPath);
+                files.forEach(file => {
+                  const filePath = path.join(assetsPath, file);
+                  const stat = fs.statSync(filePath);
+                  
+                  results.assets.push({
+                    name: file,
+                    size: stat.size,
+                    sizeKB: (stat.size / 1024).toFixed(2),
+                    type: path.extname(file)
+                  });
+                });
+              }
+              
+              // Sort by size
+              results.assets.sort((a, b) => b.size - a.size);
+              
+              // Add warnings for large files
+              results.warnings = [];
+              results.assets.forEach(asset => {
+                if (asset.type === '.js' && asset.size > 300 * 1024) {
+                  results.warnings.push({
+                    asset: asset.name,
+                    message: `JavaScript file exceeds 300KB (${asset.sizeKB}KB)`,
+                    severity: 'warning'
+                  });
+                }
+                
+                if (asset.type === '.css' && asset.size > 100 * 1024) {
+                  results.warnings.push({
+                    asset: asset.name,
+                    message: `CSS file exceeds 100KB (${asset.sizeKB}KB)`,
+                    severity: 'warning'
+                  });
+                }
+              });
+            }
+            
+            console.log(JSON.stringify(results, null, 2));
+            return results;
+          }
+          
+          analyzeBundle();
+          EOF
+          
+          BUNDLE_REPORT=$(node scripts/bundle-analyzer.js)
+          echo "bundle_report<<EOF" >> $GITHUB_OUTPUT
+          echo "$BUNDLE_REPORT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+      
+      - name: Monitor API performance
+        id: api
+        run: |
+          cat > scripts/api-monitor.js << 'EOF'
+          const https = require('https');
+          const { createClient } = require('@supabase/supabase-js');
+          
+          const supabase = createClient(
+            process.env.VITE_SUPABASE_URL,
+            process.env.VITE_SUPABASE_ANON_KEY
+          );
+          
+          async function measureApiEndpoint(operation, fn) {
+            const start = Date.now();
+            let success = false;
+            let error = null;
+            
+            try {
+              await fn();
+              success = true;
+            } catch (e) {
+              error = e.message;
+            }
+            
+            const duration = Date.now() - start;
+            
+            return {
+              operation,
+              duration,
+              success,
+              error
+            };
+          }
+          
+          async function monitorAPI() {
+            const results = {
+              timestamp: new Date().toISOString(),
+              endpoints: []
+            };
+            
+            // Test vendor search
+            results.endpoints.push(await measureApiEndpoint('vendor-search', async () => {
+              const { data, error } = await supabase
+                .from('vendors')
+                .select('id, name')
+                .limit(10);
+              if (error) throw error;
+            }));
+            
+            // Test vendor details
+            results.endpoints.push(await measureApiEndpoint('vendor-details', async () => {
+              const { data, error } = await supabase
+                .from('vendors')
+                .select('*')
+                .limit(1)
+                .single();
+              if (error) throw error;
+            }));
+            
+            // Test reviews fetch
+            results.endpoints.push(await measureApiEndpoint('reviews-fetch', async () => {
+              const { data, error } = await supabase
+                .from('reviews')
+                .select('*')
+                .limit(20);
+              if (error) throw error;
+            }));
+            
+            // Calculate stats
+            const successfulEndpoints = results.endpoints.filter(e => e.success);
+            results.averageResponseTime = successfulEndpoints.length > 0
+              ? successfulEndpoints.reduce((sum, e) => sum + e.duration, 0) / successfulEndpoints.length
+              : 0;
+            
+            results.slowEndpoints = results.endpoints.filter(e => e.duration > 1000);
+            results.failedEndpoints = results.endpoints.filter(e => !e.success);
+            
+            console.log(JSON.stringify(results, null, 2));
+            return results;
+          }
+          
+          monitorAPI().then(process.exit);
+          EOF
+          
+          API_REPORT=$(node scripts/api-monitor.js)
+          echo "api_report<<EOF" >> $GITHUB_OUTPUT
+          echo "$API_REPORT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+      
+      - name: Create performance summary
+        if: always()
+        run: |
+          echo "## Performance Monitoring Report 📊" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Performance scores
+          PERF_DATA='${{ steps.performance.outputs.performance_report }}'
+          if [ ! -z "$PERF_DATA" ]; then
+            echo "### Page Performance Scores" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            echo "$PERF_DATA" | jq -r '.pages[] | "- \(.url): \(.score)%"' >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            
+            # Check for regressions
+            REGRESSIONS=$(echo "$PERF_DATA" | jq -r '.regressions | length')
+            if [ "$REGRESSIONS" -gt 0 ]; then
+              echo "### ⚠️ Performance Regressions Detected" >> $GITHUB_STEP_SUMMARY
+              echo "$PERF_DATA" | jq -r '.regressions[] | "- \(.url): \(.metric // "Score") = \(.value // .score)"' >> $GITHUB_STEP_SUMMARY
+            fi
+          fi
+          
+          # Bundle size
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Bundle Analysis" >> $GITHUB_STEP_SUMMARY
+          BUNDLE_DATA='${{ steps.bundle.outputs.bundle_report }}'
+          if [ ! -z "$BUNDLE_DATA" ]; then
+            TOTAL_SIZE=$(echo "$BUNDLE_DATA" | jq -r '.totalSize')
+            TOTAL_MB=$(echo "scale=2; $TOTAL_SIZE / 1048576" | bc)
+            echo "Total bundle size: ${TOTAL_MB}MB" >> $GITHUB_STEP_SUMMARY
+            
+            echo "#### Largest Assets:" >> $GITHUB_STEP_SUMMARY
+            echo "$BUNDLE_DATA" | jq -r '.assets[:5][] | "- \(.name): \(.sizeKB)KB"' >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # API Performance
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### API Performance" >> $GITHUB_STEP_SUMMARY
+          API_DATA='${{ steps.api.outputs.api_report }}'
+          if [ ! -z "$API_DATA" ]; then
+            AVG_TIME=$(echo "$API_DATA" | jq -r '.averageResponseTime')
+            echo "Average response time: ${AVG_TIME}ms" >> $GITHUB_STEP_SUMMARY
+            
+            SLOW_COUNT=$(echo "$API_DATA" | jq -r '.slowEndpoints | length')
+            if [ "$SLOW_COUNT" -gt 0 ]; then
+              echo "⚠️ Slow endpoints detected (>1000ms):" >> $GITHUB_STEP_SUMMARY
+              echo "$API_DATA" | jq -r '.slowEndpoints[] | "- \(.operation): \(.duration)ms"' >> $GITHUB_STEP_SUMMARY
+            fi
+          fi
+      
+      - name: Store performance data
+        if: github.event_name != 'workflow_dispatch'
+        run: |
+          # Store performance metrics in a file for historical tracking
+          mkdir -p performance-history
+          DATE=$(date +%Y-%m-%d-%H-%M-%S)
+          
+          cat > performance-history/metrics-${DATE}.json << EOF
+          {
+            "timestamp": "${DATE}",
+            "commit": "${{ github.sha }}",
+            "performance": ${{ steps.performance.outputs.performance_report }},
+            "bundle": ${{ steps.bundle.outputs.bundle_report }},
+            "api": ${{ steps.api.outputs.api_report }}
+          }
+          EOF
+      
+      - name: Send alert for critical issues
+        if: always()
+        run: |
+          # Check for critical performance issues
+          PERF_DATA='${{ steps.performance.outputs.performance_report }}'
+          CRITICAL_ISSUES=false
+          
+          if [ ! -z "$PERF_DATA" ]; then
+            # Check if average score is below 70
+            AVG_SCORE=$(echo "$PERF_DATA" | jq -r '.averageScore // 100')
+            if (( $(echo "$AVG_SCORE < 70" | bc -l) )); then
+              CRITICAL_ISSUES=true
+            fi
+            
+            # Check for critical regressions
+            CRITICAL_COUNT=$(echo "$PERF_DATA" | jq -r '[.regressions[] | select(.severity == "critical")] | length')
+            if [ "$CRITICAL_COUNT" -gt 0 ]; then
+              CRITICAL_ISSUES=true
+            fi
+          fi
+          
+          if [ "$CRITICAL_ISSUES" = true ]; then
+            curl -X POST ${{ secrets.VITE_SUPABASE_URL }}/functions/v1/send-admin-notification \
+              -H "Authorization: Bearer ${{ secrets.VITE_SUPABASE_ANON_KEY }}" \
+              -H "Content-Type: application/json" \
+              -d '{
+                "type": "performance_alert",
+                "priority": "high",
+                "data": {
+                  "message": "Critical performance issues detected",
+                  "performance_report": ${{ toJson(steps.performance.outputs.performance_report) }},
+                  "timestamp": "'$(date -u +"%Y-%m-%d %H:%M:%S UTC")'"
+                }
+              }'
+          fi
+      
+      - name: Stop preview server
+        if: always()
+        run: pkill -f "npm run preview" || true
