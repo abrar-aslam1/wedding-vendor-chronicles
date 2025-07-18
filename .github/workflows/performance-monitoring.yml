@@ -157,9 +157,7 @@ jobs:
           
           # Run performance tests
           PERF_REPORT=$(node scripts/performance-monitor.js "${URLS[@]}")
-          echo "performance_report<<EOF" >> $GITHUB_OUTPUT
-          echo "$PERF_REPORT" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          echo "performance_report=$PERF_REPORT" >> $GITHUB_OUTPUT
       
       - name: Check bundle size
         id: bundle
@@ -246,9 +244,7 @@ jobs:
           EOF
           
           BUNDLE_REPORT=$(node scripts/bundle-analyzer.js)
-          echo "bundle_report<<EOF" >> $GITHUB_OUTPUT
-          echo "$BUNDLE_REPORT" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          echo "bundle_report=$BUNDLE_REPORT" >> $GITHUB_OUTPUT
       
       - name: Monitor API performance
         id: api
@@ -337,9 +333,7 @@ jobs:
           EOF
           
           API_REPORT=$(node scripts/api-monitor.js)
-          echo "api_report<<EOF" >> $GITHUB_OUTPUT
-          echo "$API_REPORT" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          echo "api_report=$API_REPORT" >> $GITHUB_OUTPUT
       
       - name: Create performance summary
         if: always()
