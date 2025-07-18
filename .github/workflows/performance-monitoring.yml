@@ -155,9 +155,14 @@ jobs:
             .catch(() => process.exit(1));
           EOF
           
-          # Run performance tests
-          PERF_REPORT=$(node scripts/performance-monitor.js "${URLS[@]}")
-          echo "performance_report=$PERF_REPORT" >> $GITHUB_OUTPUT
+          # Run performance tests and capture only JSON output
+          node scripts/performance-monitor.js "${URLS[@]}" > perf-results.json 2>&1
+          if [ -f perf-results.json ] && jq . perf-results.json > /dev/null 2>&1; then
+            PERF_REPORT=$(cat perf-results.json)
+            echo "performance_report=$PERF_REPORT" >> $GITHUB_OUTPUT
+          else
+            echo "performance_report={\"error\":\"Failed to generate performance report\"}" >> $GITHUB_OUTPUT
+          fi
       
       - name: Check bundle size
         id: bundle
@@ -243,8 +248,13 @@ jobs:
           analyzeBundle();
           EOF
           
-          BUNDLE_REPORT=$(node scripts/bundle-analyzer.js)
-          echo "bundle_report=$BUNDLE_REPORT" >> $GITHUB_OUTPUT
+          node scripts/bundle-analyzer.js > bundle-results.json 2>&1
+          if [ -f bundle-results.json ] && jq . bundle-results.json > /dev/null 2>&1; then
+            BUNDLE_REPORT=$(cat bundle-results.json)
+            echo "bundle_report=$BUNDLE_REPORT" >> $GITHUB_OUTPUT
+          else
+            echo "bundle_report={\"error\":\"Failed to generate bundle report\"}" >> $GITHUB_OUTPUT
+          fi
       
       - name: Monitor API performance
         id: api
@@ -332,8 +342,13 @@ jobs:
             .catch(() => process.exit(1));
           EOF
           
-          API_REPORT=$(node scripts/api-monitor.js)
-          echo "api_report=$API_REPORT" >> $GITHUB_OUTPUT
+          node scripts/api-monitor.js > api-results.json 2>&1
+          if [ -f api-results.json ] && jq . api-results.json > /dev/null 2>&1; then
+            API_REPORT=$(cat api-results.json)
+            echo "api_report=$API_REPORT" >> $GITHUB_OUTPUT
+          else
+            echo "api_report={\"error\":\"Failed to generate API report\"}" >> $GITHUB_OUTPUT
+          fi
       
       - name: Create performance summary
         if: always()
