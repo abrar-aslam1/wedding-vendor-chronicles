@@ -313,7 +313,7 @@ jobs:
             results.endpoints.push(await measureApiEndpoint('vendor-cache-fetch', async () => {
               const { data, error } = await supabase
                 .from('vendor_cache')
-                .select('id, keyword, location, result_count')
+                .select('id, search_key, result_count, created_at')
                 .limit(20);
               if (error) throw error;
             }));
