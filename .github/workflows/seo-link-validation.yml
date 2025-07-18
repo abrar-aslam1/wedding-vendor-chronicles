@@ -41,6 +41,11 @@ jobs:
           npm ci
           npm install -g lighthouse broken-link-checker
       
+      - name: Set up environment
+        run: |
+          echo "VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }}" >> $GITHUB_ENV
+          echo "VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }}" >> $GITHUB_ENV
+      
       - name: Build application
         run: npm run build
       
@@ -159,8 +164,8 @@ jobs:
           import url from 'url';
           
           const supabase = createClient(
-            process.env.VITE_SUPABASE_URL || 'placeholder',
-            process.env.VITE_SUPABASE_ANON_KEY || 'placeholder'
+            process.env.VITE_SUPABASE_URL,
+            process.env.VITE_SUPABASE_ANON_KEY
           );
           
           async function checkLink(linkUrl) {
@@ -248,8 +253,8 @@ jobs:
           import { createClient } from '@supabase/supabase-js';
           
           const supabase = createClient(
-            process.env.VITE_SUPABASE_URL || 'placeholder',
-            process.env.VITE_SUPABASE_ANON_KEY || 'placeholder'
+            process.env.VITE_SUPABASE_URL,
+            process.env.VITE_SUPABASE_ANON_KEY
           );
           
           async function generateSitemap() {
