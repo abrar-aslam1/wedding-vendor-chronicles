@@ -37,7 +37,7 @@ jobs:
       - name: Install dependencies
         run: |
           npm ci
-          npm install -g @sitespeed.io/sitespeed.io
+          npm install -g sitespeed.io
       
       - name: Set up environment
         run: |
