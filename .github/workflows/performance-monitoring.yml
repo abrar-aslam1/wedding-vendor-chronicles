@@ -150,7 +150,9 @@ jobs:
             return results;
           }
           
-          runPerformanceChecks().then(process.exit);
+          runPerformanceChecks()
+            .then(() => process.exit(0))
+            .catch(() => process.exit(1));
           EOF
           
           # Run performance tests
@@ -329,7 +331,9 @@ jobs:
             return results;
           }
           
-          monitorAPI().then(process.exit);
+          monitorAPI()
+            .then(() => process.exit(0))
+            .catch(() => process.exit(1));
           EOF
           
           API_REPORT=$(node scripts/api-monitor.js)
