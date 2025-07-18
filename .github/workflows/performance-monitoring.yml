@@ -101,7 +101,7 @@ jobs:
             };
             
             for (const url of urls) {
-              console.log(`Testing ${url}...`);
+              console.error(`Testing ${url}...`);
               const pageResult = await measurePerformance(url);
               if (pageResult) {
                 results.pages.push(pageResult);
@@ -343,46 +343,53 @@ jobs:
           
           # Performance scores
           PERF_DATA='${{ steps.performance.outputs.performance_report }}'
-          if [ ! -z "$PERF_DATA" ]; then
+          if [ ! -z "$PERF_DATA" ] && echo "$PERF_DATA" | jq . > /dev/null 2>&1; then
             echo "### Page Performance Scores" >> $GITHUB_STEP_SUMMARY
             echo '```json' >> $GITHUB_STEP_SUMMARY
-            echo "$PERF_DATA" | jq -r '.pages[] | "- \(.url): \(.score)%"' >> $GITHUB_STEP_SUMMARY
+            echo "$PERF_DATA" | jq -r '.pages[]? | "- \(.url): \(.score)%"' >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
             
             # Check for regressions
-            REGRESSIONS=$(echo "$PERF_DATA" | jq -r '.regressions | length')
+            REGRESSIONS=$(echo "$PERF_DATA" | jq -r '.regressions | length // 0')
             if [ "$REGRESSIONS" -gt 0 ]; then
               echo "### ⚠️ Performance Regressions Detected" >> $GITHUB_STEP_SUMMARY
-              echo "$PERF_DATA" | jq -r '.regressions[] | "- \(.url): \(.metric // "Score") = \(.value // .score)"' >> $GITHUB_STEP_SUMMARY
+              echo "$PERF_DATA" | jq -r '.regressions[]? | "- \(.url): \(.metric // "Score") = \(.value // .score)"' >> $GITHUB_STEP_SUMMARY
             fi
+          elif [ ! -z "$PERF_DATA" ]; then
+            echo "### Performance Data (Invalid JSON)" >> $GITHUB_STEP_SUMMARY
+            echo "Performance data could not be parsed as JSON" >> $GITHUB_STEP_SUMMARY
           fi
           
           # Bundle size
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Bundle Analysis" >> $GITHUB_STEP_SUMMARY
           BUNDLE_DATA='${{ steps.bundle.outputs.bundle_report }}'
-          if [ ! -z "$BUNDLE_DATA" ]; then
-            TOTAL_SIZE=$(echo "$BUNDLE_DATA" | jq -r '.totalSize')
+          if [ ! -z "$BUNDLE_DATA" ] && echo "$BUNDLE_DATA" | jq . > /dev/null 2>&1; then
+            TOTAL_SIZE=$(echo "$BUNDLE_DATA" | jq -r '.totalSize // 0')
             TOTAL_MB=$(echo "scale=2; $TOTAL_SIZE / 1048576" | bc)
             echo "Total bundle size: ${TOTAL_MB}MB" >> $GITHUB_STEP_SUMMARY
             
             echo "#### Largest Assets:" >> $GITHUB_STEP_SUMMARY
-            echo "$BUNDLE_DATA" | jq -r '.assets[:5][] | "- \(.name): \(.sizeKB)KB"' >> $GITHUB_STEP_SUMMARY
+            echo "$BUNDLE_DATA" | jq -r '.assets[:5][]? | "- \(.name): \(.sizeKB)KB"' >> $GITHUB_STEP_SUMMARY
+          elif [ ! -z "$BUNDLE_DATA" ]; then
+            echo "Bundle data could not be parsed as JSON" >> $GITHUB_STEP_SUMMARY
           fi
           
           # API Performance
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### API Performance" >> $GITHUB_STEP_SUMMARY
           API_DATA='${{ steps.api.outputs.api_report }}'
-          if [ ! -z "$API_DATA" ]; then
-            AVG_TIME=$(echo "$API_DATA" | jq -r '.averageResponseTime')
+          if [ ! -z "$API_DATA" ] && echo "$API_DATA" | jq . > /dev/null 2>&1; then
+            AVG_TIME=$(echo "$API_DATA" | jq -r '.averageResponseTime // 0')
             echo "Average response time: ${AVG_TIME}ms" >> $GITHUB_STEP_SUMMARY
             
-            SLOW_COUNT=$(echo "$API_DATA" | jq -r '.slowEndpoints | length')
+            SLOW_COUNT=$(echo "$API_DATA" | jq -r '.slowEndpoints | length // 0')
             if [ "$SLOW_COUNT" -gt 0 ]; then
               echo "⚠️ Slow endpoints detected (>1000ms):" >> $GITHUB_STEP_SUMMARY
-              echo "$API_DATA" | jq -r '.slowEndpoints[] | "- \(.operation): \(.duration)ms"' >> $GITHUB_STEP_SUMMARY
+              echo "$API_DATA" | jq -r '.slowEndpoints[]? | "- \(.operation): \(.duration)ms"' >> $GITHUB_STEP_SUMMARY
             fi
+          elif [ ! -z "$API_DATA" ]; then
+            echo "API data could not be parsed as JSON" >> $GITHUB_STEP_SUMMARY
           fi
       
       - name: Store performance data
