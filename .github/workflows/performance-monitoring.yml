@@ -88,7 +88,12 @@ jobs:
               };
             } catch (error) {
               console.error(`Error measuring ${url}:`, error);
-              return null;
+              return {
+                url: url,
+                score: 0,
+                metrics: {},
+                error: error.message || String(error)
+              };
             }
           }
           
@@ -152,16 +157,27 @@ jobs:
           
           runPerformanceChecks()
             .then(() => process.exit(0))
-            .catch(() => process.exit(1));
+            .catch((err) => {
+              // Always output valid JSON on failure
+              console.log(JSON.stringify({ 
+                error: err.message || "Unknown error running performance checks",
+                timestamp: new Date().toISOString(),
+                pages: [],
+                regressions: []
+              }, null, 2));
+              process.exit(1);
+            });
           EOF
           
           # Run performance tests and capture only JSON output
-          node scripts/performance-monitor.js "${URLS[@]}" > perf-results.json 2>&1
+          node scripts/performance-monitor.js "${URLS[@]}" > perf-results.json 2>perf-errors.log
           if [ -f perf-results.json ] && jq . perf-results.json > /dev/null 2>&1; then
             PERF_REPORT=$(cat perf-results.json)
             echo "performance_report=$PERF_REPORT" >> $GITHUB_OUTPUT
           else
             echo "performance_report={\"error\":\"Failed to generate performance report\"}" >> $GITHUB_OUTPUT
+            echo "Performance script errors:" >> $GITHUB_STEP_SUMMARY
+            cat perf-errors.log >> $GITHUB_STEP_SUMMARY || echo "No error log available" >> $GITHUB_STEP_SUMMARY
           fi
       
       - name: Check bundle size
