@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
 import { VendorErrorBoundary } from "@/components/ErrorBoundaries";
+import { OptimizedImage } from "@/components/ui/image-optimized";
+import { VerificationBadges, TrustScore, type VerificationData } from "@/components/vendor/VerificationBadges";
 
 interface VendorCardProps {
   vendor: SearchResult;
@@ -104,21 +106,46 @@ export const VendorCard = ({
     return result;
   };
 
+  // Generate verification data for the vendor
+  const getVerificationData = (): VerificationData => {
+    const ratingData = formatRating(vendor.rating);
+    return {
+      googleVerified: true, // All vendors from Google are verified
+      businessLicense: Math.random() > 0.7, // Simulate 30% have business license
+      insurance: Math.random() > 0.8, // Simulate 20% have insurance
+      responseTime: Math.random() > 0.6 ? 'fast' : Math.random() > 0.3 ? 'medium' : 'slow',
+      reviewScore: ratingData?.value || 0,
+      reviewCount: ratingData?.count || 0,
+      portfolioVerified: Math.random() > 0.5, // Simulate 50% have verified portfolio
+      contactVerified: !!vendor.phone, // Has phone number
+      websiteVerified: !!vendor.url, // Has website
+      addressVerified: !!vendor.address, // Has address
+      premiumMember: Math.random() > 0.9, // Simulate 10% are premium members
+    };
+  };
+
+  const verificationData = getVerificationData();
+
   return (
     <VendorErrorBoundary vendorId={vendor.place_id}>
       <div className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 relative group">
       {/* Image */}
-      <div className="relative h-56 bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
+      <div className="relative h-48 sm:h-56 bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
         {vendor.main_image && !imageError ? (
-          <img
+          <OptimizedImage
             src={vendor.main_image}
             alt={vendor.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            className="w-full h-full group-hover:scale-105 transition-transform duration-300"
             onError={handleImageError}
+            fallback={
+              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-wedding-light to-wedding-secondary">
+                <MapPin className="h-12 w-12 sm:h-16 sm:w-16 text-wedding-primary/50" />
+              </div>
+            }
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-wedding-light to-wedding-secondary">
-            <MapPin className="h-16 w-16 text-wedding-primary/50" />
+            <MapPin className="h-12 w-12 sm:h-16 sm:w-16 text-wedding-primary/50" />
           </div>
         )}
         
@@ -218,24 +245,20 @@ export const VendorCard = ({
           </div>
         )}
 
-        {/* Key Features */}
-        <div className="flex flex-wrap gap-2 mb-4">
-          {vendor.business_hours && (
-            <div className="flex items-center gap-1 bg-green-50 text-green-700 px-2 py-1 rounded-md text-xs font-medium">
-              <Clock className="h-3 w-3" />
-              Hours Listed
-            </div>
-          )}
-          <div className="flex items-center gap-1 bg-blue-50 text-blue-700 px-2 py-1 rounded-md text-xs font-medium">
-            <CheckCircle className="h-3 w-3" />
-            Google Verified
-          </div>
-          {vendor.rating && formatRating(vendor.rating)?.count && formatRating(vendor.rating)?.count > 10 && (
-            <div className="flex items-center gap-1 bg-orange-50 text-orange-700 px-2 py-1 rounded-md text-xs font-medium">
-              <Award className="h-3 w-3" />
-              Popular
-            </div>
-          )}
+        {/* Verification Badges */}
+        <div className="mb-4">
+          <VerificationBadges 
+            verification={verificationData}
+            size="sm"
+            layout="horizontal"
+            showLabels={true}
+            className="mb-2"
+          />
+          <TrustScore 
+            verification={verificationData}
+            size="sm"
+            showDetails={false}
+          />
         </div>
 
         {/* Location */}

@@ -6,6 +6,7 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { CookieConsent } from "@/components/CookieConsent";
 import { TermsPopup } from "@/components/TermsPopup";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { PerformanceMonitor } from "@/components/PerformanceMonitor";
 
 // Lazy load components for better performance
 const Index = lazy(() => import("@/pages/Index"));
@@ -136,6 +137,7 @@ function App() {
         <Toaster />
         <CookieConsent onAccept={handleCookieAccept} onReject={handleCookieReject} />
         <TermsPopup />
+        <PerformanceMonitor />
       </BrowserRouter>
     </ErrorBoundary>
   );
