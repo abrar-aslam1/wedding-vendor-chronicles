@@ -2,24 +2,28 @@ name: Process Notification Queue
 
 on:
   schedule:
-    # Run every 5 minutes
+    # Run every 15 minutes
     - cron: '*/15 * * * *'
   workflow_dispatch: # Allow manual triggering
 
 jobs:
   process-notifications:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
       - name: Process Notification Queue
         run: |
           echo "🔄 Processing notification queue..."
           
           response=$(curl -s -w "%{http_code}" -X POST \
-            'https://wpbdveyuuudhmwflrmqw.supabase.co/functions/v1/process-notification-queue' \
-            -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndwYmR2ZXl1dXVkaG13ZmxybXF3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc4NDMyNjYsImV4cCI6MjA1MzQxOTI2Nn0.zjyA1hS9Da2tXEuUu7W44tCMGSIp2ZTpK3RpJXQdL4A' \
+            '${{ secrets.VITE_SUPABASE_URL }}/functions/v1/process-notification-queue' \
+            -H 'Authorization: Bearer ${{ secrets.VITE_SUPABASE_ANON_KEY }}' \
             -H 'Content-Type: application/json' \
-            -H 'apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndwYmR2ZXl1dXVkaG13ZmxybXF3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc4NDMyNjYsImV4cCI6MjA1MzQxOTI2Nn0.zjyA1hS9Da2tXEuUu7W44tCMGSIp2ZTpK3RpJXQdL4A')
+            -H 'apikey: ${{ secrets.VITE_SUPABASE_ANON_KEY }}')
           
           http_code="${response: -3}"
           response_body="${response%???}"
@@ -34,3 +38,12 @@ jobs:
             echo "Response: $response_body"
             exit 1
           fi
+      
+      - name: Create summary
+        if: always()
+        run: |
+          echo "## Notification Queue Processing Summary 🔔" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status**: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Timestamp**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")" >> $GITHUB_STEP_SUMMARY
+          echo "- **Next Run**: In 15 minutes" >> $GITHUB_STEP_SUMMARY
