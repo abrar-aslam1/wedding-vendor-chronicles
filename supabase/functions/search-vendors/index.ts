@@ -615,7 +615,7 @@ serve(async (req) => {
                   api_cost: data.cost || 0,
                   api_response_time: Date.now() - apiStartTime,
                   is_successful: true,
-                  expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() // 30 days
+                  expires_at: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString() // 365 days
                 };
                 
                 const { error: newCacheError } = await supabase

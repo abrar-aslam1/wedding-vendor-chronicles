@@ -6,6 +6,7 @@
  */
 
 import { createClient } from '@supabase/supabase-js';
+import { collectProfiles as collectMcpProfiles } from './mcpInstagramCollector.js';
 
 // Configuration
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL || 'https://placeholder.supabase.co';
@@ -420,7 +421,15 @@ class InstagramCollector {
     console.log(`\n🔄 Processing: ${profileUrl}`);
     
     // Extract profile data
-    const profileData = await this.extractInstagramProfile(profileUrl);
+    // Attempt MCP Instagram collection if enabled
+    const mcpResults = await collectMcpProfiles([profileUrl]);
+    let profileData = null;
+    if (mcpResults && mcpResults.length > 0 && mcpResults[0].data) {
+      console.log(`✅ MCP data available for ${profileUrl}`);
+      profileData = mcpResults[0].data;
+    } else {
+      profileData = await this.extractInstagramProfile(profileUrl);
+    }
     if (!profileData) return false;
     
     // Check minimum follower requirement
@@ -455,27 +464,7 @@ class InstagramCollector {
       subcategory: subcategory,
       city: city,
       state: state,
-      address: profileData.location || `${city}, ${state}`,
-      phone: profileData.contact_info?.phone,
-      email: profileData.contact_info?.email,
-      website: profileData.contact_info?.website,
-      instagram_url: profileUrl,
-      instagram_data: {
-        username: profileData.username,
-        followers_count: profileData.followers_count,
-        posts_count: profileData.posts_count,
-        is_business_account: profileData.is_business_account,
-        is_verified: profileData.is_verified,
-        bio: profileData.bio,
-        avg_engagement: postsData.engagement_rate
-      },
-      engagement_score: Math.round(postsData.engagement_rate * 10),
-      content_quality_score: postsData.content_quality_score,
-      overall_quality_score: qualityScore,
-      vendor_source: 'instagram_brightdata',
-      verification_status: 'pending',
-      created_at: new Date().toISOString(),
-      last_instagram_update: new Date().toISOString()
+      website: profileData.contact_info?.website
     };
     
     // Store in database
