@@ -1,5 +1,6 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { SearchResult } from '@/types/search';
+import { generateCityFAQs } from '@/utils/content-generator';
 
 interface DirectoryPageSchema {
   category?: string;
