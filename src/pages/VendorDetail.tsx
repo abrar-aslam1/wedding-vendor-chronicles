@@ -13,6 +13,7 @@ import { VendorCard } from "@/components/search/VendorCard";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage } from "@/components/ui/breadcrumb";
 import { SEOHead } from "@/components/SEOHead";
 import { SchemaMarkup } from "@/components/SchemaMarkup";
+import { StickyVendorCTA } from "@/components/vendor/StickyVendorCTA";
 
 const VendorDetail = () => {
   const location = useLocation();
@@ -391,6 +392,25 @@ const VendorDetail = () => {
           </div>
         )}
       </div>
+
+      {/* Sticky CTA */}
+      {vendor && (
+        <StickyVendorCTA
+          vendor={vendor}
+          onCheckAvailability={() => {
+            // TODO: Open availability modal or navigate to booking
+            console.log('Check Availability clicked for:', vendor.title);
+          }}
+          onVisitWebsite={() => {
+            if (vendor.url) {
+              window.open(vendor.url, '_blank', 'noopener,noreferrer');
+            }
+          }}
+          onToggleFavorite={handleToggleFavorite}
+          isFavorite={isFavorite}
+          showThreshold={500} // Show after scrolling past hero section
+        />
+      )}
     </div>
   );
 };

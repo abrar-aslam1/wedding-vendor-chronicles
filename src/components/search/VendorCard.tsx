@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Heart, Instagram, Users, CheckCircle, MapPin, Phone, Globe, Star, Award, Clock } from "lucide-react";
+import { Heart, Instagram, Users, CheckCircle, MapPin, Phone, Globe, Star, Award, Clock, Calendar, Plus, Check } from "lucide-react";
 import { SearchResult } from "@/types/search";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -7,6 +7,9 @@ import { useState } from "react";
 import { VendorErrorBoundary } from "@/components/ErrorBoundaries";
 import { OptimizedImage } from "@/components/ui/image-optimized";
 import { VerificationBadges, TrustScore, type VerificationData } from "@/components/vendor/VerificationBadges";
+import { getPriceTier, getKeyDifferentiator, getStyleTags, getPriceTierColor, trackVendorClick } from "@/utils/vendorUtils";
+import { useVendorSelection } from "@/contexts/VendorSelectionContext";
+import { useToast } from "@/hooks/use-toast";
 
 interface VendorCardProps {
   vendor: SearchResult;
@@ -14,6 +17,7 @@ interface VendorCardProps {
   isLoading: boolean;
   onToggleFavorite: (vendor: SearchResult) => void;
   subcategory?: string;
+  showMultiSelect?: boolean;
 }
 
 export const VendorCard = ({ 
@@ -21,11 +25,25 @@ export const VendorCard = ({
   isFavorite, 
   isLoading, 
   onToggleFavorite,
-  subcategory
+  subcategory,
+  showMultiSelect = false
 }: VendorCardProps) => {
   console.log('🎨 VendorCard rendering:', vendor.title, 'with vendor_source:', vendor.vendor_source);
   const navigate = useNavigate();
   const [imageError, setImageError] = useState(false);
+  const { toast } = useToast();
+  
+  // Multi-selection functionality
+  const { 
+    addVendor, 
+    removeVendor, 
+    isVendorSelected, 
+    canAddMore, 
+    selectedVendors,
+    maxVendors 
+  } = useVendorSelection();
+  
+  const isSelected = isVendorSelected(vendor.place_id || vendor.title);
 
 
   const handleImageError = () => {
@@ -126,6 +144,40 @@ export const VendorCard = ({
 
   const verificationData = getVerificationData();
 
+  const handleMultiSelectToggle = () => {
+    const vendorId = vendor.place_id || vendor.title;
+    
+    if (isSelected) {
+      removeVendor(vendorId);
+      toast({
+        title: "Vendor removed",
+        description: `${vendor.title} removed from selection.`,
+      });
+    } else {
+      const success = addVendor(vendor);
+      if (success) {
+        toast({
+          title: "Vendor added",
+          description: `${vendor.title} added to selection (${selectedVendors.length + 1}/${maxVendors}).`,
+        });
+      } else {
+        if (selectedVendors.length >= maxVendors) {
+          toast({
+            title: "Selection limit reached",
+            description: `You can only select up to ${maxVendors} vendors for multi-inquiry.`,
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Already selected",
+            description: `${vendor.title} is already in your selection.`,
+            variant: "destructive",
+          });
+        }
+      }
+    }
+  };
+
   return (
     <VendorErrorBoundary vendorId={vendor.place_id}>
       <div className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 relative group">
@@ -154,21 +206,48 @@ export const VendorCard = ({
 
         {/* Top badges row */}
         <div className="absolute top-3 left-3 right-3 flex items-center justify-between z-10">
-          {/* Favorite Button */}
-          <button
-            onClick={handleFavoriteClick}
-            disabled={isLoading}
-            className="p-2.5 bg-white/95 backdrop-blur-sm rounded-full shadow-lg hover:bg-white hover:scale-110 transition-all duration-200"
-            aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
-          >
-            <Heart 
-              className={`h-4 w-4 transition-colors duration-200 ${
-                isFavorite 
-                  ? "fill-red-500 text-red-500" 
-                  : "text-gray-600 hover:text-red-500"
-              } ${isLoading ? "animate-pulse" : ""}`}
-            />
-          </button>
+          <div className="flex items-center gap-2">
+            {/* Save Button (Heart Icon) */}
+            <button
+              onClick={async () => {
+                await trackVendorClick(vendor, 'save');
+                handleFavoriteClick();
+              }}
+              disabled={isLoading}
+              className="p-2.5 bg-white/95 backdrop-blur-sm rounded-full shadow-lg hover:bg-white hover:scale-110 transition-all duration-200"
+              aria-label={isFavorite ? "Remove from favorites" : "Save to favorites"}
+            >
+              <Heart 
+                className={`h-4 w-4 transition-colors duration-200 ${
+                  isFavorite 
+                    ? "fill-red-500 text-red-500" 
+                    : "text-gray-600 hover:text-red-500"
+                } ${isLoading ? "animate-pulse" : ""}`}
+              />
+            </button>
+
+            {/* Multi-Select Checkbox */}
+            {showMultiSelect && (
+              <button
+                onClick={handleMultiSelectToggle}
+                disabled={!canAddMore && !isSelected}
+                className={`p-2.5 rounded-full shadow-lg transition-all duration-200 ${
+                  isSelected 
+                    ? "bg-wedding-primary text-white hover:bg-wedding-primary/90" 
+                    : canAddMore 
+                      ? "bg-white/95 backdrop-blur-sm text-gray-600 hover:bg-white hover:text-wedding-primary hover:scale-110" 
+                      : "bg-gray-300/95 text-gray-400 cursor-not-allowed"
+                }`}
+                aria-label={isSelected ? "Remove from selection" : "Add to selection"}
+              >
+                {isSelected ? (
+                  <Check className="h-4 w-4" />
+                ) : (
+                  <Plus className="h-4 w-4" />
+                )}
+              </button>
+            )}
+          </div>
 
           {/* Google Badge */}
           <div className="bg-gradient-to-r from-blue-500 to-green-500 text-white px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 shadow-lg">
@@ -201,65 +280,62 @@ export const VendorCard = ({
 
       {/* Content */}
       <div className="p-5">
-        {/* Title and Rating Row */}
-        <div className="mb-4">
-          <h3 className="text-lg font-bold text-gray-900 line-clamp-2 mb-2">
+        {/* Title and Price Tier Row */}
+        <div className="flex items-start justify-between mb-3">
+          <h3 className="text-lg font-bold text-gray-900 line-clamp-2 flex-1 mr-3">
             {vendor.title}
           </h3>
-          
-          {/* Rating and Reviews */}
-          {vendor.rating && (
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="flex items-center">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`h-4 w-4 ${
-                        i < Math.floor(formatRating(vendor.rating)?.value || 0)
-                          ? "fill-yellow-400 text-yellow-400"
-                          : "text-gray-200"
-                      }`}
-                    />
-                  ))}
-                </div>
-                <span className="text-sm font-medium text-gray-700">
-                  {formatRating(vendor.rating)?.value?.toFixed(1) || 'N/A'}
-                </span>
-              </div>
-              <span className="text-xs text-gray-500">
-                {formatRating(vendor.rating)?.count || 0} reviews
-              </span>
-            </div>
-          )}
-          
+          {/* Price Tier */}
+          <div className={`px-3 py-1 rounded-full text-sm font-bold ${getPriceTierColor(getPriceTier(vendor))}`}>
+            {getPriceTier(vendor)}
+          </div>
         </div>
 
+        {/* Style Tags */}
+        <div className="flex flex-wrap gap-2 mb-3">
+          {getStyleTags(vendor, subcategory).map((tag, index) => (
+            <span 
+              key={index}
+              className="px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-md"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
 
-        {/* Description */}
-        {(vendor.snippet || vendor.description) && (
-          <div className="mb-4">
-            <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
-              {vendor.snippet || vendor.description || "Professional wedding vendor with excellent service."}
-            </p>
+        {/* Key Differentiator */}
+        <div className="mb-4">
+          <div className="flex items-center gap-2 text-wedding-primary">
+            <Clock className="h-4 w-4" />
+            <span className="text-sm font-semibold">
+              {getKeyDifferentiator(vendor)}
+            </span>
+          </div>
+        </div>
+
+        {/* Rating */}
+        {vendor.rating && (
+          <div className="flex items-center gap-2 mb-4">
+            <div className="flex items-center">
+              {[...Array(5)].map((_, i) => (
+                <Star
+                  key={i}
+                  className={`h-4 w-4 ${
+                    i < Math.floor(formatRating(vendor.rating)?.value || 0)
+                      ? "fill-yellow-400 text-yellow-400"
+                      : "text-gray-200"
+                  }`}
+                />
+              ))}
+            </div>
+            <span className="text-sm font-medium text-gray-700">
+              {formatRating(vendor.rating)?.value?.toFixed(1) || 'N/A'}
+            </span>
+            <span className="text-xs text-gray-500">
+              ({formatRating(vendor.rating)?.count || 0})
+            </span>
           </div>
         )}
-
-        {/* Verification Badges */}
-        <div className="mb-4">
-          <VerificationBadges 
-            verification={verificationData}
-            size="sm"
-            layout="horizontal"
-            showLabels={true}
-            className="mb-2"
-          />
-          <TrustScore 
-            verification={verificationData}
-            size="sm"
-            showDetails={false}
-          />
-        </div>
 
         {/* Location */}
         {vendor.address && (
@@ -271,13 +347,67 @@ export const VendorCard = ({
           </div>
         )}
 
-        {/* Action Buttons */}
-        <div className="space-y-3">
-          {/* Quick Actions */}
-          <div className="flex gap-2">
+        {/* New CTA Button Hierarchy */}
+        <div className="space-y-2">
+          {/* Primary CTA - Check Availability */}
+          <Button 
+            className="w-full bg-wedding-primary hover:bg-wedding-primary/90 text-white font-semibold py-3 rounded-lg transition-all duration-200 hover:shadow-lg"
+            onClick={async () => {
+              await trackVendorClick(vendor, 'check_availability');
+              // TODO: Open availability modal or navigate to booking
+              console.log('Check Availability clicked for:', vendor.title);
+            }}
+          >
+            <Calendar className="h-4 w-4 mr-2" />
+            Check Availability
+          </Button>
+
+          {/* Secondary CTA - View Profile */}
+          <Button 
+            variant="outline"
+            className="w-full border-wedding-primary text-wedding-primary hover:bg-wedding-primary hover:text-white font-medium py-2.5 rounded-lg transition-all duration-200"
+            onClick={async () => {
+              await trackVendorClick(vendor, 'view_profile');
+              handleCardClick();
+            }}
+          >
+            View Profile
+          </Button>
+
+          {/* Multi-Select Button (when enabled) */}
+          {showMultiSelect && (
+            <Button 
+              variant={isSelected ? "default" : "outline"}
+              className={`w-full font-medium py-2.5 rounded-lg transition-all duration-200 ${
+                isSelected 
+                  ? "bg-wedding-primary hover:bg-wedding-primary/90 text-white" 
+                  : canAddMore 
+                    ? "border-wedding-secondary text-wedding-secondary hover:bg-wedding-secondary hover:text-white" 
+                    : "border-gray-300 text-gray-400 cursor-not-allowed"
+              }`}
+              onClick={handleMultiSelectToggle}
+              disabled={!canAddMore && !isSelected}
+            >
+              {isSelected ? (
+                <>
+                  <Check className="h-4 w-4 mr-2" />
+                  Selected for Inquiry
+                </>
+              ) : (
+                <>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add to Inquiry
+                </>
+              )}
+            </Button>
+          )}
+
+          {/* Quick Actions Row */}
+          <div className="flex gap-2 pt-1">
             {vendor.phone && (
               <a
                 href={`tel:${vendor.phone}`}
+                onClick={() => trackVendorClick(vendor, 'call')}
                 className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-gray-50 hover:bg-gray-100 rounded-lg text-sm font-medium text-gray-700 transition-colors duration-200"
               >
                 <Phone className="h-4 w-4" />
@@ -289,6 +419,7 @@ export const VendorCard = ({
                 href={vendor.url}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackVendorClick(vendor, 'visit_site')}
                 className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-gray-50 hover:bg-gray-100 rounded-lg text-sm font-medium text-gray-700 transition-colors duration-200"
               >
                 <Globe className="h-4 w-4" />
@@ -296,14 +427,6 @@ export const VendorCard = ({
               </a>
             )}
           </div>
-
-          {/* Primary CTA */}
-          <Button 
-            className="w-full bg-wedding-primary hover:bg-wedding-primary/90 text-white font-semibold py-3 rounded-lg transition-all duration-200 hover:shadow-lg"
-            onClick={handleCardClick}
-          >
-            View Full Profile
-          </Button>
         </div>
       </div>
     </div>

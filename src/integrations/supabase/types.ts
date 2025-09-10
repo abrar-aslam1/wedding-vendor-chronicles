@@ -9,6 +9,39 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      vendor_inquiries: {
+        Row: {
+          created_at: string | null
+          id: string
+          inquiry_data: Json
+          is_multi_inquiry: boolean | null
+          status: string | null
+          updated_at: string | null
+          user_id: string | null
+          vendor_ids: string[]
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          inquiry_data?: Json
+          is_multi_inquiry?: boolean | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          vendor_ids: string[]
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          inquiry_data?: Json
+          is_multi_inquiry?: boolean | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          vendor_ids?: string[]
+        }
+        Relationships: []
+      }
       subscription_plans: {
         Row: {
           created_at: string | null
@@ -106,6 +139,9 @@ export type Database = {
           business_name: string
           category: string
           city: string
+          claim_date: string | null
+          claim_status: string | null
+          claimed_by: string | null
           contact_info: Json
           created_at: string
           description: string
@@ -117,15 +153,15 @@ export type Database = {
           priority_ranking: number | null
           state: string
           subscription_tier: string | null
-          claimed_by: string | null
-          claim_status: string | null
-          claim_date: string | null
           verification_status: string | null
         }
         Insert: {
           business_name: string
           category: string
           city: string
+          claim_date?: string | null
+          claim_status?: string | null
+          claimed_by?: string | null
           contact_info: Json
           created_at?: string
           description: string
@@ -137,15 +173,15 @@ export type Database = {
           priority_ranking?: number | null
           state: string
           subscription_tier?: string | null
-          claimed_by?: string | null
-          claim_status?: string | null
-          claim_date?: string | null
           verification_status?: string | null
         }
         Update: {
           business_name?: string
           category?: string
           city?: string
+          claim_date?: string | null
+          claim_status?: string | null
+          claimed_by?: string | null
           contact_info?: Json
           created_at?: string
           description?: string
@@ -157,49 +193,46 @@ export type Database = {
           priority_ranking?: number | null
           state?: string
           subscription_tier?: string | null
-          claimed_by?: string | null
-          claim_status?: string | null
-          claim_date?: string | null
           verification_status?: string | null
         }
         Relationships: []
       }
       vendor_auth: {
         Row: {
-          id: string
+          created_at: string | null
           email: string
-          password_hash: string
-          vendor_id: string | null
           email_verified: boolean | null
-          verification_token: string | null
+          id: string
+          password_hash: string
           reset_token: string | null
           reset_token_expires: string | null
-          created_at: string | null
           updated_at: string | null
+          vendor_id: string | null
+          verification_token: string | null
         }
         Insert: {
-          id?: string
+          created_at?: string | null
           email: string
-          password_hash: string
-          vendor_id?: string | null
           email_verified?: boolean | null
-          verification_token?: string | null
+          id?: string
+          password_hash: string
           reset_token?: string | null
           reset_token_expires?: string | null
-          created_at?: string | null
           updated_at?: string | null
+          vendor_id?: string | null
+          verification_token?: string | null
         }
         Update: {
-          id?: string
+          created_at?: string | null
           email?: string
-          password_hash?: string
-          vendor_id?: string | null
           email_verified?: boolean | null
-          verification_token?: string | null
+          id?: string
+          password_hash?: string
           reset_token?: string | null
           reset_token_expires?: string | null
-          created_at?: string | null
           updated_at?: string | null
+          vendor_id?: string | null
+          verification_token?: string | null
         }
         Relationships: [
           {
@@ -213,49 +246,49 @@ export type Database = {
       }
       business_claims: {
         Row: {
-          id: string
-          vendor_id: string | null
+          admin_notes: string | null
+          claim_status: string | null
           claimant_email: string
           claimant_name: string
-          claim_status: string | null
-          verification_documents: Json | null
-          verification_method: string | null
-          admin_notes: string | null
           claimed_at: string | null
+          created_at: string | null
+          id: string
           reviewed_at: string | null
           reviewed_by: string | null
-          created_at: string | null
           updated_at: string | null
+          vendor_id: string | null
+          verification_documents: Json | null
+          verification_method: string | null
         }
         Insert: {
-          id?: string
-          vendor_id?: string | null
+          admin_notes?: string | null
+          claim_status?: string | null
           claimant_email: string
           claimant_name: string
-          claim_status?: string | null
-          verification_documents?: Json | null
-          verification_method?: string | null
-          admin_notes?: string | null
           claimed_at?: string | null
+          created_at?: string | null
+          id?: string
           reviewed_at?: string | null
           reviewed_by?: string | null
-          created_at?: string | null
           updated_at?: string | null
+          vendor_id?: string | null
+          verification_documents?: Json | null
+          verification_method?: string | null
         }
         Update: {
-          id?: string
-          vendor_id?: string | null
+          admin_notes?: string | null
+          claim_status?: string | null
           claimant_email?: string
           claimant_name?: string
-          claim_status?: string | null
-          verification_documents?: Json | null
-          verification_method?: string | null
-          admin_notes?: string | null
           claimed_at?: string | null
+          created_at?: string | null
+          id?: string
           reviewed_at?: string | null
           reviewed_by?: string | null
-          created_at?: string | null
           updated_at?: string | null
+          vendor_id?: string | null
+          verification_documents?: Json | null
+          verification_method?: string | null
         }
         Relationships: [
           {
@@ -269,40 +302,40 @@ export type Database = {
       }
       vendor_analytics_events: {
         Row: {
-          id: string
-          vendor_id: string | null
-          event_type: string
+          created_at: string | null
           event_data: Json | null
-          user_session_id: string | null
-          user_location: Json | null
+          event_type: string
+          id: string
+          ip_address: unknown | null
           referrer: string | null
           user_agent: string | null
-          ip_address: string | null
-          created_at: string | null
+          user_location: Json | null
+          user_session_id: string | null
+          vendor_id: string | null
         }
         Insert: {
-          id?: string
-          vendor_id?: string | null
-          event_type: string
+          created_at?: string | null
           event_data?: Json | null
-          user_session_id?: string | null
-          user_location?: Json | null
+          event_type: string
+          id?: string
+          ip_address?: unknown | null
           referrer?: string | null
           user_agent?: string | null
-          ip_address?: string | null
-          created_at?: string | null
+          user_location?: Json | null
+          user_session_id?: string | null
+          vendor_id?: string | null
         }
         Update: {
-          id?: string
-          vendor_id?: string | null
-          event_type?: string
+          created_at?: string | null
           event_data?: Json | null
-          user_session_id?: string | null
-          user_location?: Json | null
+          event_type?: string
+          id?: string
+          ip_address?: unknown | null
           referrer?: string | null
           user_agent?: string | null
-          ip_address?: string | null
-          created_at?: string | null
+          user_location?: Json | null
+          user_session_id?: string | null
+          vendor_id?: string | null
         }
         Relationships: [
           {
@@ -316,49 +349,49 @@ export type Database = {
       }
       vendor_analytics_summary: {
         Row: {
-          id: string
-          vendor_id: string | null
-          date: string
-          profile_views: number | null
           contact_clicks: number | null
-          phone_reveals: number | null
-          email_clicks: number | null
-          website_clicks: number | null
-          photo_views: number | null
-          favorites_added: number | null
-          search_impressions: number | null
           created_at: string | null
+          date: string
+          email_clicks: number | null
+          favorites_added: number | null
+          id: string
+          phone_reveals: number | null
+          photo_views: number | null
+          profile_views: number | null
+          search_impressions: number | null
           updated_at: string | null
+          vendor_id: string | null
+          website_clicks: number | null
         }
         Insert: {
-          id?: string
-          vendor_id?: string | null
-          date: string
-          profile_views?: number | null
           contact_clicks?: number | null
-          phone_reveals?: number | null
-          email_clicks?: number | null
-          website_clicks?: number | null
-          photo_views?: number | null
-          favorites_added?: number | null
-          search_impressions?: number | null
           created_at?: string | null
+          date: string
+          email_clicks?: number | null
+          favorites_added?: number | null
+          id?: string
+          phone_reveals?: number | null
+          photo_views?: number | null
+          profile_views?: number | null
+          search_impressions?: number | null
           updated_at?: string | null
+          vendor_id?: string | null
+          website_clicks?: number | null
         }
         Update: {
-          id?: string
-          vendor_id?: string | null
-          date?: string
-          profile_views?: number | null
           contact_clicks?: number | null
-          phone_reveals?: number | null
-          email_clicks?: number | null
-          website_clicks?: number | null
-          photo_views?: number | null
-          favorites_added?: number | null
-          search_impressions?: number | null
           created_at?: string | null
+          date?: string
+          email_clicks?: number | null
+          favorites_added?: number | null
+          id?: string
+          phone_reveals?: number | null
+          photo_views?: number | null
+          profile_views?: number | null
+          search_impressions?: number | null
           updated_at?: string | null
+          vendor_id?: string | null
+          website_clicks?: number | null
         }
         Relationships: [
           {
@@ -372,31 +405,345 @@ export type Database = {
       }
       admin_users: {
         Row: {
-          id: string
-          email: string
-          password_hash: string
-          role: string | null
-          permissions: Json | null
           created_at: string | null
+          email: string
+          id: string
+          password_hash: string
+          permissions: Json | null
+          role: string | null
           updated_at: string | null
         }
         Insert: {
-          id?: string
-          email: string
-          password_hash: string
-          role?: string | null
-          permissions?: Json | null
           created_at?: string | null
+          email: string
+          id?: string
+          password_hash: string
+          permissions?: Json | null
+          role?: string | null
           updated_at?: string | null
         }
         Update: {
-          id?: string
-          email?: string
-          password_hash?: string
-          role?: string | null
-          permissions?: Json | null
           created_at?: string | null
+          email?: string
+          id?: string
+          password_hash?: string
+          permissions?: Json | null
+          role?: string | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      location_metadata: {
+        Row: {
+          average_rating: number | null
+          city: string | null
+          created_at: string
+          id: string
+          popular_cities: Json | null
+          seo_description: string | null
+          state: string
+          updated_at: string
+          vendor_count: number | null
+        }
+        Insert: {
+          average_rating?: number | null
+          city?: string | null
+          created_at?: string
+          id?: string
+          popular_cities?: Json | null
+          seo_description?: string | null
+          state: string
+          updated_at?: string
+          vendor_count?: number | null
+        }
+        Update: {
+          average_rating?: number | null
+          city?: string | null
+          created_at?: string
+          id?: string
+          popular_cities?: Json | null
+          seo_description?: string | null
+          state?: string
+          updated_at?: string
+          vendor_count?: number | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          id: string
+          username: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          id: string
+          username?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          id?: string
+          username?: string | null
+        }
+        Relationships: []
+      }
+      vendor_cache: {
+        Row: {
+          category: string
+          city: string | null
+          created_at: string | null
+          expires_at: string | null
+          id: string
+          location_code: number
+          search_results: Json | null
+          state: string | null
+          subcategory: string | null
+        }
+        Insert: {
+          category: string
+          city?: string | null
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          location_code: number
+          search_results?: Json | null
+          state?: string | null
+          subcategory?: string | null
+        }
+        Update: {
+          category?: string
+          city?: string | null
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          location_code?: number
+          search_results?: Json | null
+          state?: string | null
+          subcategory?: string | null
+        }
+        Relationships: []
+      }
+      vendor_favorites: {
+        Row: {
+          created_at: string
+          id: string
+          user_id: string
+          vendor_data: Json
+          vendor_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          user_id: string
+          vendor_data: Json
+          vendor_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          user_id?: string
+          vendor_data?: Json
+          vendor_id?: string
+        }
+        Relationships: []
+      }
+      vendor_searches: {
+        Row: {
+          created_at: string | null
+          id: string
+          keyword: string
+          location_code: number
+          search_results: Json | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          keyword: string
+          location_code: number
+          search_results?: Json | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          keyword?: string
+          location_code?: number
+          search_results?: Json | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      vendor_subcategories: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      plan_board_columns: {
+        Row: {
+          created_at: string | null
+          id: string
+          name: string
+          position: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          name: string
+          position: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          name?: string
+          position?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      plan_board_items: {
+        Row: {
+          budget: number | null
+          column_id: string
+          created_at: string | null
+          description: string | null
+          id: string
+          notes: string | null
+          position: number
+          title: string
+          user_id: string
+          vendor_data: Json | null
+          vendor_id: string | null
+        }
+        Insert: {
+          budget?: number | null
+          column_id: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          notes?: string | null
+          position: number
+          title: string
+          user_id: string
+          vendor_data?: Json | null
+          vendor_id?: string | null
+        }
+        Update: {
+          budget?: number | null
+          column_id?: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          notes?: string | null
+          position?: number
+          title?: string
+          user_id?: string
+          vendor_data?: Json | null
+          vendor_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plan_board_items_column_id_fkey"
+            columns: ["column_id"]
+            isOneToOne: false
+            referencedRelation: "plan_board_columns"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      vendor_completions: {
+        Row: {
+          category: string
+          city: string
+          completion_data: Json
+          created_at: string
+          id: string
+          location_code: number
+          state: string
+          subcategory: string | null
+        }
+        Insert: {
+          category: string
+          city: string
+          completion_data: Json
+          created_at?: string
+          id?: string
+          location_code: number
+          state: string
+          subcategory?: string | null
+        }
+        Update: {
+          category?: string
+          city?: string
+          completion_data?: Json
+          created_at?: string
+          id?: string
+          location_code?: number
+          state?: string
+          subcategory?: string | null
+        }
+        Relationships: []
+      }
+      timeline_events: {
+        Row: {
+          completed: boolean | null
+          created_at: string | null
+          date: string
+          description: string | null
+          id: string
+          is_generated: boolean | null
+          template_id: string | null
+          title: string
+          user_id: string
+          vendor_category: string | null
+        }
+        Insert: {
+          completed?: boolean | null
+          created_at?: string | null
+          date: string
+          description?: string | null
+          id?: string
+          is_generated?: boolean | null
+          template_id?: string | null
+          title: string
+          user_id: string
+          vendor_category?: string | null
+        }
+        Update: {
+          completed?: boolean | null
+          created_at?: string | null
+          date?: string
+          description?: string | null
+          id?: string
+          is_generated?: boolean | null
+          template_id?: string | null
+          title?: string
+          user_id?: string
+          vendor_category?: string | null
         }
         Relationships: []
       }
@@ -425,6 +772,7 @@ export type BusinessClaim = Database['public']['Tables']['business_claims']['Row
 export type VendorAnalyticsEvent = Database['public']['Tables']['vendor_analytics_events']['Row']
 export type VendorAnalyticsSummary = Database['public']['Tables']['vendor_analytics_summary']['Row']
 export type AdminUser = Database['public']['Tables']['admin_users']['Row']
+export type VendorInquiry = Database['public']['Tables']['vendor_inquiries']['Row']
 
 export type SubscriptionTier = 'free' | 'professional' | 'premium'
 export type SubscriptionStatus = 'active' | 'inactive' | 'cancelled' | 'past_due'

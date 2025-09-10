@@ -8,7 +8,10 @@ import { ComingSoonBanner } from "./ComingSoonBanner";
 import { SearchSkeleton } from "./SearchSkeleton";
 import { MobileTabContainer } from "./MobileTabContainer";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { MapPin, Instagram } from "lucide-react";
+import { MapPin, Instagram, Mail } from "lucide-react";
+import { VendorSelectionProvider, useVendorSelection } from "@/contexts/VendorSelectionContext";
+import { MultiInquiryModal } from "@/components/vendor/MultiInquiryModal";
+import { Button } from "@/components/ui/button";
 
 interface SearchResultsProps {
   results: SearchResult[];
@@ -16,7 +19,45 @@ interface SearchResultsProps {
   subcategory?: string;
 }
 
-export const SearchResults = ({ results, isSearching, subcategory }: SearchResultsProps) => {
+// Multi-Inquiry Floating Action Button Component
+const MultiInquiryFAB = () => {
+  const { selectedVendors, removeVendor, clearSelection } = useVendorSelection();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  if (selectedVendors.length === 0) return null;
+
+  return (
+    <>
+      {/* Floating Action Button */}
+      <div className="fixed bottom-6 right-6 z-50">
+        <Button
+          onClick={() => setIsModalOpen(true)}
+          className="bg-wedding-primary hover:bg-wedding-primary/90 text-white shadow-lg hover:shadow-xl transition-all duration-200 rounded-full px-6 py-4 flex items-center gap-3"
+        >
+          <Mail className="h-5 w-5" />
+          <span className="font-semibold">
+            Contact {selectedVendors.length} Vendor{selectedVendors.length > 1 ? 's' : ''}
+          </span>
+          <div className="bg-white/20 rounded-full px-2 py-1 text-sm font-bold">
+            {selectedVendors.length}
+          </div>
+        </Button>
+      </div>
+
+      {/* Multi-Inquiry Modal */}
+      <MultiInquiryModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        selectedVendors={selectedVendors}
+        onRemoveVendor={removeVendor}
+        onClearSelection={clearSelection}
+      />
+    </>
+  );
+};
+
+// Main SearchResults Component wrapped with provider
+const SearchResultsContent = ({ results, isSearching, subcategory }: SearchResultsProps) => {
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState<Set<string>>(new Set());
   const [hasSearched, setHasSearched] = useState(false);
@@ -442,6 +483,7 @@ export const SearchResults = ({ results, isSearching, subcategory }: SearchResul
                         isLoading={loading.has(vendor.place_id || '')}
                         onToggleFavorite={toggleFavorite}
                         subcategory={subcategory}
+                        showMultiSelect={true}
                       />
                     );
                   });
@@ -483,6 +525,18 @@ export const SearchResults = ({ results, isSearching, subcategory }: SearchResul
           </div>
         </div>
       )}
+
+      {/* Multi-Inquiry Floating Action Button */}
+      <MultiInquiryFAB />
     </div>
+  );
+};
+
+// Wrapper component with VendorSelectionProvider
+export const SearchResults = ({ results, isSearching, subcategory }: SearchResultsProps) => {
+  return (
+    <VendorSelectionProvider>
+      <SearchResultsContent results={results} isSearching={isSearching} subcategory={subcategory} />
+    </VendorSelectionProvider>
   );
 };

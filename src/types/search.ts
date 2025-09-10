@@ -66,6 +66,11 @@ export interface SearchResult {
   bio?: string;
   profile_image_url?: string;
   vendor_source?: 'google' | 'instagram' | 'database' | 'sample' | 'google_database';
+  // Enhanced engagement fields
+  price_tier?: '$' | '$$' | '$$$' | '$$$$';
+  response_time?: string;
+  turnaround_time?: string;
+  key_differentiator?: string;
 }
 
 export interface DataForSEOResponse {
