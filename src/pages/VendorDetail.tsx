@@ -230,6 +230,9 @@ const VendorDetail = () => {
         category={vendor.category}
         city={vendor.city}
         state={vendor.state}
+        vendorName={vendor.title}
+        tags={vendor.tags}
+        priceRange={vendor.price_range}
       />
       <SchemaMarkup
         category={vendor.category}

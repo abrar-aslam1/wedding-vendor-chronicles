@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { getTitle, getMeta, getKeywords, getCanonicalUrl, getOGImageUrl, validateTitleLength, validateMetaLength } from '@/utils/seo-helpers';
 
 interface SEOHeadProps {
   category?: string;
@@ -17,6 +18,9 @@ interface SEOHeadProps {
   modifiedTime?: string;
   articleAuthor?: string;
   articleSection?: string;
+  vendorName?: string;
+  tags?: string[];
+  priceRange?: string;
 }
 
 export const SEOHead: React.FC<SEOHeadProps> = ({
@@ -35,16 +39,12 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
   publishedTime,
   modifiedTime,
   articleAuthor,
-  articleSection
+  articleSection,
+  vendorName,
+  tags,
+  priceRange
 }) => {
   useEffect(() => {
-    const formatText = (text: string) => {
-      return text
-        .split('-')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(' ');
-    };
-    
     const generateMetadata = () => {
       // Use custom values if provided
       if (customTitle && customDescription) {
@@ -56,14 +56,17 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
         };
       }
 
-      // Format category and subcategory if they exist
-      const formattedCategory = category ? formatText(category) : '';
-      const formattedSubcategory = subcategory ? formatText(subcategory) : '';
-      const vendorCount = totalVendors || 'Top 20';
-      
-      // Generate location string if city and state are provided
-      const locationString = city && state ? `in ${city}, ${state}` : 'Near You';
-      
+      // Use SEO helper functions for consistent title and meta generation
+      const seoParams = {
+        category,
+        city,
+        state,
+        subcategory,
+        vendorName,
+        tags,
+        priceRange
+      };
+
       // Generate title and description based on available information
       if (isHomePage) {
         return {
@@ -74,47 +77,46 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
         };
       }
 
-      if (category && subcategory && city && state) {
-        return {
-          title: `${vendorCount} Best ${formattedSubcategory} ${formattedCategory} ${locationString} | Wedding Vendor Reviews`,
-          description: `Compare the ${vendorCount} best ${formattedSubcategory.toLowerCase()} ${formattedCategory.toLowerCase()} ${locationString}. Read verified reviews, see pricing, and find the perfect ${formattedSubcategory.toLowerCase()} ${formattedCategory.toLowerCase().slice(0, -1)} for your wedding day.`,
-          keywords: `${formattedSubcategory.toLowerCase()}, ${formattedCategory.toLowerCase()}, wedding ${formattedCategory.toLowerCase()}, ${city} ${formattedCategory.toLowerCase()}, ${state} wedding vendors, ${formattedSubcategory.toLowerCase()} ${formattedCategory.toLowerCase()}, ${city} wedding planning`,
-          type: 'business.business'
-        };
+      const title = getTitle(seoParams);
+      const description = getMeta(seoParams);
+      const keywords = getKeywords(seoParams);
+
+      // Validate title and description lengths
+      if (!validateTitleLength(title)) {
+        console.warn(`SEO Warning: Title exceeds 60 characters: "${title}" (${title.length} chars)`);
+      }
+      
+      if (!validateMetaLength(description)) {
+        console.warn(`SEO Warning: Meta description exceeds 160 characters: "${description}" (${description.length} chars)`);
       }
 
-      if (category && city && state) {
-        return {
-          title: `${vendorCount} Best ${formattedCategory} ${locationString} | Wedding Vendor Reviews`,
-          description: `Compare the ${vendorCount} best ${formattedCategory.toLowerCase()} ${locationString}. Read verified reviews, see pricing, and find the perfect ${formattedCategory.toLowerCase().slice(0, -1)} for your wedding day.`,
-          keywords: `${formattedCategory.toLowerCase()}, wedding ${formattedCategory.toLowerCase()}, ${city} ${formattedCategory.toLowerCase()}, ${state} wedding vendors, ${city} wedding planning, ${state} wedding services`,
-          type: 'business.business'
-        };
-      }
-
-      if (category) {
-        return {
-          title: `Find Top ${formattedCategory} Near You | Wedding Vendor Directory`,
-          description: `Search and compare the best ${formattedCategory.toLowerCase()} for your wedding. Browse verified reviews, pricing information, and availability in your area.`,
-          keywords: `${formattedCategory.toLowerCase()}, wedding ${formattedCategory.toLowerCase()}, find ${formattedCategory.toLowerCase()}, top ${formattedCategory.toLowerCase()}, wedding vendor directory`,
-          type: 'website'
-        };
-      }
-
-      // Default fallback
       return {
-        title: 'Find My Wedding Vendor | Wedding Planning Made Easy',
-        description: 'Plan your perfect wedding with our comprehensive directory of wedding vendors. Compare services, read reviews, and make informed decisions for your special day.',
-        keywords: 'wedding planning, wedding vendors, wedding services, wedding directory, wedding planning tools',
-        type: 'website'
+        title,
+        description,
+        keywords,
+        type: vendorName ? 'business.business' : 'website'
       };
     };
 
     const metadata = generateMetadata();
     const siteUrl = window.location.origin;
-    const currentUrl = canonicalUrl || window.location.href;
-    // Use custom image if provided, otherwise use default
-    const pageImage = imageUrl || `${siteUrl}/Screenshot 2025-04-20 at 9.59.36 PM.png`;
+    
+    // Use helper function for canonical URL if not provided
+    const currentUrl = canonicalUrl || getCanonicalUrl({
+      category,
+      city,
+      state,
+      subcategory,
+      vendorName
+    });
+    
+    // Use helper function for OG image
+    const pageImage = imageUrl || getOGImageUrl({
+      category,
+      city,
+      state,
+      vendorName
+    });
     
     // Set basic meta tags
     document.title = metadata.title;

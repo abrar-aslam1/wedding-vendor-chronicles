@@ -226,37 +226,145 @@ export const SchemaMarkup: FC<DirectoryPageSchema> = ({
     ? [generateVendorSchema(vendor)]
     : vendors.map(generateVendorSchema);
 
-  // BreadcrumbList schema for navigation
-  const breadcrumbSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
+  // ItemList schema for Top-20 pages (as specified in agent brief)
+  const generateItemListSchema = () => {
+    if (!vendors || vendors.length === 0 || !category) return null;
+    
+    const formatText = (text: string) => {
+      return text
+        .split('-')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+    };
+
+    const categoryLabel = formatText(category);
+    const subcategoryLabel = subcategory ? formatText(subcategory) : '';
+    const locationString = city && state ? ` in ${city}, ${state}` : '';
+    
+    const listName = subcategory 
+      ? `Top 20 ${subcategoryLabel} ${categoryLabel}${locationString}`
+      : `Top 20 ${categoryLabel}${locationString}`;
+
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      'itemListOrder': 'https://schema.org/ItemListOrderAscending',
+      'name': listName,
+      'numberOfItems': vendors.length,
+      'itemListElement': vendors.map((v, i) => ({
+        '@type': 'ListItem',
+        'position': i + 1,
+        'url': `https://findmyweddingvendor.com/vendor/${v.place_id || v.title?.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
+        'name': v.title,
+        'item': {
+          '@type': 'LocalBusiness',
+          'name': v.title,
+          'description': v.description || v.snippet || '',
+          'image': v.main_image || '',
+          'address': {
+            '@type': 'PostalAddress',
+            'addressLocality': v.city || city || '',
+            'addressRegion': v.state || state || '',
+            'addressCountry': 'US'
+          },
+          ...(v.rating && {
+            'aggregateRating': {
+              '@type': 'AggregateRating',
+              'ratingValue': v.rating.value,
+              'reviewCount': v.rating.votes_count || 0,
+              'bestRating': 5
+            }
+          })
+        }
+      }))
+    };
+  };
+
+  const itemListSchema = generateItemListSchema();
+
+  // Enhanced BreadcrumbList schema for navigation
+  const generateBreadcrumbSchema = () => {
+    const baseUrl = window.location.origin;
+    const breadcrumbs = [
       {
         '@type': 'ListItem',
         position: 1,
-        item: {
-          '@id': window.location.origin,
-          name: 'Home'
-        }
-      },
-      ...(category ? [{
+        name: 'Home',
+        item: baseUrl
+      }
+    ];
+
+    let position = 2;
+
+    if (state) {
+      const stateSlug = state.toLowerCase().replace(/\s+/g, '-');
+      breadcrumbs.push({
         '@type': 'ListItem',
-        position: 2,
-        item: {
-          '@id': `${window.location.origin}/top-20/${category}`,
-          name: `${category} Directory`
-        }
-      }] : []),
-      ...(city && state ? [{
+        position: position++,
+        name: state,
+        item: `${baseUrl}/states/${stateSlug}`
+      });
+    }
+
+    if (city) {
+      const citySlug = city.toLowerCase().replace(/\s+/g, '-');
+      const stateSlug = state?.toLowerCase().replace(/\s+/g, '-');
+      breadcrumbs.push({
         '@type': 'ListItem',
-        position: 3,
-        item: {
-          '@id': `${window.location.origin}/top-20/${category}/${city}/${state}`,
-          name: `${city}, ${state}`
-        }
-      }] : [])
-    ]
+        position: position++,
+        name: city,
+        item: `${baseUrl}/states/${stateSlug}/${citySlug}`
+      });
+    }
+
+    if (category) {
+      const categorySlug = category.toLowerCase().replace(/\s+/g, '-');
+      const formatText = (text: string) => {
+        return text
+          .split('-')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(' ');
+      };
+      
+      breadcrumbs.push({
+        '@type': 'ListItem',
+        position: position++,
+        name: formatText(category),
+        item: city && state 
+          ? `${baseUrl}/top-20/${categorySlug}/${city.toLowerCase().replace(/\s+/g, '-')}/${state.toLowerCase().replace(/\s+/g, '-')}`
+          : `${baseUrl}/search/${categorySlug}`
+      });
+    }
+
+    if (subcategory) {
+      const subcategorySlug = subcategory.toLowerCase().replace(/\s+/g, '-');
+      const categorySlug = category?.toLowerCase().replace(/\s+/g, '-');
+      const citySlug = city?.toLowerCase().replace(/\s+/g, '-');
+      const stateSlug = state?.toLowerCase().replace(/\s+/g, '-');
+      
+      const formatText = (text: string) => {
+        return text
+          .split('-')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(' ');
+      };
+
+      breadcrumbs.push({
+        '@type': 'ListItem',
+        position: position++,
+        name: formatText(subcategory),
+        item: `${baseUrl}/top-20/${categorySlug}/${subcategorySlug}/${citySlug}/${stateSlug}`
+      });
+    }
+
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: breadcrumbs
+    };
   };
+
+  const breadcrumbSchema = generateBreadcrumbSchema();
 
   // FAQPage schema for category-specific FAQs
   const generateFaqSchema = () => {
@@ -604,6 +712,7 @@ export const SchemaMarkup: FC<DirectoryPageSchema> = ({
     ...(eventSchema ? [eventSchema] : []),
     ...(articleSchema ? [articleSchema] : []),
     ...(serviceSchema ? [serviceSchema] : []),
+    ...(itemListSchema ? [itemListSchema] : []),
     ...vendorSchemas,
     breadcrumbSchema,
     ...(faqSchema ? [faqSchema] : [])
