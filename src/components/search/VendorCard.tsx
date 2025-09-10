@@ -10,6 +10,7 @@ import { VerificationBadges, TrustScore, type VerificationData } from "@/compone
 import { getPriceTier, getKeyDifferentiator, getStyleTags, getPriceTierColor, trackVendorClick } from "@/utils/vendorUtils";
 import { useVendorSelection } from "@/contexts/VendorSelectionContext";
 import { useToast } from "@/hooks/use-toast";
+import { AvailabilityModal } from "@/components/vendor/AvailabilityModal";
 
 interface VendorCardProps {
   vendor: SearchResult;
@@ -31,6 +32,7 @@ export const VendorCard = ({
   console.log('🎨 VendorCard rendering:', vendor.title, 'with vendor_source:', vendor.vendor_source);
   const navigate = useNavigate();
   const [imageError, setImageError] = useState(false);
+  const [isAvailabilityModalOpen, setIsAvailabilityModalOpen] = useState(false);
   const { toast } = useToast();
   
   // Multi-selection functionality
@@ -354,8 +356,7 @@ export const VendorCard = ({
             className="w-full bg-wedding-primary hover:bg-wedding-primary/90 text-white font-semibold py-3 rounded-lg transition-all duration-200 hover:shadow-lg"
             onClick={async () => {
               await trackVendorClick(vendor, 'check_availability');
-              // TODO: Open availability modal or navigate to booking
-              console.log('Check Availability clicked for:', vendor.title);
+              setIsAvailabilityModalOpen(true);
             }}
           >
             <Calendar className="h-4 w-4 mr-2" />
@@ -430,6 +431,13 @@ export const VendorCard = ({
         </div>
       </div>
     </div>
+
+    {/* Availability Modal */}
+    <AvailabilityModal
+      isOpen={isAvailabilityModalOpen}
+      onClose={() => setIsAvailabilityModalOpen(false)}
+      vendor={vendor}
+    />
     </VendorErrorBoundary>
   );
 };

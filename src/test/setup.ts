@@ -1,4 +1,5 @@
 import { beforeAll, afterEach, afterAll } from 'vitest';
+import '@testing-library/jest-dom';
 
 // Mock window.location for tests
 Object.defineProperty(window, 'location', {
