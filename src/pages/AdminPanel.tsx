@@ -12,7 +12,6 @@ import { CheckCircle, XCircle, Clock, Eye, Shield, BarChart3, User, Monitor, Sea
 import { useNavigate } from "react-router-dom";
 import { Vendor } from "@/integrations/supabase/types";
 import VendorDashboard from "./VendorDashboard";
-import { toast } from "sonner";
 
 interface ExtendedVendor extends Vendor {
   display_status: 'pending' | 'approved' | 'rejected';
@@ -158,9 +157,9 @@ export default function AdminPanel() {
         setIsConnected(status === 'SUBSCRIBED');
         
         if (status === 'SUBSCRIBED') {
-          toast("Connected to realtime updates", { 
-            description: "You'll see live vendor changes", 
-            duration: 2000 
+          showToast({
+            title: "Connected to realtime updates",
+            description: "You'll see live vendor changes"
           });
         }
       });
@@ -176,8 +175,9 @@ export default function AdminPanel() {
       case 'INSERT':
         setVendors(prev => [newRecord, ...prev]);
         addNotification(`New vendor submitted: ${newRecord.business_name}`, 'info');
-        toast(`New Vendor Submitted`, { 
-          description: `${newRecord.business_name} is awaiting review` 
+        showToast({
+          title: "New Vendor Submitted",
+          description: `${newRecord.business_name} is awaiting review`
         });
         break;
         
