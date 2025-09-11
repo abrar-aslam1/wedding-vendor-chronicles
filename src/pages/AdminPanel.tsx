@@ -6,21 +6,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MainNav } from "@/components/MainNav";
-import { CheckCircle, XCircle, Clock, Eye, Shield } from "lucide-react";
+import { CheckCircle, XCircle, Clock, Eye, Shield, BarChart3, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Vendor } from "@/integrations/supabase/types";
 
-interface Vendor {
-  id: string;
-  business_name: string;
-  description: string;
-  category: string;
-  city: string;
-  state: string;
-  contact_info: any;
-  images: string[];
-  status: 'pending' | 'approved' | 'rejected';
-  created_at: string;
-  owner_id: string;
+interface ExtendedVendor extends Vendor {
+  display_status: 'pending' | 'approved' | 'rejected';
 }
 
 export default function AdminPanel() {
@@ -32,7 +23,7 @@ export default function AdminPanel() {
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [checkingAuth, setCheckingAuth] = useState(true);
 
-  const ADMIN_EMAIL = "abrar@amarosystems.com";
+  const ADMIN_EMAILS = ["abrar@amarosystems.com", "abraraslam139@gmail.com"];
 
   const checkAdminAccess = async () => {
     try {
@@ -48,7 +39,7 @@ export default function AdminPanel() {
         return;
       }
 
-      if (user.email !== ADMIN_EMAIL) {
+      if (!ADMIN_EMAILS.includes(user.email || '')) {
         toast({
           title: "Access Denied", 
           description: "You don't have permission to access this admin panel",
@@ -97,45 +88,18 @@ export default function AdminPanel() {
     try {
       setProcessingId(vendorId);
       
+      const newVerificationStatus = status === 'approved' ? 'verified' : 'rejected';
+      
       const { error } = await supabase
         .from('vendors')
-        .update({ status })
+        .update({ verification_status: newVerificationStatus })
         .eq('id', vendorId);
 
       if (error) throw error;
 
-      // Log the admin action
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        await supabase
-          .from('vendor_admin_actions')
-          .insert({
-            vendor_id: vendorId,
-            admin_id: user.id,
-            action: status === 'approved' ? 'approve' : 'reject',
-            reason
-          });
-
-        // Send notification about status change
-        const vendor = vendors.find(v => v.id === vendorId);
-        if (vendor) {
-          await supabase
-            .from('admin_notification_queue')
-            .insert({
-              notification_type: 'vendor_status_change',
-              data: {
-                business_name: vendor.business_name,
-                status: status,
-                admin_email: user.email,
-                vendor_id: vendorId
-              }
-            });
-        }
-      }
-
       // Update local state
       setVendors(vendors.map(v => 
-        v.id === vendorId ? { ...v, status } : v
+        v.id === vendorId ? { ...v, verification_status: newVerificationStatus } : v
       ));
 
       toast({
@@ -164,16 +128,17 @@ export default function AdminPanel() {
     }
   }, [isAuthorized]);
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
+  const getStatusBadge = (verificationStatus: string | null) => {
+    switch (verificationStatus) {
+      case null:
       case 'pending':
         return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800"><Clock className="w-3 h-3 mr-1" />Pending</Badge>;
-      case 'approved':
+      case 'verified':
         return <Badge variant="secondary" className="bg-green-100 text-green-800"><CheckCircle className="w-3 h-3 mr-1" />Approved</Badge>;
       case 'rejected':
         return <Badge variant="secondary" className="bg-red-100 text-red-800"><XCircle className="w-3 h-3 mr-1" />Rejected</Badge>;
       default:
-        return <Badge variant="secondary">{status}</Badge>;
+        return <Badge variant="secondary">{verificationStatus || 'Unknown'}</Badge>;
     }
   };
 
@@ -192,7 +157,7 @@ export default function AdminPanel() {
                 {vendor.category} • {vendor.city}, {vendor.state}
               </p>
             </div>
-            {getStatusBadge(vendor.status)}
+            {getStatusBadge(vendor.verification_status)}
           </div>
         </CardHeader>
         <CardContent>
@@ -235,7 +200,7 @@ export default function AdminPanel() {
               Submitted: {new Date(vendor.created_at).toLocaleDateString()}
             </div>
 
-            {vendor.status === 'pending' && (
+            {(!vendor.verification_status || vendor.verification_status === 'pending') && (
               <div className="flex gap-2 pt-2">
                 <Button 
                   size="sm" 
@@ -263,9 +228,9 @@ export default function AdminPanel() {
     );
   };
 
-  const pendingVendors = vendors.filter(v => v.status === 'pending');
-  const approvedVendors = vendors.filter(v => v.status === 'approved');
-  const rejectedVendors = vendors.filter(v => v.status === 'rejected');
+  const pendingVendors = vendors.filter(v => !v.verification_status || v.verification_status === 'pending');
+  const approvedVendors = vendors.filter(v => v.verification_status === 'verified');
+  const rejectedVendors = vendors.filter(v => v.verification_status === 'rejected');
 
   if (checkingAuth) {
     return (
@@ -316,7 +281,7 @@ export default function AdminPanel() {
         </div>
         
         <Tabs defaultValue="pending" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="pending">
               Pending ({pendingVendors.length})
             </TabsTrigger>
@@ -325,6 +290,12 @@ export default function AdminPanel() {
             </TabsTrigger>
             <TabsTrigger value="rejected">
               Rejected ({rejectedVendors.length})
+            </TabsTrigger>
+            <TabsTrigger value="dashboards">
+              Vendor Dashboards
+            </TabsTrigger>
+            <TabsTrigger value="analytics">
+              Analytics
             </TabsTrigger>
           </TabsList>
           
@@ -368,6 +339,162 @@ export default function AdminPanel() {
                 ))}
               </div>
             )}
+          </TabsContent>
+
+          <TabsContent value="dashboards" className="mt-6">
+            <div className="mb-6">
+              <h2 className="text-xl font-semibold mb-2">Vendor Dashboard Access</h2>
+              <p className="text-gray-600">Access and view any vendor's dashboard and analytics</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {approvedVendors.slice(0, 20).map(vendor => (
+                <Card key={vendor.id} className="hover:shadow-md transition-shadow">
+                  <CardHeader>
+                    <CardTitle className="text-lg">{vendor.business_name}</CardTitle>
+                    <p className="text-sm text-gray-600">
+                      {vendor.category} • {vendor.city}, {vendor.state}
+                    </p>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex gap-2">
+                      <Button 
+                        size="sm" 
+                        onClick={() => window.open(`/vendor-dashboard?vendorId=${vendor.id}`, '_blank')}
+                        className="flex-1"
+                      >
+                        <BarChart3 className="w-4 h-4 mr-2" />
+                        View Dashboard
+                      </Button>
+                      <Button 
+                        size="sm" 
+                        variant="outline"
+                        onClick={() => window.open(`/vendor/${vendor.id}`, '_blank')}
+                      >
+                        <User className="w-4 h-4 mr-2" />
+                        Public Profile
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+            
+            {approvedVendors.length > 20 && (
+              <div className="text-center mt-6">
+                <p className="text-gray-500">
+                  Showing first 20 vendors. Total approved vendors: {approvedVendors.length}
+                </p>
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="analytics" className="mt-6">
+            <div className="mb-6">
+              <h2 className="text-xl font-semibold mb-2">Platform Analytics</h2>
+              <p className="text-gray-600">Overview of platform-wide vendor metrics and statistics</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Total Vendors</CardTitle>
+                  <User className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{vendors.length}</div>
+                  <p className="text-xs text-muted-foreground">All registered vendors</p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Pending Review</CardTitle>
+                  <Clock className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-yellow-600">{pendingVendors.length}</div>
+                  <p className="text-xs text-muted-foreground">Awaiting approval</p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Approved Vendors</CardTitle>
+                  <CheckCircle className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-green-600">{approvedVendors.length}</div>
+                  <p className="text-xs text-muted-foreground">Active on platform</p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Approval Rate</CardTitle>
+                  <BarChart3 className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">
+                    {vendors.length > 0 ? Math.round((approvedVendors.length / vendors.length) * 100) : 0}%
+                  </div>
+                  <p className="text-xs text-muted-foreground">Overall approval rate</p>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Vendor Categories</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {Object.entries(
+                      vendors.reduce((acc, vendor) => {
+                        acc[vendor.category] = (acc[vendor.category] || 0) + 1;
+                        return acc;
+                      }, {} as Record<string, number>)
+                    )
+                    .sort(([,a], [,b]) => b - a)
+                    .slice(0, 5)
+                    .map(([category, count]) => (
+                      <div key={category} className="flex justify-between">
+                        <span className="text-sm">{category}</span>
+                        <span className="text-sm font-medium">{count} vendors</span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Recent Activity</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {vendors
+                      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+                      .slice(0, 5)
+                      .map(vendor => (
+                        <div key={vendor.id} className="flex justify-between items-center">
+                          <div>
+                            <p className="text-sm font-medium">{vendor.business_name}</p>
+                            <p className="text-xs text-gray-500">{vendor.category}</p>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-xs text-gray-500">
+                              {new Date(vendor.created_at).toLocaleDateString()}
+                            </p>
+                            {getStatusBadge(vendor.verification_status)}
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
         </Tabs>
       </div>

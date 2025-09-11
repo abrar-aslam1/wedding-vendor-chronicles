@@ -32,6 +32,7 @@ const FreeTimelineGenerator = lazy(() => import("@/pages/FreeTimelineGenerator")
 const WeddingHashtagGenerator = lazy(() => import("@/pages/WeddingHashtagGenerator").then(module => ({ default: module.WeddingHashtagGenerator })));
 const AdminPanel = lazy(() => import("@/pages/AdminPanel"));
 const TestSubscriptions = lazy(() => import("@/pages/TestSubscriptions"));
+const VendorDashboardPage = lazy(() => import("@/pages/VendorDashboardPage"));
 
 // Simple loading component
 const PageLoader = () => (
@@ -131,6 +132,7 @@ function App() {
             </ProtectedRoute>
           } />
           <Route path="/test-subscriptions" element={<TestSubscriptions />} />
+          <Route path="/vendor-dashboard" element={<VendorDashboardPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         </Suspense>
