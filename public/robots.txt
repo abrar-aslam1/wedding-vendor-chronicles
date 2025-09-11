@@ -51,3 +51,4 @@ Allow: /*?*location*
 
 # Sitemaps
 Sitemap: https://findmyweddingvendor.com/sitemap.xml
+Sitemap: https://findmyweddingvendor.com/sitemap-index.xml
