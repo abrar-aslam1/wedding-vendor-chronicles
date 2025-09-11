@@ -115,9 +115,8 @@ export const MultiInquiryModal: React.FC<MultiInquiryModalProps> = ({
         return;
       }
 
-      // For now, we'll store the inquiry directly in the database
-      // Later, this should call the edge function when it's deployed
-      const { error } = await supabase
+      // Store the inquiry in the database
+      const { data: inquiryData, error } = await supabase
         .from('vendor_inquiries')
         .insert({
           user_id: session.user.id,
@@ -125,10 +124,43 @@ export const MultiInquiryModal: React.FC<MultiInquiryModalProps> = ({
           inquiry_data: formData,
           is_multi_inquiry: selectedVendors.length > 1,
           status: 'pending'
-        });
+        })
+        .select()
+        .single();
 
       if (error) {
         throw error;
+      }
+
+      // Process lead notifications to send emails to vendors
+      try {
+        const { data: notificationResult, error: notificationError } = await supabase.functions.invoke(
+          'process-lead-notifications',
+          {
+            body: {
+              inquiry_id: inquiryData.id,
+              vendor_ids: selectedVendors.map(v => v.place_id || v.title),
+              customer_data: {
+                name: formData.name,
+                email: formData.email,
+                phone: formData.phone,
+                event_date: formData.eventDate,
+                message: formData.notes
+              },
+              notification_type: selectedVendors.length > 1 ? 'multi_inquiry' : 'lead_inquiry'
+            }
+          }
+        );
+
+        if (notificationError) {
+          console.error('Error sending notifications:', notificationError);
+          // Don't fail the entire submission, just log the error
+        } else {
+          console.log('Lead notifications sent successfully:', notificationResult);
+        }
+      } catch (notificationError) {
+        console.error('Failed to send vendor notifications:', notificationError);
+        // Continue with success message - inquiry was saved even if notifications failed
       }
 
       // Track analytics
