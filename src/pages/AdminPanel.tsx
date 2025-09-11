@@ -1,28 +1,41 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 import { MainNav } from "@/components/MainNav";
-import { CheckCircle, XCircle, Clock, Eye, Shield, BarChart3, User } from "lucide-react";
+import { CheckCircle, XCircle, Clock, Eye, Shield, BarChart3, User, Monitor, Search, Wifi, WifiOff, Bell, Activity } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Vendor } from "@/integrations/supabase/types";
+import VendorDashboard from "./VendorDashboard";
+import { toast } from "sonner";
 
 interface ExtendedVendor extends Vendor {
   display_status: 'pending' | 'approved' | 'rejected';
 }
 
 export default function AdminPanel() {
-  const { toast } = useToast();
+  const { toast: showToast } = useToast();
   const navigate = useNavigate();
   const [vendors, setVendors] = useState<Vendor[]>([]);
   const [loading, setLoading] = useState(true);
   const [processingId, setProcessingId] = useState<string | null>(null);
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [checkingAuth, setCheckingAuth] = useState(true);
-
+  
+  // Vendor Testing State
+  const [selectedVendorId, setSelectedVendorId] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  
+  // Realtime State
+  const [isConnected, setIsConnected] = useState(true);
+  const [realtimeChannel, setRealtimeChannel] = useState<any>(null);
+  const [notifications, setNotifications] = useState<Array<{id: string, message: string, type: string, timestamp: Date}>>([]);
+  
   const ADMIN_EMAILS = ["abrar@amarosystems.com", "abraraslam139@gmail.com"];
 
   const checkAdminAccess = async () => {
@@ -30,7 +43,7 @@ export default function AdminPanel() {
       const { data: { user }, error } = await supabase.auth.getUser();
       
       if (error || !user) {
-        toast({
+        showToast({
           title: "Access Denied",
           description: "You must be logged in to access this page",
           variant: "destructive"
@@ -40,7 +53,7 @@ export default function AdminPanel() {
       }
 
       if (!ADMIN_EMAILS.includes(user.email || '')) {
-        toast({
+        showToast({
           title: "Access Denied", 
           description: "You don't have permission to access this admin panel",
           variant: "destructive"
@@ -52,7 +65,7 @@ export default function AdminPanel() {
       setIsAuthorized(true);
     } catch (error) {
       console.error('Error checking admin access:', error);
-      toast({
+      showToast({
         title: "Error",
         description: "Failed to verify admin access",
         variant: "destructive"
@@ -74,7 +87,7 @@ export default function AdminPanel() {
       setVendors(data || []);
     } catch (error) {
       console.error('Error fetching vendors:', error);
-      toast({
+      showToast({
         title: "Error",
         description: "Failed to fetch vendors",
         variant: "destructive"
@@ -102,13 +115,13 @@ export default function AdminPanel() {
         v.id === vendorId ? { ...v, verification_status: newVerificationStatus } : v
       ));
 
-      toast({
+      showToast({
         title: "Success",
         description: `Vendor ${status === 'approved' ? 'approved' : 'rejected'} successfully`
       });
     } catch (error) {
       console.error('Error updating vendor status:', error);
-      toast({
+      showToast({
         title: "Error",
         description: "Failed to update vendor status",
         variant: "destructive"
@@ -125,8 +138,91 @@ export default function AdminPanel() {
   useEffect(() => {
     if (isAuthorized) {
       fetchVendors();
+      setupRealtimeSubscription();
     }
   }, [isAuthorized]);
+
+  // Realtime subscription setup
+  const setupRealtimeSubscription = () => {
+    const channel = supabase
+      .channel('admin-vendor-changes')
+      .on('postgres_changes', 
+        { event: '*', schema: 'public', table: 'vendors' },
+        (payload) => {
+          console.log('Vendor change detected:', payload);
+          handleRealtimeVendorChange(payload);
+        }
+      )
+      .subscribe((status) => {
+        console.log('Realtime subscription status:', status);
+        setIsConnected(status === 'SUBSCRIBED');
+        
+        if (status === 'SUBSCRIBED') {
+          toast("Connected to realtime updates", { 
+            description: "You'll see live vendor changes", 
+            duration: 2000 
+          });
+        }
+      });
+
+    setRealtimeChannel(channel);
+  };
+
+  // Handle realtime vendor changes
+  const handleRealtimeVendorChange = (payload: any) => {
+    const { eventType, new: newRecord, old: oldRecord } = payload;
+    
+    switch (eventType) {
+      case 'INSERT':
+        setVendors(prev => [newRecord, ...prev]);
+        addNotification(`New vendor submitted: ${newRecord.business_name}`, 'info');
+        toast(`New Vendor Submitted`, { 
+          description: `${newRecord.business_name} is awaiting review` 
+        });
+        break;
+        
+      case 'UPDATE':
+        setVendors(prev => prev.map(v => v.id === newRecord.id ? newRecord : v));
+        if (oldRecord.verification_status !== newRecord.verification_status) {
+          const status = newRecord.verification_status === 'verified' ? 'approved' : 'rejected';
+          addNotification(`Vendor ${status}: ${newRecord.business_name}`, 'success');
+        }
+        break;
+        
+      case 'DELETE':
+        setVendors(prev => prev.filter(v => v.id !== oldRecord.id));
+        addNotification(`Vendor deleted: ${oldRecord.business_name}`, 'warning');
+        break;
+    }
+  };
+
+  // Add notification helper
+  const addNotification = (message: string, type: string) => {
+    const notification = {
+      id: Date.now().toString(),
+      message,
+      type,
+      timestamp: new Date()
+    };
+    setNotifications(prev => [notification, ...prev.slice(0, 9)]); // Keep last 10
+  };
+
+  // Cleanup realtime subscription
+  useEffect(() => {
+    return () => {
+      if (realtimeChannel) {
+        supabase.removeChannel(realtimeChannel);
+      }
+    };
+  }, [realtimeChannel]);
+
+  // Filter vendors for search
+  const filteredVendors = vendors.filter(vendor => 
+    searchTerm === "" || 
+    vendor.business_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    vendor.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    `${vendor.city}, ${vendor.state}`.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const getStatusBadge = (verificationStatus: string | null) => {
     switch (verificationStatus) {
@@ -275,13 +371,32 @@ export default function AdminPanel() {
     <div className="min-h-screen bg-white">
       <MainNav />
       <div className="container mx-auto py-8">
-        <div className="flex items-center gap-3 mb-6">
-          <Eye className="w-6 h-6" />
-          <h1 className="text-3xl font-bold">Admin Panel - Vendor Management</h1>
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <Eye className="w-6 h-6" />
+            <h1 className="text-3xl font-bold">Admin Panel - Vendor Management</h1>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              {isConnected ? (
+                <><Wifi className="w-4 h-4 text-green-500" /><span className="text-sm text-green-600">Connected</span></>
+              ) : (
+                <><WifiOff className="w-4 h-4 text-red-500" /><span className="text-sm text-red-600">Disconnected</span></>
+              )}
+            </div>
+            {notifications.length > 0 && (
+              <div className="relative">
+                <Bell className="w-5 h-5 text-blue-500" />
+                <Badge className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 text-xs bg-red-500 text-white">
+                  {notifications.length}
+                </Badge>
+              </div>
+            )}
+          </div>
         </div>
         
         <Tabs defaultValue="pending" className="w-full">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="pending">
               Pending ({pendingVendors.length})
             </TabsTrigger>
@@ -290,6 +405,10 @@ export default function AdminPanel() {
             </TabsTrigger>
             <TabsTrigger value="rejected">
               Rejected ({rejectedVendors.length})
+            </TabsTrigger>
+            <TabsTrigger value="testing">
+              <Monitor className="w-4 h-4 mr-1" />
+              Vendor Testing
             </TabsTrigger>
             <TabsTrigger value="dashboards">
               Vendor Dashboards
@@ -338,6 +457,165 @@ export default function AdminPanel() {
                   <VendorCard key={vendor.id} vendor={vendor} />
                 ))}
               </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="testing" className="mt-6">
+            <div className="mb-6">
+              <h2 className="text-xl font-semibold mb-2">Vendor Experience Testing</h2>
+              <p className="text-gray-600">Test any vendor's dashboard experience as if you were that vendor</p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+              {/* Vendor Selection Sidebar */}
+              <div className="lg:col-span-1">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Select Vendor</CardTitle>
+                    <div className="relative">
+                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                      <Input
+                        placeholder="Search vendors..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="pl-10"
+                      />
+                    </div>
+                  </CardHeader>
+                  <CardContent className="p-0">
+                    <div className="max-h-96 overflow-y-auto">
+                      {filteredVendors.slice(0, 50).map(vendor => (
+                        <div
+                          key={vendor.id}
+                          className={`p-3 cursor-pointer transition-colors border-b hover:bg-gray-50 ${
+                            selectedVendorId === vendor.id ? 'bg-blue-50 border-blue-200' : ''
+                          }`}
+                          onClick={() => setSelectedVendorId(vendor.id)}
+                        >
+                          <div className="flex justify-between items-start">
+                            <div className="flex-1">
+                              <p className="text-sm font-medium text-gray-900 truncate">
+                                {vendor.business_name}
+                              </p>
+                              <p className="text-xs text-gray-500 mt-1">
+                                {vendor.category}
+                              </p>
+                              <p className="text-xs text-gray-400">
+                                {vendor.city}, {vendor.state}
+                              </p>
+                            </div>
+                            <div className="ml-2">
+                              {getStatusBadge(vendor.verification_status)}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                      {filteredVendors.length === 0 && (
+                        <div className="p-4 text-center text-gray-500 text-sm">
+                          No vendors found
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {selectedVendorId && (
+                  <Card className="mt-4">
+                    <CardHeader>
+                      <CardTitle className="text-sm">Testing Options</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <Button
+                        size="sm"
+                        className="w-full"
+                        onClick={() => window.open(`/vendor/${selectedVendorId}`, '_blank')}
+                      >
+                        <User className="w-4 h-4 mr-2" />
+                        View Public Profile
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="w-full"
+                        onClick={() => window.open(`/vendor-dashboard?vendorId=${selectedVendorId}`, '_blank')}
+                      >
+                        <BarChart3 className="w-4 h-4 mr-2" />
+                        Open in New Tab
+                      </Button>
+                    </CardContent>
+                  </Card>
+                )}
+              </div>
+
+              {/* Embedded Dashboard */}
+              <div className="lg:col-span-3">
+                {selectedVendorId ? (
+                  <Card>
+                    <CardHeader>
+                      <div className="flex justify-between items-center">
+                        <CardTitle className="text-lg">
+                          Vendor Dashboard Preview - {vendors.find(v => v.id === selectedVendorId)?.business_name}
+                        </CardTitle>
+                        <Badge variant="outline" className="text-xs">
+                          Admin Testing Mode
+                        </Badge>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="p-0">
+                      <div className="border rounded-lg overflow-hidden" style={{ height: '600px' }}>
+                        <VendorDashboard vendorId={selectedVendorId} />
+                      </div>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  <Card>
+                    <CardContent className="flex items-center justify-center py-16">
+                      <div className="text-center">
+                        <Monitor className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                        <h3 className="text-lg font-medium text-gray-900 mb-2">
+                          Select a Vendor to Test
+                        </h3>
+                        <p className="text-gray-500 max-w-sm">
+                          Choose a vendor from the list on the left to see their dashboard experience
+                          and test all features as if you were that vendor.
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+              </div>
+            </div>
+
+            {/* Real-time Activity Feed */}
+            {notifications.length > 0 && (
+              <Card className="mt-6">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Activity className="w-5 h-5" />
+                    Recent Activity
+                    <Badge className="bg-blue-100 text-blue-800">Live</Badge>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {notifications.slice(0, 10).map(notification => (
+                      <div key={notification.id} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                        <div className={`w-2 h-2 rounded-full mt-2 ${
+                          notification.type === 'info' ? 'bg-blue-500' :
+                          notification.type === 'success' ? 'bg-green-500' :
+                          notification.type === 'warning' ? 'bg-yellow-500' : 'bg-gray-500'
+                        }`} />
+                        <div className="flex-1">
+                          <p className="text-sm text-gray-800">{notification.message}</p>
+                          <p className="text-xs text-gray-500 mt-1">
+                            {notification.timestamp.toLocaleTimeString()}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
             )}
           </TabsContent>
 
