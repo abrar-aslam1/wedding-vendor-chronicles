@@ -1,0 +1,71 @@
+name: Instagram Vendor Automation - Daily QC Report
+
+on:
+  schedule:
+    # Run daily at 6 AM UTC (1 AM EST, 2 AM EDT)
+    - cron: '0 6 * * *'
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  daily-qc-report:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Set up environment variables
+        env:
+          # Production Configuration
+          APP_URL: ${{ secrets.APP_URL }}
+          INGEST_SHARED_KEY: ${{ secrets.INGEST_SHARED_KEY }}
+          
+          # Supabase Configuration
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE: ${{ secrets.SUPABASE_SERVICE_ROLE }}
+          
+          # DataForSEO API Configuration
+          DATAFORSEO_LOGIN: ${{ secrets.DATAFORSEO_LOGIN }}
+          DATAFORSEO_PASSWORD: ${{ secrets.DATAFORSEO_PASSWORD }}
+          
+          # MCP Automation Configuration
+          MCP_APIFY_RPS: ${{ secrets.MCP_APIFY_RPS }}
+          MCP_APIFY_BURST: ${{ secrets.MCP_APIFY_BURST }}
+          MIN_FOLLOWERS: ${{ secrets.MIN_FOLLOWERS }}
+          MIN_POSTS: ${{ secrets.MIN_POSTS }}
+        run: |
+          echo "APP_URL=${APP_URL}" >> $GITHUB_ENV
+          echo "INGEST_SHARED_KEY=${INGEST_SHARED_KEY}" >> $GITHUB_ENV
+          echo "VITE_SUPABASE_URL=${VITE_SUPABASE_URL}" >> $GITHUB_ENV
+          echo "VITE_SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY}" >> $GITHUB_ENV
+          echo "SUPABASE_URL=${SUPABASE_URL}" >> $GITHUB_ENV
+          echo "SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}" >> $GITHUB_ENV
+          echo "SUPABASE_SERVICE_ROLE=${SUPABASE_SERVICE_ROLE}" >> $GITHUB_ENV
+          echo "DATAFORSEO_LOGIN=${DATAFORSEO_LOGIN}" >> $GITHUB_ENV
+          echo "DATAFORSEO_PASSWORD=${DATAFORSEO_PASSWORD}" >> $GITHUB_ENV
+          echo "MCP_APIFY_RPS=${MCP_APIFY_RPS}" >> $GITHUB_ENV
+          echo "MCP_APIFY_BURST=${MCP_APIFY_BURST}" >> $GITHUB_ENV
+          echo "MIN_FOLLOWERS=${MIN_FOLLOWERS}" >> $GITHUB_ENV
+          echo "MIN_POSTS=${MIN_POSTS}" >> $GITHUB_ENV
+          
+      - name: Run Daily QC Report
+        run: npm run play:qc:daily
+        
+      - name: Log completion
+        run: |
+          echo "✅ Daily QC Report completed at $(date)"
+          echo "Dashboard: ${{ secrets.APP_URL }}/admin/approvals"

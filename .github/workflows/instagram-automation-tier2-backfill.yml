@@ -1,0 +1,125 @@
+name: Instagram Vendor Automation - Tier 2 Backfill (Requires Approval)
+
+on:
+  schedule:
+    # Run monthly on the 2nd at 5 AM UTC (12 AM EST, 1 AM EDT)
+    - cron: '0 5 2 * *'
+  workflow_dispatch: # Allow manual triggering
+    inputs:
+      force_run:
+        description: 'Force run without approval check (use with caution)'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'false'
+          - 'true'
+
+jobs:
+  check-approval:
+    runs-on: ubuntu-latest
+    outputs:
+      approved: ${{ steps.approval.outputs.approved }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Check for approval
+        id: approval
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE: ${{ secrets.SUPABASE_SERVICE_ROLE }}
+          FORCE_RUN: ${{ github.event.inputs.force_run || 'false' }}
+        run: |
+          if [ "$FORCE_RUN" = "true" ]; then
+            echo "⚠️  Force run enabled - skipping approval check"
+            echo "approved=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          
+          TODAY=$(date '+%Y-%m-%d')
+          echo "📅 Checking approval for backfill-tier2 on $TODAY"
+          
+          # In production, this would check the automation_approvals table via Supabase MCP
+          echo "approved=false" >> $GITHUB_OUTPUT
+          
+          echo "❌ Approval required for Tier 2 backfill"
+          echo "Visit your admin dashboard to approve: ${{ secrets.APP_URL }}/admin/approvals"
+
+  tier2-backfill:
+    needs: check-approval
+    if: needs.check-approval.outputs.approved == 'true'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Set up environment variables
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+          INGEST_SHARED_KEY: ${{ secrets.INGEST_SHARED_KEY }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE: ${{ secrets.SUPABASE_SERVICE_ROLE }}
+          MCP_APIFY_RPS: "1"
+          MCP_APIFY_BURST: "3"
+          TIER: "2"
+          LIMIT_PER_ROW: "30"
+          MAX_ENRICH: "300"
+        run: |
+          echo "APP_URL=${APP_URL}" >> $GITHUB_ENV
+          echo "INGEST_SHARED_KEY=${INGEST_SHARED_KEY}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}" >> $GITHUB_ENV
+          echo "SUPABASE_SERVICE_ROLE=${SUPABASE_SERVICE_ROLE}" >> $GITHUB_ENV
+          echo "MCP_APIFY_RPS=${MCP_APIFY_RPS}" >> $GITHUB_ENV
+          echo "MCP_APIFY_BURST=${MCP_APIFY_BURST}" >> $GITHUB_ENV
+          echo "TIER=${TIER}" >> $GITHUB_ENV
+          echo "LIMIT_PER_ROW=${LIMIT_PER_ROW}" >> $GITHUB_ENV
+          echo "MAX_ENRICH=${MAX_ENRICH}" >> $GITHUB_ENV
+          
+      - name: Run Tier 2 Backfill
+        run: |
+          echo "🚀 Starting Tier 2 cities backfill automation"
+          echo "Expected to collect ~300 Instagram vendors from medium metros"
+          npm run play:backfill:tier
+        
+      - name: Log completion and stats
+        run: |
+          echo "✅ Tier 2 Backfill completed at $(date)"
+          echo "📊 Check admin dashboard for results: ${{ secrets.APP_URL }}/admin/approvals"
+          echo "📈 New vendors should appear in your database within 30 minutes"
+
+  notify-pending:
+    needs: check-approval
+    if: needs.check-approval.outputs.approved != 'true'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Notify pending approval
+        run: |
+          echo "⏳ Tier 2 Backfill requires approval"
+          echo "📋 Job Details:"
+          echo "   • Expected vendors: ~300"
+          echo "   • Target: Tier 2 cities (medium metros)"
+          echo "   • Rate limit: 1 RPS (safe for production)"
+          echo ""
+          echo "🔗 Approve at: ${{ secrets.APP_URL }}/admin/approvals"

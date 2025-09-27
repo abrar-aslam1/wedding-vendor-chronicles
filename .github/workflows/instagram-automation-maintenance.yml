@@ -1,0 +1,50 @@
+name: Instagram Vendor Automation - Weekly Maintenance
+
+on:
+  schedule:
+    # Run weekly on Sundays at 7 AM UTC (2 AM EST, 3 AM EDT)
+    - cron: '0 7 * * 0'
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  weekly-maintenance:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Set up environment variables
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+          INGEST_SHARED_KEY: ${{ secrets.INGEST_SHARED_KEY }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE: ${{ secrets.SUPABASE_SERVICE_ROLE }}
+          MCP_APIFY_RPS: "1"
+          MCP_APIFY_BURST: "3"
+          BATCH: "25"
+        run: |
+          echo "APP_URL=${APP_URL}" >> $GITHUB_ENV
+          echo "INGEST_SHARED_KEY=${INGEST_SHARED_KEY}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}" >> $GITHUB_ENV
+          echo "SUPABASE_SERVICE_ROLE=${SUPABASE_SERVICE_ROLE}" >> $GITHUB_ENV
+          echo "MCP_APIFY_RPS=${MCP_APIFY_RPS}" >> $GITHUB_ENV
+          echo "MCP_APIFY_BURST=${MCP_APIFY_BURST}" >> $GITHUB_ENV
+          echo "BATCH=${BATCH}" >> $GITHUB_ENV
+          
+      - name: Run Weekly Maintenance
+        run: npm run play:maintain:due
+        
+      - name: Log completion
+        run: |
+          echo "✅ Weekly Maintenance completed at $(date)"
+          echo "Refreshed due vendors and updated data"
