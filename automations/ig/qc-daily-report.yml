@@ -1,0 +1,301 @@
+name: "Instagram Vendor Quality Control - Daily Report"
+description: "Generate a daily quality control snapshot of Instagram vendor data"
+
+config:
+  min_followers: "${env.MIN_FOLLOWERS || '100'}"
+  min_posts: "${env.MIN_POSTS || '10'}"
+
+steps:
+  - name: "Generate daily QC report header"
+    action: log
+    params:
+      message: "📊 Instagram Vendor Quality Control Report - ${new Date().toISOString().split('T')[0]}"
+      level: info
+
+  - name: "Query vendor status summary"
+    action: supabase_query
+    params:
+      query: |
+        SELECT 
+          CASE 
+            WHEN follower_count >= $1 AND posts_count >= $2 AND has_contact_info = true THEN 'approved'
+            WHEN follower_count < $1 OR posts_count < $2 THEN 'quality_issues'
+            WHEN has_contact_info = false THEN 'missing_contact'
+            ELSE 'pending'
+          END as status,
+          COUNT(*) as count,
+          AVG(follower_count)::int as avg_followers,
+          PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY follower_count)::int as median_followers,
+          PERCENTILE_CONT(0.9) WITHIN GROUP (ORDER BY follower_count)::int as p90_followers,
+          AVG(posts_count)::int as avg_posts,
+          PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY posts_count)::int as median_posts,
+          PERCENTILE_CONT(0.9) WITHIN GROUP (ORDER BY posts_count)::int as p90_posts
+        FROM instagram_vendors 
+        GROUP BY 
+          CASE 
+            WHEN follower_count >= $1 AND posts_count >= $2 AND has_contact_info = true THEN 'approved'
+            WHEN follower_count < $1 OR posts_count < $2 THEN 'quality_issues'
+            WHEN has_contact_info = false THEN 'missing_contact'
+            ELSE 'pending'
+          END
+        ORDER BY count DESC
+      params:
+        - "${config.min_followers}"
+        - "${config.min_posts}"
+    register: status_summary
+
+  - name: "Display status summary table"
+    action: log
+    params:
+      message: |
+        
+        ╔══════════════════════════════════════════════════════════════════════╗
+        ║                           VENDOR STATUS SUMMARY                      ║
+        ╠══════════════════════════════════════════════════════════════════════╣
+        ║ Status           │ Count │ Avg Flwrs │ Med Flwrs │ P90 Flwrs │ Posts ║
+        ╠══════════════════════════════════════════════════════════════════════╣
+        ${vars.status_summary.map(row => 
+          `║ ${row.status.padEnd(16)} │ ${String(row.count).padStart(5)} │ ${String(row.avg_followers).padStart(9)} │ ${String(row.median_followers).padStart(9)} │ ${String(row.p90_followers).padStart(9)} │ ${String(row.avg_posts).padStart(5)} ║`
+        ).join('\n')}
+        ╚══════════════════════════════════════════════════════════════════════╝
+      level: info
+    when: "vars.status_summary.length > 0"
+
+  - name: "Query vendors with quality issues"
+    action: supabase_query
+    params:
+      query: |
+        SELECT 
+          instagram_handle,
+          business_name,
+          category,
+          city,
+          state,
+          follower_count,
+          posts_count,
+          has_contact_info,
+          website_url,
+          updated_at,
+          CASE 
+            WHEN follower_count < $1 THEN 'low_followers'
+            WHEN posts_count < $2 THEN 'low_posts'
+            WHEN has_contact_info = false THEN 'no_contact'
+            ELSE 'unknown'
+          END as issue_type
+        FROM instagram_vendors 
+        WHERE 
+          follower_count < $1 
+          OR posts_count < $2 
+          OR has_contact_info = false
+        ORDER BY 
+          follower_count DESC, 
+          posts_count DESC,
+          updated_at DESC
+        LIMIT 50
+      params:
+        - "${config.min_followers}"
+        - "${config.min_posts}"
+    register: quality_issues
+
+  - name: "Display quality issues header"
+    action: log
+    params:
+      message: |
+        
+        ╔══════════════════════════════════════════════════════════════════════╗
+        ║                    VENDORS NEEDING ATTENTION (Max 50)                ║
+        ║ Min Followers: ${config.min_followers} | Min Posts: ${config.min_posts}                                    ║
+        ╚══════════════════════════════════════════════════════════════════════╝
+      level: info
+    when: "vars.quality_issues.length > 0"
+
+  - name: "Display quality issues by category"
+    action: supabase_query
+    params:
+      query: |
+        SELECT 
+          category,
+          COUNT(*) as total_issues,
+          COUNT(*) FILTER (WHERE follower_count < $1) as low_followers,
+          COUNT(*) FILTER (WHERE posts_count < $2) as low_posts,
+          COUNT(*) FILTER (WHERE has_contact_info = false) as no_contact,
+          AVG(follower_count)::int as avg_followers,
+          AVG(posts_count)::int as avg_posts
+        FROM instagram_vendors 
+        WHERE 
+          follower_count < $1 
+          OR posts_count < $2 
+          OR has_contact_info = false
+        GROUP BY category
+        ORDER BY total_issues DESC
+        LIMIT 20
+      params:
+        - "${config.min_followers}"
+        - "${config.min_posts}"
+    register: issues_by_category
+
+  - name: "Display issues by category"
+    action: log
+    params:
+      message: |
+        
+        📈 Issues by Category:
+        ${vars.issues_by_category.map(row => 
+          `• ${row.category}: ${row.total_issues} total (${row.low_followers} low followers, ${row.low_posts} low posts, ${row.no_contact} no contact)`
+        ).join('\n')}
+      level: info
+    when: "vars.issues_by_category.length > 0"
+
+  - name: "Display individual vendor issues"
+    action: log
+    params:
+      message: |
+        
+        🔍 Top Vendors Needing Review:
+        ${vars.quality_issues.slice(0, 20).map((vendor, index) => 
+          `${(index + 1).toString().padStart(2)}. @${vendor.instagram_handle} (${vendor.business_name || 'N/A'})\n    📍 ${vendor.city}, ${vendor.state} | ${vendor.category}\n    👥 ${vendor.follower_count} followers | 📸 ${vendor.posts_count} posts | 📞 ${vendor.has_contact_info ? 'Has contact' : 'No contact'}\n    ⚠️  Issue: ${vendor.issue_type.replace('_', ' ')}`
+        ).join('\n\n')}
+      level: info
+    when: "vars.quality_issues.length > 0"
+
+  - name: "Query vendors missing avatars"
+    action: supabase_query
+    params:
+      query: |
+        SELECT 
+          COUNT(*) as missing_avatars,
+          COUNT(*) FILTER (WHERE updated_at < NOW() - INTERVAL '7 days') as stale_missing
+        FROM instagram_vendors 
+        WHERE profile_image_url IS NULL OR profile_image_url = ''
+    register: avatar_stats
+
+  - name: "Display avatar statistics"
+    action: log
+    params:
+      message: |
+        
+        🖼️  Avatar Status:
+        • ${vars.avatar_stats[0].missing_avatars} vendors missing profile images
+        • ${vars.avatar_stats[0].stale_missing} with missing avatars older than 7 days (candidates for recaching)
+      level: info
+    when: "vars.avatar_stats.length > 0"
+
+  - name: "Query refresh schedule status"
+    action: supabase_query
+    params:
+      query: |
+        SELECT 
+          COUNT(*) as total_vendors,
+          COUNT(*) FILTER (WHERE vr.next_check_at IS NOT NULL) as scheduled,
+          COUNT(*) FILTER (WHERE vr.next_check_at <= NOW()) as due_now,
+          COUNT(*) FILTER (WHERE vr.next_check_at > NOW() AND vr.next_check_at <= NOW() + INTERVAL '24 hours') as due_today,
+          COUNT(*) FILTER (WHERE vr.next_check_at > NOW() + INTERVAL '24 hours' AND vr.next_check_at <= NOW() + INTERVAL '7 days') as due_week
+        FROM instagram_vendors iv
+        LEFT JOIN vendor_refresh vr ON iv.id = vr.vendor_id AND vr.vendor_type = 'instagram'
+    register: refresh_stats
+
+  - name: "Display refresh schedule status"
+    action: log
+    params:
+      message: |
+        
+        🔄 Refresh Schedule Status:
+        • ${vars.refresh_stats[0].total_vendors} total vendors
+        • ${vars.refresh_stats[0].scheduled} with refresh schedules (${((vars.refresh_stats[0].scheduled / vars.refresh_stats[0].total_vendors) * 100).toFixed(1)}%)
+        • ${vars.refresh_stats[0].due_now} due for refresh now
+        • ${vars.refresh_stats[0].due_today} due today
+        • ${vars.refresh_stats[0].due_week} due this week
+      level: info
+    when: "vars.refresh_stats.length > 0"
+
+  - name: "Calculate quality score statistics"
+    action: supabase_query
+    params:
+      query: |
+        SELECT 
+          AVG(
+            CASE 
+              WHEN follower_count >= 1000 THEN 100
+              WHEN follower_count >= 500 THEN 80
+              WHEN follower_count >= 100 THEN 60
+              ELSE 30
+            END +
+            CASE 
+              WHEN posts_count >= 50 THEN 100
+              WHEN posts_count >= 20 THEN 80
+              WHEN posts_count >= 10 THEN 60
+              ELSE 30
+            END +
+            CASE WHEN has_contact_info THEN 100 ELSE 0 END +
+            CASE WHEN website_url IS NOT NULL AND website_url != '' THEN 50 ELSE 0 END
+          ) / 4.0 as avg_quality_score,
+          PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY 
+            (CASE 
+              WHEN follower_count >= 1000 THEN 100
+              WHEN follower_count >= 500 THEN 80
+              WHEN follower_count >= 100 THEN 60
+              ELSE 30
+            END +
+            CASE 
+              WHEN posts_count >= 50 THEN 100
+              WHEN posts_count >= 20 THEN 80
+              WHEN posts_count >= 10 THEN 60
+              ELSE 30
+            END +
+            CASE WHEN has_contact_info THEN 100 ELSE 0 END +
+            CASE WHEN website_url IS NOT NULL AND website_url != '' THEN 50 ELSE 0 END) / 4.0
+          ) as median_quality_score,
+          PERCENTILE_CONT(0.9) WITHIN GROUP (ORDER BY 
+            (CASE 
+              WHEN follower_count >= 1000 THEN 100
+              WHEN follower_count >= 500 THEN 80
+              WHEN follower_count >= 100 THEN 60
+              ELSE 30
+            END +
+            CASE 
+              WHEN posts_count >= 50 THEN 100
+              WHEN posts_count >= 20 THEN 80
+              WHEN posts_count >= 10 THEN 60
+              ELSE 30
+            END +
+            CASE WHEN has_contact_info THEN 100 ELSE 0 END +
+            CASE WHEN website_url IS NOT NULL AND website_url != '' THEN 50 ELSE 0 END) / 4.0
+          ) as p90_quality_score
+        FROM instagram_vendors
+    register: quality_scores
+
+  - name: "Display quality score summary"
+    action: log
+    params:
+      message: |
+        
+        📈 Quality Score Distribution:
+        • Average Quality Score: ${vars.quality_scores[0].avg_quality_score.toFixed(1)}/100
+        • Median Quality Score: ${vars.quality_scores[0].median_quality_score.toFixed(1)}/100  
+        • 90th Percentile: ${vars.quality_scores[0].p90_quality_score.toFixed(1)}/100
+      level: info
+    when: "vars.quality_scores.length > 0"
+
+  - name: "Generate summary recommendations"
+    action: log
+    params:
+      message: |
+        
+        ╔══════════════════════════════════════════════════════════════════════╗
+        ║                            RECOMMENDATIONS                           ║
+        ╚══════════════════════════════════════════════════════════════════════╝
+        ${vars.refresh_stats[0].due_now > 0 ? '🔄 Run maintenance refresh - ' + vars.refresh_stats[0].due_now + ' vendors due now' : '✅ Maintenance up to date'}
+        ${vars.avatar_stats[0].stale_missing > 10 ? '🖼️  Consider avatar recaching - ' + vars.avatar_stats[0].stale_missing + ' stale missing avatars' : '✅ Avatar status acceptable'}
+        ${vars.quality_issues.length > 100 ? '⚠️  High number of quality issues (' + vars.quality_issues.length + ') - review thresholds' : '✅ Quality issues within normal range'}
+        ${vars.quality_scores[0].avg_quality_score < 60 ? '📊 Average quality score low (' + vars.quality_scores[0].avg_quality_score.toFixed(1) + ') - consider data improvement' : '✅ Quality scores healthy'}
+        
+        Report generated: ${new Date().toISOString()}
+      level: info
+    track_result: true
+
+  - name: "Store QC report results"
+    action: log
+    params:
+      message: "QC Daily Report completed successfully"
+      level: info
+    track_result: true

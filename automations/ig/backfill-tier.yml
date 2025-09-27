@@ -1,0 +1,179 @@
+name: "Instagram Vendor Backfill by Tier"
+description: "Discover and enrich Instagram vendors for a specific tier from seed data"
+
+config:
+  tier: "${env.TIER}"
+  limit_per_row: "${env.LIMIT_PER_ROW || '40'}"
+  max_enrich: "${env.MAX_ENRICH || '400'}"
+  app_url: "${env.APP_URL || 'http://localhost:3000'}"
+  ingest_key: "${env.INGEST_SHARED_KEY}"
+  batch_size: 25
+
+steps:
+  - name: "Load seed data for tier"
+    action: read_csv
+    params:
+      file: "data/ig_mcp_apify_seed.csv"
+      filter:
+        TIER: "${env.TIER}"
+    register: tier_seeds
+    
+  - name: "Log tier processing start"
+    action: log
+    params:
+      message: "Processing ${vars.tier_seeds.length} seed entries for Tier ${env.TIER}"
+      level: info
+
+  - name: "Initialize discovered usernames collection"
+    action: set_collection
+    params:
+      name: discovered_usernames
+      data: []
+
+  - name: "Discover Instagram usernames for each seed"
+    action: mcp_tool
+    params:
+      server: "github.com/apify/actors-mcp-server"
+      tool: "search-actors"
+      arguments:
+        search: "${item.SEARCH_TERMS}"
+        limit: "${env.LIMIT_PER_ROW}"
+    register: search_results
+    # Note: In real implementation, this would loop over tier_seeds
+    # For now, simulating the discovery process
+
+  - name: "Extract usernames from search results"
+    action: transform_data
+    params:
+      source: "vars.search_results"
+      transforms:
+        ig_username: "${username}"
+        search_term: "${search_term}"
+        city: "${city}"
+        state: "${state}"
+        category: "${category}"
+    register: discovered_profiles
+
+  - name: "Add discovered profiles to collection"
+    action: set_collection
+    params:
+      name: discovered_usernames
+      data: "vars.discovered_profiles"
+
+  - name: "Deduplicate discovered usernames"
+    action: dedup_collection
+    params:
+      source: "collections.discovered_usernames"
+      key: "ig_username"
+    register: unique_usernames
+
+  - name: "Log discovery results"
+    action: log
+    params:
+      message: "Discovered ${vars.unique_usernames.length} unique Instagram profiles"
+      level: info
+
+  - name: "Limit enrichment to max specified"
+    action: transform_data
+    params:
+      source: "vars.unique_usernames"
+      transforms:
+        slice_limit: "${env.MAX_ENRICH}"
+    register: usernames_to_enrich
+
+  - name: "Log enrichment start"
+    action: log
+    params:
+      message: "Enriching ${vars.usernames_to_enrich.length} profiles (limited by MAX_ENRICH=${env.MAX_ENRICH})"
+      level: info
+
+  - name: "Enrich profile details via Apify"
+    action: mcp_tool
+    params:
+      server: "github.com/apify/actors-mcp-server"
+      tool: "call-actor"
+      arguments:
+        actor: "apify/instagram-scraper"
+        step: "call"
+        input:
+          usernames: "vars.usernames_to_enrich"
+          resultsType: "details"
+    register: enriched_profiles
+
+  - name: "Normalize vendor data"
+    action: transform_data
+    params:
+      source: "vars.enriched_profiles"
+      transforms:
+        source: "apify_profile"
+        ig_username: "${username.toLowerCase()}"
+        ig_user_id: "${id}"
+        display_name: "${full_name || username}"
+        bio: "${biography}"
+        website_url: "${external_url}"
+        email: 
+          type: "map"
+          source: "contact_email"
+          mapping: {}
+          default: null
+        phone:
+          type: "map" 
+          source: "contact_phone"
+          mapping: {}
+          default: null
+        category: "${category}"
+        city: "${city}"
+        state: "${state}"
+        country: "US"
+        followers: "${follower_count}"
+        posts_count: "${media_count}"
+        profile_pic_url: "${profile_pic_url}"
+        external_urls: "${external_urls}"
+        tags: "${hashtags}"
+        has_contact: "${Boolean(contact_email || contact_phone || external_url)}"
+        has_location: "${Boolean(city && state)}"
+    register: normalized_vendors
+
+  - name: "Log normalization results"
+    action: log
+    params:
+      message: "Normalized ${vars.normalized_vendors.length} vendor profiles"
+      level: info
+
+  - name: "Buffer normalized vendors for batch processing"
+    action: buffer_collection
+    params:
+      buffer_name: "vendor_batch"
+      data: "vars.normalized_vendors"
+      batch_size: "${config.batch_size}"
+    register: buffer_status
+
+  - name: "Flush all vendor batches to ingest API"
+    action: flush_buffer
+    params:
+      buffer_name: "vendor_batch"
+      batch_size: "${config.batch_size}"
+      all: true
+    register: flushed_batches
+
+  - name: "Send each batch to ingest API"
+    action: http_post
+    params:
+      url: "${config.app_url}/functions/v1/ingest-instagram"
+      data:
+        vendors: "${batch}"
+      headers:
+        X-Ingest-Key: "${config.ingest_key}"
+      throttle:
+        key: "ingest_api"
+        rps: 2
+        burst: 5
+    # Note: This would loop over each batch in flushed_batches.batches
+    register: ingest_responses
+
+  - name: "Log final results"
+    action: log
+    params:
+      message: "Tier ${env.TIER} backfill completed. Processed ${vars.flushed_batches.flushed_count} vendors in ${vars.flushed_batches.batches.length} batches"
+      level: info
+    track_result: true

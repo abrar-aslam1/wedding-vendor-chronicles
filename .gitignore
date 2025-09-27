@@ -26,6 +26,14 @@ dist-ssr
 ~/Documents/Cline/MCP/
 ../../Documents/Cline/MCP/
 
+# Security and secrets
+setup-github-secrets.sh
+service_role
+*.key
+*.pem
+secrets/
+.secrets
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

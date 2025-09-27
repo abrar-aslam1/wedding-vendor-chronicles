@@ -19,7 +19,11 @@
     "check-seo-health": "npx tsx scripts/check-seo-health.ts",
     "generate-seo-sitemaps": "node scripts/generate-seo-sitemaps.js",
     "collect-vendors": "node scripts/collect-all-vendors.js",
-    "collect-vendors-interactive": "./scripts/run-vendor-collection.sh"
+    "collect-vendors-interactive": "./scripts/run-vendor-collection.sh",
+    "play:backfill:tier": "node automations/lib/yaml-runner.js automations/ig/backfill-tier.yml",
+    "play:backfill:city": "node automations/lib/yaml-runner.js automations/ig/backfill-city.yml",
+    "play:maintain:due": "node automations/lib/yaml-runner.js automations/ig/maintenance-due.yml",
+    "play:qc:daily": "node automations/lib/yaml-runner.js automations/ig/qc-daily-report.yml"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -60,10 +64,11 @@
     "cmdk": "^1.0.0",
     "csv-parser": "^3.2.0",
     "date-fns": "^3.6.0",
-    "dotenv": "^16.5.0",
+    "dotenv": "^16.6.1",
     "embla-carousel-react": "^8.3.0",
     "html2canvas": "^1.4.1",
     "input-otp": "^1.2.4",
+    "js-yaml": "^4.1.0",
     "jspdf": "^3.0.1",
     "lucide-react": "^0.462.0",
     "next-themes": "^0.3.0",

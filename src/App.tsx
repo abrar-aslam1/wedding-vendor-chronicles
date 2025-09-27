@@ -31,6 +31,7 @@ const TestAuth = lazy(() => import("@/pages/TestAuth"));
 const FreeTimelineGenerator = lazy(() => import("@/pages/FreeTimelineGenerator"));
 const WeddingHashtagGenerator = lazy(() => import("@/pages/WeddingHashtagGenerator").then(module => ({ default: module.WeddingHashtagGenerator })));
 const AdminPanel = lazy(() => import("@/pages/AdminPanel"));
+const AdminApprovalDashboard = lazy(() => import("@/pages/AdminApprovalDashboard"));
 const TestSubscriptions = lazy(() => import("@/pages/TestSubscriptions"));
 const VendorDashboardPage = lazy(() => import("@/pages/VendorDashboardPage"));
 
@@ -129,6 +130,11 @@ function App() {
           <Route path="/admin" element={
             <ProtectedRoute>
               <AdminPanel />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/approvals" element={
+            <ProtectedRoute>
+              <AdminApprovalDashboard />
             </ProtectedRoute>
           } />
           <Route path="/test-subscriptions" element={<TestSubscriptions />} />

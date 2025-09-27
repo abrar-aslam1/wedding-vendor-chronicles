@@ -1,0 +1,255 @@
+name: "Instagram Vendor Backfill by City"
+description: "Discover and enrich Instagram vendors for specific city/state/category combination"
+
+config:
+  city: "${env.CITY}"
+  state: "${env.STATE}"
+  category: "${env.CATEGORY}"
+  limit_per_row: "${env.LIMIT_PER_ROW || '40'}"
+  max_enrich: "${env.MAX_ENRICH || '400'}"
+  app_url: "${env.APP_URL || 'http://localhost:3000'}"
+  ingest_key: "${env.INGEST_SHARED_KEY}"
+  batch_size: 25
+
+steps:
+  - name: "Validate required parameters"
+    action: log
+    params:
+      message: "Starting backfill for ${env.CITY}, ${env.STATE} - ${env.CATEGORY}"
+      level: info
+    when: "env.CITY && env.STATE && env.CATEGORY"
+
+  - name: "Load seed data for city/state/category"
+    action: read_csv
+    params:
+      file: "data/ig_mcp_apify_seed.csv"
+      filter:
+        CITY: "${env.CITY}"
+        STATE: "${env.STATE}"
+        CATEGORY: "${env.CATEGORY}"
+    register: city_seeds
+    
+  - name: "Log city processing start"
+    action: log
+    params:
+      message: "Found ${vars.city_seeds.length} seed entries for ${env.CITY}, ${env.STATE} in category ${env.CATEGORY}"
+      level: info
+
+  - name: "Skip if no seeds found"
+    action: log
+    params:
+      message: "No seed data found for ${env.CITY}, ${env.STATE} - ${env.CATEGORY}. Exiting."
+      level: warn
+    when: "vars.city_seeds.length === 0"
+
+  - name: "Initialize discovered usernames collection"
+    action: set_collection
+    params:
+      name: discovered_usernames
+      data: []
+    when: "vars.city_seeds.length > 0"
+
+  - name: "Discover Instagram usernames using search terms"
+    action: mcp_tool
+    params:
+      server: "github.com/apify/actors-mcp-server"
+      tool: "search-actors"
+      arguments:
+        search: "${item.SEARCH_TERMS}"
+        limit: "${env.LIMIT_PER_ROW}"
+    register: search_results
+    when: "vars.city_seeds.length > 0"
+
+  - name: "Discover Instagram usernames using location hashtags"
+    action: mcp_tool
+    params:
+      server: "github.com/apify/actors-mcp-server"
+      tool: "search-actors"
+      arguments:
+        search: "${item.LOCATION_HASHTAGS}"
+        limit: "${env.LIMIT_PER_ROW}"
+    register: location_search_results
+    when: "vars.city_seeds.length > 0"
+
+  - name: "Extract usernames from search results"
+    action: transform_data
+    params:
+      source: "vars.search_results"
+      transforms:
+        ig_username: "${username}"
+        search_term: "${search_term}"
+        city: "${env.CITY}"
+        state: "${env.STATE}"
+        category: "${env.CATEGORY}"
+        source_type: "search_terms"
+    register: discovered_profiles
+    when: "vars.search_results"
+
+  - name: "Extract usernames from location search results"
+    action: transform_data
+    params:
+      source: "vars.location_search_results"
+      transforms:
+        ig_username: "${username}"
+        search_term: "${search_term}"
+        city: "${env.CITY}"
+        state: "${env.STATE}"
+        category: "${env.CATEGORY}"
+        source_type: "location_hashtags"
+    register: location_discovered_profiles
+    when: "vars.location_search_results"
+
+  - name: "Combine all discovered profiles"
+    action: set_collection
+    params:
+      name: all_discovered
+      data: 
+        - "vars.discovered_profiles"
+        - "vars.location_discovered_profiles"
+    when: "vars.discovered_profiles || vars.location_discovered_profiles"
+
+  - name: "Flatten combined profiles"
+    action: transform_data
+    params:
+      source: "collections.all_discovered"
+      transforms:
+        flatten: true
+    register: flattened_profiles
+    when: "collections.all_discovered"
+
+  - name: "Deduplicate discovered usernames"
+    action: dedup_collection
+    params:
+      source: "vars.flattened_profiles"
+      key: "ig_username"
+    register: unique_usernames
+    when: "vars.flattened_profiles"
+
+  - name: "Log discovery results"
+    action: log
+    params:
+      message: "Discovered ${vars.unique_usernames.length} unique Instagram profiles for ${env.CITY}, ${env.STATE}"
+      level: info
+    when: "vars.unique_usernames"
+
+  - name: "Limit enrichment to max specified"
+    action: transform_data
+    params:
+      source: "vars.unique_usernames"
+      transforms:
+        slice_limit: "${env.MAX_ENRICH}"
+    register: usernames_to_enrich
+    when: "vars.unique_usernames"
+
+  - name: "Log enrichment start"
+    action: log
+    params:
+      message: "Enriching ${vars.usernames_to_enrich.length} profiles (limited by MAX_ENRICH=${env.MAX_ENRICH})"
+      level: info
+    when: "vars.usernames_to_enrich"
+
+  - name: "Enrich profile details via Apify"
+    action: mcp_tool
+    params:
+      server: "github.com/apify/actors-mcp-server"
+      tool: "call-actor"
+      arguments:
+        actor: "apify/instagram-scraper"
+        step: "call"
+        input:
+          usernames: "vars.usernames_to_enrich"
+          resultsType: "details"
+          location: "${env.CITY}, ${env.STATE}"
+    register: enriched_profiles
+    when: "vars.usernames_to_enrich"
+
+  - name: "Normalize vendor data for city"
+    action: transform_data
+    params:
+      source: "vars.enriched_profiles"
+      transforms:
+        source: "apify_profile"
+        ig_username: "${username.toLowerCase()}"
+        ig_user_id: "${id}"
+        display_name: "${full_name || username}"
+        bio: "${biography}"
+        website_url: "${external_url}"
+        email: 
+          type: "map"
+          source: "contact_email"
+          mapping: {}
+          default: null
+        phone:
+          type: "map" 
+          source: "contact_phone"
+          mapping: {}
+          default: null
+        category: "${env.CATEGORY}"
+        city: "${env.CITY}"
+        state: "${env.STATE}"
+        country: "US"
+        followers: "${follower_count}"
+        posts_count: "${media_count}"
+        profile_pic_url: "${profile_pic_url}"
+        external_urls: "${external_urls}"
+        tags: "${hashtags}"
+        has_contact: "${Boolean(contact_email || contact_phone || external_url)}"
+        has_location: true
+    register: normalized_vendors
+    when: "vars.enriched_profiles"
+
+  - name: "Log normalization results"
+    action: log
+    params:
+      message: "Normalized ${vars.normalized_vendors.length} vendor profiles for ${env.CITY}, ${env.STATE}"
+      level: info
+    when: "vars.normalized_vendors"
+
+  - name: "Buffer normalized vendors for batch processing"
+    action: buffer_collection
+    params:
+      buffer_name: "vendor_batch"
+      data: "vars.normalized_vendors"
+      batch_size: "${config.batch_size}"
+    register: buffer_status
+    when: "vars.normalized_vendors"
+
+  - name: "Flush all vendor batches to ingest API"
+    action: flush_buffer
+    params:
+      buffer_name: "vendor_batch"
+      batch_size: "${config.batch_size}"
+      all: true
+    register: flushed_batches
+    when: "vars.buffer_status"
+
+  - name: "Send each batch to ingest API"
+    action: http_post
+    params:
+      url: "${config.app_url}/functions/v1/ingest-instagram"
+      data:
+        vendors: "${batch}"
+      headers:
+        X-Ingest-Key: "${config.ingest_key}"
+      throttle:
+        key: "ingest_api"
+        rps: 2
+        burst: 5
+    register: ingest_responses
+    when: "vars.flushed_batches"
+
+  - name: "Log final results"
+    action: log
+    params:
+      message: "${env.CITY}, ${env.STATE} - ${env.CATEGORY} backfill completed. Processed ${vars.flushed_batches.flushed_count} vendors in ${vars.flushed_batches.batches.length} batches"
+      level: info
+    track_result: true
+    when: "vars.flushed_batches"
+
+  - name: "Log no results case"
+    action: log
+    params:
+      message: "No vendors processed for ${env.CITY}, ${env.STATE} - ${env.CATEGORY}"
+      level: warn
+    track_result: true
+    when: "!vars.flushed_batches"
