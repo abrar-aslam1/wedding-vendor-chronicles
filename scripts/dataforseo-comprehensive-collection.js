@@ -221,10 +221,8 @@ async function collectVendorsForSearch(category, searchTerms, city, locationInfo
               `${city}, ${locationInfo.state}`
             );
             
-            // Basic quality filtering
-            if (businessData.business_name && 
-                (businessData.phone || businessData.website) &&
-                businessData.rating >= 3.0) {
+            // Relaxed quality filtering - just need business name
+            if (businessData.business_name && businessData.business_name.length > 3) {
               allVendors.push(businessData);
             }
           }
