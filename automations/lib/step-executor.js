@@ -257,16 +257,25 @@ class StepExecutor {
     const supabaseMcpServer = 'github.com/supabase-community/supabase-mcp'
     
     try {
-      // Resolve query parameters
+      // Resolve query parameters and substitute them in the query
       const resolvedParams = queryParams.map(param => this.resolveValue(param, context))
       
-      // Use the execute_sql tool from Supabase MCP
+      // Replace $1, $2, etc. with actual values
+      let finalQuery = query
+      resolvedParams.forEach((param, index) => {
+        const placeholder = `$${index + 1}`
+        finalQuery = finalQuery.replace(new RegExp(`\\${placeholder}`, 'g'), param)
+      })
+      
+      console.log(`🗄️  Executing Supabase query: ${finalQuery.substring(0, 100)}...`)
+      
+      // Use the execute_sql tool from Supabase MCP with project ID
       const result = await this.mcpTool({
         server: supabaseMcpServer,
         tool: 'execute_sql',
         arguments: {
-          query: query,
-          // Add any resolved parameters if needed
+          project_id: 'wpbdveyuuudhmwflrmqw',
+          query: finalQuery
         }
       }, context)
 

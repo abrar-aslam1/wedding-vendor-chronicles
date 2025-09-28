@@ -117,7 +117,7 @@ serve(async (req) => {
         // First, let's see what categories exist in the Instagram table
         try {
           const { data: categoryTest, error: categoryError } = await supabase
-            .from('vendors_instagram')
+            .from('instagram_vendors')
             .select('category')
             .limit(10);
           
@@ -146,7 +146,7 @@ serve(async (req) => {
         
         try {
           let query = supabase
-            .from('vendors_instagram')
+            .from('instagram_vendors')
             .select('*');
           
           // Enhanced category filtering for Instagram vendors
@@ -177,9 +177,9 @@ serve(async (req) => {
             console.log(`[${requestId}] No exact category match, trying fallback search with bio/description`);
             
             let fallbackQuery = supabase
-              .from('vendors_instagram')
+              .from('instagram_vendors')
               .select('*')
-              .or(`bio.ilike.%${keyword}%,display_name.ilike.%${keyword}%,category.ilike.%${keyword}%`);
+              .or(`bio.ilike.%${keyword}%,business_name.ilike.%${keyword}%,category.ilike.%${keyword}%`);
             
             if (city && state) {
               fallbackQuery = fallbackQuery
@@ -282,19 +282,19 @@ serve(async (req) => {
     const allDatabaseResults = [
       // Transform Instagram vendors
       ...instagramResults.map(vendor => ({
-        title: vendor.display_name || vendor.ig_username,
+        title: vendor.business_name || vendor.instagram_handle,
         description: vendor.bio || `Wedding vendor on Instagram`,
         rating: undefined,
         phone: vendor.phone,
         address: `${vendor.city}, ${vendor.state}`,
-        url: vendor.profile_url,
+        url: vendor.instagram_url || `https://instagram.com/${vendor.instagram_handle}`,
         place_id: `instagram_${vendor.id}`,
         main_image: vendor.profile_image_url,
         images: vendor.profile_image_url ? [vendor.profile_image_url] : [],
         city: vendor.city,
         state: vendor.state,
-        instagram_handle: vendor.ig_username,
-        follower_count: vendor.followers_count,
+        instagram_handle: vendor.instagram_handle,
+        follower_count: vendor.follower_count,
         vendor_source: 'instagram' as const
       })),
 

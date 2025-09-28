@@ -18,24 +18,24 @@ steps:
       query: |
         SELECT 
           CASE 
-            WHEN follower_count >= $1 AND posts_count >= $2 AND has_contact_info = true THEN 'approved'
-            WHEN follower_count < $1 OR posts_count < $2 THEN 'quality_issues'
-            WHEN has_contact_info = false THEN 'missing_contact'
+            WHEN follower_count >= $1 AND post_count >= $2 AND (email IS NOT NULL OR phone IS NOT NULL) THEN 'approved'
+            WHEN follower_count < $1 OR post_count < $2 THEN 'quality_issues'
+            WHEN email IS NULL AND phone IS NULL THEN 'missing_contact'
             ELSE 'pending'
           END as status,
           COUNT(*) as count,
           AVG(follower_count)::int as avg_followers,
           PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY follower_count)::int as median_followers,
           PERCENTILE_CONT(0.9) WITHIN GROUP (ORDER BY follower_count)::int as p90_followers,
-          AVG(posts_count)::int as avg_posts,
-          PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY posts_count)::int as median_posts,
-          PERCENTILE_CONT(0.9) WITHIN GROUP (ORDER BY posts_count)::int as p90_posts
+          AVG(post_count)::int as avg_posts,
+          PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY post_count)::int as median_posts,
+          PERCENTILE_CONT(0.9) WITHIN GROUP (ORDER BY post_count)::int as p90_posts
         FROM instagram_vendors 
         GROUP BY 
           CASE 
-            WHEN follower_count >= $1 AND posts_count >= $2 AND has_contact_info = true THEN 'approved'
-            WHEN follower_count < $1 OR posts_count < $2 THEN 'quality_issues'
-            WHEN has_contact_info = false THEN 'missing_contact'
+            WHEN follower_count >= $1 AND post_count >= $2 AND (email IS NOT NULL OR phone IS NOT NULL) THEN 'approved'
+            WHEN follower_count < $1 OR post_count < $2 THEN 'quality_issues'
+            WHEN email IS NULL AND phone IS NULL THEN 'missing_contact'
             ELSE 'pending'
           END
         ORDER BY count DESC
@@ -72,24 +72,24 @@ steps:
           city,
           state,
           follower_count,
-          posts_count,
-          has_contact_info,
+          post_count,
+          (email IS NOT NULL OR phone IS NOT NULL) as has_contact_info,
           website_url,
           updated_at,
           CASE 
             WHEN follower_count < $1 THEN 'low_followers'
-            WHEN posts_count < $2 THEN 'low_posts'
-            WHEN has_contact_info = false THEN 'no_contact'
+            WHEN post_count < $2 THEN 'low_posts'
+            WHEN email IS NULL AND phone IS NULL THEN 'no_contact'
             ELSE 'unknown'
           END as issue_type
         FROM instagram_vendors 
         WHERE 
           follower_count < $1 
-          OR posts_count < $2 
-          OR has_contact_info = false
+          OR post_count < $2 
+          OR (email IS NULL AND phone IS NULL)
         ORDER BY 
           follower_count DESC, 
-          posts_count DESC,
+          post_count DESC,
           updated_at DESC
         LIMIT 50
       params:
@@ -117,15 +117,15 @@ steps:
           category,
           COUNT(*) as total_issues,
           COUNT(*) FILTER (WHERE follower_count < $1) as low_followers,
-          COUNT(*) FILTER (WHERE posts_count < $2) as low_posts,
-          COUNT(*) FILTER (WHERE has_contact_info = false) as no_contact,
+          COUNT(*) FILTER (WHERE post_count < $2) as low_posts,
+          COUNT(*) FILTER (WHERE email IS NULL AND phone IS NULL) as no_contact,
           AVG(follower_count)::int as avg_followers,
-          AVG(posts_count)::int as avg_posts
+          AVG(post_count)::int as avg_posts
         FROM instagram_vendors 
         WHERE 
           follower_count < $1 
-          OR posts_count < $2 
-          OR has_contact_info = false
+          OR post_count < $2 
+          OR (email IS NULL AND phone IS NULL)
         GROUP BY category
         ORDER BY total_issues DESC
         LIMIT 20
@@ -153,7 +153,7 @@ steps:
         
         🔍 Top Vendors Needing Review:
         ${vars.quality_issues.slice(0, 20).map((vendor, index) => 
-          `${(index + 1).toString().padStart(2)}. @${vendor.instagram_handle} (${vendor.business_name || 'N/A'})\n    📍 ${vendor.city}, ${vendor.state} | ${vendor.category}\n    👥 ${vendor.follower_count} followers | 📸 ${vendor.posts_count} posts | 📞 ${vendor.has_contact_info ? 'Has contact' : 'No contact'}\n    ⚠️  Issue: ${vendor.issue_type.replace('_', ' ')}`
+          `${(index + 1).toString().padStart(2)}. @${vendor.instagram_handle} (${vendor.business_name || 'N/A'})\n    📍 ${vendor.city}, ${vendor.state} | ${vendor.category}\n    👥 ${vendor.follower_count} followers | 📸 ${vendor.post_count} posts | 📞 ${vendor.has_contact_info ? 'Has contact' : 'No contact'}\n    ⚠️  Issue: ${vendor.issue_type.replace('_', ' ')}`
         ).join('\n\n')}
       level: info
     when: "vars.quality_issues.length > 0"
@@ -221,12 +221,12 @@ steps:
               ELSE 30
             END +
             CASE 
-              WHEN posts_count >= 50 THEN 100
-              WHEN posts_count >= 20 THEN 80
-              WHEN posts_count >= 10 THEN 60
+              WHEN post_count >= 50 THEN 100
+              WHEN post_count >= 20 THEN 80
+              WHEN post_count >= 10 THEN 60
               ELSE 30
             END +
-            CASE WHEN has_contact_info THEN 100 ELSE 0 END +
+            CASE WHEN (email IS NOT NULL OR phone IS NOT NULL) THEN 100 ELSE 0 END +
             CASE WHEN website_url IS NOT NULL AND website_url != '' THEN 50 ELSE 0 END
           ) / 4.0 as avg_quality_score,
           PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY 
@@ -237,12 +237,12 @@ steps:
               ELSE 30
             END +
             CASE 
-              WHEN posts_count >= 50 THEN 100
-              WHEN posts_count >= 20 THEN 80
-              WHEN posts_count >= 10 THEN 60
+              WHEN post_count >= 50 THEN 100
+              WHEN post_count >= 20 THEN 80
+              WHEN post_count >= 10 THEN 60
               ELSE 30
             END +
-            CASE WHEN has_contact_info THEN 100 ELSE 0 END +
+            CASE WHEN (email IS NOT NULL OR phone IS NOT NULL) THEN 100 ELSE 0 END +
             CASE WHEN website_url IS NOT NULL AND website_url != '' THEN 50 ELSE 0 END) / 4.0
           ) as median_quality_score,
           PERCENTILE_CONT(0.9) WITHIN GROUP (ORDER BY 
@@ -253,12 +253,12 @@ steps:
               ELSE 30
             END +
             CASE 
-              WHEN posts_count >= 50 THEN 100
-              WHEN posts_count >= 20 THEN 80
-              WHEN posts_count >= 10 THEN 60
+              WHEN post_count >= 50 THEN 100
+              WHEN post_count >= 20 THEN 80
+              WHEN post_count >= 10 THEN 60
               ELSE 30
             END +
-            CASE WHEN has_contact_info THEN 100 ELSE 0 END +
+            CASE WHEN (email IS NOT NULL OR phone IS NOT NULL) THEN 100 ELSE 0 END +
             CASE WHEN website_url IS NOT NULL AND website_url != '' THEN 50 ELSE 0 END) / 4.0
           ) as p90_quality_score
         FROM instagram_vendors
