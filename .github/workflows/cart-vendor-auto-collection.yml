@@ -1,0 +1,62 @@
+name: Automated Cart Vendor Collection
+
+on:
+  schedule:
+    # Run every hour at the top of the hour
+    - cron: '0 * * * *'
+  workflow_dispatch:
+    # Allow manual triggering
+
+jobs:
+  collect-cart-vendors:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        # Split collection into manageable batches
+        batch: [1, 2, 3, 4, 5]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Configure Collection Batch
+        id: config
+        run: |
+          case ${{ matrix.batch }} in
+            1) echo "category=coffee-carts" >> $GITHUB_OUTPUT
+               echo "cities=[\"Austin\", \"Nashville\", \"Denver\", \"Portland\"]" >> $GITHUB_OUTPUT ;;
+            2) echo "category=matcha-carts" >> $GITHUB_OUTPUT
+               echo "cities=[\"Phoenix\", \"San Diego\", \"Tampa\", \"Orlando\"]" >> $GITHUB_OUTPUT ;;
+            3) echo "category=cocktail-carts" >> $GITHUB_OUTPUT
+               echo "cities=[\"Charleston\", \"Savannah\", \"Richmond\", \"Louisville\"]" >> $GITHUB_OUTPUT ;;
+            4) echo "category=dessert-carts" >> $GITHUB_OUTPUT
+               echo "cities=[\"Memphis\", \"Birmingham\", \"Jacksonville\", \"Virginia Beach\"]" >> $GITHUB_OUTPUT ;;
+            5) echo "category=flower-carts" >> $GITHUB_OUTPUT
+               echo "cities=[\"Salt Lake City\", \"Colorado Springs\", \"Albuquerque\", \"Tucson\"]" >> $GITHUB_OUTPUT ;;
+          esac
+
+      - name: Run Cart Vendor Collection
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          DATAFORSEO_LOGIN: ${{ secrets.DATAFORSEO_LOGIN }}
+          DATAFORSEO_PASSWORD: ${{ secrets.DATAFORSEO_PASSWORD }}
+          COLLECTION_BATCH: '{"category":"${{ steps.config.outputs.category }}","cities":${{ steps.config.outputs.cities }}}'
+        run: |
+          echo "🚀 Running batch ${{ matrix.batch }}: ${{ steps.config.outputs.category }}"
+          echo "Cities: ${{ steps.config.outputs.cities }}"
+          node scripts/automated-multi-category-collection.js
+
+      - name: Log Results
+        if: always()
+        run: echo "✅ Batch ${{ matrix.batch }} completed"
