@@ -80,7 +80,7 @@ jobs:
           # Select cities from seed data based on tier and category
           node -e "
             const fs = require('fs');
-            const csv = fs.readFileSync('data/ig_mcp_apify_seed.csv', 'utf8');
+            const csv = fs.readFileSync('data/ig_comprehensive_seed.csv', 'utf8');
             const lines = csv.trim().split('\n').slice(1); // Skip header
             
             const cities = lines
