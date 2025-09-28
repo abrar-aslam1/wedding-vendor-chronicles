@@ -1,0 +1,54 @@
+name: Autonomous System Health Check
+
+on:
+  schedule:
+    # Run health check every 6 hours
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  system-health-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Run system health check
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE: ${{ secrets.SUPABASE_SERVICE_ROLE }}
+        run: |
+          echo "🏥 Running autonomous system health check..."
+          node scripts/autonomous-health-checker.cjs
+          
+      - name: Log system status
+        run: |
+          echo "✅ Autonomous system health check completed"
+          echo "📊 Check output above for detailed metrics"
+          echo "🔄 Next health check in 6 hours"
+
+  weekly-summary:
+    runs-on: ubuntu-latest
+    if: github.event.schedule == '0 0 * * 0' # Sunday at midnight
+    
+    steps:
+      - name: Generate weekly summary
+        run: |
+          echo "📅 WEEKLY AUTONOMOUS SYSTEM SUMMARY"
+          echo "🎯 Expected Performance This Week:"
+          echo "   • ~35,000-56,000 vendors discovered"
+          echo "   • ~721 cities processed"
+          echo "   • ~1,512 automated collection runs"
+          echo "   • Zero manual intervention required"
+          echo ""
+          echo "🔍 Monitor detailed metrics in workflow logs"
