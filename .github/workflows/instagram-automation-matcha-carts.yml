@@ -1,0 +1,192 @@
+name: Instagram Automation - Matcha Carts (Hourly)
+
+on:
+  schedule:
+    # Run every hour at minute 20 (e.g., 1:20, 2:20, 3:20)
+    - cron: '20 * * * *'
+  workflow_dispatch: # Allow manual triggering
+    inputs:
+      city:
+        description: 'Specific city to process (optional - leave empty for smart selection)'
+        required: false
+        type: string
+      state:
+        description: 'State for the specific city (required if city specified)'
+        required: false
+        type: string
+      force_tier:
+        description: 'Force specific tier (1=major metros, 2=medium cities, 3=smaller cities)'
+        required: false
+        type: choice
+        options:
+          - 'auto'
+          - '1'
+          - '2'
+          - '3'
+
+jobs:
+  smart-city-selection:
+    runs-on: ubuntu-latest
+    outputs:
+      city: ${{ steps.selector.outputs.city }}
+      state: ${{ steps.selector.outputs.state }}
+      tier: ${{ steps.selector.outputs.tier }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Smart city selection
+        id: selector
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE: ${{ secrets.SUPABASE_SERVICE_ROLE }}
+          CATEGORY: "matcha-carts"
+          MANUAL_CITY: ${{ github.event.inputs.city || '' }}
+          MANUAL_STATE: ${{ github.event.inputs.state || '' }}
+          FORCE_TIER: ${{ github.event.inputs.force_tier || '' }}
+        run: |
+          # Use manual inputs if provided
+          if [ -n "$MANUAL_CITY" ] && [ -n "$MANUAL_STATE" ]; then
+            echo "🎯 Using manual city selection: $MANUAL_CITY, $MANUAL_STATE"
+            echo "city=$MANUAL_CITY" >> $GITHUB_OUTPUT
+            echo "state=$MANUAL_STATE" >> $GITHUB_OUTPUT
+            echo "tier=manual" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          
+          # Smart city selection based on current hour and processing history
+          CURRENT_HOUR=$(date +%H)
+          echo "🕐 Current hour: $CURRENT_HOUR"
+          
+          # Peak hours (9 AM - 5 PM UTC): Focus on Tier 1 cities
+          if [ $CURRENT_HOUR -ge 9 ] && [ $CURRENT_HOUR -le 17 ]; then
+            PREFERRED_TIER=${FORCE_TIER:-1}
+            echo "⏰ Peak hours: Prioritizing Tier $PREFERRED_TIER cities"
+          else
+            PREFERRED_TIER=${FORCE_TIER:-2}
+            echo "🌙 Off-peak hours: Prioritizing Tier $PREFERRED_TIER cities"
+          fi
+          
+          # Handle auto tier selection
+          if [ "$PREFERRED_TIER" = "auto" ]; then
+            PREFERRED_TIER=""
+          fi
+          
+          # Select cities from seed data based on tier and category
+          node -e "
+            const fs = require('fs');
+            const csv = fs.readFileSync('data/ig_mcp_apify_seed.csv', 'utf8');
+            const lines = csv.trim().split('\n').slice(1); // Skip header
+            
+            const cities = lines
+              .map(line => {
+                const [tier, city, state, category] = line.split(',');
+                return { tier: parseInt(tier), city: city.replace(/\"/g, ''), state: state.replace(/\"/g, ''), category: category.replace(/\"/g, '') };
+              })
+              .filter(row => row.category === 'matcha-carts')
+              .filter(row => row.tier === parseInt(process.env.PREFERRED_TIER) || process.env.PREFERRED_TIER === '');
+            
+            if (cities.length === 0) {
+              console.log('⚠️ No cities found for criteria, falling back to tier 1');
+              const fallback = lines
+                .map(line => {
+                  const [tier, city, state, category] = line.split(',');
+                  return { tier: parseInt(tier), city: city.replace(/\"/g, ''), state: state.replace(/\"/g, ''), category: category.replace(/\"/g, '') };
+                })
+                .filter(row => row.category === 'matcha-carts' && row.tier === 1);
+              
+              if (fallback.length > 0) {
+                const selected = fallback[Math.floor(Math.random() * fallback.length)];
+                console.log(\`Selected fallback city: \${selected.city}, \${selected.state} (Tier \${selected.tier})\`);
+                process.stdout.write(\`city=\${selected.city}\nstate=\${selected.state}\ntier=\${selected.tier}\n\`);
+              }
+            } else {
+              // Rotate through available cities (simple round-robin based on hour)
+              const hourIndex = parseInt(process.env.CURRENT_HOUR) % cities.length;
+              const selected = cities[hourIndex];
+              console.log(\`Selected city: \${selected.city}, \${selected.state} (Tier \${selected.tier})\`);
+              process.stdout.write(\`city=\${selected.city}\nstate=\${selected.state}\ntier=\${selected.tier}\n\`);
+            }
+          " >> $GITHUB_OUTPUT
+
+  matcha-carts-collection:
+    needs: smart-city-selection
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Set up environment variables
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+          INGEST_SHARED_KEY: ${{ secrets.INGEST_SHARED_KEY }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE: ${{ secrets.SUPABASE_SERVICE_ROLE }}
+          MCP_APIFY_RPS: "1"
+          MCP_APIFY_BURST: "3"
+          CATEGORY: "matcha-carts"
+          CITY: ${{ needs.smart-city-selection.outputs.city }}
+          STATE: ${{ needs.smart-city-selection.outputs.state }}
+          LIMIT_PER_ROW: "20"
+          MAX_ENRICH: "30"
+        run: |
+          echo "APP_URL=${APP_URL}" >> $GITHUB_ENV
+          echo "INGEST_SHARED_KEY=${INGEST_SHARED_KEY}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}" >> $GITHUB_ENV
+          echo "SUPABASE_SERVICE_ROLE=${SUPABASE_SERVICE_ROLE}" >> $GITHUB_ENV
+          echo "MCP_APIFY_RPS=${MCP_APIFY_RPS}" >> $GITHUB_ENV
+          echo "MCP_APIFY_BURST=${MCP_APIFY_BURST}" >> $GITHUB_ENV
+          echo "CATEGORY=${CATEGORY}" >> $GITHUB_ENV
+          echo "CITY=${CITY}" >> $GITHUB_ENV
+          echo "STATE=${STATE}" >> $GITHUB_ENV
+          echo "LIMIT_PER_ROW=${LIMIT_PER_ROW}" >> $GITHUB_ENV
+          echo "MAX_ENRICH=${MAX_ENRICH}" >> $GITHUB_ENV
+          
+      - name: Run Matcha Carts Collection
+        run: |
+          echo "🍵 Starting Matcha Carts collection"
+          echo "🎯 Target: ${{ needs.smart-city-selection.outputs.city }}, ${{ needs.smart-city-selection.outputs.state }} (Tier ${{ needs.smart-city-selection.outputs.tier }})"
+          echo "📊 Expected: ~15-30 matcha carts"
+          npm run play:backfill:city
+        
+      - name: Log completion and stats
+        run: |
+          echo "✅ Matcha Carts collection completed at $(date)"
+          echo "📍 Processed: ${{ needs.smart-city-selection.outputs.city }}, ${{ needs.smart-city-selection.outputs.state }}"
+          echo "📈 New matcha carts should appear in database within 5 minutes"
+          echo "🔗 Check results: ${{ secrets.APP_URL }}/search?category=matcha-carts&city=${{ needs.smart-city-selection.outputs.city }}"
+
+  error-notification:
+    needs: [smart-city-selection, matcha-carts-collection]
+    if: failure()
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Log failure details
+        run: |
+          echo "❌ Matcha Carts automation failed"
+          echo "🎯 Target was: ${{ needs.smart-city-selection.outputs.city }}, ${{ needs.smart-city-selection.outputs.state }}"
+          echo "⏰ Failed at: $(date)"
+          echo "🔍 Check workflow logs for details"
+          echo ""
+          echo "🔄 Will retry automatically in 1 hour"
