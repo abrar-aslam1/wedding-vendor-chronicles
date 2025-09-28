@@ -124,7 +124,7 @@ class StepExecutor {
     }
     
     context.collections[name] = resolvedData
-    console.log(`📦 Stored collection '${name}' with ${Array.isArray(resolvedData) ? resolvedData.length : 'unknown'} items`)
+    console.log(`📦 Stored collection '${name}' with ${Array.isArray(resolvedData) ? resolvedData.length : (resolvedData ? 1 : 0)} items`)
     
     return resolvedData
   }
@@ -346,8 +346,11 @@ class StepExecutor {
 
     if (Array.isArray(result)) {
       result = result.map(item => this.applyTransforms(item, transforms, context))
+    } else if (result) {
+      // Always return single items as an array for consistency
+      result = [this.applyTransforms(result, transforms, context)]
     } else {
-      result = this.applyTransforms(result, transforms, context)
+      result = []
     }
 
     console.log(`🔄 Transformed ${Array.isArray(sourceData) ? sourceData.length : 1} items`)
