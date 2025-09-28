@@ -78,7 +78,16 @@ serve(async (req) => {
     // Helper function to get vendor category
     const getVendorCategory = (keyword: string) => {
       const keywordLower = keyword.toLowerCase();
-      // Enhanced photographer matching
+      // Enhanced cart category matching
+      if (keywordLower.includes('coffee cart') || (keywordLower.includes('coffee') && keywordLower.includes('cart'))) return 'coffee-carts';
+      if (keywordLower.includes('matcha cart') || (keywordLower.includes('matcha') && keywordLower.includes('cart'))) return 'matcha-carts';
+      if (keywordLower.includes('cocktail cart') || keywordLower.includes('mobile bar') || (keywordLower.includes('cocktail') && keywordLower.includes('cart'))) return 'cocktail-carts';
+      if (keywordLower.includes('dessert cart') || keywordLower.includes('ice cream cart') || (keywordLower.includes('dessert') && keywordLower.includes('cart'))) return 'dessert-carts';
+      if (keywordLower.includes('flower cart') || (keywordLower.includes('flower') && keywordLower.includes('cart'))) return 'flower-carts';
+      if (keywordLower.includes('champagne cart') || keywordLower.includes('prosecco cart') || (keywordLower.includes('champagne') && keywordLower.includes('cart'))) return 'champagne-carts';
+      // Generic cart search - return null to search all cart types
+      if (keywordLower.includes('cart')) return null;
+      // Traditional vendor categories
       if (keywordLower.includes('photographer') || keywordLower.includes('photography') || keywordLower.includes('photo')) return 'photographers';
       if (keywordLower.includes('wedding planner') || keywordLower.includes('planner')) return 'wedding-planners';
       if (keywordLower.includes('videographer') || keywordLower.includes('videography') || keywordLower.includes('video')) return 'videographers';
@@ -90,7 +99,6 @@ serve(async (req) => {
       if (keywordLower.includes('bridal')) return 'bridal-shops';
       if (keywordLower.includes('makeup')) return 'makeup-artists';
       if (keywordLower.includes('hair')) return 'hair-stylists';
-      if (keywordLower.includes('cart') || keywordLower.includes('mobile bar') || keywordLower.includes('coffee cart') || keywordLower.includes('matcha cart')) return 'carts';
       return null;
     };
 
@@ -109,7 +117,7 @@ serve(async (req) => {
         // First, let's see what categories exist in the Instagram table
         try {
           const { data: categoryTest, error: categoryError } = await supabase
-            .from('instagram_vendors')
+            .from('vendors_instagram')
             .select('category')
             .limit(10);
           
@@ -121,14 +129,24 @@ serve(async (req) => {
           console.log(`[${requestId}] Could not fetch Instagram categories:`, e);
         }
         
-        if (!vendorCategory) {
-          console.log(`[${requestId}] No vendor category for Instagram query`);
+        // Always search Instagram vendors for cart-related queries
+        const isCartSearch = keyword.toLowerCase().includes('cart') || 
+                           keyword.toLowerCase().includes('mobile bar') ||
+                           keyword.toLowerCase().includes('coffee') ||
+                           keyword.toLowerCase().includes('matcha') ||
+                           keyword.toLowerCase().includes('cocktail') ||
+                           keyword.toLowerCase().includes('dessert') ||
+                           keyword.toLowerCase().includes('flower') ||
+                           keyword.toLowerCase().includes('champagne');
+        
+        if (!vendorCategory && !isCartSearch) {
+          console.log(`[${requestId}] No vendor category and not a cart search, skipping Instagram query`);
           return [];
         }
         
         try {
           let query = supabase
-            .from('instagram_vendors')
+            .from('vendors_instagram')
             .select('*');
           
           // Enhanced category filtering for Instagram vendors
@@ -159,9 +177,9 @@ serve(async (req) => {
             console.log(`[${requestId}] No exact category match, trying fallback search with bio/description`);
             
             let fallbackQuery = supabase
-              .from('instagram_vendors')
+              .from('vendors_instagram')
               .select('*')
-              .or(`bio.ilike.%${keyword}%,business_name.ilike.%${keyword}%,category.ilike.%${keyword}%`);
+              .or(`bio.ilike.%${keyword}%,display_name.ilike.%${keyword}%,category.ilike.%${keyword}%`);
             
             if (city && state) {
               fallbackQuery = fallbackQuery
@@ -264,19 +282,19 @@ serve(async (req) => {
     const allDatabaseResults = [
       // Transform Instagram vendors
       ...instagramResults.map(vendor => ({
-        title: vendor.business_name || vendor.instagram_handle,
+        title: vendor.display_name || vendor.ig_username,
         description: vendor.bio || `Wedding vendor on Instagram`,
         rating: undefined,
         phone: vendor.phone,
-        address: vendor.location || `${vendor.city}, ${vendor.state}`,
-        url: vendor.website_url,
+        address: `${vendor.city}, ${vendor.state}`,
+        url: vendor.profile_url,
         place_id: `instagram_${vendor.id}`,
         main_image: vendor.profile_image_url,
         images: vendor.profile_image_url ? [vendor.profile_image_url] : [],
         city: vendor.city,
         state: vendor.state,
-        instagram_handle: vendor.instagram_handle,
-        follower_count: vendor.follower_count,
+        instagram_handle: vendor.ig_username,
+        follower_count: vendor.followers_count,
         vendor_source: 'instagram' as const
       })),
 
