@@ -22,7 +22,7 @@ steps:
   - name: "Load seed data for city/state/category"
     action: read_csv
     params:
-      file: "data/ig_mcp_apify_seed.csv"
+      file: "data/ig_comprehensive_seed.csv"
       filter:
         CITY: "${env.CITY}"
         STATE: "${env.STATE}"

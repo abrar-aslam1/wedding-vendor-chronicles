@@ -55,12 +55,60 @@ jobs:
           MANUAL_STATE: ${{ github.event.inputs.state || '' }}
           FORCE_TIER: ${{ github.event.inputs.force_tier || '' }}
         run: |
-          # Use manual inputs if provided
+          # Use manual inputs if provided (normalize them first)
           if [ -n "$MANUAL_CITY" ] && [ -n "$MANUAL_STATE" ]; then
             echo "🎯 Using manual city selection: $MANUAL_CITY, $MANUAL_STATE"
-            echo "city=$MANUAL_CITY" >> $GITHUB_OUTPUT
-            echo "state=$MANUAL_STATE" >> $GITHUB_OUTPUT
-            echo "tier=manual" >> $GITHUB_OUTPUT
+            
+            # Normalize manual inputs to match CSV format
+            node -e "
+              const fs = require('fs');
+              const csv = fs.readFileSync('data/ig_comprehensive_seed.csv', 'utf8');
+              const lines = csv.trim().split('\n').slice(1);
+              
+              // State name to abbreviation mapping
+              const stateMap = {
+                'alabama': 'AL', 'alaska': 'AK', 'arizona': 'AZ', 'arkansas': 'AR',
+                'california': 'CA', 'colorado': 'CO', 'connecticut': 'CT', 'delaware': 'DE',
+                'florida': 'FL', 'georgia': 'GA', 'hawaii': 'HI', 'idaho': 'ID',
+                'illinois': 'IL', 'indiana': 'IN', 'iowa': 'IA', 'kansas': 'KS',
+                'kentucky': 'KY', 'louisiana': 'LA', 'maine': 'ME', 'maryland': 'MD',
+                'massachusetts': 'MA', 'michigan': 'MI', 'minnesota': 'MN', 'mississippi': 'MS',
+                'missouri': 'MO', 'montana': 'MT', 'nebraska': 'NE', 'nevada': 'NV',
+                'new hampshire': 'NH', 'new jersey': 'NJ', 'new mexico': 'NM', 'new york': 'NY',
+                'north carolina': 'NC', 'north dakota': 'ND', 'ohio': 'OH', 'oklahoma': 'OK',
+                'oregon': 'OR', 'pennsylvania': 'PA', 'rhode island': 'RI', 'south carolina': 'SC',
+                'south dakota': 'SD', 'tennessee': 'TN', 'texas': 'TX', 'utah': 'UT',
+                'vermont': 'VT', 'virginia': 'VA', 'washington': 'WA', 'west virginia': 'WV',
+                'wisconsin': 'WI', 'wyoming': 'WY', 'district of columbia': 'DC'
+              };
+              
+              const inputCity = process.env.MANUAL_CITY.toLowerCase();
+              const inputState = process.env.MANUAL_STATE.toLowerCase();
+              const normalizedState = stateMap[inputState] || process.env.MANUAL_STATE.toUpperCase();
+              
+              // Find matching city in CSV (case-insensitive)
+              const match = lines.find(line => {
+                const [tier, city, state, category] = line.split(',');
+                const csvCity = city.replace(/\"/g, '').toLowerCase();
+                const csvState = state.replace(/\"/g, '');
+                return csvCity === inputCity && csvState === normalizedState;
+              });
+              
+              if (match) {
+                const [tier, city, state, category] = match.split(',');
+                const finalCity = city.replace(/\"/g, '');
+                const finalState = state.replace(/\"/g, '');
+                console.log(\`Found match: \${finalCity}, \${finalState}\`);
+                process.stdout.write(\`city=\${finalCity}\nstate=\${finalState}\ntier=manual\n\`);
+              } else {
+                // If no match found, use title case city and normalized state
+                const titleCaseCity = process.env.MANUAL_CITY.split(' ').map(w => 
+                  w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()
+                ).join(' ');
+                console.log(\`No exact match found, using: \${titleCaseCity}, \${normalizedState}\`);
+                process.stdout.write(\`city=\${titleCaseCity}\nstate=\${normalizedState}\ntier=manual\n\`);
+              }
+            " >> $GITHUB_OUTPUT
             exit 0
           fi
           
@@ -115,6 +163,7 @@ jobs:
               const hourIndex = parseInt(process.env.CURRENT_HOUR) % cities.length;
               const selected = cities[hourIndex];
               console.log(\`Selected city: \${selected.city}, \${selected.state} (Tier \${selected.tier})\`);
+              // Output city and state exactly as they appear in CSV (proper case)
               process.stdout.write(\`city=\${selected.city}\nstate=\${selected.state}\ntier=\${selected.tier}\n\`);
             }
           " >> $GITHUB_OUTPUT
