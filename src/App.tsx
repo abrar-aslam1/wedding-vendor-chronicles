@@ -34,6 +34,7 @@ const AdminPanel = lazy(() => import("@/pages/AdminPanel"));
 const AdminApprovalDashboard = lazy(() => import("@/pages/AdminApprovalDashboard"));
 const TestSubscriptions = lazy(() => import("@/pages/TestSubscriptions"));
 const VendorDashboardPage = lazy(() => import("@/pages/VendorDashboardPage"));
+const CulturalMatchingQuiz = lazy(() => import("@/pages/CulturalMatchingQuiz"));
 
 // Simple loading component
 const PageLoader = () => (
@@ -117,6 +118,7 @@ function App() {
           <Route path="/test-auth" element={<TestAuth />} />
           <Route path="/free-tools/timeline-generator" element={<FreeTimelineGenerator />} />
           <Route path="/free-tools/hashtag-generator" element={<WeddingHashtagGenerator />} />
+          <Route path="/free-tools/cultural-matching-quiz" element={<CulturalMatchingQuiz />} />
           {/* New SEO-optimized routes for Timeline Generator */}
           <Route path="/tools/wedding-timeline-generator" element={<FreeTimelineGenerator />} />
           <Route path="/tools/wedding-timeline-generator/states" element={<FreeTimelineGenerator />} />
