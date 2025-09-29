@@ -15,7 +15,7 @@ const DATAFORSEO_LOGIN = process.env.DATAFORSEO_LOGIN;
 const DATAFORSEO_PASSWORD = process.env.DATAFORSEO_PASSWORD;
 
 const supabase = createClient(
-  process.env.VITE_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
@@ -85,7 +85,7 @@ async function makeDataForSEORequest(keyword, locationCode) {
     const options = {
       hostname: 'api.dataforseo.com',
       port: 443,
-      path: '/v3/business_data/google/my_business_listings/live',
+      path: '/v3/business_data/business_listings/search/live',
       method: 'POST',
       headers: {
         'Authorization': `Basic ${auth}`,
@@ -176,10 +176,28 @@ async function storeVendors(vendors) {
     return { success: true, count: 0 };
   }
 
+  // Deduplicate based on place_id to avoid constraint violations
+  const uniqueVendors = [];
+  const seenPlaceIds = new Set();
+  
+  for (const vendor of vendors) {
+    if (vendor.place_id && !seenPlaceIds.has(vendor.place_id)) {
+      seenPlaceIds.add(vendor.place_id);
+      uniqueVendors.push(vendor);
+    }
+  }
+
+  console.log(`📋 Deduplication: ${vendors.length} total → ${uniqueVendors.length} unique vendors`);
+
+  if (uniqueVendors.length === 0) {
+    console.log('No unique vendors to store after deduplication');
+    return { success: true, count: 0 };
+  }
+
   try {
     const { data, error } = await supabase
       .from('vendors_google_business')
-      .upsert(vendors, {
+      .upsert(uniqueVendors, {
         onConflict: 'place_id',
         ignoreDuplicates: false // Update existing records with new data
       });
@@ -189,8 +207,8 @@ async function storeVendors(vendors) {
       return { success: false, error };
     }
 
-    console.log(`✅ Stored/updated ${vendors.length} vendors successfully`);
-    return { success: true, count: vendors.length };
+    console.log(`✅ Stored/updated ${uniqueVendors.length} vendors successfully`);
+    return { success: true, count: uniqueVendors.length };
   } catch (error) {
     console.error('Database error:', error);
     return { success: false, error };

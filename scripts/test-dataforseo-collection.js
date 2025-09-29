@@ -14,7 +14,7 @@ const DATAFORSEO_LOGIN = process.env.DATAFORSEO_LOGIN;
 const DATAFORSEO_PASSWORD = process.env.DATAFORSEO_PASSWORD;
 
 const supabase = createClient(
-  process.env.VITE_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
@@ -33,7 +33,7 @@ async function makeDataForSEORequest(keyword, locationCode) {
     const options = {
       hostname: 'api.dataforseo.com',
       port: 443,
-      path: '/v3/business_data/google/my_business_listings/live',
+      path: '/v3/business_data/business_listings/search/live',
       method: 'POST',
       headers: {
         'Authorization': `Basic ${auth}`,
