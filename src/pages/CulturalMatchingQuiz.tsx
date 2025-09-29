@@ -683,12 +683,38 @@ const CulturalMatchingQuiz = () => {
                       description: 'We\'re finding vendors who match your cultural needs.',
                     });
                     
-                    // Navigate to search page with preferences
-                    // For now, show alert with preferenceId
-                    alert(`🎉 Preferences saved! ID: ${result.preferenceId}\n\nIn Phase 3, we'll run the matching algorithm and show you perfectly matched vendors!\n\nFor now, you can browse vendors in the search page.`);
+                    // Trigger matching algorithm
+                    try {
+                      toast.info('🔍 Finding your perfect matches...', {
+                        description: 'This may take a moment',
+                      });
+                      
+                      const matchResponse = await fetch(
+                        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/calculate-cultural-matches`,
+                        {
+                          method: 'POST',
+                          headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
+                          },
+                          body: JSON.stringify({ preference_id: result.preferenceId })
+                        }
+                      );
+                      
+                      if (matchResponse.ok) {
+                        const matchData = await matchResponse.json();
+                        toast.success(`🎉 Found ${matchData.matches_found} matching vendors!`, {
+                          description: 'Showing you the best matches',
+                        });
+                      }
+                    } catch (matchError) {
+                      console.error('Matching error:', matchError);
+                      // Don't block navigation if matching fails
+                      toast.warning('Matches will be calculated shortly');
+                    }
                     
-                    // Navigate to search
-                    navigate('/search');
+                    // Navigate to search with preference ID
+                    navigate(`/search?preference_id=${result.preferenceId}`);
                   }
                 }}
                 disabled={saving}
