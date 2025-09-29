@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { MainNav } from '@/components/MainNav';
 import { Footer } from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -19,11 +20,16 @@ import {
   Users, 
   Calendar as CalendarIcon,
   Sparkles,
-  CheckCircle2
+  CheckCircle2,
+  Loader2
 } from 'lucide-react';
 import { SEOHead } from '@/components/SEOHead';
+import { useBridePreferences } from '@/hooks/useBridePreferences';
+import { toast } from 'sonner';
 
 const CulturalMatchingQuiz = () => {
+  const navigate = useNavigate();
+  const { saving, savePreferences, savedPreferenceId } = useBridePreferences();
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({
     culturalBackground: [] as string[],
@@ -649,15 +655,56 @@ const CulturalMatchingQuiz = () => {
               </Button>
             ) : (
               <Button
-                onClick={() => {
-                  // TODO: Navigate to search results with preferences
-                  console.log('Form data:', formData);
-                  alert('🎉 Great! In the full version, this will show you matched vendors!');
+                onClick={async () => {
+                  // Save preferences to database
+                  const result = await savePreferences({
+                    cultural_background: formData.culturalBackground,
+                    religious_tradition: formData.religiousTradition,
+                    ceremony_types: formData.ceremonyTypes,
+                    preferred_languages: formData.languages,
+                    requires_bilingual: formData.requiresBilingual,
+                    wedding_style: formData.weddingStyle,
+                    dietary_restrictions: formData.dietaryRestrictions,
+                    modesty_preferences: formData.modestyPreferences,
+                    budget_range: formData.budgetRange,
+                    wedding_date: formData.weddingDate,
+                    guest_count: formData.guestCount,
+                    location: formData.location,
+                    importance_cultural_knowledge: formData.importanceCulturalKnowledge,
+                    importance_language: formData.importanceLanguage,
+                    importance_style_match: formData.importanceStyleMatch,
+                    importance_price: formData.importancePrice,
+                    must_have_cultural_experience: formData.importanceCulturalKnowledge >= 4,
+                    quiz_completed: true
+                  });
+
+                  if (result.success) {
+                    toast.success('✨ Your preferences have been saved!', {
+                      description: 'We\'re finding vendors who match your cultural needs.',
+                    });
+                    
+                    // Navigate to search page with preferences
+                    // For now, show alert with preferenceId
+                    alert(`🎉 Preferences saved! ID: ${result.preferenceId}\n\nIn Phase 3, we'll run the matching algorithm and show you perfectly matched vendors!\n\nFor now, you can browse vendors in the search page.`);
+                    
+                    // Navigate to search
+                    navigate('/search');
+                  }
                 }}
+                disabled={saving}
                 className="min-w-[200px] bg-gradient-to-r from-wedding-primary to-purple-600"
               >
-                Find My Perfect Vendors
-                <Sparkles className="w-4 h-4 ml-2" />
+                {saving ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    Find My Perfect Vendors
+                    <Sparkles className="w-4 h-4 ml-2" />
+                  </>
+                )}
               </Button>
             )}
           </div>
