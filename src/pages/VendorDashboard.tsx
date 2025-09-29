@@ -20,6 +20,7 @@ import {
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { VendorAnalytics, Vendor, VendorSubscription, SubscriptionPlan } from '@/integrations/supabase/types';
+import { CulturalProfileManager } from '@/components/vendor/CulturalProfileManager';
 
 interface VendorDashboardProps {
   vendorId: string;
@@ -217,10 +218,11 @@ const VendorDashboard: React.FC<VendorDashboardProps> = ({ vendorId }) => {
 
         {/* Main Content Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
             <TabsTrigger value="profile">Profile</TabsTrigger>
+            <TabsTrigger value="cultural">Cultural</TabsTrigger>
             <TabsTrigger value="billing">Billing</TabsTrigger>
           </TabsList>
 
@@ -372,6 +374,10 @@ const VendorDashboard: React.FC<VendorDashboardProps> = ({ vendorId }) => {
                 </p>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="cultural" className="space-y-6">
+            <CulturalProfileManager vendorId={vendorId} />
           </TabsContent>
 
           <TabsContent value="billing" className="space-y-6">
