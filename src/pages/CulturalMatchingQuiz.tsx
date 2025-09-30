@@ -713,8 +713,8 @@ const CulturalMatchingQuiz = () => {
                       toast.warning('Matches will be calculated shortly');
                     }
                     
-                    // Navigate to search with preference ID
-                    navigate(`/search?preference_id=${result.preferenceId}`);
+                    // Navigate to results page with preference ID
+                    navigate(`/cultural-match-results?preference_id=${result.preferenceId}`);
                   }
                 }}
                 disabled={saving}

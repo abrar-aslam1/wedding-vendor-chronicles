@@ -16,6 +16,20 @@ const AuthCallback = () => {
         if (sessionError) throw sessionError;
         
         if (session) {
+          // Check if this is a vendor sign-in
+          const isVendor = searchParams.get("type") === "vendor";
+          
+          // If this is a vendor OAuth sign-up, update user metadata
+          if (isVendor && !session.user.user_metadata?.user_type) {
+            const { error: updateError } = await supabase.auth.updateUser({
+              data: { user_type: 'vendor' }
+            });
+            
+            if (updateError) {
+              console.error('Failed to update user metadata:', updateError);
+            }
+          }
+          
           // Check if profile exists
           const { data: profile, error: profileError } = await supabase
             .from('profiles')
@@ -36,8 +50,25 @@ const AuthCallback = () => {
             if (insertError) throw insertError;
           }
 
+          // Get return URL
           const returnUrl = searchParams.get("returnUrl");
-          navigate(returnUrl ? decodeURIComponent(returnUrl) : "/");
+          
+          // Determine user type from metadata or URL parameter
+          const userType = session.user.user_metadata?.user_type || (isVendor ? 'vendor' : 'couple');
+          
+          // Redirect based on user type
+          if (userType === 'vendor' || isVendor) {
+            // For vendors, go to vendor dashboard or custom return URL
+            const vendorReturnUrl = returnUrl ? decodeURIComponent(returnUrl) : "/vendor-dashboard";
+            toast({
+              title: "Welcome!",
+              description: "Successfully signed in to your vendor account.",
+            });
+            navigate(vendorReturnUrl);
+          } else {
+            // For couples, go to home or custom return URL
+            navigate(returnUrl ? decodeURIComponent(returnUrl) : "/");
+          }
         } else {
           navigate("/auth");
         }
@@ -53,7 +84,7 @@ const AuthCallback = () => {
     };
 
     handleCallback();
-  }, [navigate]);
+  }, [navigate, searchParams, toast]);
 
   return (
     <div className="min-h-screen flex items-center justify-center">

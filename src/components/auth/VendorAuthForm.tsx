@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { Separator } from "@/components/ui/separator";
 import { Store, Eye, EyeOff } from "lucide-react";
 
 interface VendorAuthFormProps {
@@ -35,35 +37,36 @@ export const VendorAuthForm = ({ loading, setLoading }: VendorAuthFormProps) => 
     try {
       setLoading(true);
       
-      const response = await fetch('/api/functions/v1/vendor-auth', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          action: isSignUp ? 'register' : 'login',
+      if (isSignUp) {
+        // Sign up with Supabase Auth
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
-          ...(isSignUp && { vendorId: null }) // For new registrations
-        })
-      });
+          options: {
+            data: {
+              user_type: 'vendor'
+            }
+          }
+        });
 
-      const data = await response.json();
+        if (error) throw error;
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Authentication failed');
-      }
-
-      if (isSignUp) {
         toast({
           title: "Registration Successful!",
           description: "Please check your email to verify your account.",
         });
-        setIsSignUp(false); // Switch back to login form
+        setIsSignUp(false);
       } else {
-        // Store vendor auth token
-        localStorage.setItem('vendor_auth_token', data.token);
-        localStorage.setItem('vendor_data', JSON.stringify(data.vendor));
+        // Sign in with Supabase Auth
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+
+        if (error) throw error;
+
+        // Check if user is a vendor
+        const userType = data.user?.user_metadata?.user_type;
         
         toast({
           title: "Welcome back!",
@@ -84,6 +87,25 @@ export const VendorAuthForm = ({ loading, setLoading }: VendorAuthFormProps) => 
     }
   };
 
+  const handleGoogleSignIn = async () => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback?returnUrl=${encodeURIComponent(returnUrl || "/vendor-dashboard")}&type=vendor`
+        }
+      });
+      
+      if (error) throw error;
+    } catch (error: any) {
+      toast({
+        title: "Error signing in with Google",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleForgotPassword = async () => {
     if (!email) {
       toast({
@@ -97,22 +119,11 @@ export const VendorAuthForm = ({ loading, setLoading }: VendorAuthFormProps) => 
     try {
       setLoading(true);
       
-      const response = await fetch('/api/functions/v1/vendor-auth', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          action: 'reset-password',
-          email
-        })
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/auth/callback?type=vendor`,
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Password reset failed');
-      }
+      if (error) throw error;
 
       toast({
         title: "Reset Link Sent",
@@ -139,6 +150,24 @@ export const VendorAuthForm = ({ loading, setLoading }: VendorAuthFormProps) => 
         <p className="text-sm text-gray-600">
           {isSignUp ? "Join our vendor network" : "Access your business dashboard"}
         </p>
+      </div>
+
+      <Button
+        onClick={handleGoogleSignIn}
+        variant="outline"
+        className="w-full flex items-center justify-center gap-2 bg-white hover:bg-gray-50 border-2 border-gray-200"
+      >
+        <img src="/lovable-uploads/3bd6330f-efab-4a54-89b3-56ae29a9e4b5.png" alt="Google" className="w-5 h-5" />
+        Continue with Google
+      </Button>
+
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center">
+          <Separator className="w-full" />
+        </div>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-white px-2 text-muted-foreground">Or continue with email</span>
+        </div>
       </div>
 
       <form onSubmit={handleVendorAuth} className="space-y-4">
