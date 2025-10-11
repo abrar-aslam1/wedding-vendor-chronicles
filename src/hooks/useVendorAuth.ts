@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 import { VendorAuth } from '@/integrations/supabase/types';
 
 interface VendorAuthData {
   id: string;
   email: string;
-  vendor_id: string;
+  vendor_id: string | null;
   email_verified: boolean;
 }
 
@@ -15,43 +16,75 @@ export const useVendorAuth = () => {
   useEffect(() => {
     // Check for existing vendor auth on mount
     checkVendorAuth();
+
+    // Listen for auth state changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+        await checkVendorAuth();
+      } else if (event === 'SIGNED_OUT') {
+        setVendorAuth(null);
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
-  const checkVendorAuth = () => {
+  const checkVendorAuth = async () => {
     try {
-      const token = localStorage.getItem('vendor_auth_token');
-      const vendorData = localStorage.getItem('vendor_data');
-      
-      if (token && vendorData) {
-        const parsed = JSON.parse(vendorData);
-        setVendorAuth(parsed);
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+      if (sessionError) throw sessionError;
+
+      if (session?.user) {
+        const userType = session.user.user_metadata?.user_type;
+
+        // Only set vendor auth if user is a vendor
+        if (userType === 'vendor') {
+          // Try to get vendor_id from vendors table where owner_id matches user
+          const { data: vendorData } = await supabase
+            .from('vendors')
+            .select('id')
+            .eq('owner_id', session.user.id)
+            .limit(1)
+            .single();
+
+          setVendorAuth({
+            id: session.user.id,
+            email: session.user.email || '',
+            vendor_id: vendorData?.id || null,
+            email_verified: session.user.email_confirmed_at !== null,
+          });
+        } else {
+          setVendorAuth(null);
+        }
+      } else {
+        setVendorAuth(null);
       }
     } catch (error) {
       console.error('Error checking vendor auth:', error);
-      // Clear invalid data
-      localStorage.removeItem('vendor_auth_token');
-      localStorage.removeItem('vendor_data');
+      setVendorAuth(null);
     } finally {
       setLoading(false);
     }
   };
 
-  const loginVendor = (token: string, vendorData: VendorAuthData) => {
-    localStorage.setItem('vendor_auth_token', token);
-    localStorage.setItem('vendor_data', JSON.stringify(vendorData));
+  const loginVendor = async (token: string, vendorData: VendorAuthData) => {
+    // This method is kept for backward compatibility but not used with Supabase OAuth
     setVendorAuth(vendorData);
   };
 
-  const logoutVendor = () => {
-    localStorage.removeItem('vendor_auth_token');
-    localStorage.removeItem('vendor_data');
+  const logoutVendor = async () => {
+    await supabase.auth.signOut();
     setVendorAuth(null);
   };
 
   const isAuthenticated = !!vendorAuth;
 
-  const getAuthToken = () => {
-    return localStorage.getItem('vendor_auth_token');
+  const getAuthToken = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    return session?.access_token || null;
   };
 
   return {
