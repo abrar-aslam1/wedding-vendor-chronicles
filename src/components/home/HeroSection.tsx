@@ -103,8 +103,11 @@ export const HeroSection = () => {
 
   return (
     <section 
-      className="relative min-h-[100svh] md:min-h-[80vh] lg:min-h-[85vh] flex items-center py-4 md:py-8 lg:py-0"
-      style={{ background: "linear-gradient(135deg, rgba(44, 62, 80, 0.95) 0%, rgba(93, 122, 149, 0.90) 50%, rgba(232, 212, 176, 0.85) 100%)" }}
+      className="relative min-h-screen flex items-center pb-12 md:pb-16 lg:pb-0 -mt-28 pt-0"
+      style={{ 
+        background: "linear-gradient(135deg, rgba(44, 62, 80, 0.95) 0%, rgba(93, 122, 149, 0.90) 50%, rgba(232, 212, 176, 0.85) 100%)",
+        paddingTop: "calc(6rem + 112px)" // 6rem for mobile + navbar height + extra spacing
+      }}
     >
       
       <div className="container mx-auto px-4 sm:px-6 md:px-8 relative z-10">
