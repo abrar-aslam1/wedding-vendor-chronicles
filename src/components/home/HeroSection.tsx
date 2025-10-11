@@ -103,16 +103,16 @@ export const HeroSection = () => {
 
   return (
     <section 
-      className="relative min-h-screen flex items-center pb-12 md:pb-16 lg:pb-0 -mt-28 pt-0"
+      className="relative min-h-screen flex items-center pb-12 md:pb-16 lg:pb-20 -mt-28 pt-0"
       style={{ 
         background: "linear-gradient(135deg, rgba(44, 62, 80, 0.95) 0%, rgba(93, 122, 149, 0.90) 50%, rgba(232, 212, 176, 0.85) 100%)",
         paddingTop: "calc(6rem + 112px)" // 6rem for mobile + navbar height + extra spacing
       }}
     >
       
-      <div className="container mx-auto px-4 sm:px-6 md:px-8 relative z-10">
-        <div className="md:max-w-4xl md:mx-auto lg:max-w-none lg:grid lg:grid-cols-2 lg:gap-12 lg:items-center">
-          <div className="space-y-6 md:space-y-8 lg:space-y-10 text-center md:text-center lg:text-left max-w-2xl mx-auto md:mx-auto lg:mx-0 lg:max-w-none">
+      <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 relative z-10">
+        <div className="md:max-w-4xl md:mx-auto lg:max-w-none lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center lg:py-12">
+          <div className="space-y-6 md:space-y-8 lg:space-y-12 text-center md:text-center lg:text-left max-w-2xl mx-auto md:mx-auto lg:mx-0 lg:max-w-none lg:pr-8">
             <div className="space-y-4 md:space-y-6 lg:space-y-8">
               <h2 className="font-body text-wedding-primary text-sm sm:text-base md:text-lg lg:text-xl uppercase tracking-widest mb-4 md:mb-6 lg:mb-4 stagger-1 font-bold">
                 DISCOVER YOUR DREAM WEDDING TEAM
