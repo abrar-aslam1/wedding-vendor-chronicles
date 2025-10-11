@@ -7,7 +7,7 @@ export const SearchSection = () => {
   const navigate = useNavigate();
   
   return (
-    <section className="relative z-20 px-6 py-6 md:px-8 md:py-10 md:bg-white lg:py-20">
+    <section className="relative z-20 px-6 py-6 md:px-8 md:py-10 md:bg-white lg:py-16">
       <div className="max-w-md mx-auto md:max-w-3xl lg:max-w-7xl">
         <div className="md:bg-gradient-to-br md:from-wedding-light md:to-wedding-secondary/20 md:rounded-2xl md:p-8 lg:rounded-3xl lg:p-16 md:relative md:overflow-hidden">
           {/* Desktop decorative element */}
@@ -39,7 +39,7 @@ export const SearchSection = () => {
                     <div className="text-wedding-text/70">States Covered</div>
                   </div>
                 </div>
-                <div className="space-y-4 mt-8 md:mt-0 lg:mt-8">
+                <div className="space-y-4 mt-8 md:mt-0 lg:mt-4">
                   <div className="bg-white/80 backdrop-blur p-6 rounded-xl shadow-lg">
                     <div className="text-3xl font-bold text-wedding-primary">1M+</div>
                     <div className="text-wedding-text/70">Happy Couples</div>

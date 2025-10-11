@@ -112,15 +112,15 @@ export const HeroSection = () => {
       
       <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 relative z-10">
         <div className="md:max-w-4xl md:mx-auto lg:max-w-none lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center lg:py-12">
-          <div className="space-y-6 md:space-y-8 lg:space-y-12 text-center md:text-center lg:text-left max-w-2xl mx-auto md:mx-auto lg:mx-0 lg:max-w-none lg:pr-8">
-            <div className="space-y-4 md:space-y-6 lg:space-y-8">
-              <h2 className="font-body text-wedding-primary text-sm sm:text-base md:text-lg lg:text-xl uppercase tracking-widest mb-4 md:mb-6 lg:mb-4 stagger-1 font-bold">
+          <div className="space-y-6 md:space-y-8 lg:space-y-8 text-center md:text-center lg:text-left max-w-2xl mx-auto md:mx-auto lg:mx-0 lg:max-w-none lg:pr-8">
+            <div className="space-y-4 md:space-y-6 lg:space-y-6">
+              <h2 className="font-body text-wedding-primary text-sm sm:text-base md:text-lg lg:text-xl uppercase tracking-widest mb-4 md:mb-6 lg:mb-6 stagger-1 font-bold">
                 DISCOVER YOUR DREAM WEDDING TEAM
               </h2>
               <h1 className="font-heading text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold text-wedding-text leading-relaxed md:leading-relaxed lg:leading-relaxed tracking-tight stagger-2 drop-shadow-sm">
                 Find Your Wedding
                 <br />
-                <span className="text-[#E8D4B0] font-black block mt-4 md:mt-6 pb-4 md:pb-6 lg:pb-8" style={{ lineHeight: '1.4' }}>
+                <span className="text-[#E8D4B0] font-black block mt-3 md:mt-4 pb-3 md:pb-4 lg:pb-4" style={{ lineHeight: '1.4' }}>
                   {currentCategory}
                   <span className="animate-pulse">|</span>
                 </span>

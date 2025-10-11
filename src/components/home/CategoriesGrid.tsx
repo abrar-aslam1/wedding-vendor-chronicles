@@ -162,10 +162,10 @@ export const CategoriesGrid = () => {
   };
 
   return (
-    <section className="pt-8 pb-16 px-6 md:pt-16 md:pb-24 md:bg-gray-50 lg:pt-24 lg:pb-32">
+    <section className="pt-8 pb-16 px-6 md:pt-12 md:pb-20 md:bg-gray-50 lg:pt-16 lg:pb-24">
       <div className="max-w-md mx-auto md:max-w-3xl lg:max-w-7xl">
-        <div className="text-center lg:mb-16">
-          <h2 className="text-2xl font-extrabold text-center mb-6 text-wedding-text md:text-3xl md:mb-8 lg:text-5xl lg:mb-6 tracking-tight drop-shadow-sm">Wedding Vendor Categories</h2>
+        <div className="text-center lg:mb-12">
+          <h2 className="text-2xl font-extrabold text-center mb-6 text-wedding-text md:text-3xl md:mb-8 lg:text-5xl lg:mb-8 tracking-tight drop-shadow-sm">Wedding Vendor Categories</h2>
           <p className="hidden md:block text-base md:text-lg lg:text-xl text-wedding-text/85 max-w-2xl mx-auto leading-relaxed font-medium">
             Browse through our curated selection of wedding professionals to find the perfect vendors for your celebration
           </p>

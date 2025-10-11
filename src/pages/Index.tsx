@@ -15,7 +15,7 @@ const Index = () => {
         <div className="lg:hidden">
           <div className="flex flex-col">
             <HeroSection />
-            <div className="py-8 space-y-8 md:py-12 md:space-y-12">
+            <div className="py-6 space-y-6 md:py-10 md:space-y-10">
               <SearchSection />
               <CategoriesGrid />
             </div>
