@@ -10,7 +10,7 @@ const Index = () => {
     <div className="min-h-screen bg-white">
       <SEOHead isHomePage={true} />
       <MainNav />
-      <main className="pt-16">
+      <main>
         {/* Mobile and Tablet layout */}
         <div className="lg:hidden">
           <div className="flex flex-col">

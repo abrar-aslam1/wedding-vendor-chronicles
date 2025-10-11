@@ -64,7 +64,7 @@ export function MainNav() {
         <Button
           variant="ghost"
           onClick={() => navigate("/favorites")}
-          className="w-full md:w-auto text-wedding-text hover:text-wedding-primary"
+          className="w-full md:w-auto text-wedding-text hover:text-wedding-primary transition-all duration-200 rounded-lg"
         >
           <Heart className="h-4 w-4 mr-2" />
           My Favorites
@@ -72,7 +72,7 @@ export function MainNav() {
         <Button
           variant="ghost"
           onClick={() => navigate("/portal")}
-          className="w-full md:w-auto text-wedding-text hover:text-wedding-primary"
+          className="w-full md:w-auto text-wedding-text hover:text-wedding-primary transition-all duration-200 rounded-lg"
         >
           <LayoutDashboard className="h-4 w-4 mr-2" />
           Wedding Portal
@@ -80,7 +80,7 @@ export function MainNav() {
         <Button
           variant="ghost"
           onClick={handleSignOut}
-          className="w-full md:w-auto text-wedding-text hover:text-wedding-primary"
+          className="w-full md:w-auto text-wedding-text hover:text-wedding-primary transition-all duration-200 rounded-lg"
         >
           <LogOut className="h-4 w-4 mr-2" />
           Sign Out
@@ -90,7 +90,7 @@ export function MainNav() {
       <Button
         variant="ghost"
         onClick={() => navigate("/auth")}
-        className="w-full md:w-auto text-wedding-text hover:text-wedding-primary"
+        className="w-full md:w-auto text-wedding-text hover:text-wedding-primary transition-all duration-200 rounded-lg"
       >
         <LogIn className="h-4 w-4 mr-2" />
         Sign In
@@ -99,8 +99,8 @@ export function MainNav() {
   );
 
   return (
-    <nav className="liquid-glass-nav fixed top-0 left-0 right-0 z-50 border-b border-gray-100 shadow-sm">
-      <div className="container mx-auto px-4 sm:px-6">
+    <nav className="liquid-glass-nav fixed top-0 left-0 right-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center touch-manipulation">
             <img 
@@ -115,7 +115,7 @@ export function MainNav() {
             <Button
               variant="ghost"
               onClick={() => navigate("/")}
-              className="text-wedding-text hover:text-wedding-primary"
+              className="text-wedding-text hover:text-wedding-primary transition-all duration-200 rounded-lg"
             >
               <Search className="h-4 w-4 mr-2" />
               Search Vendors
@@ -123,7 +123,7 @@ export function MainNav() {
             <Button
               variant="ghost"
               onClick={() => navigate("/states")}
-              className="text-wedding-text hover:text-wedding-primary"
+              className="text-wedding-text hover:text-wedding-primary transition-all duration-200 rounded-lg"
             >
               Browse by State
             </Button>
@@ -131,7 +131,7 @@ export function MainNav() {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="text-wedding-text hover:text-wedding-primary"
+                  className="text-wedding-text hover:text-wedding-primary transition-all duration-200 rounded-lg"
                 >
                   <Gift className="h-4 w-4 mr-2" />
                   Free Tools
@@ -182,7 +182,7 @@ export function MainNav() {
                   <Button
                     variant="ghost"
                     onClick={() => navigate("/")}
-                    className="justify-start text-wedding-text hover:text-wedding-primary hover:bg-wedding-light/50 min-h-[48px] touch-manipulation"
+                    className="justify-start text-wedding-text hover:text-wedding-primary hover:bg-wedding-light/50 min-h-[48px] touch-manipulation transition-all duration-200 rounded-lg"
                   >
                     <Search className="h-5 w-5 mr-3" />
                     Search Vendors
@@ -190,7 +190,7 @@ export function MainNav() {
                   <Button
                     variant="ghost"
                     onClick={() => navigate("/states")}
-                    className="justify-start text-wedding-text hover:text-wedding-primary hover:bg-wedding-light/50 min-h-[48px] touch-manipulation"
+                    className="justify-start text-wedding-text hover:text-wedding-primary hover:bg-wedding-light/50 min-h-[48px] touch-manipulation transition-all duration-200 rounded-lg"
                   >
                     Browse by State
                   </Button>
@@ -204,7 +204,7 @@ export function MainNav() {
                     <Button
                       variant="ghost"
                       onClick={() => navigate("/tools/wedding-timeline-generator")}
-                      className="justify-start text-wedding-text hover:text-wedding-primary hover:bg-wedding-light/50 pl-6 min-h-[48px] touch-manipulation"
+                      className="justify-start text-wedding-text hover:text-wedding-primary hover:bg-wedding-light/50 pl-6 min-h-[48px] touch-manipulation transition-all duration-200 rounded-lg"
                     >
                       <Calendar className="h-5 w-5 mr-3" />
                       Timeline Generator
@@ -212,7 +212,7 @@ export function MainNav() {
                     <Button
                       variant="ghost"
                       onClick={() => navigate("/tools/wedding-hashtag-generator")}
-                      className="justify-start text-wedding-text hover:text-wedding-primary hover:bg-wedding-light/50 pl-6 min-h-[48px] touch-manipulation"
+                      className="justify-start text-wedding-text hover:text-wedding-primary hover:bg-wedding-light/50 pl-6 min-h-[48px] touch-manipulation transition-all duration-200 rounded-lg"
                     >
                       <Hash className="h-5 w-5 mr-3" />
                       Hashtag Generator
@@ -227,7 +227,7 @@ export function MainNav() {
                         <Button
                           variant="ghost"
                           onClick={() => navigate("/favorites")}
-                          className="justify-start text-wedding-text hover:text-wedding-primary hover:bg-wedding-light/50 min-h-[48px] touch-manipulation"
+                          className="justify-start text-wedding-text hover:text-wedding-primary hover:bg-wedding-light/50 min-h-[48px] touch-manipulation transition-all duration-200 rounded-lg"
                         >
                           <Heart className="h-5 w-5 mr-3" />
                           My Favorites
@@ -235,7 +235,7 @@ export function MainNav() {
                         <Button
                           variant="ghost"
                           onClick={() => navigate("/portal")}
-                          className="justify-start text-wedding-text hover:text-wedding-primary hover:bg-wedding-light/50 min-h-[48px] touch-manipulation"
+                          className="justify-start text-wedding-text hover:text-wedding-primary hover:bg-wedding-light/50 min-h-[48px] touch-manipulation transition-all duration-200 rounded-lg"
                         >
                           <LayoutDashboard className="h-5 w-5 mr-3" />
                           Wedding Portal
@@ -243,21 +243,21 @@ export function MainNav() {
                         <Button
                           variant="ghost"
                           onClick={handleSignOut}
-                          className="justify-start text-red-600 hover:text-red-700 hover:bg-red-50 min-h-[48px] touch-manipulation"
+                          className="justify-start text-red-600 hover:text-red-700 hover:bg-red-50 min-h-[48px] touch-manipulation transition-all duration-200 rounded-lg"
                         >
                           <LogOut className="h-5 w-5 mr-3" />
                           Sign Out
                         </Button>
                       </>
                     ) : (
-                      <Button
-                        variant="ghost"
-                        onClick={() => navigate("/auth")}
-                        className="justify-start text-wedding-primary hover:text-wedding-primary/80 hover:bg-wedding-light/50 min-h-[48px] touch-manipulation"
-                      >
-                        <LogIn className="h-5 w-5 mr-3" />
-                        Sign In
-                      </Button>
+                        <Button
+                          variant="ghost"
+                          onClick={() => navigate("/auth")}
+                          className="justify-start text-wedding-primary hover:text-wedding-primary/80 hover:bg-wedding-light/50 min-h-[48px] touch-manipulation transition-all duration-200 rounded-lg"
+                        >
+                          <LogIn className="h-5 w-5 mr-3" />
+                          Sign In
+                        </Button>
                     )}
                   </div>
                 </div>

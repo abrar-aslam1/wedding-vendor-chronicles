@@ -112,14 +112,96 @@
       0 0 20px rgba(255, 255, 255, 0.1);
   }
   
+  /* Enhanced Liquid Glass Navigation - Dramatic Effect */
   .liquid-glass-nav {
-    backdrop-filter: blur(var(--glass-blur, 24px)) saturate(200%);
-    -webkit-backdrop-filter: blur(var(--glass-blur, 24px)) saturate(200%);
-    background: rgba(255, 255, 255, var(--glass-opacity, 0.18));
-    border-bottom: 1.5px solid rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(40px) saturate(200%);
+    -webkit-backdrop-filter: blur(40px) saturate(200%);
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.8) 0%,
+      rgba(255, 255, 255, 0.6) 50%,
+      rgba(255, 255, 255, 0.75) 100%
+    );
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    border-radius: 24px;
+    margin: 12px 16px;
     box-shadow: 
-      0 4px 24px var(--glass-shadow, rgba(0, 0, 0, 0.15)),
-      0 0 15px rgba(255, 255, 255, 0.1);
+      0 8px 32px rgba(31, 38, 135, 0.2),
+      0 16px 64px rgba(31, 38, 135, 0.15),
+      0 2px 8px rgba(0, 0, 0, 0.1),
+      inset 0 1px 2px rgba(255, 255, 255, 1),
+      inset 0 -1px 2px rgba(255, 255, 255, 0.5),
+      0 0 0 1px rgba(255, 255, 255, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  /* Glass reflection effect */
+  .liquid-glass-nav::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.4) 0%,
+      transparent 100%
+    );
+    pointer-events: none;
+    border-radius: 24px 24px 0 0;
+  }
+  
+  /* Liquid glass shimmer effect */
+  .liquid-glass-nav::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.1) 50%,
+      transparent 100%
+    );
+    animation: liquid-shimmer 8s ease-in-out infinite;
+    pointer-events: none;
+  }
+  
+  /* Mobile optimization */
+  @media (max-width: 768px) {
+    .liquid-glass-nav {
+      backdrop-filter: blur(30px) saturate(200%);
+      -webkit-backdrop-filter: blur(30px) saturate(200%);
+      margin: 8px 12px;
+      border-radius: 20px;
+      background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.85) 0%,
+        rgba(255, 255, 255, 0.7) 50%,
+        rgba(255, 255, 255, 0.8) 100%
+      );
+    }
+  }
+  
+  /* Nav button hover effects for glass aesthetic */
+  .liquid-glass-nav button:hover,
+  .liquid-glass-nav a:hover {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+  }
+  
+  .liquid-glass-nav button:active,
+  .liquid-glass-nav a:active {
+    transform: translateY(0);
+    background: rgba(255, 255, 255, 0.25);
   }
 }
 
@@ -129,6 +211,15 @@
   }
   100% {
     left: 200%;
+  }
+}
+
+@keyframes liquid-shimmer {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(100%);
   }
 }
 
@@ -202,6 +293,7 @@
   body {
     @apply bg-background text-foreground;
   }
+  
   .font-heading {
     letter-spacing: 0.05em;
     line-height: 1.3;
