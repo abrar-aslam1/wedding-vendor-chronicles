@@ -29,11 +29,11 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         wedding: {
-          primary: "#ee9ca7",
-          secondary: "#ffdde1",
-          accent: "#f8b4bc",
-          text: "#4a4a4a",
-          light: "#faf7f7",
+          primary: "var(--theme-primary)",
+          secondary: "var(--theme-secondary)",
+          accent: "var(--theme-accent)",
+          text: "var(--theme-text)",
+          light: "var(--theme-light)",
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",

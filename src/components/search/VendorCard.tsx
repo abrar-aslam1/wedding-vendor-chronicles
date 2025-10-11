@@ -182,7 +182,7 @@ export const VendorCard = ({
 
   return (
     <VendorErrorBoundary vendorId={vendor.place_id}>
-      <div className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 relative group">
+      <div className="liquid-glass rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden relative group">
       {/* Image */}
       <div className="relative h-48 sm:h-56 bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
         {vendor.main_image && !imageError ? (

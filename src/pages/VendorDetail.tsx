@@ -14,6 +14,13 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbP
 import { SEOHead } from "@/components/SEOHead";
 import { SchemaMarkup } from "@/components/SchemaMarkup";
 import { StickyVendorCTA } from "@/components/vendor/StickyVendorCTA";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { 
+  getPriceRangeDisplay, 
+  getServiceAreaDisplay, 
+  getBusinessHoursDisplay,
+  getFallbackMessage 
+} from "@/utils/dataValidation";
 
 const VendorDetail = () => {
   const location = useLocation();
@@ -226,6 +233,7 @@ const VendorDetail = () => {
   }
 
   return (
+    <ErrorBoundary>
     <div className="min-h-screen bg-wedding-light">
       <SEOHead 
         category={vendor.category}
@@ -320,20 +328,24 @@ const VendorDetail = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex items-center space-x-3">
                   <Clock className="h-5 w-5 text-wedding-primary" />
-                  <span>Available for appointments</span>
+                  <span>
+                    {vendor.business_hours ? "See business hours below" : "Contact for availability"}
+                  </span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <DollarSign className="h-5 w-5 text-wedding-primary" />
-                  <span>Price available upon request</span>
+                  <span>{getPriceRangeDisplay(vendor.price_range)}</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <MapPin className="h-5 w-5 text-wedding-primary" />
-                  <span>Service area: {vendor.city || "Local area"}</span>
+                  <span>Service area: {getServiceAreaDisplay(vendor)}</span>
                 </div>
-                <div className="flex items-center space-x-3">
-                  <Users className="h-5 w-5 text-wedding-primary" />
-                  <span>Team size: Available upon request</span>
-                </div>
+                {vendor.year_established && (
+                  <div className="flex items-center space-x-3">
+                    <Users className="h-5 w-5 text-wedding-primary" />
+                    <span>Established: {vendor.year_established}</span>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -356,20 +368,26 @@ const VendorDetail = () => {
             {/* Business Hours */}
             <div className="bg-white rounded-lg shadow-lg p-6">
               <h2 className="text-xl font-semibold mb-4">Business Hours</h2>
-              <div className="space-y-2 text-sm">
-                <p className="flex justify-between">
-                  <span className="text-gray-600">Monday - Friday</span>
-                  <span>9:00 AM - 5:00 PM</span>
-                </p>
-                <p className="flex justify-between">
-                  <span className="text-gray-600">Saturday</span>
-                  <span>By appointment</span>
-                </p>
-                <p className="flex justify-between">
-                  <span className="text-gray-600">Sunday</span>
-                  <span>Closed</span>
-                </p>
-              </div>
+              {vendor.business_hours ? (
+                <div className="space-y-2 text-sm">
+                  {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) => {
+                    const hours = getBusinessHoursDisplay(vendor.business_hours, day.toLowerCase());
+                    return (
+                      <p key={day} className="flex justify-between">
+                        <span className="text-gray-600">{day}</span>
+                        <span>{hours}</span>
+                      </p>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="text-center py-4">
+                  <p className="text-gray-600">{getFallbackMessage('hours')}</p>
+                  <p className="text-sm text-gray-500 mt-2">
+                    Please contact the vendor directly for their availability
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -412,6 +430,7 @@ const VendorDetail = () => {
         />
       )}
     </div>
+    </ErrorBoundary>
   );
 };
 

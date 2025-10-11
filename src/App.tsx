@@ -145,12 +145,12 @@ function App() {
           <Route path="/vendor-dashboard" element={<VendorDashboardPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-        </Suspense>
-        <Toaster />
-        <CookieConsent onAccept={handleCookieAccept} onReject={handleCookieReject} />
-        <TermsPopup />
-        <PerformanceMonitor />
-      </BrowserRouter>
+          </Suspense>
+          <Toaster />
+          <CookieConsent onAccept={handleCookieAccept} onReject={handleCookieReject} />
+          <TermsPopup />
+          <PerformanceMonitor />
+        </BrowserRouter>
     </ErrorBoundary>
   );
 }

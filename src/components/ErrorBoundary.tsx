@@ -1,6 +1,6 @@
-import React, { Component, ReactNode } from 'react';
-import { AlertTriangle } from 'lucide-react';
-import { Button } from './ui/button';
+import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { AlertCircle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface Props {
   children: ReactNode;
@@ -9,68 +9,67 @@ interface Props {
 
 interface State {
   hasError: boolean;
-  error: Error | null;
+  error?: Error;
 }
 
 export class ErrorBoundary extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = { hasError: false, error: null };
-  }
+  public state: State = {
+    hasError: false
+  };
 
-  static getDerivedStateFromError(error: Error): State {
+  public static getDerivedStateFromError(error: Error): State {
     return { hasError: true, error };
   }
 
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('Error caught by boundary:', error, errorInfo);
+  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error('Uncaught error:', error, errorInfo);
   }
 
-  handleReset = () => {
-    this.setState({ hasError: false, error: null });
-    window.location.href = '/';
+  private handleReset = () => {
+    this.setState({ hasError: false, error: undefined });
   };
 
-  render() {
+  public render() {
     if (this.state.hasError) {
       if (this.props.fallback) {
-        return <>{this.props.fallback}</>;
+        return this.props.fallback;
       }
 
       return (
-        <div className="min-h-screen flex items-center justify-center p-4">
-          <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-6 text-center">
-            <AlertTriangle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">
-              Oops! Something went wrong
-            </h1>
+        <div className="min-h-[400px] flex items-center justify-center p-6">
+          <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">
+            <div className="flex justify-center mb-4">
+              <div className="bg-red-100 rounded-full p-3">
+                <AlertCircle className="h-8 w-8 text-red-600" />
+              </div>
+            </div>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-2">
+              Something went wrong
+            </h2>
             <p className="text-gray-600 mb-6">
-              We're sorry, but something unexpected happened. Please try refreshing the page or return to the home page.
+              We encountered an unexpected error. Please try refreshing the page or contact support if the problem persists.
             </p>
             <div className="space-y-3">
               <Button
-                onClick={() => window.location.reload()}
+                onClick={this.handleReset}
+                className="w-full bg-wedding-primary hover:bg-wedding-primary/90"
+              >
+                Try Again
+              </Button>
+              <Button
+                onClick={() => window.location.href = '/'}
                 variant="outline"
                 className="w-full"
               >
-                Refresh Page
-              </Button>
-              <Button
-                onClick={this.handleReset}
-                className="w-full bg-wedding-primary hover:bg-wedding-primary-dark text-white"
-              >
-                Go to Home Page
+                Go to Homepage
               </Button>
             </div>
-            {process.env.NODE_ENV === 'development' && this.state.error && (
-              <details className="mt-6 text-left">
-                <summary className="cursor-pointer text-sm text-gray-500">
-                  Error details (development only)
-                </summary>
-                <pre className="mt-2 text-xs bg-gray-100 p-2 rounded overflow-auto">
-                  {this.state.error.stack}
-                </pre>
-              </details>
+            {this.state.error && process.env.NODE_ENV === 'development' && (
+              <div className="mt-6 p-4 bg-gray-50 rounded text-left">
+                <p className="text-xs font-mono text-gray-700 break-all">
+                  {this.state.error.toString()}
+                </p>
+              </div>
             )}
           </div>
         </div>

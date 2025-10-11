@@ -75,41 +75,6 @@ const SearchResultsContent = ({ results, isSearching, subcategory }: SearchResul
   const instagramResults = results.filter(result => result.vendor_source === 'instagram');
 
   useEffect(() => {
-    console.log('🔍 SearchResults useEffect triggered');
-    console.log('Search Results component received:', { 
-      resultsCount: results.length, 
-      isSearching,
-      sampleResult: results[0] ? {
-        title: results[0].title,
-        vendor_source: results[0].vendor_source,
-        hasVendorSource: 'vendor_source' in results[0]
-      } : null
-    });
-    
-    // Detailed breakdown by vendor source
-    const sourceBreakdown = results.reduce((acc, result) => {
-      const source = result.vendor_source || 'unknown';
-      acc[source] = (acc[source] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
-    
-    console.log('Results by vendor source:', sourceBreakdown);
-    console.log('Separated results:', { 
-      googleResults: googleResults.length, 
-      instagramResults: instagramResults.length,
-      googleSample: googleResults[0] ? `${googleResults[0].title} (${googleResults[0].vendor_source})` : 'none',
-      instagramSample: instagramResults[0] ? `${instagramResults[0].title} (${instagramResults[0].vendor_source})` : 'none'
-    });
-    
-    console.log('🎯 Component render decision:', {
-      resultsLength: results.length,
-      isSearching,
-      googleResultsLength: googleResults.length,
-      instagramResultsLength: instagramResults.length,
-      willShowResults: results.length > 0,
-      willShowNoResults: results.length === 0 && !isSearching
-    });
-    
     fetchFavorites();
     if (isSearching) {
       setHasSearched(true);
@@ -123,10 +88,8 @@ const SearchResultsContent = ({ results, isSearching, subcategory }: SearchResul
   const fetchFavorites = async () => {
     try {
       const { data: session } = await supabase.auth.getSession();
-      console.log('Current session:', session);
 
       if (!session?.session?.user) {
-        console.log('No authenticated user found');
         return;
       }
 
@@ -134,8 +97,6 @@ const SearchResultsContent = ({ results, isSearching, subcategory }: SearchResul
         .from('vendor_favorites')
         .select('vendor_id')
         .eq('user_id', session.session.user.id);
-
-      console.log('Favorites fetch response:', { favoritesData, error });
 
       if (error) {
         console.error('Error fetching favorites:', error);
@@ -147,10 +108,8 @@ const SearchResultsContent = ({ results, isSearching, subcategory }: SearchResul
           .filter(f => f && f.vendor_id)
           .map(f => f.vendor_id);
         
-        console.log('Valid favorite IDs:', validFavoriteIds);
         setFavorites(new Set(validFavoriteIds));
       } else {
-        console.log('No favorites data found or invalid format');
         setFavorites(new Set());
       }
     } catch (error) {
@@ -171,7 +130,6 @@ const SearchResultsContent = ({ results, isSearching, subcategory }: SearchResul
       }
 
       if (!vendor.place_id) {
-        console.error('Cannot toggle favorite: vendor has no place_id');
         return;
       }
 
@@ -330,17 +288,7 @@ const SearchResultsContent = ({ results, isSearching, subcategory }: SearchResul
     return formattedSubcategory;
   };
 
-  console.log('🚨 RENDER DECISION:', 
-    'isSearching:', isSearching,
-    'resultsLength:', results.length,
-    'googleResultsLength:', googleResults.length,
-    'instagramResultsLength:', instagramResults.length,
-    'hasSearched:', hasSearched,
-    'isFavoritesPage:', window.location.pathname === '/favorites'
-  );
-
   if (isSearching) {
-    console.log('🔄 Rendering SearchSkeleton');
     return <SearchSkeleton />;
   }
 
@@ -348,7 +296,6 @@ const SearchResultsContent = ({ results, isSearching, subcategory }: SearchResul
 
   // If no results at all and we're on favorites page, show the old single-column layout
   if (results.length === 0 && !isSearching && isFavoritesPage) {
-    console.log('💔 Rendering favorites no results');
     return (
       <div className="mt-8 md:mt-12 text-center">
         <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md border border-gray-100">
@@ -369,7 +316,6 @@ const SearchResultsContent = ({ results, isSearching, subcategory }: SearchResul
   // If no results but we're on a search page, show mobile tabs or smart layout
   // Only show "No Results" if we've actually completed a search (hasSearched is true)
   if (results.length === 0 && !isSearching && !isFavoritesPage && hasSearched) {
-    console.log('🚫 Rendering no results page');
     return (
       <div>
         {/* Header with subcategory info */}
@@ -427,8 +373,6 @@ const SearchResultsContent = ({ results, isSearching, subcategory }: SearchResul
     );
   }
 
-  console.log('✅ Rendering main results layout with', results.length, 'results');
-  
   return (
     <div>
       {/* Header with subcategory info */}
@@ -471,23 +415,17 @@ const SearchResultsContent = ({ results, isSearching, subcategory }: SearchResul
             
             {googleResults.length > 0 ? (
               <div className="space-y-6">
-                {(() => {
-                  console.log('🎯 Rendering', googleResults.length, 'VendorCard components');
-                  return googleResults.map((vendor, index) => {
-                    console.log(`🏪 Rendering VendorCard ${index}:`, vendor.title, vendor.vendor_source);
-                    return (
-                      <VendorCard
-                        key={`google-${index}`}
-                        vendor={vendor}
-                        isFavorite={favorites.has(vendor.place_id || '')}
-                        isLoading={loading.has(vendor.place_id || '')}
-                        onToggleFavorite={toggleFavorite}
-                        subcategory={subcategory}
-                        showMultiSelect={true}
-                      />
-                    );
-                  });
-                })()}
+                {googleResults.map((vendor, index) => (
+                  <VendorCard
+                    key={`google-${index}`}
+                    vendor={vendor}
+                    isFavorite={favorites.has(vendor.place_id || '')}
+                    isLoading={loading.has(vendor.place_id || '')}
+                    onToggleFavorite={toggleFavorite}
+                    subcategory={subcategory}
+                    showMultiSelect={true}
+                  />
+                ))}
               </div>
             ) : (
               <ComingSoonBanner type="google" vendorType={vendorType} />
