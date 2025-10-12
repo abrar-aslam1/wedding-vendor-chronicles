@@ -50,13 +50,19 @@ export const WeddingHashtagGenerator = () => {
   
   // Determine if we're on a location-specific page
   const isLocationPage = Boolean(stateSlug);
-  
-  // Generate canonical URL
-  const canonicalUrl = stateSlug && citySlug
-    ? `${window.location.origin}/tools/wedding-hashtag-generator/states/${stateSlug}/${citySlug}`
-    : stateSlug
-      ? `${window.location.origin}/tools/wedding-hashtag-generator/states/${stateSlug}`
-      : `${window.location.origin}/tools/wedding-hashtag-generator`;
+
+  // Generate canonical URL - check if window is defined for SSR compatibility
+  const getCanonicalUrl = () => {
+    const origin = typeof window !== 'undefined' ? window.location.origin : 'https://findmyweddingvendor.com';
+    if (stateSlug && citySlug) {
+      return `${origin}/tools/wedding-hashtag-generator/states/${stateSlug}/${citySlug}`;
+    } else if (stateSlug) {
+      return `${origin}/tools/wedding-hashtag-generator/states/${stateSlug}`;
+    }
+    return `${origin}/tools/wedding-hashtag-generator`;
+  };
+
+  const canonicalUrl = getCanonicalUrl();
 
   // Handle input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

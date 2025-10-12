@@ -99,7 +99,7 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
     };
 
     const metadata = generateMetadata();
-    const siteUrl = window.location.origin;
+    const siteUrl = typeof window !== 'undefined' ? window.location.origin : 'https://findmyweddingvendor.com';
     
     // Use helper function for canonical URL if not provided
     const currentUrl = canonicalUrl || getCanonicalUrl({

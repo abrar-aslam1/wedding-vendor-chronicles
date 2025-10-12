@@ -27,13 +27,19 @@ const FreeTimelineGenerator = () => {
   
   // Determine if we're on a location-specific page
   const isLocationPage = Boolean(stateSlug);
-  
-  // Generate canonical URL
-  const canonicalUrl = stateSlug && citySlug
-    ? `${window.location.origin}/tools/wedding-timeline-generator/states/${stateSlug}/${citySlug}`
-    : stateSlug
-      ? `${window.location.origin}/tools/wedding-timeline-generator/states/${stateSlug}`
-      : `${window.location.origin}/tools/wedding-timeline-generator`;
+
+  // Generate canonical URL - check if window is defined for SSR compatibility
+  const getCanonicalUrl = () => {
+    const origin = typeof window !== 'undefined' ? window.location.origin : 'https://findmyweddingvendor.com';
+    if (stateSlug && citySlug) {
+      return `${origin}/tools/wedding-timeline-generator/states/${stateSlug}/${citySlug}`;
+    } else if (stateSlug) {
+      return `${origin}/tools/wedding-timeline-generator/states/${stateSlug}`;
+    }
+    return `${origin}/tools/wedding-timeline-generator`;
+  };
+
+  const canonicalUrl = getCanonicalUrl();
 
   const handleAddEvents = (events: Partial<TimelineEventType>[]) => {
     // Filter out events that the user deselected in the wizard
@@ -58,7 +64,9 @@ const FreeTimelineGenerator = () => {
   };
 
   const handlePrint = () => {
-    window.print();
+    if (typeof window !== 'undefined') {
+      window.print();
+    }
   };
 
   const handleDownload = () => {

@@ -266,7 +266,7 @@ export const validateMetaLength = (description: string): boolean => {
 /**
  * Generate structured data for breadcrumbs
  */
-export const getBreadcrumbStructuredData = (params: SEOParams) => {
+export const getBreadcrumbStructuredData = (params: SEOParams, currentUrl?: string) => {
   const { category, city, state, subcategory, vendorName } = params;
   const baseUrl = 'https://findmyweddingvendor.com';
   
@@ -313,11 +313,12 @@ export const getBreadcrumbStructuredData = (params: SEOParams) => {
   }
   
   if (vendorName) {
+    const vendorUrl = currentUrl || (typeof window !== 'undefined' ? window.location.href : `${baseUrl}/vendor/${vendorName.toLowerCase().replace(/\s+/g, '-')}`);
     breadcrumbs.push({
       '@type': 'ListItem',
       position: position++,
       name: vendorName,
-      item: window.location.href
+      item: vendorUrl
     });
   }
   
