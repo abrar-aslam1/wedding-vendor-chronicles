@@ -2,15 +2,41 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types-extension';
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || "https://wpbdveyuuudhmwflrmqw.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndwYmR2ZXl1dXVkaG13ZmxybXF3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc4NDMyNjYsImV4cCI6MjA1MzQxOTI2Nn0.zjyA1hS9Da2tXEuUu7W44tCMGSIp2ZTpK3RpJXQdL4A";
+// Support both Vite (import.meta.env) and Next.js (process.env) environments
+// In Next.js builds, process.env is available and prefixed with NEXT_PUBLIC_
+// In Vite, import.meta.env is available and prefixed with VITE_
+const getEnvVar = (fallback: string): string => {
+  // Try Next.js environment variables first (for build-time)
+  if (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_SUPABASE_URL) {
+    return process.env.NEXT_PUBLIC_SUPABASE_URL;
+  }
+  if (typeof process !== 'undefined' && process.env?.VITE_SUPABASE_URL) {
+    return process.env.VITE_SUPABASE_URL;
+  }
+  // Try Vite environment variables (for dev)
+  if (typeof import.meta !== 'undefined' && import.meta.env?.VITE_SUPABASE_URL) {
+    return import.meta.env.VITE_SUPABASE_URL;
+  }
+  return fallback;
+};
 
-// Log warning if environment variables are not set (for debugging)
-if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
-  console.warn(
-    'Supabase environment variables not found. Using fallback values. For production, set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY environment variables.'
-  );
-}
+const getAnonKey = (fallback: string): string => {
+  // Try Next.js environment variables first (for build-time)
+  if (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    return process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  }
+  if (typeof process !== 'undefined' && process.env?.VITE_SUPABASE_ANON_KEY) {
+    return process.env.VITE_SUPABASE_ANON_KEY;
+  }
+  // Try Vite environment variables (for dev)
+  if (typeof import.meta !== 'undefined' && import.meta.env?.VITE_SUPABASE_ANON_KEY) {
+    return import.meta.env.VITE_SUPABASE_ANON_KEY;
+  }
+  return fallback;
+};
+
+const SUPABASE_URL = getEnvVar('https://wpbdveyuuudhmwflrmqw.supabase.co');
+const SUPABASE_PUBLISHABLE_KEY = getAnonKey('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndwYmR2ZXl1dXVkaG13ZmxybXF3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc4NDMyNjYsImV4cCI6MjA1MzQxOTI2Nn0.zjyA1hS9Da2tXEuUu7W44tCMGSIp2ZTpK3RpJXQdL4A');
 
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
