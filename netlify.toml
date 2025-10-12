@@ -1,20 +1,14 @@
-# Netlify Configuration for Next.js + Vite Migration
-# Using Next.js for SSR/SSG on new pages (app directory)
-# Legacy pages directory uses client-side rendering
+# Netlify Configuration
+# Using Vite build - React Router SPA architecture
+# Note: Next.js migration in progress in app/ directory but not yet deployed
 
-# Next.js Build Configuration (Primary)
 [build]
-  command = "npm install && npm run build:next"
-  publish = ".next"
+  command = "npm install && npx vite build"
+  publish = "dist"
 
 [build.environment]
   NODE_VERSION = "18"
   NPM_FLAGS = "--include=dev --legacy-peer-deps"
-  NEXT_TELEMETRY_DISABLED = "1"
-
-# Use Netlify's Next.js Runtime
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
 
 # Alternative: Keep Vite build (uncomment for parallel deployment)
 # [context.vite]
