@@ -2,13 +2,12 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { ClientMainNav } from '../../_components/ClientMainNav';
 import { ClientFooter } from '../../_components/ClientFooter';
-import { createClient } from '../../_lib/supabase/server';
+import { createClient } from '../../_lib/supabase/client';
 import { US_STATES, getDefaultCitiesForState } from '../../_lib/constants/states';
 import { StateDetailClient } from './_components/StateDetailClient';
 
-// Force dynamic rendering since we use cookies
+// Render pages dynamically (no SSG) to avoid build-time Supabase calls
 export const dynamic = 'force-dynamic';
-export const dynamicParams = true;
 
 // Generate static params for all 50 states
 export async function generateStaticParams() {
@@ -42,7 +41,7 @@ export default async function StateDetailPage({ params }: { params: { state: str
   const stateName = stateObj.name;
   const supabase = createClient();
 
-  // Fetch state data from Supabase
+  // Fetch state data from Supabase (client-side client for SSG compatibility)
   const { data: stateData } = await supabase
     .from('location_metadata')
     .select('*')

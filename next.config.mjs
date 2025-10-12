@@ -1,14 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // Use static export mode - skips SSR, renders everything client-side
-  output: 'export',
-  // Disable image optimization for static export
-  images: {
-    unoptimized: true,
-  },
-  // Disable trailing slashes for better compatibility
-  trailingSlash: true,
   // Temporarily ignore build errors during migration
   typescript: {
     ignoreBuildErrors: true,
