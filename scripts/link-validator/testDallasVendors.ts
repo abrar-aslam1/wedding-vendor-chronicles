@@ -247,4 +247,5 @@ if (require.main === module) {
     });
 }
 
-export { testDallasVendors, ValidationReport };
+export { testDallasVendors };
+export type { ValidationReport };

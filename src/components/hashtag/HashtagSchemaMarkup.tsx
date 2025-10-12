@@ -76,24 +76,21 @@ const HashtagSchemaMarkup: React.FC<HashtagSchemaMarkupProps> = ({
   
   // Add location items to breadcrumb if applicable
   if (stateSlug) {
-    // @ts-expect-error - Dynamic property access for breadcrumb schema
     breadcrumbSchema.itemListElement.push({
       "@type": "ListItem",
       "position": 4,
       "name": "States",
       "item": "https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states"
     });
-    
-    // @ts-expect-error - Dynamic property access for breadcrumb schema
+
     breadcrumbSchema.itemListElement.push({
       "@type": "ListItem",
       "position": 5,
       "name": state?.stateName || stateSlug,
       "item": `https://findmyweddingvendor.com/tools/wedding-hashtag-generator/states/${stateSlug}`
     });
-    
+
     if (citySlug) {
-      // @ts-expect-error - Dynamic property access for breadcrumb schema
       breadcrumbSchema.itemListElement.push({
         "@type": "ListItem",
         "position": 6,

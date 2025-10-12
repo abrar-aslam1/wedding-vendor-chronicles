@@ -7,6 +7,7 @@ import { CookieConsent } from "@/components/CookieConsent";
 import { TermsPopup } from "@/components/TermsPopup";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { PerformanceMonitor } from "@/components/PerformanceMonitor";
+import { HelmetProvider } from 'react-helmet-async';
 
 // Lazy load components for better performance
 const Index = lazy(() => import("@/pages/Index"));
@@ -82,9 +83,10 @@ function App() {
   }, []);
 
   return (
-    <ErrorBoundary>
-      <BrowserRouter>
-        <Suspense fallback={<PageLoader />}>
+    <HelmetProvider>
+      <ErrorBoundary>
+        <BrowserRouter>
+          <Suspense fallback={<PageLoader />}>
           <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/auth" element={<Auth />} />
@@ -151,7 +153,8 @@ function App() {
           <TermsPopup />
           <PerformanceMonitor />
         </BrowserRouter>
-    </ErrorBoundary>
+      </ErrorBoundary>
+    </HelmetProvider>
   );
 }
 

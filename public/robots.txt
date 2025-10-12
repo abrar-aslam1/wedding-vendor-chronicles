@@ -8,7 +8,7 @@ Disallow: /auth/
 Disallow: /loading/
 Disallow: /api/
 Disallow: /*.json$
-Crawl-delay: 5
+Crawl-delay: 1
 
 # Google-specific rules
 User-agent: Googlebot
@@ -24,7 +24,7 @@ Allow: /
 Disallow: /auth/
 Disallow: /loading/
 Disallow: /api/
-Crawl-delay: 5
+Crawl-delay: 1
 
 # Rules for Google Image - Allow image crawling for SEO
 User-agent: Googlebot-Image
@@ -40,14 +40,14 @@ Disallow: /auth/
 Disallow: /loading/
 Disallow: /api/
 
-# Allow important query parameters but block problematic ones
+# Allow important query parameters for search and filtering
 User-agent: *
-Disallow: /*?*utm_*
-Disallow: /*?*session*
-Disallow: /*?*token*
-Allow: /*?*page*
-Allow: /*?*category*
-Allow: /*?*location*
+Allow: /*?page=*
+Allow: /*?category=*
+Allow: /*?location=*
+Allow: /*?city=*
+Allow: /*?state=*
+Allow: /*?q=*
 
 # Sitemaps
 Sitemap: https://findmyweddingvendor.com/sitemap.xml
