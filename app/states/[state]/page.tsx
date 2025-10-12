@@ -6,6 +6,10 @@ import { createClient } from '../../_lib/supabase/server';
 import { US_STATES, getDefaultCitiesForState } from '../../_lib/constants/states';
 import { StateDetailClient } from './_components/StateDetailClient';
 
+// Force dynamic rendering since we use cookies
+export const dynamic = 'force-dynamic';
+export const dynamicParams = true;
+
 // Generate static params for all 50 states
 export async function generateStaticParams() {
   return US_STATES.map((state) => ({

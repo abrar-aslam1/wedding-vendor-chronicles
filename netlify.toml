@@ -2,20 +2,14 @@
 # During migration: Both builds are supported
 # After migration complete: Remove Vite build
 
-# Next.js Build Configuration (Primary - for new SSG pages)
+# Vite Build Configuration (Primary - for React Router pages)
 [build]
-  command = "npm install && npm run build:next"
-  publish = ".next"
+  command = "npm install && npx vite build"
+  publish = "dist"
 
 [build.environment]
   NODE_VERSION = "18"
   NPM_FLAGS = "--include=dev --legacy-peer-deps"
-  NEXT_TELEMETRY_DISABLED = "1"
-
-# Use Netlify's Next.js Runtime
-# This enables SSG, ISR, and server-side features
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
 
 # Alternative: Keep Vite build (uncomment for parallel deployment)
 # [context.vite]

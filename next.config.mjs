@@ -1,6 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Use static export mode - skips SSR, renders everything client-side
+  output: 'export',
+  // Disable image optimization for static export
+  images: {
+    unoptimized: true,
+  },
+  // Disable trailing slashes for better compatibility
+  trailingSlash: true,
   // Temporarily ignore build errors during migration
   typescript: {
     ignoreBuildErrors: true,
@@ -15,26 +23,6 @@ const nextConfig = {
     // Fallback for legacy Vite components
     VITE_SUPABASE_URL: process.env.VITE_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL,
     VITE_SUPABASE_ANON_KEY: process.env.VITE_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-  },
-  images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'lh3.googleusercontent.com',
-      },
-      {
-        protocol: 'https',
-        hostname: '*.googleusercontent.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'findmyweddingvendor.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'cdn.gpteng.co',
-      },
-    ],
   },
   // Enable experimental features for better performance
   experimental: {
