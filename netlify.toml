@@ -1,10 +1,26 @@
+# Netlify Configuration for Next.js + Vite Migration
+# During migration: Both builds are supported
+# After migration complete: Remove Vite build
+
+# Next.js Build Configuration (Primary - for new SSG pages)
 [build]
-  command = "npm install && npm run update-all-sitemaps && npx vite build"
-  publish = "dist"
+  command = "npm install && npm run build:next"
+  publish = ".next"
 
 [build.environment]
   NODE_VERSION = "18"
   NPM_FLAGS = "--include=dev --legacy-peer-deps"
+  NEXT_TELEMETRY_DISABLED = "1"
+
+# Use Netlify's Next.js Runtime
+# This enables SSG, ISR, and server-side features
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# Alternative: Keep Vite build (uncomment for parallel deployment)
+# [context.vite]
+#   command = "npm install && npm run update-all-sitemaps && npx vite build"
+#   publish = "dist"
 
 # SEO optimizations
 [build.processing]
@@ -28,11 +44,23 @@
 [[headers]]
   for = "/*"
   [headers.values]
-    X-Frame-Options = "DENY"
+    X-Frame-Options = "SAMEORIGIN"
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://*.supabase.co https://api.dataforseo.com;"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google-analytics.com https://www.googletagmanager.com https://cdn.gpteng.co; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https: blob:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co https://api.dataforseo.com;"
+
+# Cache Next.js static assets
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/_next/image*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
 
 # Cache static assets
 [[headers]]
@@ -48,25 +76,33 @@
 [[headers]]
   for = "*.png"
   [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+    Cache-Control = "public, max-age=604800, immutable"
 
 [[headers]]
   for = "*.jpg"
   [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+    Cache-Control = "public, max-age=604800, immutable"
 
 [[headers]]
   for = "*.svg"
   [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+    Cache-Control = "public, max-age=604800, immutable"
 
 [[headers]]
   for = "*.webp"
   [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+    Cache-Control = "public, max-age=604800, immutable"
 
-# Redirects
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+[[headers]]
+  for = "/Find-My Wedding-Favicon/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+# Next.js specific redirects (handled by Next.js routing)
+# No catch-all redirect needed - Next.js handles routing
+
+# Legacy redirects for old URLs (if needed during migration)
+# [[redirects]]
+#   from = "/old-path"
+#   to = "/new-path"
+#   status = 301
