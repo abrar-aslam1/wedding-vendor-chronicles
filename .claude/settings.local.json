@@ -22,7 +22,8 @@
       "Bash(git push:*)",
       "Read(//Users/abraraslam/Downloads/favicon_io-13/**)",
       "Bash(npm install:*)",
-      "Bash(timeout 300 npm run build:next)"
+      "Bash(timeout 300 npm run build:next)",
+      "Bash(git reset:*)"
     ]
   },
   "enableAllProjectMcpServers": false
