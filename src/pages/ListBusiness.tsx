@@ -83,8 +83,25 @@ export default function ListBusiness() {
     try {
       setIsSubmitting(true);
 
+      // Validate location fields explicitly
+      if (!data.state || !data.city) {
+        toast({
+          title: "Missing Information",
+          description: "Please select both state and city for your business location.",
+          variant: "destructive",
+        });
+        setIsSubmitting(false);
+        return;
+      }
+
       if (selectedFiles.length === 0) {
-        throw new Error("Please upload at least one image of your business");
+        toast({
+          title: "Missing Images",
+          description: "Please upload at least one image of your business.",
+          variant: "destructive",
+        });
+        setIsSubmitting(false);
+        return;
       }
 
       const { data: { user }, error: userError } = await supabase.auth.getUser();
@@ -305,12 +322,18 @@ export default function ListBusiness() {
               setSelectedState={(state) => {
                 setSelectedState(state);
                 form.setValue("state", state);
+                // Clear city when state changes
+                setSelectedCity("");
+                form.setValue("city", "");
+                form.clearErrors("city");
               }}
               setSelectedCity={(city) => {
                 setSelectedCity(city);
                 form.setValue("city", city);
               }}
               isSearching={isSearching}
+              stateError={form.formState.errors.state?.message}
+              cityError={form.formState.errors.city?.message}
             />
 
             <div>

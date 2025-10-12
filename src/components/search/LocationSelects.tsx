@@ -14,6 +14,8 @@ interface LocationSelectsProps {
   setSelectedState: (value: string) => void;
   setSelectedCity: (value: string) => void;
   isSearching: boolean;
+  stateError?: string;
+  cityError?: string;
 }
 
 export const LocationSelects = ({
@@ -22,13 +24,19 @@ export const LocationSelects = ({
   setSelectedState,
   setSelectedCity,
   isSearching,
+  stateError,
+  cityError,
 }: LocationSelectsProps) => {
   const { states, loading: statesLoading } = useStates();
   const { cities, loading: citiesLoading } = useCities(selectedState);
 
   return (
     <>
-      <Select
+      <div className="space-y-1">
+        <label className="block text-sm font-medium">
+          State <span className="text-red-500">*</span>
+        </label>
+        <Select
         value={selectedState}
         onValueChange={(value) => {
           setSelectedState(value);
@@ -47,15 +55,29 @@ export const LocationSelects = ({
           )}
         </SelectTrigger>
         <SelectContent className="max-h-[300px]">
-          {states.map((state) => (
-            <SelectItem key={state.location_code} value={state.location_name}>
-              {state.location_name}
-            </SelectItem>
-          ))}
+          {states.length === 0 && !statesLoading ? (
+            <div className="p-4 text-center text-sm text-gray-500">
+              No states available
+            </div>
+          ) : (
+            states.map((state) => (
+              <SelectItem key={state.location_code} value={state.location_name}>
+                {state.location_name}
+              </SelectItem>
+            ))
+          )}
         </SelectContent>
       </Select>
+      {stateError && (
+        <p className="text-red-500 text-sm">{stateError}</p>
+      )}
+      </div>
 
-      <Select
+      <div className="space-y-1">
+        <label className="block text-sm font-medium">
+          City <span className="text-red-500">*</span>
+        </label>
+        <Select
         value={selectedCity}
         onValueChange={setSelectedCity}
         disabled={!selectedState || isSearching || citiesLoading}
@@ -71,13 +93,23 @@ export const LocationSelects = ({
           )}
         </SelectTrigger>
         <SelectContent className="max-h-[300px]">
-          {cities.map((city) => (
-            <SelectItem key={city.location_code} value={city.location_name}>
-              {city.location_name}
-            </SelectItem>
-          ))}
+          {cities.length === 0 && !citiesLoading ? (
+            <div className="p-4 text-center text-sm text-gray-500">
+              {selectedState ? "No cities found for this state" : "Please select a state first"}
+            </div>
+          ) : (
+            cities.map((city) => (
+              <SelectItem key={city.location_code} value={city.location_name}>
+                {city.location_name}
+              </SelectItem>
+            ))
+          )}
         </SelectContent>
       </Select>
+      {cityError && (
+        <p className="text-red-500 text-sm">{cityError}</p>
+      )}
+      </div>
     </>
   );
 };
