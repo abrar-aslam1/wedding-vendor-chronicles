@@ -23,7 +23,12 @@
       "Read(//Users/abraraslam/Downloads/favicon_io-13/**)",
       "Bash(npm install:*)",
       "Bash(timeout 300 npm run build:next)",
-      "Bash(git reset:*)"
+      "Bash(git reset:*)",
+      "Bash(pkill -f \"next dev\")",
+      "Bash(lsof -ti:5173)",
+      "Bash(cat .gitignore)",
+      "Bash(git log -1 --format=\"%H %s\")",
+      "Bash(git log -3 --format='%s')"
     ]
   },
   "enableAllProjectMcpServers": false

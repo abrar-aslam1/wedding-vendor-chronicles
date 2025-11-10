@@ -11,6 +11,18 @@ const TODAY = new Date().toISOString().split('T')[0]; // Just the date part for 
 const SITEMAP_DIR = path.join(process.cwd(), 'public', 'sitemaps');
 const MAX_URLS_PER_SITEMAP = 1000; // Keep each sitemap file manageable
 
+// Helper function to create URL-safe slugs
+function createUrlSlug(text: string): string {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')           // spaces to hyphens
+    .replace(/&/g, 'and')            // & to 'and' (cleaner than %26 in URLs)
+    .replace(/[^\w\-]/g, '')         // remove other special chars
+    .replace(/\-\-+/g, '-')          // collapse multiple hyphens
+    .replace(/^-+|-+$/g, '');        // trim hyphens from ends
+}
+
 // URL types with their priorities and change frequencies
 const URL_TYPES = {
   HOME: { priority: '1.0', changefreq: 'weekly' },
@@ -90,9 +102,9 @@ const generateSitemap = () => {
     Object.entries(stateData.cities).forEach(([city, cityCode]) => {
       // Add URLs for each category in this location
       categories.forEach(category => {
-        // Add the main category URL
+        // Add the main category URL with properly slugified city and state
         locationUrlsByCategory[category.slug].push({
-          url: `/top-20/${category.slug}/${city}/${state}`,
+          url: `/top-20/${category.slug}/${createUrlSlug(city)}/${createUrlSlug(state)}`,
           type: 'LOCATION'
         });
         
@@ -100,7 +112,7 @@ const generateSitemap = () => {
         if (subcategories[category.slug]) {
           subcategories[category.slug].forEach(subcategory => {
             locationUrlsByCategory[category.slug].push({
-              url: `/top-20/${category.slug}/${subcategory.name.toLowerCase().replace(/\s+/g, '-')}/${city}/${state}`,
+              url: `/top-20/${category.slug}/${createUrlSlug(subcategory.name)}/${createUrlSlug(city)}/${createUrlSlug(state)}`,
               type: 'SUBCATEGORY'
             });
           });
