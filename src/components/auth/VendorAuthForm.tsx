@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { Separator } from "@/components/ui/separator";
 import { Store, Eye, EyeOff } from "lucide-react";
+import posthog from "posthog-js";
 
 interface VendorAuthFormProps {
   loading: boolean;
@@ -51,6 +52,14 @@ export const VendorAuthForm = ({ loading, setLoading }: VendorAuthFormProps) => 
 
         if (error) throw error;
 
+        // Track successful vendor sign up
+        if (data.user) {
+          posthog.capture('vendor_signed_up', {
+            method: 'email',
+            user_type: 'vendor',
+          });
+        }
+
         toast({
           title: "Registration Successful!",
           description: "Please check your email to verify your account.",
@@ -65,9 +74,23 @@ export const VendorAuthForm = ({ loading, setLoading }: VendorAuthFormProps) => 
 
         if (error) throw error;
 
-        // Check if user is a vendor
-        const userType = data.user?.user_metadata?.user_type;
-        
+        // Identify vendor in PostHog
+        if (data.user) {
+          const userType = data.user.user_metadata?.user_type;
+
+          posthog.identify(data.user.id, {
+            email: data.user.email,
+            user_type: userType || 'vendor',
+            email_verified: data.user.email_confirmed_at !== null,
+          });
+
+          // Track successful vendor login
+          posthog.capture('vendor_signed_in', {
+            method: 'email',
+            user_type: 'vendor',
+          });
+        }
+
         toast({
           title: "Welcome back!",
           description: "Successfully signed in to your vendor account.",
@@ -77,6 +100,13 @@ export const VendorAuthForm = ({ loading, setLoading }: VendorAuthFormProps) => 
         navigate(returnUrl ? decodeURIComponent(returnUrl) : "/vendor-dashboard");
       }
     } catch (error: any) {
+      // Track failed auth attempt
+      posthog.capture(isSignUp ? 'vendor_sign_up_failed' : 'vendor_sign_in_failed', {
+        method: 'email',
+        user_type: 'vendor',
+        error: error.message,
+      });
+
       toast({
         title: isSignUp ? "Registration Failed" : "Sign In Failed",
         description: error.message || "An error occurred. Please try again.",
@@ -95,9 +125,22 @@ export const VendorAuthForm = ({ loading, setLoading }: VendorAuthFormProps) => 
           redirectTo: `${window.location.origin}/auth/callback?returnUrl=${encodeURIComponent(returnUrl || "/vendor-dashboard")}&type=vendor`
         }
       });
-      
+
       if (error) throw error;
+
+      // Track OAuth initiation
+      posthog.capture('vendor_oauth_initiated', {
+        provider: 'google',
+        user_type: 'vendor',
+      });
     } catch (error: any) {
+      // Track OAuth failure
+      posthog.capture('vendor_oauth_failed', {
+        provider: 'google',
+        user_type: 'vendor',
+        error: error.message,
+      });
+
       toast({
         title: "Error signing in with Google",
         description: error.message,
@@ -125,11 +168,22 @@ export const VendorAuthForm = ({ loading, setLoading }: VendorAuthFormProps) => 
 
       if (error) throw error;
 
+      // Track password reset request
+      posthog.capture('vendor_password_reset_requested', {
+        user_type: 'vendor',
+      });
+
       toast({
         title: "Reset Link Sent",
         description: "Check your email for password reset instructions.",
       });
     } catch (error: any) {
+      // Track password reset failure
+      posthog.capture('vendor_password_reset_failed', {
+        user_type: 'vendor',
+        error: error.message,
+      });
+
       toast({
         title: "Reset Failed",
         description: error.message || "An error occurred. Please try again.",

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Lato } from 'next/font/google';
 import '../src/index.css';
 import { GoogleAnalytics } from '@next/third-parties/google';
+import { PostHogProvider } from './providers/PostHogProvider';
 
 const lato = Lato({
   weight: ['300', '400', '700'],
@@ -89,8 +90,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={lato.variable}>
       <body className={`${lato.className} antialiased`}>
-        {children}
-        <GoogleAnalytics gaId="G-FL048TNQ0D" />
+        <PostHogProvider>
+          {children}
+          <GoogleAnalytics gaId="G-FL048TNQ0D" />
+        </PostHogProvider>
       </body>
     </html>
   );

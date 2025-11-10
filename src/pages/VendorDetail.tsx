@@ -15,12 +15,13 @@ import { SEOHead } from "@/components/SEOHead";
 import { SchemaMarkup } from "@/components/SchemaMarkup";
 import { StickyVendorCTA } from "@/components/vendor/StickyVendorCTA";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
-import { 
-  getPriceRangeDisplay, 
-  getServiceAreaDisplay, 
+import {
+  getPriceRangeDisplay,
+  getServiceAreaDisplay,
   getBusinessHoursDisplay,
-  getFallbackMessage 
+  getFallbackMessage
 } from "@/utils/dataValidation";
+import { trackVendorView, trackVendorContact } from "@/lib/analytics";
 
 const VendorDetail = () => {
   const location = useLocation();
@@ -106,12 +107,23 @@ const VendorDetail = () => {
     return () => subscription.unsubscribe();
   }, [navigate, toast]);
 
+  // Track vendor view when vendor data is loaded
+  useEffect(() => {
+    if (vendor) {
+      trackVendorView(vendor.place_id, vendor.category || 'Unknown', {
+        vendor_name: vendor.name,
+        rating: vendor.rating,
+        total_reviews: vendor.user_ratings_total,
+      });
+    }
+  }, [vendor]);
+
   useEffect(() => {
     const fetchSuggestedVendors = async () => {
       if (!vendor?.category) return;
-      
+
       try {
-      
+
       const { data: cachedResults } = await supabase
         .from('vendor_cache')
         .select('search_results')
@@ -168,6 +180,11 @@ const VendorDetail = () => {
 
         if (error) throw error;
         setIsFavorite(false);
+
+        // Track favorite removal
+        const { trackVendorFavorite } = await import("@/lib/analytics");
+        trackVendorFavorite(vendor.place_id, 'remove');
+
         toast({
           title: "Removed from favorites",
           description: "Vendor has been removed from your favorites",
@@ -183,6 +200,11 @@ const VendorDetail = () => {
 
         if (error) throw error;
         setIsFavorite(true);
+
+        // Track favorite addition
+        const { trackVendorFavorite } = await import("@/lib/analytics");
+        trackVendorFavorite(vendor.place_id, 'add');
+
         toast({
           title: "Added to favorites",
           description: "Vendor has been added to your favorites",

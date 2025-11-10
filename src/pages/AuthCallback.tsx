@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import posthog from "posthog-js";
 
 const AuthCallback = () => {
   const navigate = useNavigate();
@@ -18,18 +19,18 @@ const AuthCallback = () => {
         if (session) {
           // Check if this is a vendor sign-in
           const isVendor = searchParams.get("type") === "vendor";
-          
+
           // If this is a vendor OAuth sign-up, update user metadata
           if (isVendor && !session.user.user_metadata?.user_type) {
             const { error: updateError } = await supabase.auth.updateUser({
               data: { user_type: 'vendor' }
             });
-            
+
             if (updateError) {
               console.error('Failed to update user metadata:', updateError);
             }
           }
-          
+
           // Check if profile exists
           const { data: profile, error: profileError } = await supabase
             .from('profiles')
@@ -52,10 +53,25 @@ const AuthCallback = () => {
 
           // Get return URL
           const returnUrl = searchParams.get("returnUrl");
-          
+
           // Determine user type from metadata or URL parameter
           const userType = session.user.user_metadata?.user_type || (isVendor ? 'vendor' : 'couple');
-          
+
+          // Identify user in PostHog after OAuth callback
+          posthog.identify(session.user.id, {
+            email: session.user.email,
+            user_type: userType,
+            email_verified: session.user.email_confirmed_at !== null,
+            oauth_provider: 'google',
+          });
+
+          // Track OAuth completion
+          posthog.capture('oauth_callback_completed', {
+            provider: 'google',
+            user_type: userType,
+            is_new_profile: !profile,
+          });
+
           // Redirect based on user type
           if (userType === 'vendor' || isVendor) {
             // For vendors, go to vendor dashboard or custom return URL

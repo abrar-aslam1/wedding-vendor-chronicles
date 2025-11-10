@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { Separator } from "@/components/ui/separator";
+import posthog from "posthog-js";
 
 interface UserAuthFormProps {
   loading: boolean;
@@ -23,15 +24,37 @@ export const UserAuthForm = ({ loading, setLoading }: UserAuthFormProps) => {
     e.preventDefault();
     try {
       setLoading(true);
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (error) throw error;
 
+      // Identify user in PostHog
+      if (data.user) {
+        posthog.identify(data.user.id, {
+          email: data.user.email,
+          user_type: 'couple',
+          email_verified: data.user.email_confirmed_at !== null,
+        });
+
+        // Track successful login
+        posthog.capture('user_signed_in', {
+          method: 'email',
+          user_type: 'couple',
+        });
+      }
+
       navigate(returnUrl ? decodeURIComponent(returnUrl) : "/");
     } catch (error: any) {
+      // Track failed login attempt
+      posthog.capture('user_sign_in_failed', {
+        method: 'email',
+        user_type: 'couple',
+        error: error.message,
+      });
+
       toast({
         title: "Error signing in",
         description: error.message,
@@ -46,18 +69,33 @@ export const UserAuthForm = ({ loading, setLoading }: UserAuthFormProps) => {
     e.preventDefault();
     try {
       setLoading(true);
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
       });
 
       if (error) throw error;
 
+      // Track successful sign up
+      if (data.user) {
+        posthog.capture('user_signed_up', {
+          method: 'email',
+          user_type: 'couple',
+        });
+      }
+
       toast({
         title: "Success!",
         description: "Check your email for the confirmation link.",
       });
     } catch (error: any) {
+      // Track failed sign up attempt
+      posthog.capture('user_sign_up_failed', {
+        method: 'email',
+        user_type: 'couple',
+        error: error.message,
+      });
+
       toast({
         title: "Error signing up",
         description: error.message,
@@ -76,9 +114,22 @@ export const UserAuthForm = ({ loading, setLoading }: UserAuthFormProps) => {
           redirectTo: `${window.location.origin}/auth/callback${returnUrl ? `?returnUrl=${returnUrl}` : ''}`
         }
       });
-      
+
       if (error) throw error;
+
+      // Track OAuth initiation
+      posthog.capture('user_oauth_initiated', {
+        provider: 'google',
+        user_type: 'couple',
+      });
     } catch (error: any) {
+      // Track OAuth failure
+      posthog.capture('user_oauth_failed', {
+        provider: 'google',
+        user_type: 'couple',
+        error: error.message,
+      });
+
       toast({
         title: "Error signing in with Google",
         description: error.message,
