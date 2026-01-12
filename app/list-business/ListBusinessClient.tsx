@@ -155,7 +155,7 @@ export default function ListBusinessClient() {
           contact_info,
           images: imageUrls,
           owner_id: user.id,
-          status: 'pending'
+          verification_status: 'pending'
         });
 
       if (insertError) {
