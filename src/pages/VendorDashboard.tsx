@@ -71,22 +71,35 @@ const VendorDashboard: React.FC<VendorDashboardProps> = ({ vendorId }) => {
   // Fetch vendor data
   const fetchVendorData = useCallback(async () => {
     try {
+      // First, fetch basic vendor data without relations
       const { data: vendorData, error: vendorError } = await supabase
         .from('vendors')
-        .select(`
-          *,
-          vendor_subscriptions (
-            *,
-            subscription_plans (*)
-          )
-        `)
+        .select('*')
         .eq('id', vendorId)
         .single();
 
       if (vendorError) throw vendorError;
       
       setVendor(vendorData);
-      setSubscription(vendorData.vendor_subscriptions?.[0] || null);
+
+      // Try to fetch subscription data separately (may not exist)
+      try {
+        const { data: subscriptionData } = await supabase
+          .from('vendor_subscriptions')
+          .select(`
+            *,
+            subscription_plans (*)
+          `)
+          .eq('vendor_id', vendorId)
+          .single();
+        
+        if (subscriptionData) {
+          setSubscription(subscriptionData);
+        }
+      } catch (subError) {
+        // Subscription tables may not exist - this is OK
+        console.log('No subscription data available');
+      }
     } catch (error) {
       console.error('Error fetching vendor data:', error);
       toast.error('Failed to load vendor information');
