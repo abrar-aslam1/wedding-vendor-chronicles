@@ -31,7 +31,8 @@ export default function AdminPanelClient() {
   const [searchTerm, setSearchTerm] = useState("");
   
   // Realtime State
-  const [isConnected, setIsConnected] = useState(true);
+  const [isConnected, setIsConnected] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(true);
   const [realtimeChannel, setRealtimeChannel] = useState<any>(null);
   const [notifications, setNotifications] = useState<Array<{id: string, message: string, type: string, timestamp: Date}>>([]);
   
@@ -204,6 +205,8 @@ export default function AdminPanelClient() {
 
   // Realtime subscription setup
   const setupRealtimeSubscription = () => {
+    setIsConnecting(true);
+    
     const channel = supabase
       .channel('admin-vendor-changes')
       .on('postgres_changes', 
@@ -215,6 +218,7 @@ export default function AdminPanelClient() {
       )
       .subscribe((status) => {
         console.log('Realtime subscription status:', status);
+        setIsConnecting(false);
         setIsConnected(status === 'SUBSCRIBED');
         
         if (status === 'SUBSCRIBED') {
@@ -222,6 +226,9 @@ export default function AdminPanelClient() {
             title: "Connected to realtime updates",
             description: "You'll see live vendor changes"
           });
+        } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
+          console.log('Realtime connection failed, falling back to polling');
+          // Realtime might not be enabled, data still loads from regular fetch
         }
       });
 
@@ -479,10 +486,12 @@ export default function AdminPanelClient() {
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
-              {isConnected ? (
-                <><Wifi className="w-4 h-4 text-green-500" /><span className="text-sm text-green-600">Connected</span></>
+              {isConnecting ? (
+                <><Wifi className="w-4 h-4 text-yellow-500 animate-pulse" /><span className="text-sm text-yellow-600">Connecting...</span></>
+              ) : isConnected ? (
+                <><Wifi className="w-4 h-4 text-green-500" /><span className="text-sm text-green-600">Live</span></>
               ) : (
-                <><WifiOff className="w-4 h-4 text-red-500" /><span className="text-sm text-red-600">Disconnected</span></>
+                <><WifiOff className="w-4 h-4 text-gray-400" /><span className="text-sm text-gray-500">Standard</span></>
               )}
             </div>
             {notifications.length > 0 && (
