@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -15,30 +15,61 @@ import {
   Settings,
   CreditCard,
   FileText,
-  Crown
+  Crown,
+  RefreshCw,
+  Wifi,
+  WifiOff,
+  Calendar,
+  MousePointer
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { VendorAnalytics, Vendor, VendorSubscription, SubscriptionPlan } from '@/integrations/supabase/types';
+import { Vendor, VendorSubscription } from '@/integrations/supabase/types';
 import { CulturalProfileManager } from '@/components/vendor/CulturalProfileManager';
 
 interface VendorDashboardProps {
   vendorId: string;
 }
 
+interface AnalyticsMetrics {
+  profile_views: number;
+  contact_clicks: number;
+  phone_reveals: number;
+  email_clicks: number;
+  website_clicks: number;
+  favorites_added: number;
+  check_availability_clicks: number;
+  search_impressions: number;
+}
+
+interface RecentActivity {
+  id: string;
+  event_type: string;
+  event_data: any;
+  created_at: string;
+}
+
 const VendorDashboard: React.FC<VendorDashboardProps> = ({ vendorId }) => {
   const [vendor, setVendor] = useState<Vendor | null>(null);
-  const [analytics, setAnalytics] = useState<VendorAnalytics | null>(null);
+  const [metrics, setMetrics] = useState<AnalyticsMetrics>({
+    profile_views: 0,
+    contact_clicks: 0,
+    phone_reveals: 0,
+    email_clicks: 0,
+    website_clicks: 0,
+    favorites_added: 0,
+    check_availability_clicks: 0,
+    search_impressions: 0
+  });
+  const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([]);
   const [subscription, setSubscription] = useState<VendorSubscription | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
+  const [isRealtimeConnected, setIsRealtimeConnected] = useState(false);
+  const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
 
-  useEffect(() => {
-    fetchVendorData();
-    fetchAnalytics();
-  }, [vendorId]);
-
-  const fetchVendorData = async () => {
+  // Fetch vendor data
+  const fetchVendorData = useCallback(async () => {
     try {
       const { data: vendorData, error: vendorError } = await supabase
         .from('vendors')
@@ -60,50 +91,184 @@ const VendorDashboard: React.FC<VendorDashboardProps> = ({ vendorId }) => {
       console.error('Error fetching vendor data:', error);
       toast.error('Failed to load vendor information');
     }
-  };
+  }, [vendorId]);
 
-  const fetchAnalytics = async () => {
+  // Fetch analytics from database
+  const fetchAnalytics = useCallback(async () => {
     try {
-      // Call our analytics edge function
-      const response = await fetch('/api/vendor-analytics-dashboard', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          vendorId,
-          dateRange: '30'
-        })
-      });
-
-      if (!response.ok) throw new Error('Failed to fetch analytics');
+      // Get current date minus 30 days
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
       
-      const data = await response.json();
-      setAnalytics(data);
-    } catch (error) {
-      console.error('Error fetching analytics:', error);
-      // Set mock data for development
-      setAnalytics({
-        totals: {
-          profile_views: 245,
-          contact_clicks: 18,
-          phone_reveals: 12,
-          email_clicks: 8,
-          website_clicks: 15,
-          photo_views: 89,
-          favorites_added: 6,
-          search_impressions: 1250
-        },
-        basic_metrics: {
-          profile_views: 245,
-          contact_clicks: 18,
-          conversion_rate: '7.35'
+      // Fetch analytics events for this vendor
+      const { data: events, error } = await supabase
+        .from('vendor_analytics_events')
+        .select('*')
+        .eq('vendor_id', vendorId)
+        .gte('created_at', thirtyDaysAgo.toISOString())
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching analytics events:', error);
+        // Try fetching from summary table instead
+        const { data: summary } = await supabase
+          .from('vendor_analytics_summary')
+          .select('*')
+          .eq('vendor_id', vendorId)
+          .single();
+        
+        if (summary) {
+          setMetrics({
+            profile_views: summary.profile_views || 0,
+            contact_clicks: summary.contact_clicks || 0,
+            phone_reveals: summary.phone_reveals || 0,
+            email_clicks: summary.email_clicks || 0,
+            website_clicks: summary.website_clicks || 0,
+            favorites_added: summary.favorites_added || 0,
+            check_availability_clicks: summary.check_availability_clicks || 0,
+            search_impressions: summary.search_impressions || 0
+          });
+        }
+        return;
+      }
+
+      // Aggregate events into metrics
+      const aggregatedMetrics: AnalyticsMetrics = {
+        profile_views: 0,
+        contact_clicks: 0,
+        phone_reveals: 0,
+        email_clicks: 0,
+        website_clicks: 0,
+        favorites_added: 0,
+        check_availability_clicks: 0,
+        search_impressions: 0
+      };
+
+      events?.forEach((event: any) => {
+        const eventType = event.event_type || event.event_data?.cta_type;
+        switch (eventType) {
+          case 'view_profile':
+          case 'profile_view':
+            aggregatedMetrics.profile_views++;
+            break;
+          case 'call':
+          case 'phone':
+            aggregatedMetrics.phone_reveals++;
+            aggregatedMetrics.contact_clicks++;
+            break;
+          case 'email':
+            aggregatedMetrics.email_clicks++;
+            aggregatedMetrics.contact_clicks++;
+            break;
+          case 'visit_site':
+          case 'website':
+            aggregatedMetrics.website_clicks++;
+            aggregatedMetrics.contact_clicks++;
+            break;
+          case 'save':
+          case 'favorite':
+            aggregatedMetrics.favorites_added++;
+            break;
+          case 'check_availability':
+            aggregatedMetrics.check_availability_clicks++;
+            aggregatedMetrics.contact_clicks++;
+            break;
+          case 'search_impression':
+            aggregatedMetrics.search_impressions++;
+            break;
         }
       });
+
+      setMetrics(aggregatedMetrics);
+      setRecentActivity(events?.slice(0, 10) || []);
+      setLastRefresh(new Date());
+    } catch (error) {
+      console.error('Error fetching analytics:', error);
     } finally {
       setLoading(false);
     }
+  }, [vendorId]);
+
+  // Setup realtime subscription for live analytics updates
+  useEffect(() => {
+    const channel = supabase
+      .channel(`vendor-analytics-${vendorId}`)
+      .on('postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'vendor_analytics_events', filter: `vendor_id=eq.${vendorId}` },
+        (payload) => {
+          console.log('New analytics event:', payload);
+          // Update metrics based on new event
+          const eventType = payload.new.event_type || payload.new.event_data?.cta_type;
+          setMetrics(prev => {
+            const updated = { ...prev };
+            switch (eventType) {
+              case 'view_profile':
+              case 'profile_view':
+                updated.profile_views++;
+                break;
+              case 'call':
+              case 'phone':
+                updated.phone_reveals++;
+                updated.contact_clicks++;
+                break;
+              case 'email':
+                updated.email_clicks++;
+                updated.contact_clicks++;
+                break;
+              case 'visit_site':
+              case 'website':
+                updated.website_clicks++;
+                updated.contact_clicks++;
+                break;
+              case 'save':
+              case 'favorite':
+                updated.favorites_added++;
+                break;
+              case 'check_availability':
+                updated.check_availability_clicks++;
+                updated.contact_clicks++;
+                break;
+            }
+            return updated;
+          });
+          
+          // Add to recent activity
+          setRecentActivity(prev => [payload.new as RecentActivity, ...prev.slice(0, 9)]);
+          
+          toast.success('New activity detected!', {
+            description: `Someone interacted with your profile`
+          });
+        }
+      )
+      .subscribe((status) => {
+        setIsRealtimeConnected(status === 'SUBSCRIBED');
+        if (status === 'SUBSCRIBED') {
+          console.log('Realtime analytics connected');
+        }
+      });
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [vendorId]);
+
+  // Initial data fetch
+  useEffect(() => {
+    fetchVendorData();
+    fetchAnalytics();
+  }, [fetchVendorData, fetchAnalytics]);
+
+  // Manual refresh handler
+  const handleRefresh = () => {
+    setLoading(true);
+    fetchAnalytics();
+    toast.success('Analytics refreshed');
   };
+
+  // Calculate conversion rate
+  const conversionRate = metrics.profile_views > 0 
+    ? ((metrics.contact_clicks / metrics.profile_views) * 100).toFixed(1)
+    : '0';
 
   const getSubscriptionTier = () => {
     return subscription?.subscription_plans?.name?.toLowerCase() || 'free';
@@ -167,6 +332,25 @@ const VendorDashboard: React.FC<VendorDashboardProps> = ({ vendorId }) => {
           </div>
         </div>
 
+        {/* Realtime Status Bar */}
+        <div className="flex items-center justify-between mb-4 p-3 bg-white rounded-lg shadow-sm">
+          <div className="flex items-center gap-3">
+            {isRealtimeConnected ? (
+              <><Wifi className="w-4 h-4 text-green-500" /><span className="text-sm text-green-600">Live updates enabled</span></>
+            ) : (
+              <><WifiOff className="w-4 h-4 text-gray-400" /><span className="text-sm text-gray-500">Connecting...</span></>
+            )}
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-gray-500">
+              Last updated: {lastRefresh.toLocaleTimeString()}
+            </span>
+            <Button variant="ghost" size="sm" onClick={handleRefresh} disabled={loading}>
+              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+            </Button>
+          </div>
+        </div>
+
         {/* Key Metrics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card>
@@ -175,7 +359,7 @@ const VendorDashboard: React.FC<VendorDashboardProps> = ({ vendorId }) => {
               <Eye className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{analytics?.totals.profile_views || 0}</div>
+              <div className="text-2xl font-bold">{metrics.profile_views}</div>
               <p className="text-xs text-muted-foreground">Last 30 days</p>
             </CardContent>
           </Card>
@@ -186,9 +370,9 @@ const VendorDashboard: React.FC<VendorDashboardProps> = ({ vendorId }) => {
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{analytics?.totals.contact_clicks || 0}</div>
+              <div className="text-2xl font-bold">{metrics.contact_clicks}</div>
               <p className="text-xs text-muted-foreground">
-                {analytics?.basic_metrics.conversion_rate || '0'}% conversion rate
+                {conversionRate}% conversion rate
               </p>
             </CardContent>
           </Card>
@@ -199,7 +383,7 @@ const VendorDashboard: React.FC<VendorDashboardProps> = ({ vendorId }) => {
               <Phone className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{analytics?.totals.phone_reveals || 0}</div>
+              <div className="text-2xl font-bold">{metrics.phone_reveals}</div>
               <p className="text-xs text-muted-foreground">Direct inquiries</p>
             </CardContent>
           </Card>
@@ -210,7 +394,7 @@ const VendorDashboard: React.FC<VendorDashboardProps> = ({ vendorId }) => {
               <Heart className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{analytics?.totals.favorites_added || 0}</div>
+              <div className="text-2xl font-bold">{metrics.favorites_added}</div>
               <p className="text-xs text-muted-foreground">Saved by couples</p>
             </CardContent>
           </Card>
@@ -294,27 +478,27 @@ const VendorDashboard: React.FC<VendorDashboardProps> = ({ vendorId }) => {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <div className="text-center">
                     <div className="text-2xl font-bold text-blue-600">
-                      {analytics?.totals.search_impressions || 0}
+                      {metrics.search_impressions}
                     </div>
                     <div className="text-sm text-gray-500">Search Impressions</div>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl font-bold text-green-600">
-                      {analytics?.totals.email_clicks || 0}
+                      {metrics.email_clicks}
                     </div>
                     <div className="text-sm text-gray-500">Email Clicks</div>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl font-bold text-purple-600">
-                      {analytics?.totals.website_clicks || 0}
+                      {metrics.website_clicks}
                     </div>
                     <div className="text-sm text-gray-500">Website Visits</div>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl font-bold text-orange-600">
-                      {analytics?.totals.photo_views || 0}
+                      {metrics.check_availability_clicks}
                     </div>
-                    <div className="text-sm text-gray-500">Photo Views</div>
+                    <div className="text-sm text-gray-500">Availability Checks</div>
                   </div>
                 </div>
               </CardContent>
