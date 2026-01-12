@@ -1,0 +1,16 @@
+{
+  "timestamp": "2025-11-25T15:37:59.566Z",
+  "processed": 0,
+  "elapsed": 20,
+  "memory": {
+    "rss": 69,
+    "heapUsed": 12,
+    "heapTotal": 19,
+    "external": 3
+  },
+  "data": {
+    "step": 15,
+    "total": 17,
+    "name": "Flush all vendor batches to ingest API"
+  }
+}

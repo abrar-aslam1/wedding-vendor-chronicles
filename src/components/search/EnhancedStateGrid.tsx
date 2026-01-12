@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from "react";
 import { StateCard } from "./StateCard";
 import { ALL_STATES, getStatesByRegion, getPopularWeddingStates, US_REGIONS } from "@/config/states";

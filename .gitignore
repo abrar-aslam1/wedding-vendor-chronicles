@@ -39,6 +39,12 @@ service_role
 secrets/
 .secrets
 
+# Apify & Instagram Collection (sensitive)
+.keys-backup.txt
+APIFY-CREDENTIALS.md
+.apify_storage/
+apify_storage/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

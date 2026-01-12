@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect } from 'react';
 import { getTitle, getMeta, getKeywords, getCanonicalUrl, getOGImageUrl, validateTitleLength, validateMetaLength } from '@/utils/seo-helpers';
 

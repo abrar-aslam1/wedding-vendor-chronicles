@@ -3,23 +3,30 @@
 import fs from 'fs/promises'
 import path from 'path'
 import yaml from 'js-yaml'
-import { StepExecutor } from './step-executor.js'
+import { StepExecutorEnhanced } from './step-executor-enhanced.js'
 
 // Load environment variables from .env file
 import { config } from 'dotenv'
 config()
 
 class YamlRunner {
-  constructor() {
-    this.executor = new StepExecutor()
+  constructor(options = {}) {
+    this.executor = new StepExecutorEnhanced()
     this.context = {}
     this.config = {}
+    this.chunkSize = options.chunkSize || 50
+    this.enableGC = options.enableGC !== false
+    this.startTime = Date.now()
   }
 
   async run(yamlFilePath, options = {}) {
     try {
       console.log(`🚀 Starting YAML playbook: ${path.basename(yamlFilePath)}`)
       console.log(`📂 Working directory: ${process.cwd()}`)
+      console.log(`⚙️  Chunk size: ${this.chunkSize} | GC enabled: ${this.enableGC}`)
+      
+      // Log initial memory
+      this.executor.logMemoryUsage('Startup')
       
       const yamlContent = await fs.readFile(yamlFilePath, 'utf8')
       const playbook = yaml.load(yamlContent)
@@ -29,9 +36,16 @@ class YamlRunner {
       }
 
       // Load configuration from environment and playbook
-      this.config = {
+      const rawConfig = {
         ...playbook.config || {},
-        ...options
+        ...options,
+        chunk_size: this.chunkSize
+      }
+
+      // Resolve config values that may contain environment variable references
+      this.config = {}
+      for (const [key, value] of Object.entries(rawConfig)) {
+        this.config[key] = this.resolveConfigValue(value)
       }
 
       // Initialize context with environment variables and config
@@ -55,7 +69,12 @@ class YamlRunner {
         console.warn('⚠️  No steps found in playbook')
       }
 
-      console.log('✅ Playbook completed successfully')
+      // Final cleanup
+      this.executor.cleanup()
+      
+      const elapsed = Date.now() - this.startTime
+      console.log(`✅ Playbook completed successfully in ${Math.round(elapsed / 1000)}s`)
+      
       return this.context.results
 
     } catch (error) {
@@ -63,6 +82,10 @@ class YamlRunner {
       if (process.env.DEBUG) {
         console.error('Stack trace:', error.stack)
       }
+      
+      // Cleanup on error
+      this.executor.cleanup()
+      
       throw error
     }
   }
@@ -77,7 +100,7 @@ class YamlRunner {
         continue
       }
 
-      console.log(`\n🔄 Step ${stepNumber}: ${step.name}`)
+      console.log(`\n🔄 Step ${stepNumber}/${steps.length}: ${step.name}`)
       
       try {
         // Check if condition
@@ -100,6 +123,15 @@ class YamlRunner {
           this.context.results[step.name] = result
         }
 
+        // Save progress periodically
+        if (stepNumber % 5 === 0) {
+          await this.executor.saveProgress({
+            step: stepNumber,
+            total: steps.length,
+            name: step.name
+          })
+        }
+
         console.log(`✅ Step ${stepNumber}: Completed`)
 
       } catch (stepError) {
@@ -113,6 +145,11 @@ class YamlRunner {
 
         // Stop execution on failure unless explicitly told to continue
         throw new Error(`Step "${step.name}" failed: ${stepError.message}`)
+      }
+      
+      // Force garbage collection after each step if enabled
+      if (this.enableGC && global.gc) {
+        this.executor.forceGarbageCollection()
       }
     }
   }
@@ -167,6 +204,46 @@ class YamlRunner {
       console.warn(`⚠️  Condition evaluation failed for: ${condition}`, error.message)
       return false
     }
+  }
+
+  resolveConfigValue(value) {
+    if (typeof value !== 'string') {
+      return value
+    }
+
+    // Handle ${env.VAR || 'default'} syntax
+    const match = value.match(/^\$\{(.+)\}$/)
+    if (match) {
+      const expression = match[1]
+      
+      // Handle OR expressions
+      if (expression.includes('||')) {
+        const parts = expression.split('||').map(p => p.trim())
+        for (const part of parts) {
+          // Handle string literals
+          if ((part.startsWith("'") && part.endsWith("'")) || 
+              (part.startsWith('"') && part.endsWith('"'))) {
+            return part.slice(1, -1)
+          }
+          // Handle env variables
+          if (part.startsWith('env.')) {
+            const envVar = part.replace('env.', '')
+            const envValue = process.env[envVar]
+            if (envValue) {
+              return envValue
+            }
+          }
+        }
+      }
+      
+      // Handle simple env variable
+      if (expression.startsWith('env.')) {
+        const envVar = expression.replace('env.', '')
+        return process.env[envVar] || ''
+      }
+    }
+
+    return value
   }
 
   resolveVariable(varPath) {

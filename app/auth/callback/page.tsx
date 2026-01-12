@@ -3,10 +3,13 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/_lib/supabase/client';
+import { useToast } from '@/hooks/use-toast';
+import posthog from 'posthog-js';
 
 export default function AuthCallback() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { toast } = useToast();
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -30,7 +33,7 @@ export default function AuthCallback() {
 
           if (session) {
             // Check if this is a vendor sign-in
-            const isVendor = searchParams.get('type') === 'vendor';
+            const isVendor = searchParams?.get('type') === 'vendor';
 
             // If this is a vendor OAuth sign-up, update user metadata
             if (isVendor && !session.user.user_metadata?.user_type) {
@@ -64,16 +67,39 @@ export default function AuthCallback() {
             }
 
             // Get return URL
-            const returnUrl = searchParams.get('returnUrl');
+            const returnUrl = searchParams?.get('returnUrl');
 
             // Determine user type
             const userType = session.user.user_metadata?.user_type || (isVendor ? 'vendor' : 'couple');
 
+            // Identify user in PostHog after OAuth callback
+            posthog.identify(session.user.id, {
+              email: session.user.email,
+              user_type: userType,
+              email_verified: session.user.email_confirmed_at !== null,
+              oauth_provider: 'google',
+            });
+
+            // Track OAuth completion
+            posthog.capture('oauth_callback_completed', {
+              provider: 'google',
+              user_type: userType,
+              is_new_profile: !profile,
+            });
+
             // Redirect based on user type
             if (userType === 'vendor' || isVendor) {
               const vendorReturnUrl = returnUrl ? decodeURIComponent(returnUrl) : '/vendor-dashboard';
+              toast({
+                title: "Welcome!",
+                description: "Successfully signed in to your vendor account.",
+              });
               router.push(vendorReturnUrl);
             } else {
+              toast({
+                title: "Welcome!",
+                description: "Successfully signed in.",
+              });
               router.push(returnUrl ? decodeURIComponent(returnUrl) : '/');
             }
           } else {
@@ -86,8 +112,8 @@ export default function AuthCallback() {
           if (sessionError) throw sessionError;
           
           if (session) {
-            const isVendor = searchParams.get('type') === 'vendor';
-            const returnUrl = searchParams.get('returnUrl');
+            const isVendor = searchParams?.get('type') === 'vendor';
+            const returnUrl = searchParams?.get('returnUrl');
             const userType = session.user.user_metadata?.user_type || (isVendor ? 'vendor' : 'couple');
 
             if (userType === 'vendor' || isVendor) {
@@ -102,6 +128,11 @@ export default function AuthCallback() {
       } catch (error: any) {
         console.error('Auth callback error:', error);
         setError(error.message || 'Failed to complete authentication');
+        toast({
+          title: "Authentication Error",
+          description: error.message || "Failed to complete authentication",
+          variant: "destructive",
+        });
         setTimeout(() => router.push('/auth'), 3000);
       }
     };
