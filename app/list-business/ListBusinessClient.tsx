@@ -33,6 +33,9 @@ const formSchema = z.object({
     z.string().url("Please enter a valid website URL"),
     z.string().length(0)
   ]).optional(),
+  instagram: z.string().min(1, "Instagram handle is required for directory listing"),
+  facebook: z.string().optional(),
+  tiktok: z.string().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -57,6 +60,9 @@ export default function ListBusinessClient() {
       phone: "",
       email: "",
       website: "",
+      instagram: "",
+      facebook: "",
+      tiktok: "",
     },
   });
 
@@ -138,10 +144,19 @@ export default function ListBusinessClient() {
       const contact_info: Record<string, string> = {
         phone: data.phone,
         email: data.email,
+        instagram: data.instagram,
       };
       
       if (data.website) {
         contact_info.website = data.website;
+      }
+      
+      if (data.facebook) {
+        contact_info.facebook = data.facebook;
+      }
+      
+      if (data.tiktok) {
+        contact_info.tiktok = data.tiktok;
       }
 
       const { error: insertError } = await supabase
@@ -360,6 +375,62 @@ export default function ListBusinessClient() {
               {form.formState.errors.website && (
                 <p className="text-red-500 text-sm mt-1">{form.formState.errors.website.message}</p>
               )}
+            </div>
+
+            {/* Social Media Profiles Section */}
+            <div className="border-t pt-4 mt-4">
+              <h3 className="text-lg font-semibold mb-4">Social Media Profiles</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                Your Instagram handle is required to be listed in our vendor directory.
+              </p>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    Instagram Handle <span className="text-red-500">*</span>
+                  </label>
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">@</span>
+                    <Input 
+                      {...form.register("instagram")} 
+                      className="pl-8"
+                      placeholder="yourbusiness"
+                    />
+                  </div>
+                  {form.formState.errors.instagram && (
+                    <p className="text-red-500 text-sm mt-1">{form.formState.errors.instagram.message}</p>
+                  )}
+                  <p className="text-xs text-gray-500 mt-1">
+                    Required - Your business will appear in our Instagram vendors directory
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-1">Facebook Page (Optional)</label>
+                  <Input 
+                    {...form.register("facebook")} 
+                    placeholder="https://facebook.com/yourbusiness"
+                  />
+                  {form.formState.errors.facebook && (
+                    <p className="text-red-500 text-sm mt-1">{form.formState.errors.facebook.message}</p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-1">TikTok Handle (Optional)</label>
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">@</span>
+                    <Input 
+                      {...form.register("tiktok")} 
+                      className="pl-8"
+                      placeholder="yourbusiness"
+                    />
+                  </div>
+                  {form.formState.errors.tiktok && (
+                    <p className="text-red-500 text-sm mt-1">{form.formState.errors.tiktok.message}</p>
+                  )}
+                </div>
+              </div>
             </div>
 
             <div>

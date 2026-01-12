@@ -46,37 +46,46 @@ const VendorDetailClient = ({ vendorId }: VendorDetailClientProps) => {
       if (!vendorId) return;
       
       setIsLoadingVendor(true);
+      let foundVendorData: SearchResult | null = null;
+      
       try {
         // Try to fetch from vendor_cache first
         const { data: cachedData, error: cacheError } = await supabase
           .from('vendor_cache')
           .select('search_results')
-          .limit(10);
+          .limit(50);
         
         if (cachedData && !cacheError) {
           // Search through all cached results for the vendor
           for (const cache of cachedData) {
             const results = cache.search_results as SearchResult[];
-            const foundVendor = results.find(v => v.place_id === vendorId);
-            if (foundVendor) {
-              setVendor(foundVendor);
-              break;
+            if (results && Array.isArray(results)) {
+              const matchingVendor = results.find(v => v.place_id === vendorId);
+              if (matchingVendor) {
+                foundVendorData = matchingVendor;
+                break;
+              }
             }
           }
         }
         
         // If still not found, try vendor_favorites table
-        if (!vendor) {
+        if (!foundVendorData) {
           const { data: favoriteData } = await supabase
             .from('vendor_favorites')
             .select('vendor_data')
             .eq('vendor_id', vendorId)
             .limit(1)
-            .single();
+            .maybeSingle();
           
           if (favoriteData?.vendor_data) {
-            setVendor(favoriteData.vendor_data as SearchResult);
+            foundVendorData = favoriteData.vendor_data as SearchResult;
           }
+        }
+        
+        // Set the vendor state
+        if (foundVendorData) {
+          setVendor(foundVendorData);
         }
       } catch (error) {
         console.error('Error fetching vendor data:', error);

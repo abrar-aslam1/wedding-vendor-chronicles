@@ -102,6 +102,10 @@ export default function AdminPanelClient() {
       
       const newVerificationStatus = status === 'approved' ? 'verified' : 'rejected';
       
+      // Get the vendor data first
+      const vendor = vendors.find(v => v.id === vendorId);
+      if (!vendor) throw new Error('Vendor not found');
+      
       const { error } = await supabase
         .from('vendors')
         .update({ verification_status: newVerificationStatus })
@@ -109,15 +113,72 @@ export default function AdminPanelClient() {
 
       if (error) throw error;
 
+      // If approved, also add to instagram_vendors table so they show up in vendor directory
+      if (status === 'approved') {
+        const contactInfo = typeof vendor.contact_info === 'string' 
+          ? JSON.parse(vendor.contact_info) 
+          : vendor.contact_info;
+        
+        const instagramHandle = contactInfo?.instagram || '';
+        
+        // Create a unique identifier for the vendor
+        const placeId = `vendor_${vendorId}`;
+        
+        // Insert into instagram_vendors table
+        const { error: igError } = await supabase
+          .from('instagram_vendors')
+          .upsert({
+            username: instagramHandle || vendor.business_name.toLowerCase().replace(/\s+/g, ''),
+            full_name: vendor.business_name,
+            category: vendor.category,
+            subcategory: null,
+            city: vendor.city,
+            state: vendor.state,
+            bio: vendor.description,
+            profile_pic_url: vendor.images?.[0] || null,
+            external_url: contactInfo?.website || null,
+            followers_count: 0,
+            following_count: 0,
+            posts_count: 0,
+            is_verified: true,
+            is_business: true,
+            business_category: vendor.category,
+            business_phone: contactInfo?.phone || null,
+            business_email: contactInfo?.email || null,
+            business_address: `${vendor.city}, ${vendor.state}`,
+            place_id: placeId,
+            vendor_source: 'claimed',
+            collected_at: new Date().toISOString()
+          }, {
+            onConflict: 'username,category,city,state'
+          });
+
+        if (igError) {
+          console.error('Error adding to instagram_vendors:', igError);
+          // Don't throw - still mark as approved even if directory sync fails
+          showToast({
+            title: "Partial Success",
+            description: "Vendor approved but failed to sync to directory. They may need manual addition.",
+            variant: "destructive"
+          });
+        } else {
+          showToast({
+            title: "Success",
+            description: `Vendor approved and added to vendor directory successfully`
+          });
+        }
+      } else {
+        showToast({
+          title: "Success",
+          description: `Vendor rejected successfully`
+        });
+      }
+
       // Update local state
       setVendors(vendors.map(v => 
         v.id === vendorId ? { ...v, verification_status: newVerificationStatus } : v
       ));
 
-      showToast({
-        title: "Success",
-        description: `Vendor ${status === 'approved' ? 'approved' : 'rejected'} successfully`
-      });
     } catch (error) {
       console.error('Error updating vendor status:', error);
       showToast({
@@ -271,6 +332,46 @@ export default function AdminPanelClient() {
                 <a href={contactInfo.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
                   {contactInfo.website}
                 </a>
+              </div>
+            )}
+
+            {/* Social Media Profiles */}
+            {(contactInfo?.instagram || contactInfo?.facebook || contactInfo?.tiktok) && (
+              <div className="flex flex-wrap gap-4 text-sm border-t pt-2 mt-2">
+                {contactInfo?.instagram && (
+                  <div className="flex items-center gap-1">
+                    <span className="font-medium">Instagram:</span>
+                    <a 
+                      href={`https://instagram.com/${contactInfo.instagram.replace('@', '')}`} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="text-pink-600 hover:underline"
+                    >
+                      @{contactInfo.instagram.replace('@', '')}
+                    </a>
+                  </div>
+                )}
+                {contactInfo?.facebook && (
+                  <div className="flex items-center gap-1">
+                    <span className="font-medium">Facebook:</span>
+                    <a href={contactInfo.facebook} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                      View Page
+                    </a>
+                  </div>
+                )}
+                {contactInfo?.tiktok && (
+                  <div className="flex items-center gap-1">
+                    <span className="font-medium">TikTok:</span>
+                    <a 
+                      href={`https://tiktok.com/@${contactInfo.tiktok.replace('@', '')}`} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="text-gray-800 hover:underline"
+                    >
+                      @{contactInfo.tiktok.replace('@', '')}
+                    </a>
+                  </div>
+                )}
               </div>
             )}
 
