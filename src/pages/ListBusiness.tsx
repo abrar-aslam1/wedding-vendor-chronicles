@@ -153,7 +153,7 @@ export default function ListBusiness() {
           contact_info,
           images: imageUrls,
           owner_id: user.id,
-          status: 'pending'
+          verification_status: 'pending'
         });
 
       if (insertError) {
