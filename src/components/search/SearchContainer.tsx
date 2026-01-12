@@ -391,7 +391,7 @@ export const SearchContainer = () => {
   return (
     <SearchErrorBoundary onRetry={() => window.location.reload()}>
       <div className="container mx-auto px-4 py-8 mt-16">
-        {!isStateWideSearch && <SearchHeader subcategory={subcategory} />}
+        {!isStateWideSearch && <SearchHeader subcategory={subcategory} category={category} city={city} state={state} />}
         
         {(!city || !state || city === 'all-cities') && !isStateWideSearch && (
           <div className="max-w-2xl mx-auto mb-8 animate-fade-in">

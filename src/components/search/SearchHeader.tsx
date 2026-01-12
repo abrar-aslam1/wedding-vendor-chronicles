@@ -1,12 +1,13 @@
-import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 interface SearchHeaderProps {
   subcategory?: string;
+  category?: string;
+  city?: string;
+  state?: string;
 }
 
-export const SearchHeader = ({ subcategory }: SearchHeaderProps) => {
-  const { category, city, state } = useParams();
+export const SearchHeader = ({ subcategory, category, city, state }: SearchHeaderProps) => {
   const [vendorType, setVendorType] = useState<string>('vendors');
   const [singularVendorType, setSingularVendorType] = useState<string>('vendor');
   
