@@ -2,16 +2,17 @@
 
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useVendorAuth } from '@/hooks/useVendorAuth';
 import VendorDashboard from '@/pages/VendorDashboard';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Shield } from 'lucide-react';
 import { buildUrl } from '@/../lib/migration-helpers';
 
 export default function VendorDashboardPage() {
   const { vendorAuth, loading, isAuthenticated } = useVendorAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [vendorId, setVendorId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -23,11 +24,17 @@ export default function VendorDashboardPage() {
         return;
       }
       
-      if (vendorAuth?.vendor_id) {
+      // Check for vendorId in URL params (for admin access to specific vendor)
+      const urlVendorId = searchParams?.get('vendorId');
+      
+      if (urlVendorId && vendorAuth?.isAdmin) {
+        // Admin accessing a specific vendor's dashboard
+        setVendorId(urlVendorId);
+      } else if (vendorAuth?.vendor_id) {
         setVendorId(vendorAuth.vendor_id);
       }
     }
-  }, [vendorAuth, loading, isAuthenticated, router]);
+  }, [vendorAuth, loading, isAuthenticated, router, searchParams]);
 
   if (loading) {
     return (
@@ -58,21 +65,45 @@ export default function VendorDashboardPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center max-w-md mx-auto p-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Setup Required</h1>
-          <p className="text-gray-600 mb-6">Your vendor account needs to be linked to a business profile.</p>
-          <div className="space-y-3">
-            <Button onClick={() => router.push('/list-business')}>
-              Claim Your Business
-            </Button>
-            <Button 
-              variant="outline" 
-              onClick={() => router.push('/')}
-              className="w-full"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Home
-            </Button>
-          </div>
+          {vendorAuth?.isAdmin ? (
+            <>
+              <Shield className="w-12 h-12 text-wedding-primary mx-auto mb-4" />
+              <h1 className="text-2xl font-bold text-gray-900 mb-4">Admin Access</h1>
+              <p className="text-gray-600 mb-6">
+                No vendors found in the system yet. You can access individual vendor dashboards from the Admin Panel.
+              </p>
+              <div className="space-y-3">
+                <Button onClick={() => router.push('/admin')}>
+                  Go to Admin Panel
+                </Button>
+                <Button 
+                  variant="outline" 
+                  onClick={() => router.push('/list-business')}
+                  className="w-full"
+                >
+                  Create a Test Vendor
+                </Button>
+              </div>
+            </>
+          ) : (
+            <>
+              <h1 className="text-2xl font-bold text-gray-900 mb-4">Setup Required</h1>
+              <p className="text-gray-600 mb-6">Your vendor account needs to be linked to a business profile.</p>
+              <div className="space-y-3">
+                <Button onClick={() => router.push('/list-business')}>
+                  Claim Your Business
+                </Button>
+                <Button 
+                  variant="outline" 
+                  onClick={() => router.push('/')}
+                  className="w-full"
+                >
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Back to Home
+                </Button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     );
