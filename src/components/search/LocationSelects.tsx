@@ -5,7 +5,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useStates, useCities } from "@/hooks/useLocations";
+import { useStates, useCities } from "@/hooks/useStaticLocations";
 import { Loader2 } from "lucide-react";
 
 interface LocationSelectsProps {
