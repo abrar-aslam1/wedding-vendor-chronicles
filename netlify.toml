@@ -10,28 +10,31 @@
   NODE_VERSION = "18"
   NPM_FLAGS = "--include=dev --legacy-peer-deps"
 
-# Alternative: Keep Vite build (uncomment for parallel deployment)
-# [context.vite]
-#   command = "npm install && npm run update-all-sitemaps && npx vite build"
-#   publish = "dist"
-
-# SEO optimizations
+# IMPORTANT: Disable Netlify's asset processing - Vite already handles this
+# Re-processing can corrupt already-bundled JS files and cause MIME type issues
 [build.processing]
-  skip_processing = false
+  skip_processing = true
 
 [build.processing.css]
-  bundle = true
-  minify = true
+  bundle = false
+  minify = false
 
 [build.processing.js]
-  bundle = true
-  minify = true
+  bundle = false
+  minify = false
 
 [build.processing.html]
-  pretty_urls = true
+  pretty_urls = false
 
 [build.processing.images]
-  compress = true
+  compress = false
+
+# SPA redirect - serve index.html for all routes that don't match static files
+# This MUST be defined for React Router to work
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
 
 # Headers for better security and caching
 [[headers]]
@@ -44,28 +47,33 @@
     Permissions-Policy = "geolocation=(), microphone=(), camera=()"
     Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google-analytics.com https://www.googletagmanager.com https://cdn.gpteng.co https://us.i.posthog.com https://us-assets.i.posthog.com https://*.netlify.com https://*.netlify.app; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https: blob:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.dataforseo.com https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://stats.g.doubleclick.net https://us.i.posthog.com https://us-assets.i.posthog.com https://*.netlify.com https://*.netlify.app;"
 
-# Cache Next.js static assets
+# Ensure JS files are served with correct MIME type and short cache for updates
 [[headers]]
-  for = "/_next/static/*"
+  for = "/assets/*.js"
   [headers.values]
+    Content-Type = "application/javascript; charset=utf-8"
     Cache-Control = "public, max-age=31536000, immutable"
 
 [[headers]]
-  for = "/_next/image*"
+  for = "/*.js"
   [headers.values]
+    Content-Type = "application/javascript; charset=utf-8"
     Cache-Control = "public, max-age=31536000, immutable"
 
-# Cache static assets
+# Ensure CSS files are served correctly
 [[headers]]
-  for = "*.js"
+  for = "/assets/*.css"
   [headers.values]
+    Content-Type = "text/css; charset=utf-8"
     Cache-Control = "public, max-age=31536000, immutable"
 
 [[headers]]
-  for = "*.css"
+  for = "/*.css"
   [headers.values]
+    Content-Type = "text/css; charset=utf-8"
     Cache-Control = "public, max-age=31536000, immutable"
 
+# Cache image assets
 [[headers]]
   for = "*.png"
   [headers.values]
@@ -91,11 +99,13 @@
   [headers.values]
     Cache-Control = "public, max-age=604800"
 
-# Next.js specific redirects (handled by Next.js routing)
-# No catch-all redirect needed - Next.js handles routing
+# HTML should not be cached to ensure users get latest version with correct asset references
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
 
-# Legacy redirects for old URLs (if needed during migration)
-# [[redirects]]
-#   from = "/old-path"
-#   to = "/new-path"
-#   status = 301
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
