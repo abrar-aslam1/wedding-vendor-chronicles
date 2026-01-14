@@ -76,6 +76,12 @@ serve(async (req) => {
             query = query.or(`business_name.ilike.%${keyword}%,description.ilike.%${keyword}%`);
           }
           
+          // Apply subcategory filter if provided
+          if (subcategory) {
+            query = query.eq('subcategory', subcategory);
+            console.log(`[${requestId}] Applied subcategory filter to Google DB: ${subcategory}`);
+          }
+          
           if (city && state) {
             query = query
               .ilike('city', `%${city}%`)
@@ -108,6 +114,12 @@ serve(async (req) => {
             query = query.eq('category', vendorCategory);
           } else {
             query = query.or(`business_name.ilike.%${keyword}%,category.ilike.%${keyword}%`);
+          }
+          
+          // Apply subcategory filter if provided
+          if (subcategory) {
+            query = query.eq('subcategory', subcategory);
+            console.log(`[${requestId}] Applied subcategory filter to vendors table: ${subcategory}`);
           }
           
           if (city && state) {

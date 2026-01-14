@@ -76,12 +76,18 @@ serve(async (req) => {
     }
 
     // Query Instagram vendors
-    console.log(`[${requestId}] Querying Instagram vendors...`);
+    console.log(`[${requestId}] Querying Instagram vendors with subcategory: ${subcategory || 'none'}...`);
     
     let query = supabase
       .from('instagram_vendors')
       .select('*')
       .eq('category', vendorCategory);
+
+    // Apply subcategory filter if provided
+    if (subcategory) {
+      query = query.eq('subcategory', subcategory);
+      console.log(`[${requestId}] Applied subcategory filter: ${subcategory}`);
+    }
 
     // Apply location filters
     if (city && state) {

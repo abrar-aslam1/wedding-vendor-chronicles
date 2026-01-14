@@ -20,11 +20,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { LocationSelects } from "@/components/search/LocationSelects";
 import { categories } from "@/config/categories";
+import { getSubcategoriesForCategory } from "@/config/subcategories";
 
 const formSchema = z.object({
   businessName: z.string().min(2, "Business name must be at least 2 characters"),
   description: z.string().min(10, "Description must be at least 10 characters"),
   category: z.string().min(1, "Please select a category"),
+  subcategory: z.string().optional(),
   city: z.string().min(1, "Please select a city"),
   state: z.string().min(1, "Please select a state"),
   phone: z.string().min(10, "Please enter a valid phone number"),
@@ -48,6 +50,8 @@ export default function ListBusinessClient() {
   const [selectedState, setSelectedState] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
   const [isSearching, setIsSearching] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [availableSubcategories, setAvailableSubcategories] = useState<Array<{name: string, slug: string, description?: string}>>([]);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -55,6 +59,7 @@ export default function ListBusinessClient() {
       businessName: "",
       description: "",
       category: "",
+      subcategory: "",
       city: "",
       state: "",
       phone: "",
@@ -115,6 +120,8 @@ export default function ListBusinessClient() {
       const { data: { user }, error: userError } = await supabase.auth.getUser();
       if (userError || !user) throw new Error("Please sign in to list your business");
 
+      console.log('Submitting vendor with subcategory:', data.subcategory);
+
       // Upload images with better error handling
       const imageUrls: string[] = [];
       const failedUploads: string[] = [];
@@ -159,19 +166,27 @@ export default function ListBusinessClient() {
         contact_info.tiktok = data.tiktok;
       }
 
+      const vendorData: any = {
+        business_name: data.businessName,
+        description: data.description,
+        category: data.category.toLowerCase(),
+        city: data.city,
+        state: data.state,
+        contact_info,
+        images: imageUrls,
+        owner_id: user.id,
+        verification_status: 'pending'
+      };
+
+      // Add subcategory if provided
+      if (data.subcategory) {
+        vendorData.subcategory = data.subcategory;
+        console.log('Adding subcategory to vendor data:', data.subcategory);
+      }
+
       const { error: insertError } = await supabase
         .from('vendors')
-        .insert({
-          business_name: data.businessName,
-          description: data.description,
-          category: data.category.toLowerCase(),
-          city: data.city,
-          state: data.state,
-          contact_info,
-          images: imageUrls,
-          owner_id: user.id,
-          verification_status: 'pending'
-        });
+        .insert(vendorData);
 
       if (insertError) {
         throw new Error(`Failed to create listing: ${insertError.message}`);
@@ -306,7 +321,15 @@ export default function ListBusinessClient() {
             <div>
               <label className="block text-sm font-medium mb-1">Category</label>
               <Select
-                onValueChange={(value) => form.setValue("category", value)}
+                onValueChange={(value) => {
+                  form.setValue("category", value);
+                  setSelectedCategory(value);
+                  // Load subcategories for the selected category
+                  const subcats = getSubcategoriesForCategory(value);
+                  setAvailableSubcategories(subcats);
+                  // Reset subcategory when category changes
+                  form.setValue("subcategory", "");
+                }}
                 defaultValue={form.getValues("category")}
               >
                 <SelectTrigger className="w-full h-12 rounded-xl border-wedding-primary/20">
@@ -332,6 +355,47 @@ export default function ListBusinessClient() {
                 <p className="text-red-500 text-sm mt-1">{form.formState.errors.category.message}</p>
               )}
             </div>
+
+            {/* Subcategory dropdown - only shows when category is selected */}
+            {selectedCategory && availableSubcategories.length > 0 && (
+              <div className="animate-fade-in">
+                <label className="block text-sm font-medium mb-1">
+                  Subcategory <span className="text-gray-500 text-xs">(Optional but recommended)</span>
+                </label>
+                <Select
+                  onValueChange={(value) => form.setValue("subcategory", value)}
+                  value={form.getValues("subcategory")}
+                >
+                  <SelectTrigger className="w-full h-12 rounded-xl border-wedding-primary/20">
+                    <SelectValue placeholder="Select a subcategory to help customers find you" />
+                  </SelectTrigger>
+                  <SelectContent className="max-h-[300px]">
+                    <SelectItem value="">
+                      <span className="text-gray-500">No subcategory</span>
+                    </SelectItem>
+                    {availableSubcategories.map((subcat) => (
+                      <SelectItem
+                        key={subcat.slug}
+                        value={subcat.slug}
+                      >
+                        <div className="flex flex-col">
+                          <span>{subcat.name}</span>
+                          {subcat.description && (
+                            <span className="text-sm text-gray-500">{subcat.description}</span>
+                          )}
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <p className="text-xs text-gray-500 mt-1">
+                  Selecting a subcategory helps couples find exactly what they're looking for
+                </p>
+                {form.formState.errors.subcategory && (
+                  <p className="text-red-500 text-sm mt-1">{form.formState.errors.subcategory.message}</p>
+                )}
+              </div>
+            )}
 
             <LocationSelects
               selectedState={selectedState}

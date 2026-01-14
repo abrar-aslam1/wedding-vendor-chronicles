@@ -211,14 +211,13 @@ export const SearchContainer = () => {
       const stateAbbr = stateAbbreviations[searchState.toLowerCase()] || searchState.toUpperCase();
       const formattedLocation = `${searchCity.charAt(0).toUpperCase() + searchCity.slice(1)}, ${stateAbbr}`;
       
-      console.log('🚀 Starting parallel vendor search...');
+      console.log('🚀 Starting optimized vendor search (database first)...');
       console.log('📦 Search parameters:', { 
         keyword: searchCategory, 
         location: formattedLocation, 
         subcategory: formattedSubcategory 
       });
 
-      // Execute Google and Instagram searches in parallel for maximum performance
       const searchStartTime = Date.now();
       
       // Helper function to add timeout to promises with proper typing
@@ -231,8 +230,37 @@ export const SearchContainer = () => {
         ]);
       };
 
+      // STEP 1: Query local database FIRST for instant results
+      console.log('💾 Step 1: Querying local database for instant results...');
+      const databaseStartTime = Date.now();
+      
+      try {
+        const { data: dbResponse, error: dbError } = await supabase.functions.invoke('search-database-vendors', {
+          body: { 
+            keyword: searchCategory,
+            location: formattedLocation,
+            subcategory: formattedSubcategory
+          }
+        });
+        
+        const dbTime = Date.now() - databaseStartTime;
+        
+        if (!dbError && dbResponse?.results?.length > 0) {
+          console.log(`✅ Database search: ${dbResponse.results.length} results in ${dbTime}ms`);
+          // Show database results immediately!
+          setSearchResults(dbResponse.results);
+        } else {
+          console.log(`⚠️ Database search: 0 results in ${dbTime}ms`);
+        }
+      } catch (dbQueryError) {
+        console.error('❌ Database search error:', dbQueryError);
+      }
+
+      // STEP 2: Load external results in background (with shorter timeout)
+      console.log('🌐 Step 2: Loading external results in background...');
+      
       const [googleResults, instagramResults] = await Promise.allSettled([
-        // Google vendors search with timeout
+        // Google vendors search with reduced timeout
         withTimeout((async () => {
           try {
             console.log('🔍 Calling search-google-vendors API...');
@@ -256,9 +284,9 @@ export const SearchContainer = () => {
             console.error('❌ Google vendors API failed:', error);
             return [];
           }
-        })(), 30000), // 30 second timeout
+        })(), 15000), // Reduced to 15 second timeout
         
-        // Instagram vendors search with timeout
+        // Instagram vendors search with reduced timeout
         withTimeout((async () => {
           try {
             console.log('📸 Calling search-instagram-vendors API...');
@@ -282,7 +310,7 @@ export const SearchContainer = () => {
             console.error('❌ Instagram vendors API failed:', error);
             return [];
           }
-        })(), 30000)
+        })(), 15000) // Reduced to 15 second timeout
       ]);
 
       const searchTime = Date.now() - searchStartTime;
@@ -292,7 +320,7 @@ export const SearchContainer = () => {
       const googleVendors = googleResults.status === 'fulfilled' ? googleResults.value : [];
       const instagramVendors = instagramResults.status === 'fulfilled' ? instagramResults.value : [];
 
-      console.log(`📊 Results: Google=${googleVendors.length}, Instagram=${instagramVendors.length}`);
+      console.log(`📊 External Results: Google=${googleVendors.length}, Instagram=${instagramVendors.length}`);
 
       // Log any failed searches
       if (googleResults.status === 'rejected') {
@@ -302,14 +330,27 @@ export const SearchContainer = () => {
         console.error('❌ Instagram search failed:', instagramResults.reason);
       }
 
-      // Combine all results
-      const combinedResults = [...googleVendors, ...instagramVendors];
+      // STEP 3: Combine all results and deduplicate
+      console.log('🔗 Step 3: Combining and deduplicating results...');
       
-      // Set the actual results - no fake data
-      setSearchResults(combinedResults);
-      console.log(`🔗 Combined results: ${combinedResults.length} total`);
+      // Get current database results (if any were loaded)
+      const currentResults = searchResults || [];
+      
+      // Combine all results: database + google + instagram
+      const allResults = [...currentResults, ...googleVendors, ...instagramVendors];
+      
+      // Deduplicate by title (case-insensitive)
+      const uniqueResults = allResults.filter((vendor, index, self) => 
+        index === self.findIndex(v => 
+          v.title?.toLowerCase().trim() === vendor.title?.toLowerCase().trim()
+        )
+      );
+      
+      // Set the combined unique results
+      setSearchResults(uniqueResults);
+      console.log(`✅ Final combined results: ${uniqueResults.length} total (deduplicated from ${allResults.length})`);
 
-      if (combinedResults.length === 0) {
+      if (uniqueResults.length === 0) {
         console.log('❌ No vendors found for search criteria');
         toast({
           title: "No Results Found",
