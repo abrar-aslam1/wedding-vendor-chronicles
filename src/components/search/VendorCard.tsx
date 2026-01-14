@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Heart, Instagram, Users, CheckCircle, MapPin, Phone, Globe, Star, Award, Clock, Calendar, Plus, Check } from "lucide-react";
 import { SearchResult } from "@/types/search";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
 import { VendorErrorBoundary } from "@/components/ErrorBoundaries";
@@ -32,7 +32,7 @@ export const VendorCard = ({
   showMultiSelect = false
 }: VendorCardProps) => {
   console.log('🎨 VendorCard rendering:', vendor.title, 'with vendor_source:', vendor.vendor_source);
-  const router = useRouter();
+  const navigate = useNavigate();
   const [imageError, setImageError] = useState(false);
   const [isAvailabilityModalOpen, setIsAvailabilityModalOpen] = useState(false);
   const { toast } = useToast();
@@ -86,14 +86,14 @@ export const VendorCard = ({
   };
 
   const handleCardClick = () => {
-    router.push(`/vendor/${encodeURIComponent(vendor.place_id || vendor.title)}`);
+    navigate(`/vendor/${encodeURIComponent(vendor.place_id || vendor.title)}`);
   };
 
   const handleFavoriteClick = async () => {
     const { data: { session } } = await supabase.auth.getSession();
     
     if (!session) {
-      router.push('/auth');
+      navigate('/auth');
       return;
     }
     
