@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
-import { SearchForm } from "@/components/search/SearchForm";
+import { SearchSection } from "@/components/home/SearchSection";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -23,7 +23,6 @@ const categories = [
 ];
 
 export const HeroSection = () => {
-  const [isSearching, setIsSearching] = useState(false);
   const [currentCategory, setCurrentCategory] = useState("");
   const [categoryIndex, setCategoryIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -76,31 +75,6 @@ export const HeroSection = () => {
     navigate("/list-business");
   };
 
-  const handleSearch = async (category: string, state: string, city: string, subcategory?: string) => {
-    try {
-      console.log('SearchForm submitting:', { categoryToUse: category, selectedState: state, selectedCity: city, subcategory });
-      setIsSearching(true);
-      const locationString = `${city}, ${state}`;
-      
-      const formattedCategory = category.toLowerCase().replace(/ /g, '-');
-      const urlPath = subcategory 
-        ? `/top-20/${formattedCategory}/${subcategory}/${city}/${state}`
-        : `/top-20/${formattedCategory}/${city}/${state}`;
-      
-      navigate(urlPath);
-      
-    } catch (error: any) {
-      console.error('Search error:', error);
-      toast({
-        title: "Error searching vendors",
-        description: error.message || "An error occurred while searching",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSearching(false);
-    }
-  };
-
   return (
     <section 
       className="relative min-h-screen flex items-center pb-12 md:pb-16 lg:pb-20 -mt-28 pt-0"
@@ -133,28 +107,25 @@ export const HeroSection = () => {
           </div>
 
           <div className="mt-6 md:mt-8 lg:mt-0">
-            <div className="liquid-glass max-w-xl md:max-w-2xl lg:max-w-2xl p-4 sm:p-6 md:p-8 lg:p-10 rounded-2xl shadow-2xl mx-auto md:mx-auto lg:mx-0">
-              <h3 className="hidden lg:block text-2xl font-bold text-wedding-text mb-6">Start Your Search</h3>
-              <h3 className="block lg:hidden text-xl font-bold text-wedding-text mb-4 text-center">Start Your Search</h3>
-              <SearchForm onSearch={handleSearch} isSearching={isSearching} />
-              
-              {/* Vendor CTA - Below Search Form */}
-              <div className="mt-8 pt-8 border-t border-white/20 text-center">
-                <p className="text-wedding-text/85 text-sm mb-3 lg:text-base font-semibold">
-                  Are you a wedding vendor?
-                </p>
-                <Button
-                  onClick={handleListBusiness}
-                  size="lg"
-                  className="bg-wedding-primary hover:bg-wedding-primary/90 text-white px-6 py-3 sm:px-8 sm:py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 text-base lg:text-lg min-h-[48px] animate-glow-pulse w-full sm:w-auto"
-                >
-                  <Plus className="h-5 w-5 mr-2 lg:h-6 lg:w-6" />
-                  <span>List Your Business</span>
-                </Button>
-                <p className="text-wedding-text/75 text-xs mt-2 lg:text-sm font-medium">
-                  Join thousands of vendors growing their business with us
-                </p>
-              </div>
+            {/* Replace old search form with new SearchSection */}
+            <SearchSection />
+            
+            {/* Vendor CTA - Below Search Section */}
+            <div className="mt-8 pt-8 text-center">
+              <p className="text-wedding-text/85 text-sm mb-3 lg:text-base font-semibold">
+                Are you a wedding vendor?
+              </p>
+              <Button
+                onClick={handleListBusiness}
+                size="lg"
+                className="bg-wedding-primary hover:bg-wedding-primary/90 text-white px-6 py-3 sm:px-8 sm:py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 text-base lg:text-lg min-h-[48px] animate-glow-pulse w-full sm:w-auto"
+              >
+                <Plus className="h-5 w-5 mr-2 lg:h-6 lg:w-6" />
+                <span>List Your Business</span>
+              </Button>
+              <p className="text-wedding-text/75 text-xs mt-2 lg:text-sm font-medium">
+                Join thousands of vendors growing their business with us
+              </p>
             </div>
           </div>
         </div>
