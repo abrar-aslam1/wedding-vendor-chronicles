@@ -38,10 +38,13 @@ serve(async (req) => {
     
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Helper function to get vendor category
+    // Helper function to get vendor category (all wedding-related)
     const getVendorCategory = (keyword: string) => {
       const keywordLower = keyword.toLowerCase();
-      if (keywordLower.includes('photographer') || keywordLower.includes('photography') || keywordLower.includes('photo')) return 'photographers';
+      // Strip "wedding" prefix if present to avoid double-wedding in queries
+      const cleanKeyword = keywordLower.replace(/^wedding\s+/, '');
+      
+      if (cleanKeyword.includes('photographer') || cleanKeyword.includes('photography') || cleanKeyword.includes('photo')) return 'photographers';
       if (keywordLower.includes('wedding planner') || keywordLower.includes('planner')) return 'wedding-planners';
       if (keywordLower.includes('videographer') || keywordLower.includes('videography') || keywordLower.includes('video')) return 'videographers';
       if (keywordLower.includes('florist') || keywordLower.includes('floral')) return 'florists';

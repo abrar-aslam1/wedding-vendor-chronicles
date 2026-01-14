@@ -127,15 +127,15 @@ serve(async (req) => {
       
       const fallbackResults = [
         {
-          title: `${subcategoryPrefix}${keyword} in ${city}, ${state}`,
-          description: `Professional ${subcategoryPrefix}${keyword} services in ${city}, ${state}`,
+          title: `${subcategoryPrefix}Wedding ${keyword} in ${city}, ${state}`,
+          description: `Professional wedding ${subcategoryPrefix}${keyword} services in ${city}, ${state}`,
           rating: { value: 4.5, rating_type: "Max5", votes_count: 25, rating_max: 5, count: 25 },
           phone: '(555) 123-4567',
           address: `123 Main Street, ${city}, ${state}`,
           place_id: `fallback_google_${subcategoryId}_1`,
           main_image: undefined,
           images: [],
-          snippet: `Top-rated ${subcategoryPrefix}${keyword} serving ${city} and surrounding areas`,
+          snippet: `Top-rated wedding ${subcategoryPrefix}${keyword} serving ${city} and surrounding areas`,
           latitude: 40.7128 + (Math.random() - 0.5) * 0.1,
           longitude: -74.0060 + (Math.random() - 0.5) * 0.1,
           business_hours: 'Mon-Fri 9AM-6PM',
@@ -225,15 +225,17 @@ serve(async (req) => {
     
     const auth = btoa(`${dataForSeoLogin}:${dataForSeoPassword}`);
     // Include subcategory in the search query for more specific results
+    // ALL searches are wedding-specific since this is a wedding directory
     let searchQuery;
     if (subcategory) {
       // For subcategories, put them first for better targeting
-      searchQuery = `${subcategory} ${keyword} in ${city} ${state}`;
+      searchQuery = `${subcategory} wedding ${keyword} in ${city} ${state}`;
     } else {
-      searchQuery = `${keyword} in ${city} ${state}`;
+      // Always add "wedding" context for better targeting
+      searchQuery = `wedding ${keyword} in ${city} ${state}`;
     }
     
-    console.log(`[${requestId}] Search query: "${searchQuery}"`);
+    console.log(`[${requestId}] Wedding-specific search query: "${searchQuery}"`);
     console.log(`[${requestId}] Using subcategory: ${subcategory || 'none'}`);
     
     // Get location code

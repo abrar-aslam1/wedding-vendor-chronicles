@@ -72,7 +72,7 @@ const categories = [
     id: 10,
     name: "Carts",
     description: "Mobile service stations for unique experiences",
-    image: "https://images.unsplash.com/photo-1545558014-8692077e9b5c",
+    image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085",
     slug: "carts"
   },
 ];
