@@ -1,27 +1,42 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { SubcategoryModal } from './SubcategoryModal';
+import { 
+  Camera, 
+  Video, 
+  Flower2, 
+  ClipboardList, 
+  Building2, 
+  Utensils, 
+  Music, 
+  Cake, 
+  Sparkles, 
+  Scissors,
+  Palette,
+  Heart
+} from 'lucide-react';
+import { LucideIcon } from 'lucide-react';
 
 interface Category {
   name: string;
   slug: string;
-  icon: string;
+  icon: LucideIcon;
   description: string;
 }
 
 const VENDOR_CATEGORIES: Category[] = [
-  { name: 'Photographers', slug: 'photographers', icon: '📸', description: 'Capture your special moments' },
-  { name: 'Videographers', slug: 'videographers', icon: '🎥', description: 'Professional video services' },
-  { name: 'Florists', slug: 'florists', icon: '💐', description: 'Beautiful wedding flowers' },
-  { name: 'Wedding Planners', slug: 'wedding-planners', icon: '📋', description: 'Expert planning services' },
-  { name: 'Venues', slug: 'venues', icon: '🏛️', description: 'Perfect ceremony locations' },
-  { name: 'Caterers', slug: 'caterers', icon: '🍽️', description: 'Delicious wedding cuisine' },
-  { name: 'DJs & Bands', slug: 'djs-and-bands', icon: '🎵', description: 'Entertainment & music' },
-  { name: 'Cake Designers', slug: 'cake-designers', icon: '🍰', description: 'Custom wedding cakes' },
-  { name: 'Makeup Artists', slug: 'makeup-artists', icon: '💄', description: 'Bridal beauty services' },
-  { name: 'Hair Stylists', slug: 'hair-stylists', icon: '💇', description: 'Wedding hair styling' },
-  { name: 'Wedding Decorators', slug: 'wedding-decorators', icon: '🎨', description: 'Decor & design services' },
-  { name: 'Bridal Shops', slug: 'bridal-shops', icon: '👰', description: 'Wedding dress boutiques' },
+  { name: 'Photographers', slug: 'photographers', icon: Camera, description: 'Capture your special moments' },
+  { name: 'Videographers', slug: 'videographers', icon: Video, description: 'Professional video services' },
+  { name: 'Florists', slug: 'florists', icon: Flower2, description: 'Beautiful wedding flowers' },
+  { name: 'Wedding Planners', slug: 'wedding-planners', icon: ClipboardList, description: 'Expert planning services' },
+  { name: 'Venues', slug: 'venues', icon: Building2, description: 'Perfect ceremony locations' },
+  { name: 'Caterers', slug: 'caterers', icon: Utensils, description: 'Delicious wedding cuisine' },
+  { name: 'DJs & Bands', slug: 'djs-and-bands', icon: Music, description: 'Entertainment & music' },
+  { name: 'Cake Designers', slug: 'cake-designers', icon: Cake, description: 'Custom wedding cakes' },
+  { name: 'Makeup Artists', slug: 'makeup-artists', icon: Sparkles, description: 'Bridal beauty services' },
+  { name: 'Hair Stylists', slug: 'hair-stylists', icon: Scissors, description: 'Wedding hair styling' },
+  { name: 'Wedding Decorators', slug: 'wedding-decorators', icon: Palette, description: 'Decor & design services' },
+  { name: 'Bridal Shops', slug: 'bridal-shops', icon: Heart, description: 'Wedding dress boutiques' },
 ];
 
 interface QuickCategoryGridProps {
@@ -64,22 +79,30 @@ export const QuickCategoryGrid = ({ city, state, onCategorySelect }: QuickCatego
       </div>
       
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-        {VENDOR_CATEGORIES.map((category) => (
-          <Button
-            key={category.slug}
-            variant="outline"
-            onClick={() => handleCategoryClick(category)}
-            className="h-auto py-4 px-3 flex flex-col items-center justify-center gap-2 hover:bg-wedding-primary/10 hover:border-wedding-primary transition-all duration-200 group"
-            title={category.description}
-          >
-            <span className="text-3xl group-hover:scale-110 transition-transform duration-200">
-              {category.icon}
-            </span>
-            <span className="text-xs font-medium text-center leading-tight">
-              {category.name}
-            </span>
-          </Button>
-        ))}
+        {VENDOR_CATEGORIES.map((category) => {
+          const IconComponent = category.icon;
+          return (
+            <Button
+              key={category.slug}
+              variant="outline"
+              onClick={() => handleCategoryClick(category)}
+              className="h-auto py-5 px-3 flex flex-col items-center justify-center gap-3 border-wedding-primary/20 hover:border-wedding-primary transition-all duration-300 group relative overflow-hidden"
+              title={category.description}
+            >
+              {/* Liquid glass icon container */}
+              <div className="liquid-glass rounded-xl p-3 group-hover:scale-105 transition-all duration-300 group-hover:shadow-lg">
+                <IconComponent className="w-7 h-7 text-wedding-primary group-hover:text-wedding-accent transition-colors duration-300" />
+              </div>
+              
+              <span className="text-xs font-semibold text-center leading-tight text-wedding-text group-hover:text-wedding-primary transition-colors duration-300">
+                {category.name}
+              </span>
+              
+              {/* Hover gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-br from-wedding-primary/5 to-wedding-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+            </Button>
+          );
+        })}
       </div>
 
       {/* Subcategory Modal */}

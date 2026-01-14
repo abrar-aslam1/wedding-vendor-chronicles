@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from '@/components/ui/button';
 import { getSubcategoriesForCategory } from '@/config/subcategories';
-import { X } from 'lucide-react';
+import { X, LucideIcon } from 'lucide-react';
 
 interface SubcategoryModalProps {
   isOpen: boolean;
@@ -16,7 +16,7 @@ interface SubcategoryModalProps {
   category: {
     name: string;
     slug: string;
-    icon: string;
+    icon: LucideIcon;
   };
   city: string;
   state: string;
@@ -31,6 +31,7 @@ export const SubcategoryModal = ({
 }: SubcategoryModalProps) => {
   const navigate = useNavigate();
   const subcategories = getSubcategoriesForCategory(category.slug);
+  const IconComponent = category.icon;
 
   const handleSubcategoryClick = (subcategorySlug: string) => {
     const formattedCity = city.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
@@ -59,8 +60,11 @@ export const SubcategoryModal = ({
       <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <span className="text-4xl">{category.icon}</span>
+            <div className="flex items-center gap-4">
+              {/* Liquid glass icon container */}
+              <div className="liquid-glass rounded-2xl p-4">
+                <IconComponent className="w-10 h-10 text-wedding-primary" />
+              </div>
               <div>
                 <DialogTitle className="text-2xl">
                   Choose {category.name} Style

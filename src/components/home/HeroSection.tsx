@@ -94,7 +94,14 @@ export const HeroSection = () => {
               <h1 className="font-heading text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold text-wedding-text leading-relaxed md:leading-relaxed lg:leading-relaxed tracking-tight stagger-2 drop-shadow-sm">
                 Find Your Wedding
                 <br />
-                <span className="text-[#E8D4B0] font-black block mt-3 md:mt-4 pb-3 md:pb-4 lg:pb-4" style={{ lineHeight: '1.4' }}>
+                <span 
+                  className="text-[#E8D4B0] font-black block mt-3 md:mt-4 pb-3 md:pb-4 lg:pb-4 inline-block" 
+                  style={{ 
+                    lineHeight: '1.4',
+                    minHeight: '1.4em',
+                    minWidth: '280px'
+                  }}
+                >
                   {currentCategory}
                   <span className="animate-pulse">|</span>
                 </span>
