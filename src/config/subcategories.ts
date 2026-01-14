@@ -214,3 +214,14 @@ export const findSubcategoryBySlug = (slug: string): Subcategory | undefined => 
   }
   return undefined;
 };
+
+// Export subcategories as an object for backward compatibility with SearchForm.tsx
+export const subcategories: Record<string, Array<{id: string, name: string, description: string | null}>> = 
+  subcategoriesByCategory.reduce((acc, category) => {
+    acc[category.categorySlug] = category.subcategories.map(sub => ({
+      id: sub.slug,
+      name: sub.name,
+      description: sub.description || null
+    }));
+    return acc;
+  }, {} as Record<string, Array<{id: string, name: string, description: string | null}>>);
