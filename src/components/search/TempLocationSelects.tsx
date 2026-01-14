@@ -5,7 +5,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ALL_STATES } from "@/config/states";
+import { US_STATES, getCitiesForState } from "@/data/usLocations";
 
 interface TempLocationSelectsProps {
   selectedState: string;
@@ -23,11 +23,11 @@ export const TempLocationSelects = ({
   isSearching,
 }: TempLocationSelectsProps) => {
   // Find the selected state object to get its cities
-  const selectedStateObj = ALL_STATES.find(state => state.name === selectedState);
-  const cities = selectedStateObj ? selectedStateObj.majorCities : [];
+  const selectedStateObj = US_STATES.find(state => state.name === selectedState);
+  const cities = selectedStateObj ? selectedStateObj.cities.sort() : [];
 
   // Sort states alphabetically for better UX
-  const sortedStates = [...ALL_STATES].sort((a, b) => a.name.localeCompare(b.name));
+  const sortedStates = [...US_STATES].sort((a, b) => a.name.localeCompare(b.name));
 
   return (
     <>

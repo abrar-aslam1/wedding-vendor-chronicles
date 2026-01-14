@@ -87,13 +87,14 @@ export const SearchForm = ({ onSearch, isSearching, preselectedCategory }: Searc
       categoryToUse, 
       selectedState, 
       selectedCity,
-      selectedSubcategory 
+      selectedSubcategory: selectedSubcategory || 'none (broad search)'
     });
+    // Pass undefined if no subcategory selected so API doesn't filter
     await onSearch(
       categoryToUse, 
       selectedState, 
       selectedCity, 
-      selectedSubcategory
+      selectedSubcategory || undefined
     );
   };
 
@@ -115,49 +116,28 @@ export const SearchForm = ({ onSearch, isSearching, preselectedCategory }: Searc
         {subcategories.length > 0 && (
           <div className="space-y-3">
             <label className="block text-base font-medium text-wedding-text">
-              {selectedCategory.toLowerCase().includes('caterer') 
-                ? 'Select Cuisine Type for Catering'
-                : selectedCategory.toLowerCase().includes('cart')
-                ? 'Select Cart Type'
-                : selectedCategory.toLowerCase().includes('wedding-planner') || selectedCategory.toLowerCase().includes('wedding planner')
-                ? 'Select Planning Service Type'
-                : selectedCategory.toLowerCase().includes('photographer')
-                ? 'Select Photography Style'
-                : selectedCategory.toLowerCase().includes('videographer')
-                ? 'Select Videography Style'
-                : selectedCategory.toLowerCase().includes('florist')
-                ? 'Select Floral Style'
-                : selectedCategory.toLowerCase().includes('venue')
-                ? 'Select Venue Type'
-                : selectedCategory.toLowerCase().includes('dj') || selectedCategory.toLowerCase().includes('band')
-                ? 'Select Entertainment Type'
-                : selectedCategory.toLowerCase().includes('cake')
-                ? 'Select Cake Style'
-                : selectedCategory.toLowerCase().includes('bridal')
-                ? 'Select Dress Type'
-                : selectedCategory.toLowerCase().includes('makeup')
-                ? 'Select Makeup Style'
-                : selectedCategory.toLowerCase().includes('hair')
-                ? 'Select Hair Style'
-                : selectedCategory.toLowerCase().includes('decorator') || selectedCategory.toLowerCase().includes('decoration')
-                ? 'Select Decoration Style'
-                : `Select ${selectedCategory} Type`}
+              Refine Your Search (Optional)
             </label>
             <p className="text-sm text-gray-500 mb-2">
-              {selectedCategory.toLowerCase().includes('caterer') 
-                ? 'Choose a cuisine to see caterers specializing in that type of food'
-                : selectedCategory.toLowerCase().includes('cart')
-                ? 'Choose a cart type to find mobile services perfect for your wedding'
-                : selectedCategory.toLowerCase().includes('photographer')
-                ? 'Choose a photography style to find photographers specializing in that approach'
-                : selectedCategory.toLowerCase().includes('videographer')
-                ? 'Choose a videography style to find videographers with that specialty'
-                : selectedCategory.toLowerCase().includes('venue')
-                ? 'Choose a venue type to find locations perfect for your wedding style'
-                : selectedCategory.toLowerCase().includes('florist')
-                ? 'Choose a floral style to find florists who match your wedding aesthetic'
-                : `Choose a type to see ${selectedCategory.toLowerCase()} specializing in that area`}
+              Choose a specialty or search all {selectedCategory.toLowerCase()}
             </p>
+            
+            {/* "All [Category]" button - allows searching without subcategory filter */}
+            <div className="mb-3">
+              <Button
+                variant={!selectedSubcategory ? "default" : "outline"}
+                className={`w-full text-sm py-3 px-4 ${
+                  !selectedSubcategory 
+                    ? "bg-wedding-primary text-white shadow-md" 
+                    : "hover:bg-wedding-primary/10"
+                }`}
+                onClick={() => setSelectedSubcategory("")}
+              >
+                ✨ All {selectedCategory}
+              </Button>
+            </div>
+            
+            <p className="text-xs text-gray-400 mb-2">Or choose a specific specialty:</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {subcategories.map((subcategory) => (
                 <Button
@@ -193,8 +173,7 @@ export const SearchForm = ({ onSearch, isSearching, preselectedCategory }: Searc
           isSearching || 
           (!preselectedCategory && !selectedCategory) || 
           !selectedState || 
-          !selectedCity ||
-          (subcategories.length > 0 && !selectedSubcategory)
+          !selectedCity
         }
         onClick={handleSubmit}
       />
