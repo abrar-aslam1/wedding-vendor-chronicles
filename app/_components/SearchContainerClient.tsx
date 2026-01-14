@@ -311,11 +311,71 @@ export function SearchContainerClient({
       }
 
       // Combine all results
-      const combinedResults = [...googleVendors, ...instagramVendors];
+      let combinedResults = [...googleVendors, ...instagramVendors];
       
-      // Set the actual results - no fake data
+      // If no results from APIs, try database fallback
+      if (combinedResults.length === 0) {
+        console.log('⚠️ No results from APIs, trying database fallback...');
+        try {
+          let dbQuery = supabase
+            .from('vendors')
+            .select('*')
+            .ilike('city', `%${searchCity}%`)
+            .ilike('state', `%${searchState}%`);
+          
+          // Apply category filter
+          if (searchCategory && searchCategory !== 'wedding vendors') {
+            dbQuery = dbQuery.ilike('category', `%${searchCategory}%`);
+          }
+          
+          // Apply subcategory filter if provided
+          if (formattedSubcategory) {
+            dbQuery = dbQuery.ilike('subcategory', `%${formattedSubcategory}%`);
+          }
+          
+          const { data: dbVendors, error: dbError } = await dbQuery.limit(20);
+          
+          if (!dbError && dbVendors && dbVendors.length > 0) {
+            console.log(`✅ Found ${dbVendors.length} vendors in database fallback`);
+            
+            // Transform database vendors to SearchResult format
+            combinedResults = dbVendors.map((vendor: any) => ({
+              title: vendor.business_name || 'Unknown Business',
+              description: vendor.description || '',
+              rating: undefined,
+              phone: vendor.contact_info?.phone,
+              address: `${vendor.city || ''}, ${vendor.state || ''}`,
+              url: vendor.contact_info?.website,
+              place_id: `vendor_${vendor.id}`,
+              main_image: vendor.images?.[0],
+              images: vendor.images || [],
+              snippet: vendor.description || '',
+              latitude: undefined,
+              longitude: undefined,
+              business_hours: undefined,
+              price_range: undefined,
+              payment_methods: undefined,
+              service_area: [vendor.city, vendor.state].filter(Boolean),
+              categories: [vendor.category || 'wedding vendor'],
+              reviews: undefined,
+              year_established: undefined,
+              email: vendor.contact_info?.email,
+              city: vendor.city,
+              state: vendor.state,
+              postal_code: undefined,
+              vendor_source: 'database' as const
+            }));
+          } else {
+            console.log('❌ Database fallback also returned no results');
+          }
+        } catch (dbError) {
+          console.error('❌ Database fallback failed:', dbError);
+        }
+      }
+      
+      // Set the actual results
       setSearchResults(combinedResults);
-      console.log(`🔗 Combined results: ${combinedResults.length} total`);
+      console.log(`🔗 Final results: ${combinedResults.length} total`);
 
       if (combinedResults.length === 0) {
         console.log('❌ No vendors found for search criteria');

@@ -47,6 +47,7 @@ serve(async (req) => {
       if (keywordLower.includes('florist') || keywordLower.includes('floral')) return 'florists';
       if (keywordLower.includes('caterer') || keywordLower.includes('catering')) return 'caterers';
       if (keywordLower.includes('venue')) return 'venues';
+      if (keywordLower.includes('decorator') || keywordLower.includes('decor')) return 'wedding-decorators';
       if (keywordLower.includes('dj') || keywordLower.includes('band') || keywordLower.includes('music')) return 'djs-and-bands';
       if (keywordLower.includes('cake')) return 'cake-designers';
       if (keywordLower.includes('bridal')) return 'bridal-shops';
