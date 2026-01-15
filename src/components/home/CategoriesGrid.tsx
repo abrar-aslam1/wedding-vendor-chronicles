@@ -151,7 +151,8 @@ export const CategoriesGrid = () => {
     if (slug === 'caterers' || slug === 'carts') {
       setSelectedCategory(slug);
     } else {
-      router.push(`/search/${slug}`);
+      // Redirect to states page for location selection
+      router.push(`/states?category=${slug}`);
     }
   };
 

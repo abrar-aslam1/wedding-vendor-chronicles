@@ -182,28 +182,22 @@ export const trackVendorClick = async (
       });
     }
 
-    // Also track in Supabase analytics
-    const response = await fetch('/api/track-analytics', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        vendorId: vendor.place_id,
-        eventType: 'vendor_click',
-        eventData: {
-          cta_type: ctaType,
-          category: category,
-          city: city,
-          rank_position: position || 0
-        }
-      })
-    });
-
-    if (!response.ok) {
-      console.warn('Failed to track vendor click analytics');
+    // Track with PostHog if available
+    if (typeof window !== 'undefined' && (window as any).posthog) {
+      (window as any).posthog.capture('vendor_click', {
+        vendor_id: vendor.place_id,
+        vendor_name: vendor.title,
+        cta_type: ctaType,
+        category: category,
+        city: city,
+        rank_position: position || 0,
+        page_path: path
+      });
     }
   } catch (error) {
-    console.error('Error tracking vendor click:', error);
+    // Silently log errors without disrupting user experience
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('Analytics tracking error:', error);
+    }
   }
 };
