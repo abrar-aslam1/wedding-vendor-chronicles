@@ -3,7 +3,7 @@ import { SearchForm } from "./SearchForm";
 import { StateWideResults } from "./StateWideResults";
 import { LoadMoreButton } from "./LoadMoreButton";
 import { useEffect, useState, useRef } from "react";
-import { useParams, useNavigate } from "next/navigation"; import { useRouter };
+import { useParams, useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { SearchResult } from "@/types/search";
