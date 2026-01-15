@@ -9,6 +9,9 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft, Shield } from 'lucide-react';
 import { buildUrl } from '@/../lib/migration-helpers';
 
+// Prevent static generation since we use useSearchParams
+export const dynamic = 'force-dynamic';
+
 export default function VendorDashboardPage() {
   const { vendorAuth, loading, isAuthenticated } = useVendorAuth();
   const router = useRouter();

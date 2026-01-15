@@ -1,9 +1,9 @@
-import { Suspense } from 'react';
-import { MainNav } from "@/components/MainNav";
-import { SearchContainerClient } from "@/_components/SearchContainerClient";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage } from "@/components/ui/breadcrumb";
-import { SEOHead } from "@/components/SEOHead";
-import { SchemaMarkup } from "@/components/SchemaMarkup";
+import React, { Suspense } from 'react';
+import { MainNav } from "@/src/components/MainNav";
+import { SearchContainerClient } from "@/app/_components/SearchContainerClient";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage } from "@/src/components/ui/breadcrumb";
+import { SEOHead } from "@/src/components/SEOHead";
+import { SchemaMarkup } from "@/src/components/SchemaMarkup";
 
 interface SearchPageProps {
   params: Promise<{

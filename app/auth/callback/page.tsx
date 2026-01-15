@@ -6,6 +6,9 @@ import { createClient } from '@/_lib/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import posthog from 'posthog-js';
 
+// Prevent static generation since we use useSearchParams
+export const dynamic = 'force-dynamic';
+
 export default function AuthCallback() {
   const router = useRouter();
   const searchParams = useSearchParams();

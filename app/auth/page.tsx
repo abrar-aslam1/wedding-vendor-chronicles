@@ -9,6 +9,9 @@ import { UserAuthForm } from "@/components/auth/UserAuthForm";
 import { VendorAuthForm } from "@/components/auth/VendorAuthForm";
 import { useNavigateCompat } from "@/../lib/migration-helpers";
 
+// Prevent static generation since we use useSearchParams
+export const dynamic = 'force-dynamic';
+
 export default function Auth() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigateCompat();

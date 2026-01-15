@@ -30,6 +30,10 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
   },
+  // Force dynamic rendering for specific routes
+  staticPageGenerationTimeout: 120,
+  // Support PostHog trailing slash API requests and skip static optimization for dynamic pages
+  skipTrailingSlashRedirect: true,
   // Ignore prerender errors from legacy pages during export
   onDemandEntries: {
     maxInactiveAge: 25 * 1000,
@@ -70,8 +74,6 @@ const nextConfig = {
       },
     ];
   },
-  // Support PostHog trailing slash API requests
-  skipTrailingSlashRedirect: true,
 };
 
 export default nextConfig;
