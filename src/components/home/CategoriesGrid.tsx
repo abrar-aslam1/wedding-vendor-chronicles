@@ -1,4 +1,6 @@
-import { useNavigate } from "react-router-dom";
+'use client';
+
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -84,7 +86,7 @@ interface Subcategory {
 }
 
 export const CategoriesGrid = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
 
@@ -149,15 +151,15 @@ export const CategoriesGrid = () => {
     if (slug === 'caterers' || slug === 'carts') {
       setSelectedCategory(slug);
     } else {
-      navigate(`/search/${slug}`);
+      router.push(`/search/${slug}`);
     }
   };
 
   const handleSubcategoryClick = (subcategoryName: string) => {
     if (selectedCategory === 'caterers') {
-      navigate(`/search/caterers?cuisine=${encodeURIComponent(subcategoryName)}`);
+      router.push(`/search/caterers?cuisine=${encodeURIComponent(subcategoryName)}`);
     } else if (selectedCategory === 'carts') {
-      navigate(`/search/carts?subcategory=${encodeURIComponent(subcategoryName)}`);
+      router.push(`/search/carts?subcategory=${encodeURIComponent(subcategoryName)}`);
     }
   };
 

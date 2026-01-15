@@ -1,5 +1,7 @@
+'use client';
+
 import { useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,10 +20,10 @@ export const VendorAuthForm = ({ loading, setLoading }: VendorAuthFormProps) => 
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const { toast } = useToast();
-  const returnUrl = searchParams.get("returnUrl");
+  const returnUrl = searchParams?.get("returnUrl");
 
   const handleVendorAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -97,7 +99,7 @@ export const VendorAuthForm = ({ loading, setLoading }: VendorAuthFormProps) => 
         });
 
         // Navigate to vendor dashboard or return URL
-        navigate(returnUrl ? decodeURIComponent(returnUrl) : "/vendor-dashboard");
+        router.push(returnUrl ? decodeURIComponent(returnUrl) : "/vendor-dashboard");
       }
     } catch (error: any) {
       // Track failed auth attempt

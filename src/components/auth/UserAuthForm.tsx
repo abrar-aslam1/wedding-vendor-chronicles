@@ -1,5 +1,7 @@
+'use client';
+
 import { useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,10 +17,10 @@ interface UserAuthFormProps {
 export const UserAuthForm = ({ loading, setLoading }: UserAuthFormProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const { toast } = useToast();
-  const returnUrl = searchParams.get("returnUrl");
+  const returnUrl = searchParams?.get("returnUrl");
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,7 +48,7 @@ export const UserAuthForm = ({ loading, setLoading }: UserAuthFormProps) => {
         });
       }
 
-      navigate(returnUrl ? decodeURIComponent(returnUrl) : "/");
+      router.push(returnUrl ? decodeURIComponent(returnUrl) : "/");
     } catch (error: any) {
       // Track failed login attempt
       posthog.capture('user_sign_in_failed', {

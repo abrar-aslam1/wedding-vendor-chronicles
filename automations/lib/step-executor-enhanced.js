@@ -2,11 +2,14 @@ import { createClient } from '@supabase/supabase-js'
 import fs from 'fs/promises'
 import path from 'path'
 import { parse } from 'csv-parse/sync'
+import { ApifyDirectClient } from '../../scripts/apify-direct-client.js'
 
 export class StepExecutorEnhanced {
   constructor() {
     this.supabase = null
+    this.apifyClient = null
     this.initializeSupabase()
+    this.initializeApify()
     this.progressFile = 'workflow-progress.json'
     this.collections = new Map()
     this.buffers = new Map()
@@ -29,6 +32,22 @@ export class StepExecutorEnhanced {
       console.log('✅ Supabase client initialized')
     } catch (error) {
       console.error('❌ Failed to initialize Supabase client:', error.message)
+    }
+  }
+
+  initializeApify() {
+    const apiToken = process.env.APIFY_API_TOKEN
+    
+    if (!apiToken) {
+      console.warn('⚠️  APIFY_API_TOKEN not found. Apify operations will be simulated.')
+      return
+    }
+
+    try {
+      this.apifyClient = new ApifyDirectClient(apiToken)
+      console.log('✅ Apify client initialized')
+    } catch (error) {
+      console.error('❌ Failed to initialize Apify client:', error.message)
     }
   }
 
@@ -544,15 +563,64 @@ export class StepExecutorEnhanced {
     const { server, tool, arguments: args } = params
     
     console.log(`🔧 MCP Tool: ${tool} on ${server}`)
-    console.log(`⚠️  Note: MCP tool execution not yet implemented - simulating...`)
     
-    // Simulate MCP tool execution
-    // In production, this would call the actual MCP server
+    // Check if this is an Apify actor call
+    if (server && server.includes('apify') && tool === 'call-actor') {
+      return await this.executeApifyActor(args, context)
+    }
+    
+    // For other MCP tools, log warning and simulate
+    console.log(`⚠️  MCP tool '${tool}' not directly implemented - simulating...`)
+    
     return {
       success: true,
       tool,
       server,
-      note: 'Simulated execution - implement actual MCP integration'
+      note: 'Simulated execution - implement full MCP integration as needed'
+    }
+  }
+
+  async executeApifyActor(args, context) {
+    if (!this.apifyClient) {
+      console.warn('⚠️  Apify client not initialized - cannot execute actor')
+      return {
+        success: false,
+        error: 'Apify client not initialized'
+      }
+    }
+
+    const { actor, input } = args
+
+    try {
+      // Handle instagram scraper
+      if (actor && actor.includes('instagram')) {
+        const { usernames } = input || {}
+        
+        if (!usernames || usernames.length === 0) {
+          console.warn('⚠️  No usernames provided for Instagram scraper')
+          return []
+        }
+
+        console.log(`📸 Calling Apify Instagram scraper for ${usernames.length} profiles...`)
+        
+        const profiles = await this.apifyClient.enrichInstagramProfiles(usernames)
+        
+        console.log(`✅ Retrieved ${profiles.length} Instagram profiles`)
+        
+        // Track processed count
+        this.processedCount += profiles.length
+        
+        return profiles
+      }
+
+      // For other actors, return empty array
+      console.warn(`⚠️  Actor '${actor}' not specifically handled`)
+      return []
+
+    } catch (error) {
+      console.error('❌ Apify actor execution failed:', error.message)
+      // Return empty array instead of throwing to allow workflow to continue
+      return []
     }
   }
 

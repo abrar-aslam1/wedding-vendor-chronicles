@@ -1,5 +1,7 @@
+'use client';
+
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 import {
   Dialog,
   DialogContent,
@@ -31,26 +33,26 @@ export const VendorSearchModal = ({
   stateName,
   popularCities
 }: VendorSearchModalProps) => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [selectedCity, setSelectedCity] = useState<string>("");
   
   const stateInfo = getStateBySlug(state);
 
   const handleStateWideSearch = () => {
-    navigate(`/top-20/${categorySlug}/all-cities/${state}`);
+    router.push(`/top-20/${categorySlug}/all-cities/${state}`);
     onClose();
   };
 
   const handleCitySearch = (city: string) => {
     const citySlug = city.toLowerCase().replace(/\s+/g, '-');
-    navigate(`/top-20/${categorySlug}/${citySlug}/${state}`);
+    router.push(`/top-20/${categorySlug}/${citySlug}/${state}`);
     onClose();
   };
 
   const handleCustomCitySearch = () => {
     if (selectedCity.trim()) {
       const citySlug = selectedCity.toLowerCase().replace(/\s+/g, '-');
-      navigate(`/top-20/${categorySlug}/${citySlug}/${state}`);
+      router.push(`/top-20/${categorySlug}/${citySlug}/${state}`);
       onClose();
     }
   };

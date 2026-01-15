@@ -2,14 +2,14 @@
 'use client';
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 import { LocationDetector } from "@/components/search/LocationDetector";
 import { SearchForm } from "@/components/search/SearchForm";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
 export const SearchSection = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [showManualSearch, setShowManualSearch] = useState(false);
 
   const handleManualSelect = () => {
@@ -29,7 +29,7 @@ export const SearchSection = () => {
       ? `/search/${categorySlug}/${stateSlug}/${citySlug}?subcategory=${subcategory}`
       : `/search/${categorySlug}/${stateSlug}/${citySlug}`;
     
-    navigate(url);
+    router.push(url);
   };
   
   return (
@@ -69,7 +69,7 @@ export const SearchSection = () => {
           </p>
           <Button
             variant="link"
-            onClick={() => navigate("/states")}
+            onClick={() => router.push("/states")}
             className="text-wedding-primary hover:text-wedding-primary/80"
           >
             View All States →

@@ -16,6 +16,12 @@ export const LocationDetector = ({ onManualSelect }: LocationDetectorProps) => {
   const [nearestCity, setNearestCity] = useState<NearestCity | null>(null);
   const [showCategories, setShowCategories] = useState(false);
   const [locationRequested, setLocationRequested] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  // Prevent hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Find nearest city when coordinates are available
   useEffect(() => {
@@ -50,6 +56,22 @@ export const LocationDetector = ({ onManualSelect }: LocationDetectorProps) => {
       onManualSelect();
     }
   };
+
+  // Don't render until mounted to prevent hydration mismatch
+  if (!mounted) {
+    return (
+      <div className="liquid-glass rounded-2xl shadow-2xl p-6 md:p-8 space-y-6">
+        <div className="text-center space-y-3">
+          <h2 className="text-2xl md:text-3xl font-bold text-wedding-text">
+            Find Wedding Vendors Near You
+          </h2>
+          <p className="text-wedding-text/70">
+            Discover top-rated wedding vendors in your area
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   // Show loading state
   if (loading) {

@@ -44,8 +44,9 @@ export function SearchContainerClient({
     }
     
     // Check if this is a test URL for showing the "no results" message
-    const urlParams = new URLSearchParams(window.location.search);
-    const testNoResults = urlParams.get('test-no-results') === 'true';
+    const testNoResults = typeof window !== 'undefined' 
+      ? new URLSearchParams(window.location.search).get('test-no-results') === 'true'
+      : false;
     
     if (testNoResults) {
       console.log('Test mode: Showing no results message');

@@ -1,5 +1,5 @@
 import { Heart } from "lucide-react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { categories } from "@/config/categories";
 
 export const Footer = () => {
@@ -24,22 +24,22 @@ export const Footer = () => {
             <h3 className="font-semibold text-wedding-text mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/" className="text-sm text-wedding-text hover:text-wedding-primary">
+                <Link href="/" className="text-sm text-wedding-text hover:text-wedding-primary">
                   Home
                 </Link>
               </li>
               <li>
-                <Link to="/auth" className="text-sm text-wedding-text hover:text-wedding-primary">
+                <Link href="/auth" className="text-sm text-wedding-text hover:text-wedding-primary">
                   Sign In
                 </Link>
               </li>
               <li>
-                <Link to="/privacy" className="text-sm text-wedding-text hover:text-wedding-primary">
+                <Link href="/privacy" className="text-sm text-wedding-text hover:text-wedding-primary">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link to="/terms" className="text-sm text-wedding-text hover:text-wedding-primary">
+                <Link href="/terms" className="text-sm text-wedding-text hover:text-wedding-primary">
                   Terms of Service
                 </Link>
               </li>
@@ -52,7 +52,7 @@ export const Footer = () => {
               {categories.slice(0, 4).map((category) => (
                 <li key={category.slug}>
                   <Link 
-                    to={`/search/${category.slug}`}
+                    href={`/search/${category.slug}`}
                     className="text-sm text-wedding-text hover:text-wedding-primary"
                   >
                     {category.name}
@@ -68,7 +68,7 @@ export const Footer = () => {
               {categories.slice(4, 8).map((category) => (
                 <li key={category.slug}>
                   <Link 
-                    to={`/search/${category.slug}`}
+                    href={`/search/${category.slug}`}
                     className="text-sm text-wedding-text hover:text-wedding-primary"
                   >
                     {category.name}

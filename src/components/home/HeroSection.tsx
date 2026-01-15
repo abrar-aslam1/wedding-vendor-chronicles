@@ -1,5 +1,7 @@
+'use client';
+
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { SearchSection } from "@/components/home/SearchSection";
 import { Button } from "@/components/ui/button";
@@ -27,7 +29,7 @@ export const HeroSection = () => {
   const [categoryIndex, setCategoryIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
   const [charIndex, setCharIndex] = useState(0);
-  const navigate = useNavigate();
+  const router = useRouter();
   const { toast } = useToast();
 
   // Typewriter effect
@@ -68,11 +70,11 @@ export const HeroSection = () => {
         description: "Please sign in to list your business",
         variant: "default",
       });
-      navigate("/auth?returnUrl=/list-business");
+      router.push("/auth?returnUrl=/list-business");
       return;
     }
 
-    navigate("/list-business");
+    router.push("/list-business");
   };
 
   return (

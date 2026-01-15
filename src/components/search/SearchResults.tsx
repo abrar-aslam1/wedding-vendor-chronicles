@@ -1,4 +1,7 @@
+'use client';
+
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { SearchResult } from "@/types/search";
@@ -240,15 +243,15 @@ const SearchResultsContent = ({ results, isSearching, subcategory }: SearchResul
 
   // Get vendor type from URL
   const [vendorType, setVendorType] = useState<string>('vendors');
+  const pathname = usePathname();
   
   useEffect(() => {
-    const path = window.location.pathname;
-    if (path === '/favorites') {
+    if (pathname === '/favorites') {
       setVendorType('Vendors');
       return;
     }
     
-    const matches = path.match(/\/top-20\/([^\/]+)/);
+    const matches = pathname.match(/\/top-20\/([^\/]+)/);
     if (matches && matches[1]) {
       const slug = matches[1];
       let displayType = slug.replace(/-/g, ' ');
@@ -258,7 +261,7 @@ const SearchResultsContent = ({ results, isSearching, subcategory }: SearchResul
         .join(' ');
       setVendorType(displayType);
     }
-  }, []);
+  }, [pathname]);
 
   const getSingularVendorType = () => {
     const type = vendorType.toLowerCase();
@@ -292,7 +295,7 @@ const SearchResultsContent = ({ results, isSearching, subcategory }: SearchResul
     return <SearchSkeleton />;
   }
 
-  const isFavoritesPage = window.location.pathname === '/favorites';
+  const isFavoritesPage = pathname === '/favorites';
 
   // If no results at all and we're on favorites page, show the old single-column layout
   if (results.length === 0 && !isSearching && isFavoritesPage) {

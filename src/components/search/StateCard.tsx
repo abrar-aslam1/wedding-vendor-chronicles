@@ -1,5 +1,7 @@
+'use client';
+
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 import { MapPin, Users, Star } from "lucide-react";
 
 interface StateCardProps {
@@ -21,7 +23,7 @@ export const StateCard = ({
   weddingSeasonPeak,
   popularVenueTypes = []
 }: StateCardProps) => {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   // Get state abbreviation for display
   const getStateAbbreviation = (stateName: string) => {
@@ -45,7 +47,7 @@ export const StateCard = ({
   return (
     <Card 
       className="cursor-pointer hover:shadow-lg hover:scale-105 transition-all duration-300 border-l-4 border-l-wedding-primary group"
-      onClick={() => navigate(`/states/${state.replace(/\s+/g, '-').toLowerCase()}`)}
+      onClick={() => router.push(`/states/${state.replace(/\s+/g, '-').toLowerCase()}`)}
     >
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">

@@ -1,3 +1,5 @@
+'use client';
+
 import { FC, useEffect, useState } from 'react';
 import { SearchResult } from '@/types/search';
 import { generateCityFAQs } from '@/utils/content-generator';
@@ -37,13 +39,27 @@ export const SchemaMarkup: FC<DirectoryPageSchema> = ({
   modifiedDate,
   articleSection
 }) => {
+  const [mounted, setMounted] = useState(false);
+  const [origin, setOrigin] = useState('https://findmyweddingvendor.com');
+
+  useEffect(() => {
+    setMounted(true);
+    if (typeof window !== 'undefined') {
+      setOrigin(origin);
+    }
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
+
   // Organization schema for the website itself
   const websiteSchema = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: 'Find My Wedding Vendor',
-    url: window.location.origin,
-    logo: `${window.location.origin}/og-image.png`,
+    url: origin,
+    logo: `${origin}/og-image.png`,
     description: 'Find My Wedding Vendor helps couples discover and connect with the best wedding vendors for their special day.',
     sameAs: [
       'https://facebook.com/findmyweddingvendor',
@@ -61,12 +77,12 @@ export const SchemaMarkup: FC<DirectoryPageSchema> = ({
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: 'Find My Wedding Vendor',
-    url: window.location.origin,
+    url: origin,
     potentialAction: {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: `${window.location.origin}/search?q={search_term_string}`
+        urlTemplate: `${origin}/search?q={search_term_string}`
       },
       'query-input': 'required name=search_term_string'
     }
@@ -285,7 +301,7 @@ export const SchemaMarkup: FC<DirectoryPageSchema> = ({
 
   // Enhanced BreadcrumbList schema for navigation
   const generateBreadcrumbSchema = () => {
-    const baseUrl = window.location.origin;
+    const baseUrl = origin;
     const breadcrumbs = [
       {
         '@type': 'ListItem',
@@ -627,7 +643,7 @@ export const SchemaMarkup: FC<DirectoryPageSchema> = ({
       organizer: {
         '@type': 'Organization',
         name: 'Find My Wedding Vendor',
-        url: window.location.origin
+        url: origin
       },
       eventStatus: 'https://schema.org/EventScheduled',
       eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode'
@@ -652,14 +668,14 @@ export const SchemaMarkup: FC<DirectoryPageSchema> = ({
         name: 'Find My Wedding Vendor',
         logo: {
           '@type': 'ImageObject',
-          url: `${window.location.origin}/Screenshot 2025-04-20 at 9.59.36 PM.png`
+          url: `${origin}/Screenshot 2025-04-20 at 9.59.36 PM.png`
         }
       },
       datePublished: publishedDate || new Date().toISOString(),
       dateModified: modifiedDate || publishedDate || new Date().toISOString(),
       mainEntityOfPage: {
         '@type': 'WebPage',
-        '@id': window.location.href
+        '@id': `${origin}${typeof window !== "undefined" ? window.location.pathname : ""}`
       },
       articleSection: articleSection || 'Wedding Planning',
       keywords: category ? `wedding planning, ${category.toLowerCase()}, wedding vendors` : 'wedding planning, wedding vendors'

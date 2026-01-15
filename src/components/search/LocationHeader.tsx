@@ -1,5 +1,5 @@
-import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useParams } from "next/navigation";
+import Link from "next/link";
 
 export const LocationHeader = () => {
   const { state, city } = useParams();

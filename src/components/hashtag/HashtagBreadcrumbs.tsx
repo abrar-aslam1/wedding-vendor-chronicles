@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { getLocationData } from "@/config/hashtag-locations";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { ChevronRight, Home } from "lucide-react";
@@ -23,7 +23,7 @@ const HashtagBreadcrumbs: React.FC<HashtagBreadcrumbsProps> = ({
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link to="/">
+            <Link href="/">
               <Home className="h-4 w-4 mr-1" />
               Home
             </Link>
@@ -36,7 +36,7 @@ const HashtagBreadcrumbs: React.FC<HashtagBreadcrumbsProps> = ({
         
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link to="/tools/wedding-hashtag-generator">
+            <Link href="/tools/wedding-hashtag-generator">
               Wedding Tools
             </Link>
           </BreadcrumbLink>
@@ -54,7 +54,7 @@ const HashtagBreadcrumbs: React.FC<HashtagBreadcrumbsProps> = ({
           <>
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link to="/tools/wedding-hashtag-generator">
+                <Link href="/tools/wedding-hashtag-generator">
                   Wedding Hashtag Generator
                 </Link>
               </BreadcrumbLink>
@@ -66,7 +66,7 @@ const HashtagBreadcrumbs: React.FC<HashtagBreadcrumbsProps> = ({
             
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link to="/tools/wedding-hashtag-generator/states">
+                <Link href="/tools/wedding-hashtag-generator/states">
                   States
                 </Link>
               </BreadcrumbLink>
@@ -84,7 +84,7 @@ const HashtagBreadcrumbs: React.FC<HashtagBreadcrumbsProps> = ({
               <>
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
-                    <Link to={`/tools/wedding-hashtag-generator/states/${stateSlug}`}>
+                    <Link href={`/tools/wedding-hashtag-generator/states/${stateSlug}`}>
                       {state?.stateName || stateSlug}
                     </Link>
                   </BreadcrumbLink>

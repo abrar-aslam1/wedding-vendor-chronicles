@@ -1,9 +1,11 @@
-import { useNavigate } from "react-router-dom";
+'use client';
+
+import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
 export const ListBusinessButton = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { toast } = useToast();
 
   const handleClick = async () => {
@@ -15,11 +17,11 @@ export const ListBusinessButton = () => {
         description: "Please sign in to list your business",
         variant: "default",
       });
-      navigate("/auth?returnUrl=/list-business");
+      router.push("/auth?returnUrl=/list-business");
       return;
     }
 
-    navigate("/list-business");
+    router.push("/list-business");
   };
   
   return (

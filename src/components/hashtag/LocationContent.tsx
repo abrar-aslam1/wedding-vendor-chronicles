@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { getLocationData, getLocationWeddingStats, getAllStatesSlugs, getCitySlugsForState } from "@/config/hashtag-locations";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -44,7 +44,7 @@ const LocationContent: React.FC<LocationContentProps> = ({
                   <CardDescription>{state.stateNickname || "Wedding Hashtags"}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Link to={`/tools/wedding-hashtag-generator/states/${slug}`}>
+                  <Link href={`/tools/wedding-hashtag-generator/states/${slug}`}>
                     <Button variant="outline" className="w-full">
                       View {state.stateName} Hashtags
                       <ChevronRight className="h-4 w-4 ml-2" />
@@ -139,7 +139,7 @@ const LocationContent: React.FC<LocationContentProps> = ({
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Link to={`/tools/wedding-hashtag-generator/states/${stateSlug}/${citySlug}`}>
+                  <Link href={`/tools/wedding-hashtag-generator/states/${stateSlug}/${citySlug}`}>
                     <Button variant="outline" className="w-full">
                       {city.cityName} Hashtags
                       <ChevronRight className="h-4 w-4 ml-2" />

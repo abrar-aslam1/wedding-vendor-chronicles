@@ -1,4 +1,6 @@
-import { useNavigate } from "react-router-dom";
+'use client';
+
+import { useRouter } from "next/navigation";
 
 interface CityCardProps {
   city: string;
@@ -7,10 +9,10 @@ interface CityCardProps {
 }
 
 export const CityCard = ({ city, state, vendorCount }: CityCardProps) => {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const handleClick = () => {
-    navigate(`/search/${state.replace(/\s+/g, '-').toLowerCase()}/${city.replace(/\s+/g, '-').toLowerCase()}`);
+    router.push(`/search/${state.replace(/\s+/g, '-').toLowerCase()}/${city.replace(/\s+/g, '-').toLowerCase()}`);
   };
 
   return (

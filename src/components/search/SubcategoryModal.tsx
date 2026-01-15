@@ -1,4 +1,6 @@
-import { useNavigate } from 'react-router-dom';
+'use client';
+
+import { useNavigate } from 'next/navigation';
 import {
   Dialog,
   DialogContent,
@@ -29,7 +31,7 @@ export const SubcategoryModal = ({
   city,
   state,
 }: SubcategoryModalProps) => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const subcategories = getSubcategoriesForCategory(category.slug);
   const IconComponent = category.icon;
 
@@ -40,7 +42,7 @@ export const SubcategoryModal = ({
     const searchUrl = `/top-20/${category.slug}/${formattedCity}/${formattedState}?subcategory=${subcategorySlug}`;
     
     console.log('Navigating to subcategory:', searchUrl);
-    navigate(searchUrl);
+    router.push(searchUrl);
     onClose();
   };
 
@@ -51,7 +53,7 @@ export const SubcategoryModal = ({
     const searchUrl = `/top-20/${category.slug}/${formattedCity}/${formattedState}`;
     
     console.log('Navigating to all:', searchUrl);
-    navigate(searchUrl);
+    router.push(searchUrl);
     onClose();
   };
 

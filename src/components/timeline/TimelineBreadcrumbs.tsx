@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 
 interface TimelineBreadcrumbsProps {
@@ -20,13 +20,13 @@ const TimelineBreadcrumbs = ({ stateSlug, citySlug, className = "" }: TimelineBr
     <nav className={`flex items-center text-sm text-gray-500 ${className}`} aria-label="Breadcrumb">
       <ol className="flex items-center space-x-2">
         <li>
-          <Link to="/" className="hover:text-wedding-primary">
+          <Link href="/" className="hover:text-wedding-primary">
             Home
           </Link>
         </li>
         <li className="flex items-center">
           <ChevronRight className="h-4 w-4 mx-1" />
-          <Link to="/tools/wedding-timeline-generator" className="hover:text-wedding-primary">
+          <Link href="/tools/wedding-timeline-generator" className="hover:text-wedding-primary">
             Wedding Timeline Generator
           </Link>
         </li>

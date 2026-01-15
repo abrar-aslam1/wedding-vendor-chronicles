@@ -8,7 +8,7 @@ import { Calendar, Clock, User, Mail, Phone, MessageSquare } from "lucide-react"
 import { SearchResult } from "@/types/search";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 
 interface AvailabilityModalProps {
   isOpen: boolean;
@@ -38,7 +38,7 @@ export const AvailabilityModal = ({ isOpen, onClose, vendor }: AvailabilityModal
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const handleInputChange = (field: keyof AvailabilityFormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -56,7 +56,7 @@ export const AvailabilityModal = ({ isOpen, onClose, vendor }: AvailabilityModal
         description: "Please sign in to check availability.",
         variant: "destructive",
       });
-      navigate('/auth');
+      router.push('/auth');
       return;
     }
 

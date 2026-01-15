@@ -144,11 +144,8 @@ serve(async (req) => {
           follower_count: vendor.followers || null,
           posts_count: vendor.posts_count || null,
           profile_image_url: vendor.profile_pic_url || null,
-          external_urls: vendor.external_urls || null,
-          tags: vendor.tags || null,
           has_contact_info: vendor.has_contact || false,
           source: vendor.source,
-          country: vendor.country || 'US',
           updated_at: new Date().toISOString()
         }
 

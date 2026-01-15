@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { MainNav } from "@/components/MainNav";
-import { SearchContainerClient } from "@/_components/SearchContainerClient";
+import { SearchContainerClient } from "../../../../_components/SearchContainerClient";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage } from "@/components/ui/breadcrumb";
 import { SEOHead } from "@/components/SEOHead";
 import { SchemaMarkup } from "@/components/SchemaMarkup";

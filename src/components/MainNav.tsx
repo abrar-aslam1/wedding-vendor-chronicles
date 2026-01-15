@@ -1,6 +1,7 @@
 'use client';
 
-import { Link, useNavigate } from "react-router-dom";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { LogIn, LogOut, Menu, Search, Heart, LayoutDashboard, Calendar, Gift, Hash, ChevronDown } from "lucide-react";
 import {
@@ -23,8 +24,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ListBusinessButton } from "@/components/ui/list-business-button";
 
 export function MainNav() {
-  const [user, setUser] = useState(null);
-  const navigate = useNavigate();
+  const [user, setUser] = useState<any>(null);
+  const router = useRouter();
   const { toast } = useToast();
 
   useEffect(() => {
@@ -47,7 +48,7 @@ export function MainNav() {
     try {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
-      navigate("/");
+      router.push("/");
       toast({
         title: "Signed out successfully",
       });
@@ -65,7 +66,7 @@ export function MainNav() {
       <>
         <Button
           variant="ghost"
-          onClick={() => navigate("/favorites")}
+          onClick={() => router.push("/favorites")}
           className="w-full md:w-auto text-wedding-text hover:text-wedding-primary transition-all duration-200 rounded-lg"
         >
           <Heart className="h-4 w-4 mr-2" />
@@ -73,7 +74,7 @@ export function MainNav() {
         </Button>
         <Button
           variant="ghost"
-          onClick={() => navigate("/portal")}
+          onClick={() => router.push("/portal")}
           className="w-full md:w-auto text-wedding-text hover:text-wedding-primary transition-all duration-200 rounded-lg"
         >
           <LayoutDashboard className="h-4 w-4 mr-2" />
@@ -91,7 +92,7 @@ export function MainNav() {
     ) : (
       <Button
         variant="ghost"
-        onClick={() => navigate("/auth")}
+        onClick={() => router.push("/auth")}
         className="w-full md:w-auto text-wedding-text hover:text-wedding-primary transition-all duration-200 rounded-lg"
       >
         <LogIn className="h-4 w-4 mr-2" />
@@ -104,7 +105,7 @@ export function MainNav() {
     <nav className="liquid-glass-nav fixed top-0 left-0 right-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-16">
-          <Link to="/" className="flex items-center touch-manipulation">
+          <Link href="/" className="flex items-center touch-manipulation">
             <img 
               src="/lovable-uploads/fc1186f3-9e97-4be6-910e-9851d1205033.png" 
               alt="My Wedding Logo" 
@@ -116,7 +117,7 @@ export function MainNav() {
           <div className="hidden md:flex items-center space-x-4">
             <Button
               variant="ghost"
-              onClick={() => navigate("/")}
+              onClick={() => router.push("/")}
               className="text-wedding-text hover:text-wedding-primary transition-all duration-200 rounded-lg"
             >
               <Search className="h-4 w-4 mr-2" />
@@ -124,7 +125,7 @@ export function MainNav() {
             </Button>
             <Button
               variant="ghost"
-              onClick={() => navigate("/states")}
+              onClick={() => router.push("/states")}
               className="text-wedding-text hover:text-wedding-primary transition-all duration-200 rounded-lg"
             >
               Browse by State
@@ -141,11 +142,11 @@ export function MainNav() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem onClick={() => navigate("/tools/wedding-timeline-generator")}>
+                <DropdownMenuItem onClick={() => router.push("/tools/wedding-timeline-generator")}>
                   <Calendar className="h-4 w-4 mr-2" />
                   Free Timeline
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate("/tools/wedding-hashtag-generator")}>
+                <DropdownMenuItem onClick={() => router.push("/tools/wedding-hashtag-generator")}>
                   <Hash className="h-4 w-4 mr-2" />
                   Hashtag Generator
                 </DropdownMenuItem>
@@ -183,7 +184,7 @@ export function MainNav() {
                 <div className="flex flex-col gap-2 mt-6">
                   <Button
                     variant="ghost"
-                    onClick={() => navigate("/")}
+                    onClick={() => router.push("/")}
                     className="justify-start text-wedding-text hover:text-wedding-primary hover:bg-wedding-light/50 min-h-[48px] touch-manipulation transition-all duration-200 rounded-lg"
                   >
                     <Search className="h-5 w-5 mr-3" />
@@ -191,7 +192,7 @@ export function MainNav() {
                   </Button>
                   <Button
                     variant="ghost"
-                    onClick={() => navigate("/states")}
+                    onClick={() => router.push("/states")}
                     className="justify-start text-wedding-text hover:text-wedding-primary hover:bg-wedding-light/50 min-h-[48px] touch-manipulation transition-all duration-200 rounded-lg"
                   >
                     Browse by State
@@ -205,7 +206,7 @@ export function MainNav() {
                     </div>
                     <Button
                       variant="ghost"
-                      onClick={() => navigate("/tools/wedding-timeline-generator")}
+                      onClick={() => router.push("/tools/wedding-timeline-generator")}
                       className="justify-start text-wedding-text hover:text-wedding-primary hover:bg-wedding-light/50 pl-6 min-h-[48px] touch-manipulation transition-all duration-200 rounded-lg"
                     >
                       <Calendar className="h-5 w-5 mr-3" />
@@ -213,7 +214,7 @@ export function MainNav() {
                     </Button>
                     <Button
                       variant="ghost"
-                      onClick={() => navigate("/tools/wedding-hashtag-generator")}
+                      onClick={() => router.push("/tools/wedding-hashtag-generator")}
                       className="justify-start text-wedding-text hover:text-wedding-primary hover:bg-wedding-light/50 pl-6 min-h-[48px] touch-manipulation transition-all duration-200 rounded-lg"
                     >
                       <Hash className="h-5 w-5 mr-3" />
@@ -228,7 +229,7 @@ export function MainNav() {
                       <>
                         <Button
                           variant="ghost"
-                          onClick={() => navigate("/favorites")}
+                          onClick={() => router.push("/favorites")}
                           className="justify-start text-wedding-text hover:text-wedding-primary hover:bg-wedding-light/50 min-h-[48px] touch-manipulation transition-all duration-200 rounded-lg"
                         >
                           <Heart className="h-5 w-5 mr-3" />
@@ -236,7 +237,7 @@ export function MainNav() {
                         </Button>
                         <Button
                           variant="ghost"
-                          onClick={() => navigate("/portal")}
+                          onClick={() => router.push("/portal")}
                           className="justify-start text-wedding-text hover:text-wedding-primary hover:bg-wedding-light/50 min-h-[48px] touch-manipulation transition-all duration-200 rounded-lg"
                         >
                           <LayoutDashboard className="h-5 w-5 mr-3" />
@@ -254,7 +255,7 @@ export function MainNav() {
                     ) : (
                         <Button
                           variant="ghost"
-                          onClick={() => navigate("/auth")}
+                          onClick={() => router.push("/auth")}
                           className="justify-start text-wedding-primary hover:text-wedding-primary/80 hover:bg-wedding-light/50 min-h-[48px] touch-manipulation transition-all duration-200 rounded-lg"
                         >
                           <LogIn className="h-5 w-5 mr-3" />

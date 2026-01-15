@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'next/navigation';
 import { VendorCard } from '../VendorCard';
 import { SearchResult } from '@/types/search';
 import { VendorSelectionProvider } from '@/contexts/VendorSelectionContext';

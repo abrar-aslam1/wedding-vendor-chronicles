@@ -3,7 +3,7 @@ import { SearchForm } from "./SearchForm";
 import { StateWideResults } from "./StateWideResults";
 import { LoadMoreButton } from "./LoadMoreButton";
 import { useEffect, useState, useRef } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "next/navigation"; import { useRouter };
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { SearchResult } from "@/types/search";
@@ -24,7 +24,7 @@ export const SearchContainer = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
   const { toast } = useToast();
-  const navigate = useNavigate();
+  const router = useRouter();
   const abortControllerRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
@@ -106,7 +106,7 @@ export const SearchContainer = () => {
       : `/top-20/${formattedCategory}/${selectedCity}/${selectedState}`;
     
     console.log('Navigating to URL:', urlPath);
-    navigate(urlPath);
+    router.push(urlPath);
   };
 
   const fetchStateResults = async (searchCategory: string, searchState: string, subcategory?: string) => {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 import { supabase } from "@/integrations/supabase/client";
 import Loading from "@/pages/Loading";
 
@@ -8,7 +8,7 @@ interface ProtectedRouteProps {
 }
 
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -20,14 +20,14 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
         if (error || !user) {
           // Store the current path to redirect back after auth
           const returnUrl = encodeURIComponent(window.location.pathname);
-          navigate(`/auth?returnUrl=${returnUrl}`);
+          router.push(`/auth?returnUrl=${returnUrl}`);
           return;
         }
 
         setIsAuthenticated(true);
       } catch (error) {
         console.error("Auth check failed:", error);
-        navigate("/auth");
+        router.push("/auth");
       } finally {
         setIsLoading(false);
       }
