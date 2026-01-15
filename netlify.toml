@@ -1,42 +1,20 @@
 # Netlify Configuration
-# Using Vite build - React Router SPA architecture
-# Note: Next.js migration in progress in app/ directory but not yet deployed
+# Using Next.js App Router with SSR
+# Deployed from app/ directory
 
 [build]
-  command = "npm install && npx vite build"
-  publish = "dist"
+  command = "npm install && npm run build"
+  publish = ".next"
 
 [build.environment]
   NODE_VERSION = "18"
-  NPM_FLAGS = "--include=dev --legacy-peer-deps"
+  NPM_FLAGS = "--legacy-peer-deps"
 
-# IMPORTANT: Disable Netlify's asset processing - Vite already handles this
-# Re-processing can corrupt already-bundled JS files and cause MIME type issues
-[build.processing]
-  skip_processing = true
+# Next.js plugin for Netlify
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
 
-[build.processing.css]
-  bundle = false
-  minify = false
-
-[build.processing.js]
-  bundle = false
-  minify = false
-
-[build.processing.html]
-  pretty_urls = false
-
-[build.processing.images]
-  compress = false
-
-# SPA redirect - serve index.html for all routes that don't match static files
-# This MUST be defined for React Router to work
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-
-# Headers for better security and caching
+# Security and performance headers
 [[headers]]
   for = "/*"
   [headers.values]
@@ -46,66 +24,3 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "geolocation=(), microphone=(), camera=()"
     Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google-analytics.com https://www.googletagmanager.com https://cdn.gpteng.co https://us.i.posthog.com https://us-assets.i.posthog.com https://*.netlify.com https://*.netlify.app; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https: blob:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.dataforseo.com https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://stats.g.doubleclick.net https://us.i.posthog.com https://us-assets.i.posthog.com https://*.netlify.com https://*.netlify.app;"
-
-# Ensure JS files are served with correct MIME type and short cache for updates
-[[headers]]
-  for = "/assets/*.js"
-  [headers.values]
-    Content-Type = "application/javascript; charset=utf-8"
-    Cache-Control = "public, max-age=31536000, immutable"
-
-[[headers]]
-  for = "/*.js"
-  [headers.values]
-    Content-Type = "application/javascript; charset=utf-8"
-    Cache-Control = "public, max-age=31536000, immutable"
-
-# Ensure CSS files are served correctly
-[[headers]]
-  for = "/assets/*.css"
-  [headers.values]
-    Content-Type = "text/css; charset=utf-8"
-    Cache-Control = "public, max-age=31536000, immutable"
-
-[[headers]]
-  for = "/*.css"
-  [headers.values]
-    Content-Type = "text/css; charset=utf-8"
-    Cache-Control = "public, max-age=31536000, immutable"
-
-# Cache image assets
-[[headers]]
-  for = "*.png"
-  [headers.values]
-    Cache-Control = "public, max-age=604800, immutable"
-
-[[headers]]
-  for = "*.jpg"
-  [headers.values]
-    Cache-Control = "public, max-age=604800, immutable"
-
-[[headers]]
-  for = "*.svg"
-  [headers.values]
-    Cache-Control = "public, max-age=604800, immutable"
-
-[[headers]]
-  for = "*.webp"
-  [headers.values]
-    Cache-Control = "public, max-age=604800, immutable"
-
-[[headers]]
-  for = "/Find-My Wedding-Favicon/*"
-  [headers.values]
-    Cache-Control = "public, max-age=604800"
-
-# HTML should not be cached to ensure users get latest version with correct asset references
-[[headers]]
-  for = "/*.html"
-  [headers.values]
-    Cache-Control = "no-cache, no-store, must-revalidate"
-
-[[headers]]
-  for = "/index.html"
-  [headers.values]
-    Cache-Control = "no-cache, no-store, must-revalidate"
