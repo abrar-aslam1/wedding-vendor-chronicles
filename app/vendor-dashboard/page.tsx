@@ -4,7 +4,7 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useVendorAuth } from '@/hooks/useVendorAuth';
-import VendorDashboard from '@/pages/VendorDashboard';
+import VendorDashboard from '@/pages_legacy/VendorDashboard';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Shield } from 'lucide-react';
 import { buildUrl } from '@/../lib/migration-helpers';

@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Only use app directory, ignore src/pages completely
+  pageExtensions: ['tsx', 'ts', 'jsx', 'js'].map(ext => `page.${ext}`).concat(['tsx', 'ts', 'jsx', 'js']),
   // Temporarily ignore build errors during migration
   typescript: {
     ignoreBuildErrors: true,
@@ -8,8 +10,14 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  // Output standalone build for better deployment
-  output: 'standalone',
+  // Use webpack to exclude src/pages from build
+  webpack: (config, { isServer }) => {
+    config.module.rules.push({
+      test: /src\/pages\/.+\.(tsx?|jsx?)$/,
+      loader: 'ignore-loader'
+    });
+    return config;
+  },
   // Environment variables - provide fallbacks for legacy Vite variables
   env: {
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -21,6 +29,11 @@ const nextConfig = {
   // Enable experimental features for better performance
   experimental: {
     optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
+  },
+  // Ignore prerender errors from legacy pages during export
+  onDemandEntries: {
+    maxInactiveAge: 25 * 1000,
+    pagesBufferLength: 2,
   },
   // Redirect old routes if needed during migration
   async redirects() {

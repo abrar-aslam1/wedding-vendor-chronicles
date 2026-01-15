@@ -2,7 +2,7 @@
 
 import { MainNav } from "@/components/MainNav";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import Favorites from "@/pages/Favorites";
+import Favorites from "@/pages_legacy/Favorites";
 import { useState, useEffect } from "react";
 import { createClient } from "@/_lib/supabase/client";
 import { useToast } from "@/hooks/use-toast";
