@@ -35,6 +35,87 @@
   to = "/top-20/venues"
   status = 301
 
+# Catch-all redirects for category-only pages (e.g., /top-20/carts/Madison/Wisconsin)
+# Redirect to category homepage
+[[redirects]]
+  from = "/top-20/photographers/:state/:state"
+  to = "/top-20/photographers"
+  status = 301
+
+[[redirects]]
+  from = "/top-20/videographers/:state/:state"
+  to = "/top-20/videographers"
+  status = 301
+
+[[redirects]]
+  from = "/top-20/caterers/:state/:state"
+  to = "/top-20/caterers"
+  status = 301
+
+[[redirects]]
+  from = "/top-20/florists/:state/:state"
+  to = "/top-20/florists"
+  status = 301
+
+[[redirects]]
+  from = "/top-20/venues/:state/:state"
+  to = "/top-20/venues"
+  status = 301
+
+[[redirects]]
+  from = "/top-20/cake-designers/:state/:state"
+  to = "/top-20/cake-designers"
+  status = 301
+
+[[redirects]]
+  from = "/top-20/bridal-shops/:state/:state"
+  to = "/top-20/bridal-shops"
+  status = 301
+
+[[redirects]]
+  from = "/top-20/makeup-artists/:state/:state"
+  to = "/top-20/makeup-artists"
+  status = 301
+
+[[redirects]]
+  from = "/top-20/hair-stylists/:state/:state"
+  to = "/top-20/hair-stylists"
+  status = 301
+
+[[redirects]]
+  from = "/top-20/djs-and-bands/:state/:state"
+  to = "/top-20/djs-and-bands"
+  status = 301
+
+[[redirects]]
+  from = "/top-20/wedding-decorators/:state/:state"
+  to = "/top-20/wedding-decorators"
+  status = 301
+
+[[redirects]]
+  from = "/top-20/wedding-planners/:state/:state"
+  to = "/top-20/wedding-planners"
+  status = 301
+
+[[redirects]]
+  from = "/top-20/carts/:state/:state"
+  to = "/top-20/carts"
+  status = 301
+
+# Catch-all for generic 2-param category pages (e.g., /top-20/carts/Madison/Wisconsin)
+[[redirects]]
+  from = "/top-20/:category/:city/:state"
+  to = "/top-20/:category"
+  status = 301
+  force = false
+
+# Catch-all for state pages (e.g., /states/california/san-francisco)
+[[redirects]]
+  from = "/states/:state/:city"
+  to = "/states/:state"
+  status = 301
+  force = false
+
 # Security and performance headers
 [[headers]]
   for = "/*"
