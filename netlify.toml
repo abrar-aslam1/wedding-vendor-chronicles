@@ -16,6 +16,25 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
+# Redirect rules for legacy/malformed URLs
+# These handle common URL patterns that were causing 404 errors
+[[redirects]]
+  from = "/top-20/:category/:subcategory/:city/:state"
+  to = "/top-20/:category/:city/:state?subcategory=:subcategory"
+  status = 301
+  force = false
+
+# Handle URLs with special characters (from sitemap issues)
+[[redirects]]
+  from = "/search/florists"
+  to = "/top-20/florists"
+  status = 301
+
+[[redirects]]
+  from = "/search/venues"
+  to = "/top-20/venues"
+  status = 301
+
 # Security and performance headers
 [[headers]]
   for = "/*"

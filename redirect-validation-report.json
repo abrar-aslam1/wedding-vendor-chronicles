@@ -1,0 +1,4010 @@
+{
+  "successful": [
+    {
+      "old": "/top-20/cake-designers/cupcakes-and-dessert-bars/bangor/maine",
+      "new": "/top-20/cake-designers/bangor/maine?subcategory=cupcakes-and-dessert-bars"
+    },
+    {
+      "old": "/top-20/wedding-planners/partial-planning/jacksonville/florida",
+      "new": "/top-20/wedding-planners/jacksonville/florida?subcategory=partial-planning"
+    },
+    {
+      "old": "/top-20/caterers/mexican/columbus/ohio",
+      "new": "/top-20/caterers/columbus/ohio?subcategory=mexican"
+    },
+    {
+      "old": "/top-20/florists/modern-arrangements/Lubbock/Texas",
+      "new": "/top-20/florists/lubbock/texas?subcategory=modern-arrangements"
+    },
+    {
+      "old": "/top-20/carts/cocktail-carts/Fairbanks/Alaska",
+      "new": "/top-20/carts/fairbanks/alaska?subcategory=cocktail-carts"
+    },
+    {
+      "old": "/top-20/carts/dessert-carts/Fairbanks/Alaska",
+      "new": "/top-20/carts/fairbanks/alaska?subcategory=dessert-carts"
+    },
+    {
+      "old": "/top-20/florists/rusticbohemian/columbus/ohio",
+      "new": "/top-20/florists/columbus/ohio?subcategory=rusticbohemian"
+    },
+    {
+      "old": "/top-20/bridal-shops/plus-size-specialists/austin/texas",
+      "new": "/top-20/bridal-shops/austin/texas?subcategory=plus-size-specialists"
+    },
+    {
+      "old": "/top-20/cake-designers/moderncontemporary/springfield/massachusetts",
+      "new": "/top-20/cake-designers/springfield/massachusetts?subcategory=moderncontemporary"
+    },
+    {
+      "old": "/top-20/wedding-planners/full-service-planning/san-diego/california",
+      "new": "/top-20/wedding-planners/san-diego/california?subcategory=full-service-planning"
+    },
+    {
+      "old": "/top-20/venues/gardens-and-parks/el-paso/texas",
+      "new": "/top-20/venues/el-paso/texas?subcategory=gardens-and-parks"
+    },
+    {
+      "old": "/top-20/bridal-shops/plus-size-specialists/las-cruces/new-mexico",
+      "new": "/top-20/bridal-shops/las-cruces/new-mexico?subcategory=plus-size-specialists"
+    },
+    {
+      "old": "/top-20/carts/matcha-carts/Rapid City/South ",
+      "new": "/top-20/carts/rapid-city/south?subcategory=matcha-carts"
+    },
+    {
+      "old": "/top-20/caterers/middle-eastern/charleston/west-virginia",
+      "new": "/top-20/caterers/charleston/west-virginia?subcategory=middle-eastern"
+    },
+    {
+      "old": "/top-20/caterers/thai/dallas/texas",
+      "new": "/top-20/caterers/dallas/texas?subcategory=thai"
+    },
+    {
+      "old": "/top-20/caterers/chinese/amarillo/texas",
+      "new": "/top-20/caterers/amarillo/texas?subcategory=chinese"
+    },
+    {
+      "old": "/top-20/caterers/japanese/cheyenne/wyoming",
+      "new": "/top-20/caterers/cheyenne/wyoming?subcategory=japanese"
+    },
+    {
+      "old": "/top-20/caterers/indian/raleigh/north-carolina",
+      "new": "/top-20/caterers/raleigh/north-carolina?subcategory=indian"
+    },
+    {
+      "old": "/top-20/djs-and-bands/djs/las-cruces/new-mexico",
+      "new": "/top-20/djs-and-bands/las-cruces/new-mexico?subcategory=djs"
+    },
+    {
+      "old": "/top-20/venues/barns-and-farms/garland/texas",
+      "new": "/top-20/venues/garland/texas?subcategory=barns-and-farms"
+    },
+    {
+      "old": "/top-20/venues/ballrooms/garland/texas",
+      "new": "/top-20/venues/garland/texas?subcategory=ballrooms"
+    },
+    {
+      "old": "/top-20/videographers/drone-videography/cincinnati/ohio",
+      "new": "/top-20/videographers/cincinnati/ohio?subcategory=drone-videography"
+    },
+    {
+      "old": "/top-20/photographers/traditional-photography/grand-island/nebraska",
+      "new": "/top-20/photographers/grand-island/nebraska?subcategory=traditional-photography"
+    },
+    {
+      "old": "/top-20/caterers/italian/Plano/Texas",
+      "new": "/top-20/caterers/plano/texas?subcategory=italian"
+    },
+    {
+      "old": "/top-20/caterers/mexican/hartford/connecticut",
+      "new": "/top-20/caterers/hartford/connecticut?subcategory=mexican"
+    },
+    {
+      "old": "/top-20/caterers/indian/columbus/ohio",
+      "new": "/top-20/caterers/columbus/ohio?subcategory=indian"
+    },
+    {
+      "old": "/top-20/photographers/traditional-photography/louisiana/louisiana",
+      "new": "/top-20/photographers/louisiana/louisiana?subcategory=traditional-photography"
+    },
+    {
+      "old": "/top-20/bridal-shops/custom-design/Norfolk/Virginia",
+      "new": "/top-20/bridal-shops/norfolk/virginia?subcategory=custom-design"
+    },
+    {
+      "old": "/top-20/wedding-decorators/lighting-design/charleston/west-virginia",
+      "new": "/top-20/wedding-decorators/charleston/west-virginia?subcategory=lighting-design"
+    },
+    {
+      "old": "/top-20/caterers/indian/fargo/north-dakota",
+      "new": "/top-20/caterers/fargo/north-dakota?subcategory=indian"
+    },
+    {
+      "old": "/top-20/hair-stylists/extensions-and-volume/amarillo/texas",
+      "new": "/top-20/hair-stylists/amarillo/texas?subcategory=extensions-and-volume"
+    },
+    {
+      "old": "/top-20/carts/cocktail-carts/Austin/Texas",
+      "new": "/top-20/carts/austin/texas?subcategory=cocktail-carts"
+    },
+    {
+      "old": "/top-20/venues/gardens-and-parks/cincinnati/ohio",
+      "new": "/top-20/venues/cincinnati/ohio?subcategory=gardens-and-parks"
+    },
+    {
+      "old": "/top-20/photographers/photojournalistic/casper/wyoming",
+      "new": "/top-20/photographers/casper/wyoming?subcategory=photojournalistic"
+    },
+    {
+      "old": "/top-20/wedding-decorators/themed-decor/bowling-green/kentucky",
+      "new": "/top-20/wedding-decorators/bowling-green/kentucky?subcategory=themed-decor"
+    },
+    {
+      "old": "/top-20/bridal-shops/budget-friendly/Albany/New ",
+      "new": "/top-20/bridal-shops/albany/new?subcategory=budget-friendly"
+    },
+    {
+      "old": "/top-20/wedding-planners/full-service-planning/omaha/nebraska",
+      "new": "/top-20/wedding-planners/omaha/nebraska?subcategory=full-service-planning"
+    },
+    {
+      "old": "/top-20/wedding-planners/partial-planning/Tucson/Arizona",
+      "new": "/top-20/wedding-planners/tucson/arizona?subcategory=partial-planning"
+    },
+    {
+      "old": "/top-20/wedding-planners/partial-planning/stamford/connecticut",
+      "new": "/top-20/wedding-planners/stamford/connecticut?subcategory=partial-planning"
+    },
+    {
+      "old": "/top-20/caterers/indian/houston/texas",
+      "new": "/top-20/caterers/houston/texas?subcategory=indian"
+    },
+    {
+      "old": "/top-20/videographers/cinematic-style/sioux-falls/south-dakota",
+      "new": "/top-20/videographers/sioux-falls/south-dakota?subcategory=cinematic-style"
+    },
+    {
+      "old": "/top-20/caterers/spanish/columbus/ohio",
+      "new": "/top-20/caterers/columbus/ohio?subcategory=spanish"
+    },
+    {
+      "old": "/top-20/florists/luxuryextravagant/trenton/new-jersey",
+      "new": "/top-20/florists/trenton/new-jersey?subcategory=luxuryextravagant"
+    },
+    {
+      "old": "/top-20/wedding-planners/destination-wedding-planning/Springfield/Missouri",
+      "new": "/top-20/wedding-planners/springfield/missouri?subcategory=destination-wedding-planning"
+    },
+    {
+      "old": "/top-20/wedding-decorators/lighting-design/baton-rouge/louisiana",
+      "new": "/top-20/wedding-decorators/baton-rouge/louisiana?subcategory=lighting-design"
+    },
+    {
+      "old": "/top-20/caterers/spanish/salt-lake-city/utah",
+      "new": "/top-20/caterers/salt-lake-city/utah?subcategory=spanish"
+    },
+    {
+      "old": "/top-20/caterers/french/colorado-springs/colorado",
+      "new": "/top-20/caterers/colorado-springs/colorado?subcategory=french"
+    },
+    {
+      "old": "/top-20/florists/minimalist/salt-lake-city/utah",
+      "new": "/top-20/florists/salt-lake-city/utah?subcategory=minimalist"
+    },
+    {
+      "old": "/top-20/wedding-decorators/lighting-design/grand-forks/north-dakota",
+      "new": "/top-20/wedding-decorators/grand-forks/north-dakota?subcategory=lighting-design"
+    },
+    {
+      "old": "/top-20/djs-and-bands/live-bands/portland/maine",
+      "new": "/top-20/djs-and-bands/portland/maine?subcategory=live-bands"
+    },
+    {
+      "old": "/top-20/bridal-shops/custom-design/omaha/nebraska",
+      "new": "/top-20/bridal-shops/omaha/nebraska?subcategory=custom-design"
+    },
+    {
+      "old": "/top-20/wedding-decorators/draping-and-linens/reno/nevada",
+      "new": "/top-20/wedding-decorators/reno/nevada?subcategory=draping-and-linens"
+    },
+    {
+      "old": "/top-20/hair-stylists/updos-&-formal-styles/Hartford/Connecticut",
+      "new": "/top-20/hair-stylists/hartford/connecticut?subcategory=updos-and-formal-styles"
+    },
+    {
+      "old": "/top-20/wedding-planners/partial-planning/amarillo/texas",
+      "new": "/top-20/wedding-planners/amarillo/texas?subcategory=partial-planning"
+    },
+    {
+      "old": "/top-20/wedding-planners/destination-wedding-planning/Cincinnati/Ohio",
+      "new": "/top-20/wedding-planners/cincinnati/ohio?subcategory=destination-wedding-planning"
+    },
+    {
+      "old": "/top-20/wedding-planners/day-of-coordination/spokane/washington",
+      "new": "/top-20/wedding-planners/spokane/washington?subcategory=day-of-coordination"
+    },
+    {
+      "old": "/top-20/makeup-artists/destination-wedding/Frederick/Maryland",
+      "new": "/top-20/makeup-artists/frederick/maryland?subcategory=destination-wedding"
+    },
+    {
+      "old": "/top-20/wedding-planners/partial-planning/columbus/ohio",
+      "new": "/top-20/wedding-planners/columbus/ohio?subcategory=partial-planning"
+    },
+    {
+      "old": "/top-20/caterers/thai/montpelier/vermont",
+      "new": "/top-20/caterers/montpelier/vermont?subcategory=thai"
+    },
+    {
+      "old": "/top-20/caterers/indian/amarillo/texas",
+      "new": "/top-20/caterers/amarillo/texas?subcategory=indian"
+    },
+    {
+      "old": "/top-20/caterers/indian/columbia/south-carolina",
+      "new": "/top-20/caterers/columbia/south-carolina?subcategory=indian"
+    },
+    {
+      "old": "/top-20/caterers/middle-eastern/albuquerque/new-mexico",
+      "new": "/top-20/caterers/albuquerque/new-mexico?subcategory=middle-eastern"
+    },
+    {
+      "old": "/top-20/photographers/fine-art/casper/wyoming",
+      "new": "/top-20/photographers/casper/wyoming?subcategory=fine-art"
+    },
+    {
+      "old": "/top-20/photographers/photojournalistic/nashville/tennessee",
+      "new": "/top-20/photographers/nashville/tennessee?subcategory=photojournalistic"
+    },
+    {
+      "old": "/top-20/photographers/engagement-specialists/missouri/missouri",
+      "new": "/top-20/photographers/missouri/missouri?subcategory=engagement-specialists"
+    },
+    {
+      "old": "/top-20/cake-designers/rusticnaked-cakes/laramie/wyoming",
+      "new": "/top-20/cake-designers/laramie/wyoming?subcategory=rusticnaked-cakes"
+    },
+    {
+      "old": "/top-20/caterers/italian/trenton/new-jersey",
+      "new": "/top-20/caterers/trenton/new-jersey?subcategory=italian"
+    },
+    {
+      "old": "/top-20/wedding-planners/partial-planning/springfield/missouri",
+      "new": "/top-20/wedding-planners/springfield/missouri?subcategory=partial-planning"
+    },
+    {
+      "old": "/top-20/caterers/thai/jersey-city/new-jersey",
+      "new": "/top-20/caterers/jersey-city/new-jersey?subcategory=thai"
+    },
+    {
+      "old": "/top-20/caterers/spanish/new-york-city/new-york",
+      "new": "/top-20/caterers/new-york-city/new-york?subcategory=spanish"
+    },
+    {
+      "old": "/top-20/caterers/middle-eastern/grand-forks/north-dakota",
+      "new": "/top-20/caterers/grand-forks/north-dakota?subcategory=middle-eastern"
+    },
+    {
+      "old": "/top-20/hair-stylists/extensions-and-volume/fayetteville/arkansas",
+      "new": "/top-20/hair-stylists/fayetteville/arkansas?subcategory=extensions-and-volume"
+    },
+    {
+      "old": "/top-20/wedding-planners/partial-planning/hartford/connecticut",
+      "new": "/top-20/wedding-planners/hartford/connecticut?subcategory=partial-planning"
+    },
+    {
+      "old": "/top-20/caterers/mexican/trenton/new-jersey",
+      "new": "/top-20/caterers/trenton/new-jersey?subcategory=mexican"
+    },
+    {
+      "old": "/top-20/carts/champagne-carts/sacramento/california",
+      "new": "/top-20/carts/sacramento/california?subcategory=champagne-carts"
+    },
+    {
+      "old": "/top-20/carts/champagne-carts/Jacksonville/Florida",
+      "new": "/top-20/carts/jacksonville/florida?subcategory=champagne-carts"
+    },
+    {
+      "old": "/top-20/caterers/indian/trenton/new-jersey",
+      "new": "/top-20/caterers/trenton/new-jersey?subcategory=indian"
+    },
+    {
+      "old": "/top-20/bridal-shops/budget-friendly/idaho-falls/idaho",
+      "new": "/top-20/bridal-shops/idaho-falls/idaho?subcategory=budget-friendly"
+    },
+    {
+      "old": "/top-20/hair-stylists/on-location-services/springfield/massachusetts",
+      "new": "/top-20/hair-stylists/springfield/massachusetts?subcategory=on-location-services"
+    },
+    {
+      "old": "/top-20/wedding-planners/day-of-coordination/bowling-green/kentucky",
+      "new": "/top-20/wedding-planners/bowling-green/kentucky?subcategory=day-of-coordination"
+    },
+    {
+      "old": "/top-20/wedding-planners/full-service-planning/ogden/utah",
+      "new": "/top-20/wedding-planners/ogden/utah?subcategory=full-service-planning"
+    },
+    {
+      "old": "/top-20/djs-and-bands/djs/fairbanks/alaska",
+      "new": "/top-20/djs-and-bands/fairbanks/alaska?subcategory=djs"
+    },
+    {
+      "old": "/top-20/venues/barns-&-farms/Laramie/Wyoming",
+      "new": "/top-20/venues/laramie/wyoming?subcategory=barns-and-farms"
+    },
+    {
+      "old": "/top-20/carts/dessert-carts/Austin/Texas",
+      "new": "/top-20/carts/austin/texas?subcategory=dessert-carts"
+    },
+    {
+      "old": "/top-20/caterers/mediterranean/fargo/north-dakota",
+      "new": "/top-20/caterers/fargo/north-dakota?subcategory=mediterranean"
+    },
+    {
+      "old": "/top-20/caterers/chinese/irving/texas",
+      "new": "/top-20/caterers/irving/texas?subcategory=chinese"
+    },
+    {
+      "old": "/top-20/bridal-shops/plus-size-specialists/south-bend/indiana",
+      "new": "/top-20/bridal-shops/south-bend/indiana?subcategory=plus-size-specialists"
+    },
+    {
+      "old": "/top-20/makeup-artists/destination-wedding/st-louis/missouri",
+      "new": "/top-20/makeup-artists/st-louis/missouri?subcategory=destination-wedding"
+    },
+    {
+      "old": "/top-20/carts/dessert-carts/Memphis/Tennessee",
+      "new": "/top-20/carts/memphis/tennessee?subcategory=dessert-carts"
+    },
+    {
+      "old": "/top-20/wedding-planners/partial-planning/tulsa/oklahoma",
+      "new": "/top-20/wedding-planners/tulsa/oklahoma?subcategory=partial-planning"
+    },
+    {
+      "old": "/top-20/cake-designers/cupcakes-and-dessert-bars/new-york-city/new-york",
+      "new": "/top-20/cake-designers/new-york-city/new-york?subcategory=cupcakes-and-dessert-bars"
+    },
+    {
+      "old": "/top-20/wedding-planners/day-of-coordination/birmingham/alabama",
+      "new": "/top-20/wedding-planners/birmingham/alabama?subcategory=day-of-coordination"
+    },
+    {
+      "old": "/top-20/bridal-shops/budget-friendly/Manchester/New ",
+      "new": "/top-20/bridal-shops/manchester/new?subcategory=budget-friendly"
+    },
+    {
+      "old": "/top-20/wedding-planners/partial-planning/indianapolis/indiana",
+      "new": "/top-20/wedding-planners/indianapolis/indiana?subcategory=partial-planning"
+    },
+    {
+      "old": "/top-20/bridal-shops/vintageantique/detroit/michigan",
+      "new": "/top-20/bridal-shops/detroit/michigan?subcategory=vintageantique"
+    },
+    {
+      "old": "/top-20/wedding-decorators/draping-&-linens/Tacoma/Washington",
+      "new": "/top-20/wedding-decorators/tacoma/washington?subcategory=draping-and-linens"
+    },
+    {
+      "old": "/top-20/makeup-artists/airbrush-makeup/Mobile/Alabama",
+      "new": "/top-20/makeup-artists/mobile/alabama?subcategory=airbrush-makeup"
+    },
+    {
+      "old": "/top-20/carts/cocktail-carts/Tacoma/Washington",
+      "new": "/top-20/carts/tacoma/washington?subcategory=cocktail-carts"
+    },
+    {
+      "old": "/top-20/wedding-decorators/floral-installations/houston/texas",
+      "new": "/top-20/wedding-decorators/houston/texas?subcategory=floral-installations"
+    },
+    {
+      "old": "/top-20/carts/flower-carts/Tacoma/Washington",
+      "new": "/top-20/carts/tacoma/washington?subcategory=flower-carts"
+    },
+    {
+      "old": "/top-20/venues/wineries-and-vineyards/indianapolis/indiana",
+      "new": "/top-20/venues/indianapolis/indiana?subcategory=wineries-and-vineyards"
+    },
+    {
+      "old": "/top-20/venues/industrial-spaces/jersey-city/new-jersey",
+      "new": "/top-20/venues/jersey-city/new-jersey?subcategory=industrial-spaces"
+    },
+    {
+      "old": "/top-20/venues/gardens-and-parks/newport/rhode-island",
+      "new": "/top-20/venues/newport/rhode-island?subcategory=gardens-and-parks"
+    },
+    {
+      "old": "/top-20/caterers/american/tucson/arizona",
+      "new": "/top-20/caterers/tucson/arizona?subcategory=american"
+    },
+    {
+      "old": "/top-20/wedding-decorators/reception-decor/birmingham/alabama",
+      "new": "/top-20/wedding-decorators/birmingham/alabama?subcategory=reception-decor"
+    },
+    {
+      "old": "/top-20/venues/hotels-and-resorts/milwaukee/wisconsin",
+      "new": "/top-20/venues/milwaukee/wisconsin?subcategory=hotels-and-resorts"
+    },
+    {
+      "old": "/top-20/makeup-artists/bridal-makeup/norman/oklahoma",
+      "new": "/top-20/makeup-artists/norman/oklahoma?subcategory=bridal-makeup"
+    },
+    {
+      "old": "/top-20/caterers/japanese/mesa/arizona",
+      "new": "/top-20/caterers/mesa/arizona?subcategory=japanese"
+    },
+    {
+      "old": "/top-20/carts/champagne-carts/bismarck/north-dakota",
+      "new": "/top-20/carts/bismarck/north-dakota?subcategory=champagne-carts"
+    },
+    {
+      "old": "/top-20/videographers/cinematic-style/Bangor/Maine",
+      "new": "/top-20/videographers/bangor/maine?subcategory=cinematic-style"
+    },
+    {
+      "old": "/top-20/wedding-planners/partial-planning/green-bay/wisconsin",
+      "new": "/top-20/wedding-planners/green-bay/wisconsin?subcategory=partial-planning"
+    },
+    {
+      "old": "/top-20/makeup-artists/bridal-makeup/Orlando/Florida",
+      "new": "/top-20/makeup-artists/orlando/florida?subcategory=bridal-makeup"
+    },
+    {
+      "old": "/top-20/videographers/cinematic-style/bangor/maine",
+      "new": "/top-20/videographers/bangor/maine?subcategory=cinematic-style"
+    },
+    {
+      "old": "/top-20/djs-and-bands/djs/jackson/mississippi",
+      "new": "/top-20/djs-and-bands/jackson/mississippi?subcategory=djs"
+    },
+    {
+      "old": "/top-20/wedding-decorators/reception-decor/saint-paul/minnesota",
+      "new": "/top-20/wedding-decorators/saint-paul/minnesota?subcategory=reception-decor"
+    },
+    {
+      "old": "/top-20/videographers/traditional-videography/fort-worth/texas",
+      "new": "/top-20/videographers/fort-worth/texas?subcategory=traditional-videography"
+    },
+    {
+      "old": "/top-20/carts/matcha-carts/Fairbanks/Alaska",
+      "new": "/top-20/carts/fairbanks/alaska?subcategory=matcha-carts"
+    },
+    {
+      "old": "/top-20/bridal-shops/vintageantique/dallas/texas",
+      "new": "/top-20/bridal-shops/dallas/texas?subcategory=vintageantique"
+    },
+    {
+      "old": "/top-20/carts/dessert-carts/houston/texas",
+      "new": "/top-20/carts/houston/texas?subcategory=dessert-carts"
+    },
+    {
+      "old": "/top-20/djs-and-bands/orchestras/Louisville/Kentucky",
+      "new": "/top-20/djs-and-bands/louisville/kentucky?subcategory=orchestras"
+    },
+    {
+      "old": "/top-20/carts/dessert-carts/las-vegas/nevada",
+      "new": "/top-20/carts/las-vegas/nevada?subcategory=dessert-carts"
+    },
+    {
+      "old": "/top-20/bridal-shops/plus-size-specialists/Buffalo/New ",
+      "new": "/top-20/bridal-shops/buffalo/new?subcategory=plus-size-specialists"
+    },
+    {
+      "old": "/top-20/cake-designers/traditional-cakes/huntington/west-virginia",
+      "new": "/top-20/cake-designers/huntington/west-virginia?subcategory=traditional-cakes"
+    },
+    {
+      "old": "/top-20/florists/classictraditional/santa-fe/new-mexico",
+      "new": "/top-20/florists/santa-fe/new-mexico?subcategory=classictraditional"
+    },
+    {
+      "old": "/top-20/venues/hotels-and-resorts/cleveland/ohio",
+      "new": "/top-20/venues/cleveland/ohio?subcategory=hotels-and-resorts"
+    },
+    {
+      "old": "/top-20/photographers/aerial-photography/corpus-christi/texas",
+      "new": "/top-20/photographers/corpus-christi/texas?subcategory=aerial-photography"
+    },
+    {
+      "old": "/top-20/makeup-artists/destination-wedding/Rockford/Illinois",
+      "new": "/top-20/makeup-artists/rockford/illinois?subcategory=destination-wedding"
+    },
+    {
+      "old": "/top-20/wedding-planners/day-of-coordination/south-bend/indiana",
+      "new": "/top-20/wedding-planners/south-bend/indiana?subcategory=day-of-coordination"
+    },
+    {
+      "old": "/top-20/photographers/photojournalistic/san-antonio/texas",
+      "new": "/top-20/photographers/san-antonio/texas?subcategory=photojournalistic"
+    },
+    {
+      "old": "/top-20/caterers/indian/irving/texas",
+      "new": "/top-20/caterers/irving/texas?subcategory=indian"
+    },
+    {
+      "old": "/top-20/florists/minimalist/Worcester/Massachusetts",
+      "new": "/top-20/florists/worcester/massachusetts?subcategory=minimalist"
+    },
+    {
+      "old": "/top-20/photographers/engagement-specialists/sacramento/california",
+      "new": "/top-20/photographers/sacramento/california?subcategory=engagement-specialists"
+    },
+    {
+      "old": "/top-20/makeup-artists/destination-wedding/Albuquerque/New ",
+      "new": "/top-20/makeup-artists/albuquerque/new?subcategory=destination-wedding"
+    },
+    {
+      "old": "/top-20/djs-and-bands/solo-musicians/montgomery/alabama",
+      "new": "/top-20/djs-and-bands/montgomery/alabama?subcategory=solo-musicians"
+    },
+    {
+      "old": "/top-20/wedding-planners/day-of-coordination/Houston/Texas",
+      "new": "/top-20/wedding-planners/houston/texas?subcategory=day-of-coordination"
+    },
+    {
+      "old": "/top-20/wedding-planners/partial-planning/san-francisco/california",
+      "new": "/top-20/wedding-planners/san-francisco/california?subcategory=partial-planning"
+    },
+    {
+      "old": "/top-20/carts/champagne-carts/jacksonville/florida",
+      "new": "/top-20/carts/jacksonville/florida?subcategory=champagne-carts"
+    },
+    {
+      "old": "/top-20/wedding-planners/day-of-coordination/manchester/new-hampshire",
+      "new": "/top-20/wedding-planners/manchester/new-hampshire?subcategory=day-of-coordination"
+    },
+    {
+      "old": "/top-20/caterers/indian/miami/florida",
+      "new": "/top-20/caterers/miami/florida?subcategory=indian"
+    },
+    {
+      "old": "/top-20/wedding-planners/destination-wedding-planning/Boulder/Colorado",
+      "new": "/top-20/wedding-planners/boulder/colorado?subcategory=destination-wedding-planning"
+    },
+    {
+      "old": "/top-20/wedding-planners/cultural-wedding-specialists/tacoma/washington",
+      "new": "/top-20/wedding-planners/tacoma/washington?subcategory=cultural-wedding-specialists"
+    },
+    {
+      "old": "/top-20/hair-stylists/multicultural-hair/Trenton/New ",
+      "new": "/top-20/hair-stylists/trenton/new?subcategory=multicultural-hair"
+    },
+    {
+      "old": "/top-20/cake-designers/traditional-cakes/las-cruces/new-mexico",
+      "new": "/top-20/cake-designers/las-cruces/new-mexico?subcategory=traditional-cakes"
+    },
+    {
+      "old": "/top-20/wedding-planners/day-of-coordination/bangor/maine",
+      "new": "/top-20/wedding-planners/bangor/maine?subcategory=day-of-coordination"
+    },
+    {
+      "old": "/top-20/florists/rusticbohemian/amarillo/texas",
+      "new": "/top-20/florists/amarillo/texas?subcategory=rusticbohemian"
+    },
+    {
+      "old": "/top-20/carts/dessert-carts/Cedar Rapids/Iowa",
+      "new": "/top-20/carts/cedar-rapids/iowa?subcategory=dessert-carts"
+    },
+    {
+      "old": "/top-20/cake-designers/cupcakes-and-dessert-bars/casper/wyoming",
+      "new": "/top-20/cake-designers/casper/wyoming?subcategory=cupcakes-and-dessert-bars"
+    },
+    {
+      "old": "/top-20/wedding-decorators/reception-decor/oklahoma-city/oklahoma",
+      "new": "/top-20/wedding-decorators/oklahoma-city/oklahoma?subcategory=reception-decor"
+    },
+    {
+      "old": "/top-20/cake-designers/cupcakes-and-dessert-bars/knoxville/tennessee",
+      "new": "/top-20/cake-designers/knoxville/tennessee?subcategory=cupcakes-and-dessert-bars"
+    },
+    {
+      "old": "/top-20/bridal-shops/plus-size-specialists/cedar-rapids/iowa",
+      "new": "/top-20/bridal-shops/cedar-rapids/iowa?subcategory=plus-size-specialists"
+    },
+    {
+      "old": "/top-20/carts/coffee-carts/Cedar Rapids/Iowa",
+      "new": "/top-20/carts/cedar-rapids/iowa?subcategory=coffee-carts"
+    },
+    {
+      "old": "/top-20/carts/champagne-carts/Salem/Oregon",
+      "new": "/top-20/carts/salem/oregon?subcategory=champagne-carts"
+    },
+    {
+      "old": "/top-20/cake-designers/specialty-dietary/saint-paul/minnesota",
+      "new": "/top-20/cake-designers/saint-paul/minnesota?subcategory=specialty-dietary"
+    },
+    {
+      "old": "/top-20/carts/champagne-carts/salem/oregon",
+      "new": "/top-20/carts/salem/oregon?subcategory=champagne-carts"
+    },
+    {
+      "old": "/top-20/cake-designers/moderncontemporary/las-cruces/new-mexico",
+      "new": "/top-20/cake-designers/las-cruces/new-mexico?subcategory=moderncontemporary"
+    },
+    {
+      "old": "/top-20/cake-designers/specialty-dietary/pittsburgh/pennsylvania",
+      "new": "/top-20/cake-designers/pittsburgh/pennsylvania?subcategory=specialty-dietary"
+    },
+    {
+      "old": "/top-20/carts/cocktail-carts/Salem/Oregon",
+      "new": "/top-20/carts/salem/oregon?subcategory=cocktail-carts"
+    },
+    {
+      "old": "/top-20/wedding-decorators/floral-installations/Mobile/Alabama",
+      "new": "/top-20/wedding-decorators/mobile/alabama?subcategory=floral-installations"
+    },
+    {
+      "old": "/top-20/makeup-artists/cultural-specialists/Mobile/Alabama",
+      "new": "/top-20/makeup-artists/mobile/alabama?subcategory=cultural-specialists"
+    },
+    {
+      "old": "/top-20/carts/dessert-carts/Salem/Oregon",
+      "new": "/top-20/carts/salem/oregon?subcategory=dessert-carts"
+    },
+    {
+      "old": "/top-20/wedding-planners/destination-wedding-planning/springfield/illinois",
+      "new": "/top-20/wedding-planners/springfield/illinois?subcategory=destination-wedding-planning"
+    },
+    {
+      "old": "/top-20/wedding-planners/destination-wedding-planning/tampa/florida",
+      "new": "/top-20/wedding-planners/tampa/florida?subcategory=destination-wedding-planning"
+    },
+    {
+      "old": "/top-20/wedding-planners/partial-planning/spokane/washington",
+      "new": "/top-20/wedding-planners/spokane/washington?subcategory=partial-planning"
+    },
+    {
+      "old": "/top-20/wedding-decorators/draping-&-linens/Mobile/Alabama",
+      "new": "/top-20/wedding-decorators/mobile/alabama?subcategory=draping-and-linens"
+    },
+    {
+      "old": "/top-20/carts/flower-carts/Salem/Oregon",
+      "new": "/top-20/carts/salem/oregon?subcategory=flower-carts"
+    },
+    {
+      "old": "/top-20/wedding-decorators/floral-installations/Charleston/South ",
+      "new": "/top-20/wedding-decorators/charleston/south?subcategory=floral-installations"
+    },
+    {
+      "old": "/top-20/makeup-artists/cultural-specialists/Charleston/South ",
+      "new": "/top-20/makeup-artists/charleston/south?subcategory=cultural-specialists"
+    },
+    {
+      "old": "/top-20/carts/coffee-carts/Salem/Oregon",
+      "new": "/top-20/carts/salem/oregon?subcategory=coffee-carts"
+    },
+    {
+      "old": "/top-20/hair-stylists/multicultural-hair/charlotte/north-carolina",
+      "new": "/top-20/hair-stylists/charlotte/north-carolina?subcategory=multicultural-hair"
+    },
+    {
+      "old": "/top-20/wedding-decorators/ceremony-decor/austin/texas",
+      "new": "/top-20/wedding-decorators/austin/texas?subcategory=ceremony-decor"
+    },
+    {
+      "old": "/top-20/videographers/cinematic-style/Dallas/Texas",
+      "new": "/top-20/videographers/dallas/texas?subcategory=cinematic-style"
+    },
+    {
+      "old": "/top-20/carts/coffee-carts/Rapid City/South ",
+      "new": "/top-20/carts/rapid-city/south?subcategory=coffee-carts"
+    },
+    {
+      "old": "/top-20/wedding-planners/partial-planning/las-cruces/new-mexico",
+      "new": "/top-20/wedding-planners/las-cruces/new-mexico?subcategory=partial-planning"
+    },
+    {
+      "old": "/top-20/wedding-decorators/floral-installations/eugene/oregon",
+      "new": "/top-20/wedding-decorators/eugene/oregon?subcategory=floral-installations"
+    },
+    {
+      "old": "/top-20/djs-and-bands/djs/Raleigh/North ",
+      "new": "/top-20/djs-and-bands/raleigh/north?subcategory=djs"
+    },
+    {
+      "old": "/top-20/videographers/drone-videography/las-vegas/nevada",
+      "new": "/top-20/videographers/las-vegas/nevada?subcategory=drone-videography"
+    },
+    {
+      "old": "/top-20/hair-stylists/extensions-and-volume/tucson/arizona",
+      "new": "/top-20/hair-stylists/tucson/arizona?subcategory=extensions-and-volume"
+    },
+    {
+      "old": "/top-20/makeup-artists/bridal-makeup/tampa/florida",
+      "new": "/top-20/makeup-artists/tampa/florida?subcategory=bridal-makeup"
+    },
+    {
+      "old": "/top-20/bridal-shops/custom-design/Wilmington/Delaware",
+      "new": "/top-20/bridal-shops/wilmington/delaware?subcategory=custom-design"
+    },
+    {
+      "old": "/top-20/venues/gardens-and-parks/springfield/missouri",
+      "new": "/top-20/venues/springfield/missouri?subcategory=gardens-and-parks"
+    },
+    {
+      "old": "/top-20/bridal-shops/custom-design/wilmington/delaware",
+      "new": "/top-20/bridal-shops/wilmington/delaware?subcategory=custom-design"
+    },
+    {
+      "old": "/top-20/makeup-artists/naturalorganic/colorado-springs/colorado",
+      "new": "/top-20/makeup-artists/colorado-springs/colorado?subcategory=naturalorganic"
+    },
+    {
+      "old": "/top-20/djs-and-bands/live-bands/nashville/tennessee",
+      "new": "/top-20/djs-and-bands/nashville/tennessee?subcategory=live-bands"
+    },
+    {
+      "old": "/top-20/bridal-shops/budget-friendly/los-angeles/california",
+      "new": "/top-20/bridal-shops/los-angeles/california?subcategory=budget-friendly"
+    },
+    {
+      "old": "/top-20/wedding-planners/partial-planning/bangor/maine",
+      "new": "/top-20/wedding-planners/bangor/maine?subcategory=partial-planning"
+    },
+    {
+      "old": "/top-20/makeup-artists/airbrush-makeup/austin/texas",
+      "new": "/top-20/makeup-artists/austin/texas?subcategory=airbrush-makeup"
+    },
+    {
+      "old": "/top-20/cake-designers/cupcakes-and-dessert-bars/fayetteville/arkansas",
+      "new": "/top-20/cake-designers/fayetteville/arkansas?subcategory=cupcakes-and-dessert-bars"
+    },
+    {
+      "old": "/top-20/djs-and-bands/djs/fort-smith/arkansas",
+      "new": "/top-20/djs-and-bands/fort-smith/arkansas?subcategory=djs"
+    },
+    {
+      "old": "/top-20/florists/minimalist/Sacramento/California",
+      "new": "/top-20/florists/sacramento/california?subcategory=minimalist"
+    },
+    {
+      "old": "/top-20/venues/historic-buildings/spokane/washington",
+      "new": "/top-20/venues/spokane/washington?subcategory=historic-buildings"
+    },
+    {
+      "old": "/top-20/carts/cocktail-carts/Mobile/Alabama",
+      "new": "/top-20/carts/mobile/alabama?subcategory=cocktail-carts"
+    },
+    {
+      "old": "/top-20/carts/flower-carts/Mobile/Alabama",
+      "new": "/top-20/carts/mobile/alabama?subcategory=flower-carts"
+    },
+    {
+      "old": "/top-20/hair-stylists/extensions-and-volume/kansas-city/missouri",
+      "new": "/top-20/hair-stylists/kansas-city/missouri?subcategory=extensions-and-volume"
+    },
+    {
+      "old": "/top-20/wedding-planners/destination-wedding-planning/Minneapolis/Minnesota",
+      "new": "/top-20/wedding-planners/minneapolis/minnesota?subcategory=destination-wedding-planning"
+    },
+    {
+      "old": "/top-20/cake-designers/rusticnaked-cakes/oklahoma-city/oklahoma",
+      "new": "/top-20/cake-designers/oklahoma-city/oklahoma?subcategory=rusticnaked-cakes"
+    },
+    {
+      "old": "/top-20/makeup-artists/naturalorganic/sacramento/california",
+      "new": "/top-20/makeup-artists/sacramento/california?subcategory=naturalorganic"
+    },
+    {
+      "old": "/top-20/caterers/middle-eastern/Austin/Texas",
+      "new": "/top-20/caterers/austin/texas?subcategory=middle-eastern"
+    },
+    {
+      "old": "/top-20/wedding-planners/day-of-coordination/rockford/illinois",
+      "new": "/top-20/wedding-planners/rockford/illinois?subcategory=day-of-coordination"
+    },
+    {
+      "old": "/top-20/makeup-artists/bridal-makeup/columbia/south-carolina",
+      "new": "/top-20/makeup-artists/columbia/south-carolina?subcategory=bridal-makeup"
+    },
+    {
+      "old": "/top-20/carts/coffee-carts/salem/oregon",
+      "new": "/top-20/carts/salem/oregon?subcategory=coffee-carts"
+    },
+    {
+      "old": "/top-20/venues/historic-buildings/augusta/maine",
+      "new": "/top-20/venues/augusta/maine?subcategory=historic-buildings"
+    },
+    {
+      "old": "/top-20/venues/hotels-and-resorts/fayetteville/arkansas",
+      "new": "/top-20/venues/fayetteville/arkansas?subcategory=hotels-and-resorts"
+    },
+    {
+      "old": "/top-20/makeup-artists/naturalorganic/albuquerque/new-mexico",
+      "new": "/top-20/makeup-artists/albuquerque/new-mexico?subcategory=naturalorganic"
+    },
+    {
+      "old": "/top-20/caterers/american/memphis/tennessee",
+      "new": "/top-20/caterers/memphis/tennessee?subcategory=american"
+    },
+    {
+      "old": "/top-20/carts/cocktail-carts/Charleston/South ",
+      "new": "/top-20/carts/charleston/south?subcategory=cocktail-carts"
+    },
+    {
+      "old": "/top-20/bridal-shops/designer-gowns/frederick/maryland",
+      "new": "/top-20/bridal-shops/frederick/maryland?subcategory=designer-gowns"
+    },
+    {
+      "old": "/top-20/wedding-planners/partial-planning/augusta/maine",
+      "new": "/top-20/wedding-planners/augusta/maine?subcategory=partial-planning"
+    },
+    {
+      "old": "/top-20/wedding-planners/partial-planning/montpelier/vermont",
+      "new": "/top-20/wedding-planners/montpelier/vermont?subcategory=partial-planning"
+    },
+    {
+      "old": "/top-20/hair-stylists/multicultural-hair/Newport/Rhode ",
+      "new": "/top-20/hair-stylists/newport/rhode?subcategory=multicultural-hair"
+    },
+    {
+      "old": "/top-20/wedding-planners/day-of-coordination/mesa/arizona",
+      "new": "/top-20/wedding-planners/mesa/arizona?subcategory=day-of-coordination"
+    },
+    {
+      "old": "/top-20/wedding-planners/day-of-coordination/detroit/michigan",
+      "new": "/top-20/wedding-planners/detroit/michigan?subcategory=day-of-coordination"
+    },
+    {
+      "old": "/top-20/carts/coffee-carts/Jackson/Mississippi",
+      "new": "/top-20/carts/jackson/mississippi?subcategory=coffee-carts"
+    },
+    {
+      "old": "/top-20/carts/cocktail-carts/Jersey City/New ",
+      "new": "/top-20/carts/jersey-city/new?subcategory=cocktail-carts"
+    },
+    {
+      "old": "/top-20/venues/gardens-and-parks/fort-collins/colorado",
+      "new": "/top-20/venues/fort-collins/colorado?subcategory=gardens-and-parks"
+    },
+    {
+      "old": "/top-20/hair-stylists/extensions-and-volume/salt-lake-city/utah",
+      "new": "/top-20/hair-stylists/salt-lake-city/utah?subcategory=extensions-and-volume"
+    },
+    {
+      "old": "/top-20/wedding-planners/partial-planning/virginia-beach/virginia",
+      "new": "/top-20/wedding-planners/virginia-beach/virginia?subcategory=partial-planning"
+    },
+    {
+      "old": "/top-20/wedding-planners/partial-planning/Richmond/Virginia",
+      "new": "/top-20/wedding-planners/richmond/virginia?subcategory=partial-planning"
+    },
+    {
+      "old": "/top-20/videographers/cinematic-style/dallas/texas",
+      "new": "/top-20/videographers/dallas/texas?subcategory=cinematic-style"
+    },
+    {
+      "old": "/top-20/carts/cocktail-carts/athens/georgia",
+      "new": "/top-20/carts/athens/georgia?subcategory=cocktail-carts"
+    },
+    {
+      "old": "/top-20/wedding-planners/partial-planning/Charleston/South ",
+      "new": "/top-20/wedding-planners/charleston/south?subcategory=partial-planning"
+    },
+    {
+      "old": "/top-20/florists/minimalist/Gulfport/Mississippi",
+      "new": "/top-20/florists/gulfport/mississippi?subcategory=minimalist"
+    },
+    {
+      "old": "/top-20/wedding-planners/partial-planning/Austin/Texas",
+      "new": "/top-20/wedding-planners/austin/texas?subcategory=partial-planning"
+    },
+    {
+      "old": "/top-20/wedding-planners/partial-planning/Milwaukee/Wisconsin",
+      "new": "/top-20/wedding-planners/milwaukee/wisconsin?subcategory=partial-planning"
+    },
+    {
+      "old": "/top-20/wedding-decorators/lighting-design/peoria/illinois",
+      "new": "/top-20/wedding-decorators/peoria/illinois?subcategory=lighting-design"
+    },
+    {
+      "old": "/top-20/wedding-planners/partial-planning/Buffalo/New ",
+      "new": "/top-20/wedding-planners/buffalo/new?subcategory=partial-planning"
+    },
+    {
+      "old": "/top-20/photographers/traditional-photography/arkansas/arkansas",
+      "new": "/top-20/photographers/arkansas/arkansas?subcategory=traditional-photography"
+    },
+    {
+      "old": "/top-20/photographers/aerial-photography/arkansas/arkansas",
+      "new": "/top-20/photographers/arkansas/arkansas?subcategory=aerial-photography"
+    },
+    {
+      "old": "/top-20/photographers/engagement-specialists/iowa/iowa",
+      "new": "/top-20/photographers/iowa/iowa?subcategory=engagement-specialists"
+    },
+    {
+      "old": "/top-20/caterers/chinese/plano/texas",
+      "new": "/top-20/caterers/plano/texas?subcategory=chinese"
+    },
+    {
+      "old": "/top-20/hair-stylists/extensions-&-volume/Irving/Texas",
+      "new": "/top-20/hair-stylists/irving/texas?subcategory=extensions-and-volume"
+    },
+    {
+      "old": "/top-20/wedding-decorators/lighting-design/houston/texas",
+      "new": "/top-20/wedding-decorators/houston/texas?subcategory=lighting-design"
+    },
+    {
+      "old": "/top-20/videographers/live-streaming/Jackson/Mississippi",
+      "new": "/top-20/videographers/jackson/mississippi?subcategory=live-streaming"
+    },
+    {
+      "old": "/top-20/makeup-artists/bridal-makeup/Tulsa/Oklahoma",
+      "new": "/top-20/makeup-artists/tulsa/oklahoma?subcategory=bridal-makeup"
+    },
+    {
+      "old": "/top-20/photographers/traditional-photography/sacramento/california",
+      "new": "/top-20/photographers/sacramento/california?subcategory=traditional-photography"
+    },
+    {
+      "old": "/top-20/caterers/middle-eastern/newark/new-jersey",
+      "new": "/top-20/caterers/newark/new-jersey?subcategory=middle-eastern"
+    },
+    {
+      "old": "/top-20/caterers/middle-eastern/missoula/montana",
+      "new": "/top-20/caterers/missoula/montana?subcategory=middle-eastern"
+    },
+    {
+      "old": "/top-20/makeup-artists/cultural-specialists/Jackson/Mississippi",
+      "new": "/top-20/makeup-artists/jackson/mississippi?subcategory=cultural-specialists"
+    },
+    {
+      "old": "/top-20/carts/dessert-carts/Jackson/Mississippi",
+      "new": "/top-20/carts/jackson/mississippi?subcategory=dessert-carts"
+    },
+    {
+      "old": "/top-20/carts/flower-carts/fort-worth/texas",
+      "new": "/top-20/carts/fort-worth/texas?subcategory=flower-carts"
+    },
+    {
+      "old": "/top-20/caterers/american/fargo/north-dakota",
+      "new": "/top-20/caterers/fargo/north-dakota?subcategory=american"
+    },
+    {
+      "old": "/top-20/wedding-decorators/floral-installations/Kailua/Hawaii",
+      "new": "/top-20/wedding-decorators/kailua/hawaii?subcategory=floral-installations"
+    },
+    {
+      "old": "/top-20/caterers/mexican/fargo/north-dakota",
+      "new": "/top-20/caterers/fargo/north-dakota?subcategory=mexican"
+    },
+    {
+      "old": "/top-20/makeup-artists/cultural-specialists/Kailua/Hawaii",
+      "new": "/top-20/makeup-artists/kailua/hawaii?subcategory=cultural-specialists"
+    },
+    {
+      "old": "/top-20/caterers/spanish/harrisburg/pennsylvania",
+      "new": "/top-20/caterers/harrisburg/pennsylvania?subcategory=spanish"
+    },
+    {
+      "old": "/top-20/carts/champagne-carts/Kailua/Hawaii",
+      "new": "/top-20/carts/kailua/hawaii?subcategory=champagne-carts"
+    },
+    {
+      "old": "/top-20/caterers/italian/fargo/north-dakota",
+      "new": "/top-20/caterers/fargo/north-dakota?subcategory=italian"
+    },
+    {
+      "old": "/top-20/carts/dessert-carts/Kailua/Hawaii",
+      "new": "/top-20/carts/kailua/hawaii?subcategory=dessert-carts"
+    },
+    {
+      "old": "/top-20/carts/matcha-carts/Kailua/Hawaii",
+      "new": "/top-20/carts/kailua/hawaii?subcategory=matcha-carts"
+    },
+    {
+      "old": "/top-20/carts/matcha-carts/kailua/hawaii",
+      "new": "/top-20/carts/kailua/hawaii?subcategory=matcha-carts"
+    },
+    {
+      "old": "/top-20/wedding-planners/partial-planning/Manchester/New ",
+      "new": "/top-20/wedding-planners/manchester/new?subcategory=partial-planning"
+    },
+    {
+      "old": "/top-20/carts/coffee-carts/Kailua/Hawaii",
+      "new": "/top-20/carts/kailua/hawaii?subcategory=coffee-carts"
+    },
+    {
+      "old": "/top-20/carts/flower-carts/Kailua/Hawaii",
+      "new": "/top-20/carts/kailua/hawaii?subcategory=flower-carts"
+    },
+    {
+      "old": "/top-20/venues/barns-and-farms/phoenix/arizona",
+      "new": "/top-20/venues/phoenix/arizona?subcategory=barns-and-farms"
+    },
+    {
+      "old": "/top-20/caterers/italian/houston/texas",
+      "new": "/top-20/caterers/houston/texas?subcategory=italian"
+    },
+    {
+      "old": "/top-20/photographers/photojournalistic/fort-worth/texas",
+      "new": "/top-20/photographers/fort-worth/texas?subcategory=photojournalistic"
+    },
+    {
+      "old": "/top-20/caterers/mexican/columbia/south-carolina",
+      "new": "/top-20/caterers/columbia/south-carolina?subcategory=mexican"
+    },
+    {
+      "old": "/top-20/carts/flower-carts/New York City/New ",
+      "new": "/top-20/carts/new-york-city/new?subcategory=flower-carts"
+    },
+    {
+      "old": "/top-20/caterers/mediterranean/tulsa/oklahoma",
+      "new": "/top-20/caterers/tulsa/oklahoma?subcategory=mediterranean"
+    },
+    {
+      "old": "/top-20/bridal-shops/designer-gowns/kansas-city/kansas",
+      "new": "/top-20/bridal-shops/kansas-city/kansas?subcategory=designer-gowns"
+    },
+    {
+      "old": "/top-20/carts/matcha-carts/Albuquerque/New ",
+      "new": "/top-20/carts/albuquerque/new?subcategory=matcha-carts"
+    },
+    {
+      "old": "/top-20/carts/flower-carts/Cheyenne/Wyoming",
+      "new": "/top-20/carts/cheyenne/wyoming?subcategory=flower-carts"
+    },
+    {
+      "old": "/top-20/carts/matcha-carts/Athens/Georgia",
+      "new": "/top-20/carts/athens/georgia?subcategory=matcha-carts"
+    },
+    {
+      "old": "/top-20/carts/flower-carts/Laramie/Wyoming",
+      "new": "/top-20/carts/laramie/wyoming?subcategory=flower-carts"
+    },
+    {
+      "old": "/top-20/cake-designers/specialty-dietary/Plano/Texas",
+      "new": "/top-20/cake-designers/plano/texas?subcategory=specialty-dietary"
+    },
+    {
+      "old": "/top-20/photographers/traditional-photography/indiana/indiana",
+      "new": "/top-20/photographers/indiana/indiana?subcategory=traditional-photography"
+    },
+    {
+      "old": "/top-20/videographers/cinematic-style/Scottsdale/Arizona",
+      "new": "/top-20/videographers/scottsdale/arizona?subcategory=cinematic-style"
+    },
+    {
+      "old": "/top-20/wedding-decorators/ceremony-decor/Arlington/Texas",
+      "new": "/top-20/wedding-decorators/arlington/texas?subcategory=ceremony-decor"
+    },
+    {
+      "old": "/top-20/videographers/traditional-videography/Juneau/Alaska",
+      "new": "/top-20/videographers/juneau/alaska?subcategory=traditional-videography"
+    },
+    {
+      "old": "/top-20/makeup-artists/destination-wedding/Burlington/Vermont",
+      "new": "/top-20/makeup-artists/burlington/vermont?subcategory=destination-wedding"
+    },
+    {
+      "old": "/top-20/carts/flower-carts/Springfield/Massachusetts",
+      "new": "/top-20/carts/springfield/massachusetts?subcategory=flower-carts"
+    },
+    {
+      "old": "/top-20/wedding-decorators/lighting-design/Juneau/Alaska",
+      "new": "/top-20/wedding-decorators/juneau/alaska?subcategory=lighting-design"
+    },
+    {
+      "old": "/top-20/wedding-decorators/ceremony-decor/Norman/Oklahoma",
+      "new": "/top-20/wedding-decorators/norman/oklahoma?subcategory=ceremony-decor"
+    },
+    {
+      "old": "/top-20/wedding-planners/destination-wedding-planning/Rochester/Minnesota",
+      "new": "/top-20/wedding-planners/rochester/minnesota?subcategory=destination-wedding-planning"
+    },
+    {
+      "old": "/top-20/photographers/engagement-specialists/south/south-dakota",
+      "new": "/top-20/photographers/south/south-dakota?subcategory=engagement-specialists"
+    },
+    {
+      "old": "/top-20/wedding-decorators/reception-decor/Houston/Texas",
+      "new": "/top-20/wedding-decorators/houston/texas?subcategory=reception-decor"
+    },
+    {
+      "old": "/top-20/makeup-artists/destination-wedding/Dallas/Texas",
+      "new": "/top-20/makeup-artists/dallas/texas?subcategory=destination-wedding"
+    },
+    {
+      "old": "/top-20/wedding-decorators/themed-decor/Boston/Massachusetts",
+      "new": "/top-20/wedding-decorators/boston/massachusetts?subcategory=themed-decor"
+    },
+    {
+      "old": "/top-20/carts/matcha-carts/Newark/New Jersey",
+      "new": "/top-20/carts/newark/new-jersey?subcategory=matcha-carts"
+    },
+    {
+      "old": "/top-20/videographers/traditional-videography/Rockford/Illinois",
+      "new": "/top-20/videographers/rockford/illinois?subcategory=traditional-videography"
+    },
+    {
+      "old": "/top-20/photographers/traditional-photography/idaho/idaho",
+      "new": "/top-20/photographers/idaho/idaho?subcategory=traditional-photography"
+    },
+    {
+      "old": "/top-20/videographers/cinematic-style/Ogden/Utah",
+      "new": "/top-20/videographers/ogden/utah?subcategory=cinematic-style"
+    },
+    {
+      "old": "/top-20/cake-designers/specialty-dietary/Seattle/Washington",
+      "new": "/top-20/cake-designers/seattle/washington?subcategory=specialty-dietary"
+    },
+    {
+      "old": "/top-20/wedding-planners/partial-planning/Arlington/Texas",
+      "new": "/top-20/wedding-planners/arlington/texas?subcategory=partial-planning"
+    },
+    {
+      "old": "/top-20/wedding-planners/full-service-planning/Amarillo/Texas",
+      "new": "/top-20/wedding-planners/amarillo/texas?subcategory=full-service-planning"
+    },
+    {
+      "old": "/top-20/photographers/engagement-specialists/oregon/oregon",
+      "new": "/top-20/photographers/oregon/oregon?subcategory=engagement-specialists"
+    },
+    {
+      "old": "/top-20/photographers/engagement-specialists/lubbock/texas",
+      "new": "/top-20/photographers/lubbock/texas?subcategory=engagement-specialists"
+    },
+    {
+      "old": "/top-20/photographers/photojournalistic/new/new-jersey",
+      "new": "/top-20/photographers/new/new-jersey?subcategory=photojournalistic"
+    },
+    {
+      "old": "/top-20/hair-stylists/on-location-services/Rochester/New ",
+      "new": "/top-20/hair-stylists/rochester/new?subcategory=on-location-services"
+    },
+    {
+      "old": "/top-20/bridal-shops/custom-design/Omaha/Nebraska",
+      "new": "/top-20/bridal-shops/omaha/nebraska?subcategory=custom-design"
+    },
+    {
+      "old": "/top-20/wedding-decorators/ceremony-decor/Houston/Texas",
+      "new": "/top-20/wedding-decorators/houston/texas?subcategory=ceremony-decor"
+    },
+    {
+      "old": "/top-20/videographers/live-streaming/Charleston/South ",
+      "new": "/top-20/videographers/charleston/south?subcategory=live-streaming"
+    },
+    {
+      "old": "/top-20/videographers/documentary-style/Knoxville/Tennessee",
+      "new": "/top-20/videographers/knoxville/tennessee?subcategory=documentary-style"
+    },
+    {
+      "old": "/top-20/carts/coffee-carts/Morgantown/West ",
+      "new": "/top-20/carts/morgantown/west?subcategory=coffee-carts"
+    },
+    {
+      "old": "/top-20/wedding-decorators/ceremony-decor/Aberdeen/South ",
+      "new": "/top-20/wedding-decorators/aberdeen/south?subcategory=ceremony-decor"
+    },
+    {
+      "old": "/top-20/photographers/traditional-photography/connecticut/connecticut",
+      "new": "/top-20/photographers/connecticut/connecticut?subcategory=traditional-photography"
+    },
+    {
+      "old": "/top-20/makeup-artists/destination-wedding/Trenton/New ",
+      "new": "/top-20/makeup-artists/trenton/new?subcategory=destination-wedding"
+    },
+    {
+      "old": "/top-20/cake-designers/traditional-cakes/Columbia/South ",
+      "new": "/top-20/cake-designers/columbia/south?subcategory=traditional-cakes"
+    },
+    {
+      "old": "/top-20/hair-stylists/updos-&-formal-styles/Salem/Oregon",
+      "new": "/top-20/hair-stylists/salem/oregon?subcategory=updos-and-formal-styles"
+    },
+    {
+      "old": "/top-20/wedding-decorators/themed-decor/Houston/Texas",
+      "new": "/top-20/wedding-decorators/houston/texas?subcategory=themed-decor"
+    },
+    {
+      "old": "/top-20/carts/flower-carts/Nashville/Tennessee",
+      "new": "/top-20/carts/nashville/tennessee?subcategory=flower-carts"
+    },
+    {
+      "old": "/top-20/videographers/cinematic-style/Amarillo/Texas",
+      "new": "/top-20/videographers/amarillo/texas?subcategory=cinematic-style"
+    },
+    {
+      "old": "/top-20/videographers/live-streaming/Savannah/Georgia",
+      "new": "/top-20/videographers/savannah/georgia?subcategory=live-streaming"
+    },
+    {
+      "old": "/top-20/photographers/traditional-photography/houston/texas",
+      "new": "/top-20/photographers/houston/texas?subcategory=traditional-photography"
+    },
+    {
+      "old": "/top-20/carts/flower-carts/Miami/Florida",
+      "new": "/top-20/carts/miami/florida?subcategory=flower-carts"
+    },
+    {
+      "old": "/top-20/carts/flower-carts/Galveston/Texas",
+      "new": "/top-20/carts/galveston/texas?subcategory=flower-carts"
+    },
+    {
+      "old": "/top-20/carts/matcha-carts/Augusta/Maine",
+      "new": "/top-20/carts/augusta/maine?subcategory=matcha-carts"
+    },
+    {
+      "old": "/top-20/makeup-artists/destination-wedding/Newark/Delaware",
+      "new": "/top-20/makeup-artists/newark/delaware?subcategory=destination-wedding"
+    },
+    {
+      "old": "/top-20/carts/matcha-carts/Dover/Delaware",
+      "new": "/top-20/carts/dover/delaware?subcategory=matcha-carts"
+    },
+    {
+      "old": "/top-20/photographers/engagement-specialists/plano/texas",
+      "new": "/top-20/photographers/plano/texas?subcategory=engagement-specialists"
+    },
+    {
+      "old": "/top-20/wedding-planners/partial-planning/Gulfport/Mississippi",
+      "new": "/top-20/wedding-planners/gulfport/mississippi?subcategory=partial-planning"
+    },
+    {
+      "old": "/top-20/videographers/cinematic-style/Sacramento/California",
+      "new": "/top-20/videographers/sacramento/california?subcategory=cinematic-style"
+    },
+    {
+      "old": "/top-20/wedding-decorators/lighting-design/Cleveland/Ohio",
+      "new": "/top-20/wedding-decorators/cleveland/ohio?subcategory=lighting-design"
+    },
+    {
+      "old": "/top-20/makeup-artists/destination-wedding/Bangor/Maine",
+      "new": "/top-20/makeup-artists/bangor/maine?subcategory=destination-wedding"
+    },
+    {
+      "old": "/top-20/makeup-artists/destination-wedding/Tacoma/Washington",
+      "new": "/top-20/makeup-artists/tacoma/washington?subcategory=destination-wedding"
+    },
+    {
+      "old": "/top-20/photographers/traditional-photography/new/new-hampshire",
+      "new": "/top-20/photographers/new/new-hampshire?subcategory=traditional-photography"
+    },
+    {
+      "old": "/top-20/photographers/aerial-photography/garland/texas",
+      "new": "/top-20/photographers/garland/texas?subcategory=aerial-photography"
+    },
+    {
+      "old": "/top-20/videographers/live-streaming/Pocatello/Idaho",
+      "new": "/top-20/videographers/pocatello/idaho?subcategory=live-streaming"
+    },
+    {
+      "old": "/top-20/makeup-artists/bridal-makeup/Rochester/Minnesota",
+      "new": "/top-20/makeup-artists/rochester/minnesota?subcategory=bridal-makeup"
+    },
+    {
+      "old": "/top-20/carts/coffee-carts/Warwick/Rhode ",
+      "new": "/top-20/carts/warwick/rhode?subcategory=coffee-carts"
+    },
+    {
+      "old": "/top-20/carts/matcha-carts/Shreveport/Louisiana",
+      "new": "/top-20/carts/shreveport/louisiana?subcategory=matcha-carts"
+    },
+    {
+      "old": "/top-20/carts/matcha-carts/Jackson/Mississippi",
+      "new": "/top-20/carts/jackson/mississippi?subcategory=matcha-carts"
+    },
+    {
+      "old": "/top-20/photographers/fine-art/north/north-dakota",
+      "new": "/top-20/photographers/north/north-dakota?subcategory=fine-art"
+    },
+    {
+      "old": "/top-20/carts/flower-carts/Topeka/Kansas",
+      "new": "/top-20/carts/topeka/kansas?subcategory=flower-carts"
+    },
+    {
+      "old": "/top-20/videographers/live-streaming/Arlington/Texas",
+      "new": "/top-20/videographers/arlington/texas?subcategory=live-streaming"
+    },
+    {
+      "old": "/top-20/videographers/cinematic-style/Wilmington/Delaware",
+      "new": "/top-20/videographers/wilmington/delaware?subcategory=cinematic-style"
+    },
+    {
+      "old": "/top-20/carts/coffee-carts/Detroit/Michigan",
+      "new": "/top-20/carts/detroit/michigan?subcategory=coffee-carts"
+    },
+    {
+      "old": "/top-20/wedding-decorators/lighting-design/Eugene/Oregon",
+      "new": "/top-20/wedding-decorators/eugene/oregon?subcategory=lighting-design"
+    },
+    {
+      "old": "/top-20/carts/flower-carts/Ann Arbor/Michigan",
+      "new": "/top-20/carts/ann-arbor/michigan?subcategory=flower-carts"
+    },
+    {
+      "old": "/top-20/carts/flower-carts/Fargo/North Dakota",
+      "new": "/top-20/carts/fargo/north-dakota?subcategory=flower-carts"
+    },
+    {
+      "old": "/top-20/wedding-decorators/lighting-design/Helena/Montana",
+      "new": "/top-20/wedding-decorators/helena/montana?subcategory=lighting-design"
+    },
+    {
+      "old": "/top-20/carts/coffee-carts/Idaho Falls/Idaho",
+      "new": "/top-20/carts/idaho-falls/idaho?subcategory=coffee-carts"
+    },
+    {
+      "old": "/top-20/venues/hotels-&-resorts/Plano/Texas",
+      "new": "/top-20/venues/plano/texas?subcategory=hotels-and-resorts"
+    },
+    {
+      "old": "/top-20/makeup-artists/airbrush-makeup/Columbia/South ",
+      "new": "/top-20/makeup-artists/columbia/south?subcategory=airbrush-makeup"
+    },
+    {
+      "old": "/top-20/wedding-decorators/draping-&-linens/Anchorage/Alaska",
+      "new": "/top-20/wedding-decorators/anchorage/alaska?subcategory=draping-and-linens"
+    },
+    {
+      "old": "/top-20/videographers/cinematic-style/Columbus/Ohio",
+      "new": "/top-20/videographers/columbus/ohio?subcategory=cinematic-style"
+    },
+    {
+      "old": "/top-20/photographers/traditional-photography/alaska/alaska",
+      "new": "/top-20/photographers/alaska/alaska?subcategory=traditional-photography"
+    },
+    {
+      "old": "/top-20/photographers/photojournalistic/north/north-carolina",
+      "new": "/top-20/photographers/north/north-carolina?subcategory=photojournalistic"
+    },
+    {
+      "old": "/top-20/photographers/fine-art/maine/maine",
+      "new": "/top-20/photographers/maine/maine?subcategory=fine-art"
+    },
+    {
+      "old": "/top-20/photographers/traditional-photography/corpus-christi/texas",
+      "new": "/top-20/photographers/corpus-christi/texas?subcategory=traditional-photography"
+    },
+    {
+      "old": "/top-20/makeup-artists/cultural-specialists/Anchorage/Alaska",
+      "new": "/top-20/makeup-artists/anchorage/alaska?subcategory=cultural-specialists"
+    },
+    {
+      "old": "/top-20/videographers/drone-videography/Detroit/Michigan",
+      "new": "/top-20/videographers/detroit/michigan?subcategory=drone-videography"
+    },
+    {
+      "old": "/top-20/carts/coffee-carts/Helena/Montana",
+      "new": "/top-20/carts/helena/montana?subcategory=coffee-carts"
+    },
+    {
+      "old": "/top-20/videographers/live-streaming/Nashville/Tennessee",
+      "new": "/top-20/videographers/nashville/tennessee?subcategory=live-streaming"
+    },
+    {
+      "old": "/top-20/cake-designers/specialty-dietary/Sacramento/California",
+      "new": "/top-20/cake-designers/sacramento/california?subcategory=specialty-dietary"
+    },
+    {
+      "old": "/top-20/bridal-shops/designer-gowns/Columbia/South ",
+      "new": "/top-20/bridal-shops/columbia/south?subcategory=designer-gowns"
+    },
+    {
+      "old": "/top-20/bridal-shops/budget-friendly/Indianapolis/Indiana",
+      "new": "/top-20/bridal-shops/indianapolis/indiana?subcategory=budget-friendly"
+    },
+    {
+      "old": "/top-20/makeup-artists/cultural-specialists/Augusta/Georgia",
+      "new": "/top-20/makeup-artists/augusta/georgia?subcategory=cultural-specialists"
+    },
+    {
+      "old": "/top-20/wedding-decorators/ceremony-decor/Rockford/Illinois",
+      "new": "/top-20/wedding-decorators/rockford/illinois?subcategory=ceremony-decor"
+    },
+    {
+      "old": "/top-20/wedding-decorators/reception-decor/Phoenix/Arizona",
+      "new": "/top-20/wedding-decorators/phoenix/arizona?subcategory=reception-decor"
+    },
+    {
+      "old": "/top-20/wedding-decorators/ceremony-decor/Durham/North ",
+      "new": "/top-20/wedding-decorators/durham/north?subcategory=ceremony-decor"
+    },
+    {
+      "old": "/top-20/wedding-decorators/draping-&-linens/Newark/New ",
+      "new": "/top-20/wedding-decorators/newark/new?subcategory=draping-and-linens"
+    },
+    {
+      "old": "/top-20/wedding-decorators/lighting-design/Garland/Texas",
+      "new": "/top-20/wedding-decorators/garland/texas?subcategory=lighting-design"
+    },
+    {
+      "old": "/top-20/photographers/aerial-photography/mississippi/mississippi",
+      "new": "/top-20/photographers/mississippi/mississippi?subcategory=aerial-photography"
+    },
+    {
+      "old": "/top-20/photographers/engagement-specialists/ohio/ohio",
+      "new": "/top-20/photographers/ohio/ohio?subcategory=engagement-specialists"
+    },
+    {
+      "old": "/top-20/photographers/traditional-photography/nebraska/nebraska",
+      "new": "/top-20/photographers/nebraska/nebraska?subcategory=traditional-photography"
+    },
+    {
+      "old": "/top-20/makeup-artists/airbrush-makeup/Pocatello/Idaho",
+      "new": "/top-20/makeup-artists/pocatello/idaho?subcategory=airbrush-makeup"
+    },
+    {
+      "old": "/top-20/photographers/aerial-photography/south/south-dakota",
+      "new": "/top-20/photographers/south/south-dakota?subcategory=aerial-photography"
+    },
+    {
+      "old": "/top-20/wedding-decorators/draping-&-linens/Mesa/Arizona",
+      "new": "/top-20/wedding-decorators/mesa/arizona?subcategory=draping-and-linens"
+    },
+    {
+      "old": "/top-20/makeup-artists/destination-wedding/Mobile/Alabama",
+      "new": "/top-20/makeup-artists/mobile/alabama?subcategory=destination-wedding"
+    },
+    {
+      "old": "/top-20/photographers/aerial-photography/vermont/vermont",
+      "new": "/top-20/photographers/vermont/vermont?subcategory=aerial-photography"
+    },
+    {
+      "old": "/top-20/photographers/engagement-specialists/minnesota/minnesota",
+      "new": "/top-20/photographers/minnesota/minnesota?subcategory=engagement-specialists"
+    },
+    {
+      "old": "/top-20/videographers/cinematic-style/Norman/Oklahoma",
+      "new": "/top-20/videographers/norman/oklahoma?subcategory=cinematic-style"
+    },
+    {
+      "old": "/top-20/photographers/aerial-photography/rhode/rhode-island",
+      "new": "/top-20/photographers/rhode/rhode-island?subcategory=aerial-photography"
+    },
+    {
+      "old": "/top-20/videographers/cinematic-style/Biloxi/Mississippi",
+      "new": "/top-20/videographers/biloxi/mississippi?subcategory=cinematic-style"
+    },
+    {
+      "old": "/top-20/videographers/cinematic-style/Buffalo/New ",
+      "new": "/top-20/videographers/buffalo/new?subcategory=cinematic-style"
+    },
+    {
+      "old": "/top-20/photographers/engagement-specialists/mississippi/mississippi",
+      "new": "/top-20/photographers/mississippi/mississippi?subcategory=engagement-specialists"
+    },
+    {
+      "old": "/top-20/photographers/photojournalistic/michigan/michigan",
+      "new": "/top-20/photographers/michigan/michigan?subcategory=photojournalistic"
+    },
+    {
+      "old": "/top-20/makeup-artists/destination-wedding/Kailua/Hawaii",
+      "new": "/top-20/makeup-artists/kailua/hawaii?subcategory=destination-wedding"
+    },
+    {
+      "old": "/top-20/videographers/cinematic-style/Columbia/South ",
+      "new": "/top-20/videographers/columbia/south?subcategory=cinematic-style"
+    },
+    {
+      "old": "/top-20/photographers/fine-art/rochester/new-york",
+      "new": "/top-20/photographers/rochester/new-york?subcategory=fine-art"
+    },
+    {
+      "old": "/top-20/hair-stylists/on-location-services/Tampa/Florida",
+      "new": "/top-20/hair-stylists/tampa/florida?subcategory=on-location-services"
+    },
+    {
+      "old": "/top-20/hair-stylists/extensions-&-volume/Raleigh/North ",
+      "new": "/top-20/hair-stylists/raleigh/north?subcategory=extensions-and-volume"
+    },
+    {
+      "old": "/top-20/photographers/traditional-photography/kansas/kansas",
+      "new": "/top-20/photographers/kansas/kansas?subcategory=traditional-photography"
+    },
+    {
+      "old": "/top-20/venues/hotels-&-resorts/Shreveport/Louisiana",
+      "new": "/top-20/venues/shreveport/louisiana?subcategory=hotels-and-resorts"
+    },
+    {
+      "old": "/top-20/carts/coffee-carts/Eugene/Oregon",
+      "new": "/top-20/carts/eugene/oregon?subcategory=coffee-carts"
+    },
+    {
+      "old": "/top-20/photographers/engagement-specialists/new/new-jersey",
+      "new": "/top-20/photographers/new/new-jersey?subcategory=engagement-specialists"
+    },
+    {
+      "old": "/top-20/makeup-artists/cultural-specialists/Detroit/Michigan",
+      "new": "/top-20/makeup-artists/detroit/michigan?subcategory=cultural-specialists"
+    },
+    {
+      "old": "/top-20/photographers/aerial-photography/dallas/texas",
+      "new": "/top-20/photographers/dallas/texas?subcategory=aerial-photography"
+    },
+    {
+      "old": "/top-20/videographers/live-streaming/Peoria/Illinois",
+      "new": "/top-20/videographers/peoria/illinois?subcategory=live-streaming"
+    },
+    {
+      "old": "/top-20/videographers/live-streaming/Cheyenne/Wyoming",
+      "new": "/top-20/videographers/cheyenne/wyoming?subcategory=live-streaming"
+    },
+    {
+      "old": "/top-20/hair-stylists/updos-&-formal-styles/Houston/Texas",
+      "new": "/top-20/hair-stylists/houston/texas?subcategory=updos-and-formal-styles"
+    },
+    {
+      "old": "/top-20/makeup-artists/destination-wedding/Morgantown/West ",
+      "new": "/top-20/makeup-artists/morgantown/west?subcategory=destination-wedding"
+    },
+    {
+      "old": "/top-20/videographers/live-streaming/Davenport/Iowa",
+      "new": "/top-20/videographers/davenport/iowa?subcategory=live-streaming"
+    },
+    {
+      "old": "/top-20/videographers/traditional-videography/Tacoma/Washington",
+      "new": "/top-20/videographers/tacoma/washington?subcategory=traditional-videography"
+    },
+    {
+      "old": "/top-20/hair-stylists/updos-&-formal-styles/Savannah/Georgia",
+      "new": "/top-20/hair-stylists/savannah/georgia?subcategory=updos-and-formal-styles"
+    },
+    {
+      "old": "/top-20/videographers/cinematic-style/Bismarck/North ",
+      "new": "/top-20/videographers/bismarck/north?subcategory=cinematic-style"
+    },
+    {
+      "old": "/top-20/bridal-shops/designer-gowns/Fairbanks/Alaska",
+      "new": "/top-20/bridal-shops/fairbanks/alaska?subcategory=designer-gowns"
+    },
+    {
+      "old": "/top-20/videographers/traditional-videography/Charlotte/North ",
+      "new": "/top-20/videographers/charlotte/north?subcategory=traditional-videography"
+    },
+    {
+      "old": "/top-20/venues/hotels-&-resorts/Amarillo/Texas",
+      "new": "/top-20/venues/amarillo/texas?subcategory=hotels-and-resorts"
+    },
+    {
+      "old": "/top-20/carts/matcha-carts/Detroit/Michigan",
+      "new": "/top-20/carts/detroit/michigan?subcategory=matcha-carts"
+    },
+    {
+      "old": "/top-20/makeup-artists/bridal-makeup/Dallas/Texas",
+      "new": "/top-20/makeup-artists/dallas/texas?subcategory=bridal-makeup"
+    },
+    {
+      "old": "/top-20/makeup-artists/airbrush-makeup/Rockford/Illinois",
+      "new": "/top-20/makeup-artists/rockford/illinois?subcategory=airbrush-makeup"
+    },
+    {
+      "old": "/top-20/makeup-artists/bridal-makeup/Jacksonville/Florida",
+      "new": "/top-20/makeup-artists/jacksonville/florida?subcategory=bridal-makeup"
+    },
+    {
+      "old": "/top-20/makeup-artists/destination-wedding/Providence/Rhode ",
+      "new": "/top-20/makeup-artists/providence/rhode?subcategory=destination-wedding"
+    },
+    {
+      "old": "/top-20/makeup-artists/cultural-specialists/Dover/Delaware",
+      "new": "/top-20/makeup-artists/dover/delaware?subcategory=cultural-specialists"
+    },
+    {
+      "old": "/top-20/wedding-decorators/ceremony-decor/Augusta/Maine",
+      "new": "/top-20/wedding-decorators/augusta/maine?subcategory=ceremony-decor"
+    },
+    {
+      "old": "/top-20/makeup-artists/cultural-specialists/Harrisburg/Pennsylvania",
+      "new": "/top-20/makeup-artists/harrisburg/pennsylvania?subcategory=cultural-specialists"
+    },
+    {
+      "old": "/top-20/carts/matcha-carts/Missoula/Montana",
+      "new": "/top-20/carts/missoula/montana?subcategory=matcha-carts"
+    },
+    {
+      "old": "/top-20/caterers/mediterranean/Garland/Texas",
+      "new": "/top-20/caterers/garland/texas?subcategory=mediterranean"
+    },
+    {
+      "old": "/top-20/florists/minimalist/Madison/Wisconsin",
+      "new": "/top-20/florists/madison/wisconsin?subcategory=minimalist"
+    },
+    {
+      "old": "/top-20/wedding-decorators/reception-decor/Galveston/Texas",
+      "new": "/top-20/wedding-decorators/galveston/texas?subcategory=reception-decor"
+    },
+    {
+      "old": "/top-20/videographers/cinematic-style/Charlotte/North ",
+      "new": "/top-20/videographers/charlotte/north?subcategory=cinematic-style"
+    },
+    {
+      "old": "/top-20/photographers/engagement-specialists/arizona/arizona",
+      "new": "/top-20/photographers/arizona/arizona?subcategory=engagement-specialists"
+    },
+    {
+      "old": "/top-20/wedding-decorators/ceremony-decor/Galveston/Texas",
+      "new": "/top-20/wedding-decorators/galveston/texas?subcategory=ceremony-decor"
+    },
+    {
+      "old": "/top-20/wedding-decorators/draping-&-linens/Burlington/Vermont",
+      "new": "/top-20/wedding-decorators/burlington/vermont?subcategory=draping-and-linens"
+    },
+    {
+      "old": "/top-20/videographers/documentary-style/Gulfport/Mississippi",
+      "new": "/top-20/videographers/gulfport/mississippi?subcategory=documentary-style"
+    },
+    {
+      "old": "/top-20/djs-and-bands/live-bands/Amarillo/Texas",
+      "new": "/top-20/djs-and-bands/amarillo/texas?subcategory=live-bands"
+    },
+    {
+      "old": "/top-20/photographers/aerial-photography/indiana/indiana",
+      "new": "/top-20/photographers/indiana/indiana?subcategory=aerial-photography"
+    },
+    {
+      "old": "/top-20/photographers/photojournalistic/maryland/maryland",
+      "new": "/top-20/photographers/maryland/maryland?subcategory=photojournalistic"
+    },
+    {
+      "old": "/top-20/carts/matcha-carts/Springfield/Illinois",
+      "new": "/top-20/carts/springfield/illinois?subcategory=matcha-carts"
+    },
+    {
+      "old": "/top-20/hair-stylists/updos-&-formal-styles/Mobile/Alabama",
+      "new": "/top-20/hair-stylists/mobile/alabama?subcategory=updos-and-formal-styles"
+    },
+    {
+      "old": "/top-20/photographers/photojournalistic/rochester/new-york",
+      "new": "/top-20/photographers/rochester/new-york?subcategory=photojournalistic"
+    },
+    {
+      "old": "/top-20/photographers/fine-art/san-diego/california",
+      "new": "/top-20/photographers/san-diego/california?subcategory=fine-art"
+    },
+    {
+      "old": "/top-20/photographers/engagement-specialists/wisconsin/wisconsin",
+      "new": "/top-20/photographers/wisconsin/wisconsin?subcategory=engagement-specialists"
+    },
+    {
+      "old": "/top-20/wedding-decorators/lighting-design/Dallas/Texas",
+      "new": "/top-20/wedding-decorators/dallas/texas?subcategory=lighting-design"
+    },
+    {
+      "old": "/top-20/videographers/documentary-style/Madison/Wisconsin",
+      "new": "/top-20/videographers/madison/wisconsin?subcategory=documentary-style"
+    },
+    {
+      "old": "/top-20/wedding-decorators/themed-decor/Galveston/Texas",
+      "new": "/top-20/wedding-decorators/galveston/texas?subcategory=themed-decor"
+    },
+    {
+      "old": "/top-20/photographers/fine-art/iowa/iowa",
+      "new": "/top-20/photographers/iowa/iowa?subcategory=fine-art"
+    },
+    {
+      "old": "/top-20/videographers/documentary-style/Topeka/Kansas",
+      "new": "/top-20/videographers/topeka/kansas?subcategory=documentary-style"
+    },
+    {
+      "old": "/top-20/photographers/traditional-photography/miami/florida",
+      "new": "/top-20/photographers/miami/florida?subcategory=traditional-photography"
+    },
+    {
+      "old": "/top-20/photographers/traditional-photography/missouri/missouri",
+      "new": "/top-20/photographers/missouri/missouri?subcategory=traditional-photography"
+    },
+    {
+      "old": "/top-20/hair-stylists/on-location-services/Phoenix/Arizona",
+      "new": "/top-20/hair-stylists/phoenix/arizona?subcategory=on-location-services"
+    },
+    {
+      "old": "/top-20/bridal-shops/plus-size-specialists/Eugene/Oregon",
+      "new": "/top-20/bridal-shops/eugene/oregon?subcategory=plus-size-specialists"
+    },
+    {
+      "old": "/top-20/hair-stylists/on-location-services/Wilmington/Delaware",
+      "new": "/top-20/hair-stylists/wilmington/delaware?subcategory=on-location-services"
+    },
+    {
+      "old": "/top-20/photographers/traditional-photography/maryland/maryland",
+      "new": "/top-20/photographers/maryland/maryland?subcategory=traditional-photography"
+    },
+    {
+      "old": "/top-20/videographers/traditional-videography/Orlando/Florida",
+      "new": "/top-20/videographers/orlando/florida?subcategory=traditional-videography"
+    },
+    {
+      "old": "/top-20/hair-stylists/extensions-&-volume/Billings/Montana",
+      "new": "/top-20/hair-stylists/billings/montana?subcategory=extensions-and-volume"
+    },
+    {
+      "old": "/top-20/carts/matcha-carts/Burlington/Vermont",
+      "new": "/top-20/carts/burlington/vermont?subcategory=matcha-carts"
+    },
+    {
+      "old": "/top-20/photographers/traditional-photography/Amarillo/Texas",
+      "new": "/top-20/photographers/amarillo/texas?subcategory=traditional-photography"
+    },
+    {
+      "old": "/top-20/videographers/live-streaming/Trenton/New ",
+      "new": "/top-20/videographers/trenton/new?subcategory=live-streaming"
+    },
+    {
+      "old": "/top-20/videographers/documentary-style/Shreveport/Louisiana",
+      "new": "/top-20/videographers/shreveport/louisiana?subcategory=documentary-style"
+    },
+    {
+      "old": "/top-20/videographers/documentary-style/Trenton/New ",
+      "new": "/top-20/videographers/trenton/new?subcategory=documentary-style"
+    },
+    {
+      "old": "/top-20/photographers/fine-art/fort-worth/texas",
+      "new": "/top-20/photographers/fort-worth/texas?subcategory=fine-art"
+    },
+    {
+      "old": "/top-20/videographers/drone-videography/Anchorage/Alaska",
+      "new": "/top-20/videographers/anchorage/alaska?subcategory=drone-videography"
+    },
+    {
+      "old": "/top-20/photographers/engagement-specialists/galveston/texas",
+      "new": "/top-20/photographers/galveston/texas?subcategory=engagement-specialists"
+    },
+    {
+      "old": "/top-20/florists/modern-arrangements/Irving/Texas",
+      "new": "/top-20/florists/irving/texas?subcategory=modern-arrangements"
+    },
+    {
+      "old": "/top-20/photographers/fine-art/garland/texas",
+      "new": "/top-20/photographers/garland/texas?subcategory=fine-art"
+    },
+    {
+      "old": "/top-20/djs-and-bands/djs/Plano/Texas",
+      "new": "/top-20/djs-and-bands/plano/texas?subcategory=djs"
+    },
+    {
+      "old": "/top-20/carts/flower-carts/Burlington/Vermont",
+      "new": "/top-20/carts/burlington/vermont?subcategory=flower-carts"
+    },
+    {
+      "old": "/top-20/photographers/photojournalistic/new/new-hampshire",
+      "new": "/top-20/photographers/new/new-hampshire?subcategory=photojournalistic"
+    },
+    {
+      "old": "/top-20/videographers/traditional-videography/Providence/Rhode ",
+      "new": "/top-20/videographers/providence/rhode?subcategory=traditional-videography"
+    },
+    {
+      "old": "/top-20/photographers/photojournalistic/minnesota/minnesota",
+      "new": "/top-20/photographers/minnesota/minnesota?subcategory=photojournalistic"
+    },
+    {
+      "old": "/top-20/florists/minimalist/Garland/Texas",
+      "new": "/top-20/florists/garland/texas?subcategory=minimalist"
+    },
+    {
+      "old": "/top-20/wedding-decorators/ceremony-decor/Dallas/Texas",
+      "new": "/top-20/wedding-decorators/dallas/texas?subcategory=ceremony-decor"
+    },
+    {
+      "old": "/top-20/carts/coffee-carts/Burlington/Vermont",
+      "new": "/top-20/carts/burlington/vermont?subcategory=coffee-carts"
+    },
+    {
+      "old": "/top-20/cake-designers/cupcakes-&-dessert-bars/Wilmington/Delaware",
+      "new": "/top-20/cake-designers/wilmington/delaware?subcategory=cupcakes-and-dessert-bars"
+    },
+    {
+      "old": "/top-20/makeup-artists/bridal-makeup/Irving/Texas",
+      "new": "/top-20/makeup-artists/irving/texas?subcategory=bridal-makeup"
+    },
+    {
+      "old": "/top-20/wedding-decorators/floral-installations/Galveston/Texas",
+      "new": "/top-20/wedding-decorators/galveston/texas?subcategory=floral-installations"
+    },
+    {
+      "old": "/top-20/bridal-shops/custom-design/Ogden/Utah",
+      "new": "/top-20/bridal-shops/ogden/utah?subcategory=custom-design"
+    },
+    {
+      "old": "/top-20/videographers/live-streaming/Topeka/Kansas",
+      "new": "/top-20/videographers/topeka/kansas?subcategory=live-streaming"
+    },
+    {
+      "old": "/top-20/videographers/traditional-videography/Huntington/West ",
+      "new": "/top-20/videographers/huntington/west?subcategory=traditional-videography"
+    },
+    {
+      "old": "/top-20/videographers/cinematic-style/Manchester/New ",
+      "new": "/top-20/videographers/manchester/new?subcategory=cinematic-style"
+    },
+    {
+      "old": "/top-20/hair-stylists/multicultural-hair/Burlington/Vermont",
+      "new": "/top-20/hair-stylists/burlington/vermont?subcategory=multicultural-hair"
+    },
+    {
+      "old": "/top-20/videographers/cinematic-style/Wichita/Kansas",
+      "new": "/top-20/videographers/wichita/kansas?subcategory=cinematic-style"
+    },
+    {
+      "old": "/top-20/hair-stylists/updos-&-formal-styles/Stamford/Connecticut",
+      "new": "/top-20/hair-stylists/stamford/connecticut?subcategory=updos-and-formal-styles"
+    },
+    {
+      "old": "/top-20/venues/barns-&-farms/Austin/Texas",
+      "new": "/top-20/venues/austin/texas?subcategory=barns-and-farms"
+    },
+    {
+      "old": "/top-20/wedding-decorators/floral-installations/Cheyenne/Wyoming",
+      "new": "/top-20/wedding-decorators/cheyenne/wyoming?subcategory=floral-installations"
+    },
+    {
+      "old": "/top-20/carts/dessert-carts/Peoria/Illinois",
+      "new": "/top-20/carts/peoria/illinois?subcategory=dessert-carts"
+    },
+    {
+      "old": "/top-20/wedding-planners/destination-wedding-planning/Stamford/Connecticut",
+      "new": "/top-20/wedding-planners/stamford/connecticut?subcategory=destination-wedding-planning"
+    },
+    {
+      "old": "/top-20/bridal-shops/designer-gowns/Ogden/Utah",
+      "new": "/top-20/bridal-shops/ogden/utah?subcategory=designer-gowns"
+    },
+    {
+      "old": "/top-20/photographers/traditional-photography/rochester/new-york",
+      "new": "/top-20/photographers/rochester/new-york?subcategory=traditional-photography"
+    },
+    {
+      "old": "/top-20/venues/wineries-&-vineyards/Galveston/Texas",
+      "new": "/top-20/venues/galveston/texas?subcategory=wineries-and-vineyards"
+    },
+    {
+      "old": "/top-20/wedding-decorators/ceremony-decor/Baltimore/Maryland",
+      "new": "/top-20/wedding-decorators/baltimore/maryland?subcategory=ceremony-decor"
+    },
+    {
+      "old": "/top-20/photographers/fine-art/arizona/arizona",
+      "new": "/top-20/photographers/arizona/arizona?subcategory=fine-art"
+    },
+    {
+      "old": "/top-20/photographers/traditional-photography/maine/maine",
+      "new": "/top-20/photographers/maine/maine?subcategory=traditional-photography"
+    },
+    {
+      "old": "/top-20/wedding-planners/partial-planning/Ogden/Utah",
+      "new": "/top-20/wedding-planners/ogden/utah?subcategory=partial-planning"
+    },
+    {
+      "old": "/top-20/wedding-decorators/reception-decor/Davenport/Iowa",
+      "new": "/top-20/wedding-decorators/davenport/iowa?subcategory=reception-decor"
+    },
+    {
+      "old": "/top-20/cake-designers/traditional-cakes/Aberdeen/South ",
+      "new": "/top-20/cake-designers/aberdeen/south?subcategory=traditional-cakes"
+    },
+    {
+      "old": "/top-20/photographers/engagement-specialists/utah/utah",
+      "new": "/top-20/photographers/utah/utah?subcategory=engagement-specialists"
+    },
+    {
+      "old": "/top-20/cake-designers/traditional-cakes/Savannah/Georgia",
+      "new": "/top-20/cake-designers/savannah/georgia?subcategory=traditional-cakes"
+    },
+    {
+      "old": "/top-20/cake-designers/specialty-dietary/Tucson/Arizona",
+      "new": "/top-20/cake-designers/tucson/arizona?subcategory=specialty-dietary"
+    },
+    {
+      "old": "/top-20/bridal-shops/plus-size-specialists/Harrisburg/Pennsylvania",
+      "new": "/top-20/bridal-shops/harrisburg/pennsylvania?subcategory=plus-size-specialists"
+    },
+    {
+      "old": "/top-20/makeup-artists/cultural-specialists/Sacramento/California",
+      "new": "/top-20/makeup-artists/sacramento/california?subcategory=cultural-specialists"
+    },
+    {
+      "old": "/top-20/wedding-decorators/lighting-design/Mobile/Alabama",
+      "new": "/top-20/wedding-decorators/mobile/alabama?subcategory=lighting-design"
+    },
+    {
+      "old": "/top-20/photographers/fine-art/oregon/oregon",
+      "new": "/top-20/photographers/oregon/oregon?subcategory=fine-art"
+    },
+    {
+      "old": "/top-20/wedding-decorators/floral-installations/Biloxi/Mississippi",
+      "new": "/top-20/wedding-decorators/biloxi/mississippi?subcategory=floral-installations"
+    },
+    {
+      "old": "/top-20/wedding-decorators/draping-&-linens/Shreveport/Louisiana",
+      "new": "/top-20/wedding-decorators/shreveport/louisiana?subcategory=draping-and-linens"
+    },
+    {
+      "old": "/top-20/cake-designers/traditional-cakes/Augusta/Georgia",
+      "new": "/top-20/cake-designers/augusta/georgia?subcategory=traditional-cakes"
+    },
+    {
+      "old": "/top-20/caterers/spanish/Garland/Texas",
+      "new": "/top-20/caterers/garland/texas?subcategory=spanish"
+    },
+    {
+      "old": "/top-20/videographers/drone-videography/Bismarck/North ",
+      "new": "/top-20/videographers/bismarck/north?subcategory=drone-videography"
+    },
+    {
+      "old": "/top-20/wedding-decorators/floral-installations/Lexington/Kentucky",
+      "new": "/top-20/wedding-decorators/lexington/kentucky?subcategory=floral-installations"
+    },
+    {
+      "old": "/top-20/hair-stylists/on-location-services/Hilo/Hawaii",
+      "new": "/top-20/hair-stylists/hilo/hawaii?subcategory=on-location-services"
+    },
+    {
+      "old": "/top-20/makeup-artists/cultural-specialists/Knoxville/Tennessee",
+      "new": "/top-20/makeup-artists/knoxville/tennessee?subcategory=cultural-specialists"
+    },
+    {
+      "old": "/top-20/wedding-decorators/ceremony-decor/Atlanta/Georgia",
+      "new": "/top-20/wedding-decorators/atlanta/georgia?subcategory=ceremony-decor"
+    },
+    {
+      "old": "/top-20/wedding-decorators/floral-installations/Bangor/Maine",
+      "new": "/top-20/wedding-decorators/bangor/maine?subcategory=floral-installations"
+    },
+    {
+      "old": "/top-20/hair-stylists/on-location-services/Laramie/Wyoming",
+      "new": "/top-20/hair-stylists/laramie/wyoming?subcategory=on-location-services"
+    },
+    {
+      "old": "/top-20/makeup-artists/cultural-specialists/Madison/Wisconsin",
+      "new": "/top-20/makeup-artists/madison/wisconsin?subcategory=cultural-specialists"
+    },
+    {
+      "old": "/top-20/wedding-decorators/ceremony-decor/Fayetteville/Arkansas",
+      "new": "/top-20/wedding-decorators/fayetteville/arkansas?subcategory=ceremony-decor"
+    },
+    {
+      "old": "/top-20/makeup-artists/airbrush-makeup/Denver/Colorado",
+      "new": "/top-20/makeup-artists/denver/colorado?subcategory=airbrush-makeup"
+    },
+    {
+      "old": "/top-20/hair-stylists/on-location-services/Pocatello/Idaho",
+      "new": "/top-20/hair-stylists/pocatello/idaho?subcategory=on-location-services"
+    },
+    {
+      "old": "/top-20/wedding-decorators/floral-installations/Anchorage/Alaska",
+      "new": "/top-20/wedding-decorators/anchorage/alaska?subcategory=floral-installations"
+    },
+    {
+      "old": "/top-20/cake-designers/specialty-dietary/Salem/Oregon",
+      "new": "/top-20/cake-designers/salem/oregon?subcategory=specialty-dietary"
+    },
+    {
+      "old": "/top-20/bridal-shops/budget-friendly/Juneau/Alaska",
+      "new": "/top-20/bridal-shops/juneau/alaska?subcategory=budget-friendly"
+    },
+    {
+      "old": "/top-20/carts/flower-carts/Wilmington/Delaware",
+      "new": "/top-20/carts/wilmington/delaware?subcategory=flower-carts"
+    },
+    {
+      "old": "/top-20/hair-stylists/on-location-services/Garland/Texas",
+      "new": "/top-20/hair-stylists/garland/texas?subcategory=on-location-services"
+    },
+    {
+      "old": "/top-20/wedding-decorators/themed-decor/Albuquerque/New ",
+      "new": "/top-20/wedding-decorators/albuquerque/new?subcategory=themed-decor"
+    },
+    {
+      "old": "/top-20/carts/coffee-carts/Wichita/Kansas",
+      "new": "/top-20/carts/wichita/kansas?subcategory=coffee-carts"
+    },
+    {
+      "old": "/top-20/makeup-artists/cultural-specialists/Newark/Delaware",
+      "new": "/top-20/makeup-artists/newark/delaware?subcategory=cultural-specialists"
+    },
+    {
+      "old": "/top-20/makeup-artists/airbrush-makeup/Dover/Delaware",
+      "new": "/top-20/makeup-artists/dover/delaware?subcategory=airbrush-makeup"
+    },
+    {
+      "old": "/top-20/photographers/engagement-specialists/tennessee/tennessee",
+      "new": "/top-20/photographers/tennessee/tennessee?subcategory=engagement-specialists"
+    },
+    {
+      "old": "/top-20/photographers/aerial-photography/utah/utah",
+      "new": "/top-20/photographers/utah/utah?subcategory=aerial-photography"
+    },
+    {
+      "old": "/top-20/cake-designers/specialty-dietary/Lubbock/Texas",
+      "new": "/top-20/cake-designers/lubbock/texas?subcategory=specialty-dietary"
+    },
+    {
+      "old": "/top-20/wedding-decorators/reception-decor/Dallas/Texas",
+      "new": "/top-20/wedding-decorators/dallas/texas?subcategory=reception-decor"
+    },
+    {
+      "old": "/top-20/cake-designers/traditional-cakes/Hilo/Hawaii",
+      "new": "/top-20/cake-designers/hilo/hawaii?subcategory=traditional-cakes"
+    },
+    {
+      "old": "/top-20/wedding-decorators/draping-&-linens/Stamford/Connecticut",
+      "new": "/top-20/wedding-decorators/stamford/connecticut?subcategory=draping-and-linens"
+    },
+    {
+      "old": "/top-20/wedding-planners/destination-wedding-planning/Chicago/Illinois",
+      "new": "/top-20/wedding-planners/chicago/illinois?subcategory=destination-wedding-planning"
+    },
+    {
+      "old": "/top-20/makeup-artists/airbrush-makeup/Lincoln/Nebraska",
+      "new": "/top-20/makeup-artists/lincoln/nebraska?subcategory=airbrush-makeup"
+    },
+    {
+      "old": "/top-20/cake-designers/specialty-dietary/Springfield/Missouri",
+      "new": "/top-20/cake-designers/springfield/missouri?subcategory=specialty-dietary"
+    },
+    {
+      "old": "/top-20/cake-designers/cupcakes-&-dessert-bars/Manchester/New ",
+      "new": "/top-20/cake-designers/manchester/new?subcategory=cupcakes-and-dessert-bars"
+    },
+    {
+      "old": "/top-20/hair-stylists/multicultural-hair/Biloxi/Mississippi",
+      "new": "/top-20/hair-stylists/biloxi/mississippi?subcategory=multicultural-hair"
+    },
+    {
+      "old": "/top-20/makeup-artists/bridal-makeup/Harrisburg/Pennsylvania",
+      "new": "/top-20/makeup-artists/harrisburg/pennsylvania?subcategory=bridal-makeup"
+    },
+    {
+      "old": "/top-20/wedding-decorators/reception-decor/Laramie/Wyoming",
+      "new": "/top-20/wedding-decorators/laramie/wyoming?subcategory=reception-decor"
+    },
+    {
+      "old": "/top-20/makeup-artists/airbrush-makeup/Omaha/Nebraska",
+      "new": "/top-20/makeup-artists/omaha/nebraska?subcategory=airbrush-makeup"
+    },
+    {
+      "old": "/top-20/wedding-decorators/themed-decor/Laramie/Wyoming",
+      "new": "/top-20/wedding-decorators/laramie/wyoming?subcategory=themed-decor"
+    },
+    {
+      "old": "/top-20/wedding-decorators/draping-&-linens/Frederick/Maryland",
+      "new": "/top-20/wedding-decorators/frederick/maryland?subcategory=draping-and-linens"
+    },
+    {
+      "old": "/top-20/photographers/fine-art/arlington/texas",
+      "new": "/top-20/photographers/arlington/texas?subcategory=fine-art"
+    },
+    {
+      "old": "/top-20/photographers/engagement-specialists/pennsylvania/pennsylvania",
+      "new": "/top-20/photographers/pennsylvania/pennsylvania?subcategory=engagement-specialists"
+    },
+    {
+      "old": "/top-20/caterers/chinese/Amarillo/Texas",
+      "new": "/top-20/caterers/amarillo/texas?subcategory=chinese"
+    },
+    {
+      "old": "/top-20/wedding-decorators/floral-installations/Indianapolis/Indiana",
+      "new": "/top-20/wedding-decorators/indianapolis/indiana?subcategory=floral-installations"
+    },
+    {
+      "old": "/top-20/makeup-artists/cultural-specialists/Annapolis/Maryland",
+      "new": "/top-20/makeup-artists/annapolis/maryland?subcategory=cultural-specialists"
+    },
+    {
+      "old": "/top-20/wedding-decorators/draping-&-linens/Newport/Rhode ",
+      "new": "/top-20/wedding-decorators/newport/rhode?subcategory=draping-and-linens"
+    },
+    {
+      "old": "/top-20/bridal-shops/plus-size-specialists/Newark/New ",
+      "new": "/top-20/bridal-shops/newark/new?subcategory=plus-size-specialists"
+    },
+    {
+      "old": "/top-20/makeup-artists/cultural-specialists/Peoria/Illinois",
+      "new": "/top-20/makeup-artists/peoria/illinois?subcategory=cultural-specialists"
+    },
+    {
+      "old": "/top-20/photographers/fine-art/Galveston/Texas",
+      "new": "/top-20/photographers/galveston/texas?subcategory=fine-art"
+    },
+    {
+      "old": "/top-20/wedding-decorators/reception-decor/Worcester/Massachusetts",
+      "new": "/top-20/wedding-decorators/worcester/massachusetts?subcategory=reception-decor"
+    },
+    {
+      "old": "/top-20/bridal-shops/plus-size-specialists/Lincoln/Nebraska",
+      "new": "/top-20/bridal-shops/lincoln/nebraska?subcategory=plus-size-specialists"
+    },
+    {
+      "old": "/top-20/caterers/french/Arlington/Texas",
+      "new": "/top-20/caterers/arlington/texas?subcategory=french"
+    },
+    {
+      "old": "/top-20/wedding-decorators/themed-decor/Stamford/Connecticut",
+      "new": "/top-20/wedding-decorators/stamford/connecticut?subcategory=themed-decor"
+    },
+    {
+      "old": "/top-20/wedding-decorators/reception-decor/Sacramento/California",
+      "new": "/top-20/wedding-decorators/sacramento/california?subcategory=reception-decor"
+    },
+    {
+      "old": "/top-20/makeup-artists/airbrush-makeup/Bangor/Maine",
+      "new": "/top-20/makeup-artists/bangor/maine?subcategory=airbrush-makeup"
+    },
+    {
+      "old": "/top-20/wedding-planners/full-service-planning/Arlington/Texas",
+      "new": "/top-20/wedding-planners/arlington/texas?subcategory=full-service-planning"
+    },
+    {
+      "old": "/top-20/caterers/spanish/Galveston/Texas",
+      "new": "/top-20/caterers/galveston/texas?subcategory=spanish"
+    },
+    {
+      "old": "/top-20/caterers/spanish/Irving/Texas",
+      "new": "/top-20/caterers/irving/texas?subcategory=spanish"
+    },
+    {
+      "old": "/top-20/bridal-shops/custom-design/Amarillo/Texas",
+      "new": "/top-20/bridal-shops/amarillo/texas?subcategory=custom-design"
+    },
+    {
+      "old": "/top-20/wedding-decorators/ceremony-decor/Augusta/Georgia",
+      "new": "/top-20/wedding-decorators/augusta/georgia?subcategory=ceremony-decor"
+    },
+    {
+      "old": "/top-20/makeup-artists/destination-wedding/Detroit/Michigan",
+      "new": "/top-20/makeup-artists/detroit/michigan?subcategory=destination-wedding"
+    },
+    {
+      "old": "/top-20/wedding-decorators/lighting-design/Rutland/Vermont",
+      "new": "/top-20/wedding-decorators/rutland/vermont?subcategory=lighting-design"
+    },
+    {
+      "old": "/top-20/wedding-decorators/lighting-design/Spokane/Washington",
+      "new": "/top-20/wedding-decorators/spokane/washington?subcategory=lighting-design"
+    },
+    {
+      "old": "/top-20/djs-and-bands/cultural-music-specialists/Plano/Texas",
+      "new": "/top-20/djs-and-bands/plano/texas?subcategory=cultural-music-specialists"
+    },
+    {
+      "old": "/top-20/makeup-artists/bridal-makeup/Newark/New ",
+      "new": "/top-20/makeup-artists/newark/new?subcategory=bridal-makeup"
+    },
+    {
+      "old": "/top-20/wedding-decorators/ceremony-decor/Boston/Massachusetts",
+      "new": "/top-20/wedding-decorators/boston/massachusetts?subcategory=ceremony-decor"
+    },
+    {
+      "old": "/top-20/wedding-decorators/ceremony-decor/Worcester/Massachusetts",
+      "new": "/top-20/wedding-decorators/worcester/massachusetts?subcategory=ceremony-decor"
+    },
+    {
+      "old": "/top-20/makeup-artists/cultural-specialists/Irving/Texas",
+      "new": "/top-20/makeup-artists/irving/texas?subcategory=cultural-specialists"
+    },
+    {
+      "old": "/top-20/wedding-planners/cultural-wedding-specialists/Arlington/Texas",
+      "new": "/top-20/wedding-planners/arlington/texas?subcategory=cultural-wedding-specialists"
+    },
+    {
+      "old": "/top-20/makeup-artists/destination-wedding/Charlotte/North ",
+      "new": "/top-20/makeup-artists/charlotte/north?subcategory=destination-wedding"
+    },
+    {
+      "old": "/top-20/makeup-artists/destination-wedding/Springfield/Illinois",
+      "new": "/top-20/makeup-artists/springfield/illinois?subcategory=destination-wedding"
+    },
+    {
+      "old": "/top-20/makeup-artists/cultural-specialists/Huntington/West ",
+      "new": "/top-20/makeup-artists/huntington/west?subcategory=cultural-specialists"
+    },
+    {
+      "old": "/top-20/photographers/photojournalistic/Arlington/Texas",
+      "new": "/top-20/photographers/arlington/texas?subcategory=photojournalistic"
+    },
+    {
+      "old": "/top-20/makeup-artists/bridal-makeup/Huntington/West ",
+      "new": "/top-20/makeup-artists/huntington/west?subcategory=bridal-makeup"
+    },
+    {
+      "old": "/top-20/wedding-decorators/lighting-design/Augusta/Georgia",
+      "new": "/top-20/wedding-decorators/augusta/georgia?subcategory=lighting-design"
+    },
+    {
+      "old": "/top-20/wedding-planners/full-service-planning/Plano/Texas",
+      "new": "/top-20/wedding-planners/plano/texas?subcategory=full-service-planning"
+    },
+    {
+      "old": "/top-20/caterers/chinese/Irving/Texas",
+      "new": "/top-20/caterers/irving/texas?subcategory=chinese"
+    },
+    {
+      "old": "/top-20/makeup-artists/cultural-specialists/Phoenix/Arizona",
+      "new": "/top-20/makeup-artists/phoenix/arizona?subcategory=cultural-specialists"
+    },
+    {
+      "old": "/top-20/wedding-decorators/reception-decor/Tacoma/Washington",
+      "new": "/top-20/wedding-decorators/tacoma/washington?subcategory=reception-decor"
+    },
+    {
+      "old": "/top-20/photographers/fine-art/corpus-christi/texas",
+      "new": "/top-20/photographers/corpus-christi/texas?subcategory=fine-art"
+    },
+    {
+      "old": "/top-20/wedding-decorators/floral-installations/Fayetteville/Arkansas",
+      "new": "/top-20/wedding-decorators/fayetteville/arkansas?subcategory=floral-installations"
+    },
+    {
+      "old": "/top-20/wedding-decorators/lighting-design/Topeka/Kansas",
+      "new": "/top-20/wedding-decorators/topeka/kansas?subcategory=lighting-design"
+    },
+    {
+      "old": "/top-20/djs-and-bands/live-bands/Lubbock/Texas",
+      "new": "/top-20/djs-and-bands/lubbock/texas?subcategory=live-bands"
+    },
+    {
+      "old": "/top-20/makeup-artists/airbrush-makeup/Morgantown/West ",
+      "new": "/top-20/makeup-artists/morgantown/west?subcategory=airbrush-makeup"
+    },
+    {
+      "old": "/top-20/wedding-decorators/ceremony-decor/Sacramento/California",
+      "new": "/top-20/wedding-decorators/sacramento/california?subcategory=ceremony-decor"
+    },
+    {
+      "old": "/top-20/florists/modern-arrangements/Amarillo/Texas",
+      "new": "/top-20/florists/amarillo/texas?subcategory=modern-arrangements"
+    },
+    {
+      "old": "/top-20/caterers/french/Plano/Texas",
+      "new": "/top-20/caterers/plano/texas?subcategory=french"
+    },
+    {
+      "old": "/top-20/makeup-artists/cultural-specialists/Providence/Rhode ",
+      "new": "/top-20/makeup-artists/providence/rhode?subcategory=cultural-specialists"
+    },
+    {
+      "old": "/top-20/makeup-artists/airbrush-makeup/Newport/Rhode ",
+      "new": "/top-20/makeup-artists/newport/rhode?subcategory=airbrush-makeup"
+    },
+    {
+      "old": "/top-20/caterers/indian/Arlington/Texas",
+      "new": "/top-20/caterers/arlington/texas?subcategory=indian"
+    },
+    {
+      "old": "/top-20/photographers/engagement-specialists/Plano/Texas",
+      "new": "/top-20/photographers/plano/texas?subcategory=engagement-specialists"
+    },
+    {
+      "old": "/top-20/wedding-decorators/lighting-design/Tucson/Arizona",
+      "new": "/top-20/wedding-decorators/tucson/arizona?subcategory=lighting-design"
+    },
+    {
+      "old": "/top-20/wedding-decorators/ceremony-decor/Boulder/Colorado",
+      "new": "/top-20/wedding-decorators/boulder/colorado?subcategory=ceremony-decor"
+    },
+    {
+      "old": "/top-20/makeup-artists/cultural-specialists/Orlando/Florida",
+      "new": "/top-20/makeup-artists/orlando/florida?subcategory=cultural-specialists"
+    },
+    {
+      "old": "/top-20/caterers/japanese/Arlington/Texas",
+      "new": "/top-20/caterers/arlington/texas?subcategory=japanese"
+    },
+    {
+      "old": "/top-20/makeup-artists/destination-wedding/Newark/New ",
+      "new": "/top-20/makeup-artists/newark/new?subcategory=destination-wedding"
+    },
+    {
+      "old": "/top-20/wedding-decorators/draping-&-linens/Charlotte/North ",
+      "new": "/top-20/wedding-decorators/charlotte/north?subcategory=draping-and-linens"
+    },
+    {
+      "old": "/top-20/wedding-decorators/lighting-design/Morgantown/West ",
+      "new": "/top-20/wedding-decorators/morgantown/west?subcategory=lighting-design"
+    },
+    {
+      "old": "/top-20/djs-and-bands/live-bands/Irving/Texas",
+      "new": "/top-20/djs-and-bands/irving/texas?subcategory=live-bands"
+    },
+    {
+      "old": "/top-20/photographers/aerial-photography/illinois/illinois",
+      "new": "/top-20/photographers/illinois/illinois?subcategory=aerial-photography"
+    },
+    {
+      "old": "/top-20/wedding-decorators/lighting-design/Tulsa/Oklahoma",
+      "new": "/top-20/wedding-decorators/tulsa/oklahoma?subcategory=lighting-design"
+    },
+    {
+      "old": "/top-20/wedding-decorators/lighting-design/Casper/Wyoming",
+      "new": "/top-20/wedding-decorators/casper/wyoming?subcategory=lighting-design"
+    },
+    {
+      "old": "/top-20/makeup-artists/cultural-specialists/Aberdeen/South ",
+      "new": "/top-20/makeup-artists/aberdeen/south?subcategory=cultural-specialists"
+    },
+    {
+      "old": "/top-20/wedding-decorators/themed-decor/Huntsville/Alabama",
+      "new": "/top-20/wedding-decorators/huntsville/alabama?subcategory=themed-decor"
+    },
+    {
+      "old": "/top-20/wedding-decorators/lighting-design/Huntington/West ",
+      "new": "/top-20/wedding-decorators/huntington/west?subcategory=lighting-design"
+    },
+    {
+      "old": "/top-20/caterers/spanish/Fort Worth/Texas",
+      "new": "/top-20/caterers/fort-worth/texas?subcategory=spanish"
+    },
+    {
+      "old": "/top-20/wedding-decorators/reception-decor/Biloxi/Mississippi",
+      "new": "/top-20/wedding-decorators/biloxi/mississippi?subcategory=reception-decor"
+    },
+    {
+      "old": "/top-20/photographers/photojournalistic/Galveston/Texas",
+      "new": "/top-20/photographers/galveston/texas?subcategory=photojournalistic"
+    },
+    {
+      "old": "/top-20/wedding-decorators/floral-installations/Norfolk/Virginia",
+      "new": "/top-20/wedding-decorators/norfolk/virginia?subcategory=floral-installations"
+    },
+    {
+      "old": "/top-20/hair-stylists/updos-&-formal-styles/Richmond/Virginia",
+      "new": "/top-20/hair-stylists/richmond/virginia?subcategory=updos-and-formal-styles"
+    },
+    {
+      "old": "/top-20/photographers/engagement-specialists/Galveston/Texas",
+      "new": "/top-20/photographers/galveston/texas?subcategory=engagement-specialists"
+    },
+    {
+      "old": "/top-20/venues/ballrooms/Lubbock/Texas",
+      "new": "/top-20/venues/lubbock/texas?subcategory=ballrooms"
+    },
+    {
+      "old": "/top-20/wedding-decorators/lighting-design/Billings/Montana",
+      "new": "/top-20/wedding-decorators/billings/montana?subcategory=lighting-design"
+    },
+    {
+      "old": "/top-20/makeup-artists/airbrush-makeup/Wichita/Kansas",
+      "new": "/top-20/makeup-artists/wichita/kansas?subcategory=airbrush-makeup"
+    },
+    {
+      "old": "/top-20/makeup-artists/bridal-makeup/Wichita/Kansas",
+      "new": "/top-20/makeup-artists/wichita/kansas?subcategory=bridal-makeup"
+    },
+    {
+      "old": "/top-20/venues/industrial-spaces/Arlington/Texas",
+      "new": "/top-20/venues/arlington/texas?subcategory=industrial-spaces"
+    },
+    {
+      "old": "/top-20/makeup-artists/airbrush-makeup/Wilmington/Delaware",
+      "new": "/top-20/makeup-artists/wilmington/delaware?subcategory=airbrush-makeup"
+    },
+    {
+      "old": "/top-20/hair-stylists/updos-&-formal-styles/Wichita/Kansas",
+      "new": "/top-20/hair-stylists/wichita/kansas?subcategory=updos-and-formal-styles"
+    },
+    {
+      "old": "/top-20/wedding-decorators/themed-decor/Billings/Montana",
+      "new": "/top-20/wedding-decorators/billings/montana?subcategory=themed-decor"
+    },
+    {
+      "old": "/top-20/makeup-artists/bridal-makeup/Wilmington/Delaware",
+      "new": "/top-20/makeup-artists/wilmington/delaware?subcategory=bridal-makeup"
+    },
+    {
+      "old": "/top-20/wedding-decorators/themed-decor/Newport/Rhode ",
+      "new": "/top-20/wedding-decorators/newport/rhode?subcategory=themed-decor"
+    },
+    {
+      "old": "/top-20/makeup-artists/airbrush-makeup/Irving/Texas",
+      "new": "/top-20/makeup-artists/irving/texas?subcategory=airbrush-makeup"
+    },
+    {
+      "old": "/top-20/wedding-decorators/lighting-design/Fargo/North ",
+      "new": "/top-20/wedding-decorators/fargo/north?subcategory=lighting-design"
+    },
+    {
+      "old": "/top-20/photographers/fine-art/Amarillo/Texas",
+      "new": "/top-20/photographers/amarillo/texas?subcategory=fine-art"
+    },
+    {
+      "old": "/top-20/florists/minimalist/Minneapolis/Minnesota",
+      "new": "/top-20/florists/minneapolis/minnesota?subcategory=minimalist"
+    },
+    {
+      "old": "/top-20/makeup-artists/airbrush-makeup/Atlanta/Georgia",
+      "new": "/top-20/makeup-artists/atlanta/georgia?subcategory=airbrush-makeup"
+    },
+    {
+      "old": "/top-20/bridal-shops/plus-size-specialists/Garland/Texas",
+      "new": "/top-20/bridal-shops/garland/texas?subcategory=plus-size-specialists"
+    },
+    {
+      "old": "/top-20/caterers/spanish/Amarillo/Texas",
+      "new": "/top-20/caterers/amarillo/texas?subcategory=spanish"
+    },
+    {
+      "old": "/top-20/venues/ballrooms/Galveston/Texas",
+      "new": "/top-20/venues/galveston/texas?subcategory=ballrooms"
+    },
+    {
+      "old": "/top-20/wedding-decorators/floral-installations/Athens/Georgia",
+      "new": "/top-20/wedding-decorators/athens/georgia?subcategory=floral-installations"
+    },
+    {
+      "old": "/top-20/wedding-decorators/floral-installations/Boston/Massachusetts",
+      "new": "/top-20/wedding-decorators/boston/massachusetts?subcategory=floral-installations"
+    },
+    {
+      "old": "/top-20/hair-stylists/on-location-services/Lubbock/Texas",
+      "new": "/top-20/hair-stylists/lubbock/texas?subcategory=on-location-services"
+    },
+    {
+      "old": "/top-20/wedding-decorators/ceremony-decor/Athens/Georgia",
+      "new": "/top-20/wedding-decorators/athens/georgia?subcategory=ceremony-decor"
+    },
+    {
+      "old": "/top-20/photographers/engagement-specialists/Amarillo/Texas",
+      "new": "/top-20/photographers/amarillo/texas?subcategory=engagement-specialists"
+    },
+    {
+      "old": "/top-20/wedding-decorators/ceremony-decor/Charlotte/North ",
+      "new": "/top-20/wedding-decorators/charlotte/north?subcategory=ceremony-decor"
+    },
+    {
+      "old": "/top-20/wedding-planners/partial-planning/Montpelier/Vermont",
+      "new": "/top-20/wedding-planners/montpelier/vermont?subcategory=partial-planning"
+    },
+    {
+      "old": "/top-20/photographers/photojournalistic/Lubbock/Texas",
+      "new": "/top-20/photographers/lubbock/texas?subcategory=photojournalistic"
+    },
+    {
+      "old": "/top-20/photographers/photojournalistic/Amarillo/Texas",
+      "new": "/top-20/photographers/amarillo/texas?subcategory=photojournalistic"
+    },
+    {
+      "old": "/top-20/wedding-decorators/floral-installations/Austin/Texas",
+      "new": "/top-20/wedding-decorators/austin/texas?subcategory=floral-installations"
+    },
+    {
+      "old": "/top-20/wedding-decorators/lighting-design/Cheyenne/Wyoming",
+      "new": "/top-20/wedding-decorators/cheyenne/wyoming?subcategory=lighting-design"
+    },
+    {
+      "old": "/top-20/makeup-artists/bridal-makeup/Atlanta/Georgia",
+      "new": "/top-20/makeup-artists/atlanta/georgia?subcategory=bridal-makeup"
+    },
+    {
+      "old": "/top-20/wedding-decorators/reception-decor/Cincinnati/Ohio",
+      "new": "/top-20/wedding-decorators/cincinnati/ohio?subcategory=reception-decor"
+    },
+    {
+      "old": "/top-20/makeup-artists/destination-wedding/Tampa/Florida",
+      "new": "/top-20/makeup-artists/tampa/florida?subcategory=destination-wedding"
+    },
+    {
+      "old": "/top-20/wedding-planners/partial-planning/Galveston/Texas",
+      "new": "/top-20/wedding-planners/galveston/texas?subcategory=partial-planning"
+    },
+    {
+      "old": "/top-20/hair-stylists/on-location-services/Harrisburg/Pennsylvania",
+      "new": "/top-20/hair-stylists/harrisburg/pennsylvania?subcategory=on-location-services"
+    },
+    {
+      "old": "/top-20/wedding-decorators/themed-decor/Miami/Florida",
+      "new": "/top-20/wedding-decorators/miami/florida?subcategory=themed-decor"
+    },
+    {
+      "old": "/top-20/wedding-decorators/themed-decor/Norman/Oklahoma",
+      "new": "/top-20/wedding-decorators/norman/oklahoma?subcategory=themed-decor"
+    },
+    {
+      "old": "/top-20/wedding-planners/destination-wedding-planning/Irving/Texas",
+      "new": "/top-20/wedding-planners/irving/texas?subcategory=destination-wedding-planning"
+    },
+    {
+      "old": "/top-20/wedding-planners/partial-planning/Plano/Texas",
+      "new": "/top-20/wedding-planners/plano/texas?subcategory=partial-planning"
+    },
+    {
+      "old": "/top-20/wedding-decorators/ceremony-decor/Cincinnati/Ohio",
+      "new": "/top-20/wedding-decorators/cincinnati/ohio?subcategory=ceremony-decor"
+    },
+    {
+      "old": "/top-20/makeup-artists/destination-wedding/Wilmington/Delaware",
+      "new": "/top-20/makeup-artists/wilmington/delaware?subcategory=destination-wedding"
+    },
+    {
+      "old": "/top-20/caterers/chinese/Carson City/Nevada",
+      "new": "/top-20/caterers/carson-city/nevada?subcategory=chinese"
+    },
+    {
+      "old": "/top-20/florists/minimalist/El Paso/Texas",
+      "new": "/top-20/florists/el-paso/texas?subcategory=minimalist"
+    },
+    {
+      "old": "/top-20/hair-stylists/multicultural-hair/Peoria/Illinois",
+      "new": "/top-20/hair-stylists/peoria/illinois?subcategory=multicultural-hair"
+    },
+    {
+      "old": "/top-20/videographers/live-streaming/Raleigh/North ",
+      "new": "/top-20/videographers/raleigh/north?subcategory=live-streaming"
+    },
+    {
+      "old": "/top-20/videographers/drone-videography/Omaha/Nebraska",
+      "new": "/top-20/videographers/omaha/nebraska?subcategory=drone-videography"
+    },
+    {
+      "old": "/top-20/bridal-shops/custom-design/Madison/Wisconsin",
+      "new": "/top-20/bridal-shops/madison/wisconsin?subcategory=custom-design"
+    },
+    {
+      "old": "/top-20/caterers/chinese/Kansas City/Missouri",
+      "new": "/top-20/caterers/kansas-city/missouri?subcategory=chinese"
+    },
+    {
+      "old": "/top-20/bridal-shops/budget-friendly/Amarillo/Texas",
+      "new": "/top-20/bridal-shops/amarillo/texas?subcategory=budget-friendly"
+    },
+    {
+      "old": "/top-20/videographers/cinematic-style/Irving/Texas",
+      "new": "/top-20/videographers/irving/texas?subcategory=cinematic-style"
+    },
+    {
+      "old": "/top-20/wedding-decorators/themed-decor/Dover/Delaware",
+      "new": "/top-20/wedding-decorators/dover/delaware?subcategory=themed-decor"
+    }
+  ],
+  "failed": [
+    {
+      "url": "/top-20/wedding-decorators/themed-decor/Rapid ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/coffee-carts/Little ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/airbrush-makeup/Green ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/airbrush-makeup/Fort ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/cake-designers/specialty-dietary/Grand ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/matcha-carts/Little ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/airbrush-makeup/South ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/reception-decor/Oklahoma ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/flower-carts/Little ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/videographers/cinematic-style/Fort ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/champagne-carts/Cedar ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/cocktail-carts/Cedar ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/floral-installations/Rapid ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-planners/destination-wedding-planning/Virginia ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/florists/minimalist/New ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-planners/partial-planning/San ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/floral-installations/New ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/cultural-specialists/New ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/cocktail-carts/New York ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/utah/utah",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/videographers/delaware/delaware",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/Madison/Wisconsin",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/Savannah/Georgia",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/Grand Rapids/Michigan",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/Galveston/Texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/Las Cruces/New ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/Dover/Delaware",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/djs-and-bands/Rochester/Minnesota",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/florists/washington/washington",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/Salem/Oregon",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/hair-stylists/orlando/florida",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/el-paso/texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/Fort Wayne/Indiana",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/Montgomery/Alabama",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/reception-decor/Virginia ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/Laramie/Wyoming",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/photographers/new/new-mexico",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/Norfolk/Virginia",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-planners/Springfield/Massachusetts",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/cake-designers/traditional-cakes/Baton ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/New Orleans/Louisiana",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/Bismarck/North Dakota",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/caterers/massachusetts/massachusetts",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/San Francisco/California",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-planners/Los ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/Warwick/Rhode Island",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/photographers/indiana/indiana",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/bridal-shops/Knoxville/Tennessee",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/destination-wedding/Oklahoma ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/houston/texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/cake-designers/nebraska/nebraska",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/videographers/michigan/michigan",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/videographers/utah/utah",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/bridal-shops/indiana/indiana",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/djs-and-bands/Des Moines/Iowa",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/djs-and-bands/Frederick/Maryland",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/videographers/Lubbock/Texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/Cedar Rapids/Iowa",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/cake-designers/miami/florida",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/photographers/oregon/oregon",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/cake-designers/maine/maine",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/djs-and-bands/Minneapolis/Minnesota",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/Spokane/Washington",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/cake-designers/buffalo/new-york",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/Springfield/Massachusetts",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/lighting-design/South ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/caterers/alabama/alabama",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/Rapid City/South ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/bridal-shops/galveston/texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-planners/kansas/kansas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/hair-stylists/sacramento/california",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-planners/Springfield/Missouri",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/Irving/Texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/Jackson/Mississippi",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/djs-and-bands/El Paso/Texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-planners/nebraska/nebraska",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/Springfield/Illinois",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/videographers/amarillo/texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/cake-designers/sacramento/california",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/caterers/colorado/colorado",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/cake-designers/louisiana/louisiana",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/hair-stylists/Casper/Wyoming",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/cake-designers/indiana/indiana",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/caterers/middle-eastern/Fort ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/reception-decor/Kansas ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-planners/Fort Worth/Texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/themed-decor/Kansas ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-planners/fort-worth/texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/djs-and-bands/Lubbock/Texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-planners/Knoxville/Tennessee",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/Myrtle ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/djs-and-bands/Orlando/Florida",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/coffee-carts/Myrtle ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/airbrush-makeup/Cedar ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/djs-and-bands/djs/Corpus ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/themed-decor/Grand ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/venues/massachusetts/massachusetts",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/venues/Huntington/West Virginia",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/Knoxville/Tennessee",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/venues/Albuquerque/New Mexico",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/videographers/documentary-style/San ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/bridal-shops/oregon/oregon",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/bridal-shops/jacksonville/florida",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/bridal-makeup/Cedar ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/Virginia Beach/Virginia",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/videographers/san-antonio/texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/photographers/photojournalistic/Corpus ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/hair-stylists/extensions-&-volume/Myrtle ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/photographers/north/north-dakota",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/venues/idaho/idaho",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/venues/Irving/Texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-planners/Columbia/South ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/lighting-design/Baton ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/djs-and-bands/cultural-music-specialists/El ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/cake-designers/north/north-carolina",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/photographers/new/new-hampshire",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/bridal-makeup/Jersey ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/photographers/Birmingham/Alabama",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/cake-designers/Kansas City/Kansas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/caterers/el-paso/texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/reception-decor/South ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/bridal-shops/Las Cruces/New Mexico",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/photographers/traditional-photography/Corpus ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/bridal-shops/designer-gowns/Colorado ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/reception-decor/Corpus ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-planners/montana/montana",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/Sioux Falls/South ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-planners/mississippi/mississippi",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/bridal-shops/delaware/delaware",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/tampa/florida",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/bridal-shops/connecticut/connecticut",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/videographers/documentary-style/New ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/djs-and-bands/hawaii/hawaii",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/nebraska/nebraska",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/Juneau/Alaska",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/venues/georgia/georgia",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/hair-stylists/St. Louis/Missouri",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/hair-stylists/multicultural-hair/San ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/caterers/Sacramento/California",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/videographers/live-streaming/Green ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/caterers/alaska/alaska",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/videographers/documentary-style/Rapid ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/delaware/delaware",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/fort-worth/texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/flower-carts/Virginia ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/floral-installations/Sioux ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/djs-and-bands/montana/montana",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/Reno/Nevada",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/coffee-carts/Fort ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/venues/Corpus Christi/Texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/caterers/sacramento/california",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/Scottsdale/Arizona",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/hair-stylists/new-york-city/new-york",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-planners/Irving/Texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/hair-stylists/Amarillo/Texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/djs-and-bands/live-bands/El ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-planners/birmingham/alabama",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/photographers/Rutland/Vermont",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/videographers/drone-videography/Fort ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/videographers/traditional-videography/Kansas ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/photographers/aerial-photography/El ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/bridal-shops/san-francisco/california",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-planners/buffalo/new-york",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/hair-stylists/new/new-mexico",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/cake-designers/san-diego/california",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/hair-stylists/fort-smith/arkansas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/Corpus ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/bridal-shops/south/south-carolina",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/videographers/live-streaming/New ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/hair-stylists/multicultural-hair/Salt ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/virginia/virginia",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/videographers/live-streaming/Kansas ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/cake-designers/Denver/Colorado",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/Bismarck/North ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/hair-stylists/multicultural-hair/Colorado ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-planners/cultural-wedding-specialists/El ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/hair-stylists/missouri/missouri",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/bridal-shops/custom-design/Des ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/cake-designers/Corpus Christi/Texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/florists/kentucky/kentucky",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/hair-stylists/updos-&-formal-styles/Cedar ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/videographers/live-streaming/New ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/hair-stylists/extensions-&-volume/Rapid ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/djs-and-bands/orchestras/Corpus ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/bridal-shops/fort-worth/texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/videographers/drone-videography/Los ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/airbrush-makeup/San ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/videographers/documentary-style/Salt ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/djs-and-bands/amarillo/texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-planners/New ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/videographers/drone-videography/New ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/Davenport/Iowa",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-planners/Morgantown/West ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/bridal-makeup/San ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/michigan/michigan",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/floral-installations/Green ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/bridal-shops/Los Angeles/California",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/reception-decor/Grand ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/ceremony-decor/Grand ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/caterers/Cleveland/Ohio",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/cake-designers/Minneapolis/Minnesota",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-planners/Chicago/Illinois",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/caterers/Baltimore/Maryland",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/bridal-shops/Louisville/Kentucky",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/Aberdeen/South Dakota",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/Detroit/Michigan",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/destination-wedding/Kansas ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/florists/minimalist/San ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/Colorado Springs/Colorado",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/videographers/maine/maine",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/Denver/Colorado",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/Wilmington/Delaware",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/videographers/arkansas/arkansas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/reception-decor/Colorado ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/cultural-specialists/Green ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/new/new-mexico",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-planners/new/new-hampshire",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/ceremony-decor/Colorado ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/draping-&-linens/Green ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/florists/gulfport/mississippi",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/airbrush-makeup/Fort ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/caterers/irving/texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-planners/arizona/arizona",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/houston/texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/Philadelphia/Pennsylvania",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/hair-stylists/updos-&-formal-styles/New ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/cultural-specialists/Little ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/themed-decor/Grand ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/cultural-specialists/Oklahoma ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/draping-&-linens/Oklahoma ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/djs-and-bands/michigan/michigan",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/caterers/miami/florida",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-planners/Kansas City/Kansas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/ceremony-decor/Des ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/videographers/live-streaming/Rapid ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/draping-&-linens/San ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/florists/los-angeles/california",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/themed-decor/Grand ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/floral-installations/Corpus ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/caterers/missouri/missouri",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/themed-decor/Colorado ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/photographers/maine/maine",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/cultural-specialists/Fort ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/djs-and-bands/new-york-city/new-york",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-planners/Plano/Texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/djs-and-bands/Mobile/Alabama",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/cultural-specialists/Bowling ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/cake-designers/Buffalo/New York",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/videographers/orlando/florida",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/Madison/Wisconsin",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/hair-stylists/Jersey City/New Jersey",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/Augusta/Georgia",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/djs-and-bands/corpus-christi/texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/ceremony-decor/El ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/reception-decor/Bowling ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/cake-designers/Orlando/Florida",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/states/california/san-francisco",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/Springfield/Missouri",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/videographers/massachusetts/massachusetts",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/Miami/Florida",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/Chicago/Illinois",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/lighting-design/Green ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/bridal-shops/kansas/kansas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/djs-and-bands/Mesa/Arizona",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/cake-designers/specialty-dietary/Los ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/videographers/cinematic-style/Grand ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/themed-decor/Carson ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-planners/Ann Arbor/Michigan",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/cultural-specialists/Myrtle ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/caterers/Lubbock/Texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/florists/El Paso/Texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/bridal-shops/Irving/Texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/florists/austin/texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/photographers/Newark/Delaware",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/Memphis/Tennessee",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/destination-wedding/Green ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/venues/fort-worth/texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/Aberdeen/South ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/floral-installations/Myrtle ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/photographers/alabama/alabama",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/lighting-design/Fort ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/djs-and-bands/solo-musicians/Fort ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/lighting-design/Kansas ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/bridal-shops/Fort Worth/Texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/draping-&-linens/Sioux ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/Newark/Delaware",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/venues/El Paso/Texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/themed-decor/New ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/states/new-york/new-york-city",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/caterers/mediterranean/Bowling ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/themed-decor/Fort ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/draping-&-linens/Fort ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/bridal-shops/budget-friendly/Corpus ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/airbrush-makeup/Las ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/floral-installations/Bowling ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/states/nevada/nevada",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/states/missouri/springfield",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/caterers/El Paso/Texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/djs-and-bands/Fort Worth/Texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/hair-stylists/Corpus Christi/Texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/hair-stylists/Fort Worth/Texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/Green ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/photographers/Corpus Christi/Texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/Nashville/Tennessee",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/Little ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/Saint ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/caterers/corpus-christi/texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/lighting-design/Colorado ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/destination-wedding/Corpus ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/caterers/new/new-jersey",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/venues/north/north-carolina",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/states/utah/utah",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/Bismarck/North Dakota",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/reception-decor/Idaho ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/vendor/sample-vendor-r8",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/bridal-shops/El Paso/Texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/djs-and-bands/Galveston/Texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/themed-decor/Idaho ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/djs-and-bands/live-bands/Corpus ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/florists/modern-arrangements/Corpus ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/Springfield/Missouri",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-planners/day-of-coordination/Fort ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/photographers/fine-art/Corpus ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/Morgantown/West ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/photographers/Arlington/Texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/draping-&-linens/Idaho ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/draping-&-linens/Rapid ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/buffalo/new-york",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/cake-designers/Raleigh/North Carolina",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-planners/Sacramento/California",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/destination-wedding/Rapid ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/djs-and-bands/solo-musicians/El ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/themed-decor/South ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/caterers/Garland/Texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-planners/Atlanta/Georgia",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/bridal-shops/alabama/alabama",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/bridal-shops/Albany/New York",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/states/texas/el-paso",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/Minneapolis/Minnesota",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/Denver/Colorado",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/Billings/Montana",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/Eugene/Oregon",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/Huntington/West Virginia",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/Montpelier/Vermont",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/bridal-shops/albany/new-york",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/makeup-artists/El Paso/Texas",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/Worcester/Massachusetts",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/Tampa/Florida",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/Newark/New Jersey",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/florists/san-francisco/california",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/djs-and-bands/orchestras/Kansas ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/Ann Arbor/Michigan",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/Salt Lake City/Utah",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/Providence/Rhode Island",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/bridal-shops/west/west-virginia",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/Colorado ",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/Louisville/Kentucky",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/Kansas City/Missouri",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/Ann Arbor/Michigan",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/Anchorage/Alaska",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/wedding-decorators/Davenport/Iowa",
+      "reason": "Invalid URL pattern"
+    },
+    {
+      "url": "/top-20/carts/Manchester/New Hampshire",
+      "reason": "Invalid URL pattern"
+    }
+  ],
+  "special": [
+    {
+      "old": "/search/florists",
+      "new": "/top-20/florists",
+      "type": "search-redirect"
+    },
+    {
+      "old": "/search/venues",
+      "new": "/top-20/venues",
+      "type": "search-redirect"
+    }
+  ]
+}
