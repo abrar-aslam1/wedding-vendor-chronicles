@@ -26,12 +26,20 @@ export const useGeolocation = () => {
     coordinates: null,
     loading: false,
     error: null,
-    supported: 'geolocation' in navigator,
+    supported: false, // Will be set correctly on mount
   });
 
-  // Check for cached location on mount
+  // Check for browser support and cached location on mount
   useEffect(() => {
-    if (!state.supported) return;
+    // Check if we're in the browser and geolocation is supported
+    const isSupported = typeof window !== 'undefined' && 'geolocation' in navigator;
+    
+    setState(prev => ({
+      ...prev,
+      supported: isSupported,
+    }));
+
+    if (!isSupported) return;
 
     try {
       const cached = localStorage.getItem(GEOLOCATION_CACHE_KEY);
@@ -59,6 +67,12 @@ export const useGeolocation = () => {
   }, [state.supported]);
 
   const requestLocation = () => {
+    // Check if we're in the browser
+    if (typeof window === 'undefined') {
+      console.warn('Geolocation can only be accessed in the browser');
+      return;
+    }
+
     if (!state.supported) {
       setState(prev => ({
         ...prev,
@@ -127,10 +141,13 @@ export const useGeolocation = () => {
   };
 
   const clearLocation = () => {
-    try {
-      localStorage.removeItem(GEOLOCATION_CACHE_KEY);
-    } catch (error) {
-      console.error('Error clearing cached location:', error);
+    // Only access localStorage in the browser
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.removeItem(GEOLOCATION_CACHE_KEY);
+      } catch (error) {
+        console.error('Error clearing cached location:', error);
+      }
     }
 
     setState({

@@ -3,10 +3,16 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { LocationDetector } from "@/components/search/LocationDetector";
+import dynamic from "next/dynamic";
 import { SearchForm } from "@/components/search/SearchForm";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+
+// Dynamically import LocationDetector to prevent SSR issues with navigator
+const LocationDetector = dynamic(
+  () => import("@/components/search/LocationDetector").then(mod => ({ default: mod.LocationDetector })),
+  { ssr: false }
+);
 
 export const SearchSection = () => {
   const router = useRouter();
