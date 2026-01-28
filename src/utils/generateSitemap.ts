@@ -23,6 +23,27 @@ function createUrlSlug(text: string): string {
     .replace(/^-+|-+$/g, '');        // trim hyphens from ends
 }
 
+// Validate that a URL doesn't have invalid patterns
+function isValidUrl(url: string): boolean {
+  // Reject URLs with duplicate state/state patterns
+  const duplicateStatePattern = /\/([a-z-]+)\/\1$/;
+  if (duplicateStatePattern.test(url)) {
+    return false;
+  }
+  
+  // Reject URLs with uppercase letters (should be all lowercase)
+  if (/[A-Z]/.test(url)) {
+    return false;
+  }
+  
+  // Reject URLs with spaces or special chars that shouldn't be there
+  if (/[\s%]/.test(url)) {
+    return false;
+  }
+  
+  return true;
+}
+
 // URL types with their priorities and change frequencies
 const URL_TYPES = {
   HOME: { priority: '1.0', changefreq: 'weekly' },
@@ -53,8 +74,9 @@ const generateSitemap = () => {
     { url: '/favorites', type: 'USER' }
   ];
   
+  // Changed from /search/ to /top-20/ to match actual routes
   const categoryUrls = categories.map(category => ({
-    url: `/search/${category.slug}`,
+    url: `/top-20/${category.slug}`,
     type: 'CATEGORY'
   }));
   
@@ -90,7 +112,7 @@ const generateSitemap = () => {
     }));
   
   // Generate location URLs by category
-  const locationUrlsByCategory = {};
+  const locationUrlsByCategory: Record<string, Array<{ url: string; type: string }>> = {};
   
   // Initialize an array for each category
   categories.forEach(category => {
@@ -102,19 +124,34 @@ const generateSitemap = () => {
     Object.entries(stateData.cities).forEach(([city, cityCode]) => {
       // Add URLs for each category in this location
       categories.forEach(category => {
+        const citySlug = createUrlSlug(city);
+        const stateSlug = createUrlSlug(state);
+        
         // Add the main category URL with properly slugified city and state
-        locationUrlsByCategory[category.slug].push({
-          url: `/top-20/${category.slug}/${createUrlSlug(city)}/${createUrlSlug(state)}`,
-          type: 'LOCATION'
-        });
+        const mainUrl = `/top-20/${category.slug}/${citySlug}/${stateSlug}`;
+        
+        // Validate before adding
+        if (isValidUrl(mainUrl)) {
+          locationUrlsByCategory[category.slug].push({
+            url: mainUrl,
+            type: 'LOCATION'
+          });
+        }
         
         // Add subcategory URLs if available for this category
+        // NOTE: Using query parameters instead of path segments for subcategories
         if (subcategories[category.slug]) {
           subcategories[category.slug].forEach(subcategory => {
-            locationUrlsByCategory[category.slug].push({
-              url: `/top-20/${category.slug}/${createUrlSlug(subcategory.name)}/${createUrlSlug(city)}/${createUrlSlug(state)}`,
-              type: 'SUBCATEGORY'
-            });
+            const subcategorySlug = createUrlSlug(subcategory.name);
+            const subcategoryUrl = `/top-20/${category.slug}/${citySlug}/${stateSlug}?subcategory=${subcategorySlug}`;
+            
+            // Validate before adding
+            if (isValidUrl(subcategoryUrl)) {
+              locationUrlsByCategory[category.slug].push({
+                url: subcategoryUrl,
+                type: 'SUBCATEGORY'
+              });
+            }
           });
         }
       });
@@ -259,8 +296,8 @@ function formatUrl({ url, type }) {
 }
 
 // Helper function to split an array into chunks
-function chunkArray(array, chunkSize) {
-  const chunks = [];
+function chunkArray<T>(array: T[], chunkSize: number): T[][] {
+  const chunks: T[][] = [];
   for (let i = 0; i < array.length; i += chunkSize) {
     chunks.push(array.slice(i, i + chunkSize));
   }
