@@ -18,117 +18,31 @@
 
 # Redirect rules for legacy/malformed URLs
 # These handle common URL patterns that were causing 404 errors
+# IMPORTANT: Order matters! More specific rules must come first.
 
 # PRIORITY 1: Handle old subcategory path structure → query parameter structure
 # This catches the old 4-segment URL pattern and converts to query params
+# Example: /top-20/carts/coffee-carts/montpelier/vermont → /top-20/carts/montpelier/vermont?subcategory=coffee-carts
 [[redirects]]
   from = "/top-20/:category/:subcategory/:city/:state"
   to = "/top-20/:category/:city/:state?subcategory=:subcategory"
   status = 301
   force = true
 
-# PRIORITY 2: Handle capitalized URLs (convert to lowercase)
-[[redirects]]
-  from = "/top-20/:category/:city/:state"
-  to = "/top-20/:category/:city/:state"
-  status = 301
-  force = false
-  conditions = {Header = "X-Forwarded-Proto: https"}
-
-# PRIORITY 3: Handle /search/ redirects to /top-20/
+# PRIORITY 2: Handle /search/ redirects to /top-20/
 [[redirects]]
   from = "/search/:category"
   to = "/top-20/:category"
   status = 301
   force = true
 
-# PRIORITY 4: Handle duplicate state patterns (e.g., /georgia/georgia)
+# PRIORITY 3: Handle duplicate state patterns (e.g., /georgia/georgia)
+# These should redirect to category homepage
 [[redirects]]
-  from = "/top-20/:category/:state/:state"
+  from = "/top-20/:category/:duplicate/:duplicate"
   to = "/top-20/:category"
   status = 301
   force = true
-
-# PRIORITY 5: Specific category fixes for common patterns
-# These catch URLs that were generated with only 2 location params
-[[redirects]]
-  from = "/top-20/carts/:location1/:location2"
-  to = "/top-20/carts"
-  status = 301
-  force = false
-  conditions = {Country = ["*"]}
-
-[[redirects]]
-  from = "/top-20/photographers/:location1/:location2"
-  to = "/top-20/photographers"
-  status = 301
-  force = false
-
-[[redirects]]
-  from = "/top-20/videographers/:location1/:location2"
-  to = "/top-20/videographers"
-  status = 301
-  force = false
-
-[[redirects]]
-  from = "/top-20/makeup-artists/:location1/:location2"
-  to = "/top-20/makeup-artists"
-  status = 301
-  force = false
-
-[[redirects]]
-  from = "/top-20/hair-stylists/:location1/:location2"
-  to = "/top-20/hair-stylists"
-  status = 301
-  force = false
-
-[[redirects]]
-  from = "/top-20/wedding-decorators/:location1/:location2"
-  to = "/top-20/wedding-decorators"
-  status = 301
-  force = false
-
-[[redirects]]
-  from = "/top-20/wedding-planners/:location1/:location2"
-  to = "/top-20/wedding-planners"
-  status = 301
-  force = false
-
-[[redirects]]
-  from = "/top-20/djs-and-bands/:location1/:location2"
-  to = "/top-20/djs-and-bands"
-  status = 301
-  force = false
-
-[[redirects]]
-  from = "/top-20/caterers/:location1/:location2"
-  to = "/top-20/caterers"
-  status = 301
-  force = false
-
-[[redirects]]
-  from = "/top-20/florists/:location1/:location2"
-  to = "/top-20/florists"
-  status = 301
-  force = false
-
-[[redirects]]
-  from = "/top-20/venues/:location1/:location2"
-  to = "/top-20/venues"
-  status = 301
-  force = false
-
-[[redirects]]
-  from = "/top-20/cake-designers/:location1/:location2"
-  to = "/top-20/cake-designers"
-  status = 301
-  force = false
-
-[[redirects]]
-  from = "/top-20/bridal-shops/:location1/:location2"
-  to = "/top-20/bridal-shops"
-  status = 301
-  force = false
 
 # Security and performance headers
 [[headers]]
