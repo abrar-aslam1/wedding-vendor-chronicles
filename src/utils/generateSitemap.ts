@@ -139,11 +139,12 @@ const generateSitemap = () => {
         }
         
         // Add subcategory URLs if available for this category
-        // NOTE: Using query parameters instead of path segments for subcategories
+        // NEW: Using path segments for subcategories instead of query parameters
         if (subcategories[category.slug]) {
           subcategories[category.slug].forEach(subcategory => {
             const subcategorySlug = createUrlSlug(subcategory.name);
-            const subcategoryUrl = `/top-20/${category.slug}/${citySlug}/${stateSlug}?subcategory=${subcategorySlug}`;
+            // New path structure: /top-20/[category]/[subcategory]/[city]/[state]
+            const subcategoryUrl = `/top-20/${category.slug}/${subcategorySlug}/${citySlug}/${stateSlug}`;
             
             // Validate before adding
             if (isValidUrl(subcategoryUrl)) {

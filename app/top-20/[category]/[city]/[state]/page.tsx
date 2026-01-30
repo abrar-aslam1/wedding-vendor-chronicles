@@ -23,8 +23,14 @@ export default async function Top20SearchPage({ params, searchParams }: SearchPa
   
   const cleanCategory = category ? category.replace('top-20/', '').replace(/-/g, ' ') : 'wedding-vendors';
   
+  // Create canonical URL (no query parameters)
+  const canonicalUrl = `https://findmyweddingvendor.com/top-20/${category}/${city}/${state}`;
+  
   return (
     <div className="min-h-screen bg-background">
+      <head>
+        <link rel="canonical" href={canonicalUrl} />
+      </head>
       <SEOHead 
         category={category?.replace('top-20/', '')} 
         city={city} 
@@ -96,11 +102,25 @@ export async function generateMetadata({ params, searchParams }: SearchPageProps
     word.charAt(0).toUpperCase() + word.slice(1)
   ).join(' ');
   
-  const location = city && state ? ` in ${city}, ${state}` : '';
+  const titleCity = city ? city.charAt(0).toUpperCase() + city.slice(1) : '';
+  const titleState = state ? state.charAt(0).toUpperCase() + state.slice(1) : '';
+  
+  const location = city && state ? ` in ${titleCity}, ${titleState}` : '';
   const subcategoryText = subcategory ? ` - ${subcategory}` : '';
+  
+  const canonicalUrl = `https://findmyweddingvendor.com/top-20/${category}/${city}/${state}`;
   
   return {
     title: `Top 20 ${titleCategory}${subcategoryText}${location} | Wedding Vendor Chronicles`,
     description: `Find the top 20 ${cleanCategory}${subcategoryText}${location}. Browse reviews, compare pricing, and book trusted wedding vendors.`,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title: `Top 20 ${titleCategory}${location}`,
+      description: `Find the top 20 ${cleanCategory}${location}. Browse reviews, compare pricing, and book trusted wedding vendors.`,
+      url: canonicalUrl,
+      type: 'website',
+    },
   };
 }

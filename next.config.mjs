@@ -41,7 +41,20 @@ const nextConfig = {
   },
   // Redirect old routes if needed during migration
   async redirects() {
-    return [];
+    return [
+      {
+        // Redirect old query-parameter URLs to new path-based URLs
+        source: '/top-20/:category/:city/:state',
+        has: [
+          {
+            type: 'query',
+            key: 'subcategory',
+          },
+        ],
+        destination: '/top-20/:category/:subcategory/:city/:state',
+        permanent: true,
+      },
+    ];
   },
   // Add headers for better SEO and performance
   async headers() {
