@@ -101,25 +101,14 @@ const VendorDetailClient = ({ vendorId }: VendorDetailClientProps) => {
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
-      if (!session) {
-        toast({
-          title: "Authentication Required",
-          description: "Please sign in to view vendor details",
-          variant: "destructive",
-        });
-        router.push(routes.auth());
-      }
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       setSession(session);
-      if (!session) {
-        router.push(routes.auth());
-      }
     });
 
     return () => subscription.unsubscribe();
-  }, [router, toast]);
+  }, []);
 
   // Track vendor view when vendor data is loaded
   useEffect(() => {
@@ -181,7 +170,17 @@ const VendorDetailClient = ({ vendorId }: VendorDetailClientProps) => {
   }, [session, vendorId]);
 
   const handleToggleFavorite = async () => {
-    if (!session?.user?.id || !vendor) return;
+    if (!vendor) return;
+
+    // Check if user is logged in
+    if (!session?.user?.id) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in to save vendors to your favorites",
+      });
+      router.push(routes.auth());
+      return;
+    }
 
     try {
       if (isFavorite) {
