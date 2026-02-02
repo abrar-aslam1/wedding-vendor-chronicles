@@ -27,14 +27,6 @@
   status = 301
   force = true
 
-# PRIORITY 3: Handle duplicate state patterns (e.g., /georgia/georgia)
-# These should redirect to category homepage
-[[redirects]]
-  from = "/top-20/:category/:duplicate/:duplicate"
-  to = "/top-20/:category"
-  status = 301
-  force = true
-
 # Security and performance headers
 [[headers]]
   for = "/*"
