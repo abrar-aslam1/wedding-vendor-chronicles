@@ -2,110 +2,54 @@
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap>
     <loc>https://findmyweddingvendor.com/sitemaps/static.xml</loc>
-    <lastmod>2026-01-28</lastmod>
+    <lastmod>2026-02-02</lastmod>
   </sitemap>
   <sitemap>
-    <loc>https://findmyweddingvendor.com/sitemaps/wedding-planners-1.xml</loc>
-    <lastmod>2026-01-28</lastmod>
+    <loc>https://findmyweddingvendor.com/sitemaps/photographers.xml</loc>
+    <lastmod>2026-02-02</lastmod>
   </sitemap>
   <sitemap>
-    <loc>https://findmyweddingvendor.com/sitemaps/wedding-planners-2.xml</loc>
-    <lastmod>2026-01-28</lastmod>
+    <loc>https://findmyweddingvendor.com/sitemaps/videographers.xml</loc>
+    <lastmod>2026-02-02</lastmod>
   </sitemap>
   <sitemap>
-    <loc>https://findmyweddingvendor.com/sitemaps/photographers-1.xml</loc>
-    <lastmod>2026-01-28</lastmod>
+    <loc>https://findmyweddingvendor.com/sitemaps/venues.xml</loc>
+    <lastmod>2026-02-02</lastmod>
   </sitemap>
   <sitemap>
-    <loc>https://findmyweddingvendor.com/sitemaps/photographers-2.xml</loc>
-    <lastmod>2026-01-28</lastmod>
+    <loc>https://findmyweddingvendor.com/sitemaps/caterers.xml</loc>
+    <lastmod>2026-02-02</lastmod>
   </sitemap>
   <sitemap>
-    <loc>https://findmyweddingvendor.com/sitemaps/videographers-1.xml</loc>
-    <lastmod>2026-01-28</lastmod>
+    <loc>https://findmyweddingvendor.com/sitemaps/florists.xml</loc>
+    <lastmod>2026-02-02</lastmod>
   </sitemap>
   <sitemap>
-    <loc>https://findmyweddingvendor.com/sitemaps/videographers-2.xml</loc>
-    <lastmod>2026-01-28</lastmod>
+    <loc>https://findmyweddingvendor.com/sitemaps/djs-and-bands.xml</loc>
+    <lastmod>2026-02-02</lastmod>
   </sitemap>
   <sitemap>
-    <loc>https://findmyweddingvendor.com/sitemaps/florists-1.xml</loc>
-    <lastmod>2026-01-28</lastmod>
+    <loc>https://findmyweddingvendor.com/sitemaps/cake-designers.xml</loc>
+    <lastmod>2026-02-02</lastmod>
   </sitemap>
   <sitemap>
-    <loc>https://findmyweddingvendor.com/sitemaps/florists-2.xml</loc>
-    <lastmod>2026-01-28</lastmod>
+    <loc>https://findmyweddingvendor.com/sitemaps/wedding-planners.xml</loc>
+    <lastmod>2026-02-02</lastmod>
   </sitemap>
   <sitemap>
-    <loc>https://findmyweddingvendor.com/sitemaps/caterers-1.xml</loc>
-    <lastmod>2026-01-28</lastmod>
+    <loc>https://findmyweddingvendor.com/sitemaps/hair-stylists.xml</loc>
+    <lastmod>2026-02-02</lastmod>
   </sitemap>
   <sitemap>
-    <loc>https://findmyweddingvendor.com/sitemaps/caterers-2.xml</loc>
-    <lastmod>2026-01-28</lastmod>
+    <loc>https://findmyweddingvendor.com/sitemaps/makeup-artists.xml</loc>
+    <lastmod>2026-02-02</lastmod>
   </sitemap>
   <sitemap>
-    <loc>https://findmyweddingvendor.com/sitemaps/venues-1.xml</loc>
-    <lastmod>2026-01-28</lastmod>
+    <loc>https://findmyweddingvendor.com/sitemaps/bridal-shops.xml</loc>
+    <lastmod>2026-02-02</lastmod>
   </sitemap>
   <sitemap>
-    <loc>https://findmyweddingvendor.com/sitemaps/venues-2.xml</loc>
-    <lastmod>2026-01-28</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://findmyweddingvendor.com/sitemaps/djs-and-bands-1.xml</loc>
-    <lastmod>2026-01-28</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://findmyweddingvendor.com/sitemaps/djs-and-bands-2.xml</loc>
-    <lastmod>2026-01-28</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://findmyweddingvendor.com/sitemaps/cake-designers-1.xml</loc>
-    <lastmod>2026-01-28</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://findmyweddingvendor.com/sitemaps/cake-designers-2.xml</loc>
-    <lastmod>2026-01-28</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://findmyweddingvendor.com/sitemaps/bridal-shops-1.xml</loc>
-    <lastmod>2026-01-28</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://findmyweddingvendor.com/sitemaps/bridal-shops-2.xml</loc>
-    <lastmod>2026-01-28</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://findmyweddingvendor.com/sitemaps/makeup-artists-1.xml</loc>
-    <lastmod>2026-01-28</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://findmyweddingvendor.com/sitemaps/makeup-artists-2.xml</loc>
-    <lastmod>2026-01-28</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://findmyweddingvendor.com/sitemaps/hair-stylists-1.xml</loc>
-    <lastmod>2026-01-28</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://findmyweddingvendor.com/sitemaps/hair-stylists-2.xml</loc>
-    <lastmod>2026-01-28</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://findmyweddingvendor.com/sitemaps/wedding-decorators-1.xml</loc>
-    <lastmod>2026-01-28</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://findmyweddingvendor.com/sitemaps/wedding-decorators-2.xml</loc>
-    <lastmod>2026-01-28</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://findmyweddingvendor.com/sitemaps/carts-1.xml</loc>
-    <lastmod>2026-01-28</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://findmyweddingvendor.com/sitemaps/carts-2.xml</loc>
-    <lastmod>2026-01-28</lastmod>
+    <loc>https://findmyweddingvendor.com/sitemaps/wedding-decorators.xml</loc>
+    <lastmod>2026-02-02</lastmod>
   </sitemap>
 </sitemapindex>

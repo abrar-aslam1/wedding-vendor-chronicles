@@ -20,16 +20,7 @@
 # These handle common URL patterns that were causing 404 errors
 # IMPORTANT: Order matters! More specific rules must come first.
 
-# PRIORITY 1: Handle old subcategory path structure → query parameter structure
-# This catches the old 4-segment URL pattern and converts to query params
-# Example: /top-20/carts/coffee-carts/montpelier/vermont → /top-20/carts/montpelier/vermont?subcategory=coffee-carts
-[[redirects]]
-  from = "/top-20/:category/:subcategory/:city/:state"
-  to = "/top-20/:category/:city/:state?subcategory=:subcategory"
-  status = 301
-  force = true
-
-# PRIORITY 2: Handle /search/ redirects to /top-20/
+# PRIORITY 1: Handle /search/ redirects to /top-20/
 [[redirects]]
   from = "/search/:category"
   to = "/top-20/:category"
