@@ -1,3 +1,4 @@
+
 # Google Tag Manager Implementation Complete
 
 ## Summary
@@ -108,12 +109,109 @@ To verify GTM is working correctly:
    - Deploy to your hosting platform
    - Verify GTM loads correctly on production
 
+## Custom Event Tracking
+
+The site now includes custom Google Analytics event tracking for key user actions:
+
+### 1. **Vendor Signup Tracking** (`vendor_listing_signup`)
+Triggered when a vendor completes the business listing form.
+
+**Location:** `app/list-business/ListBusinessClient.tsx`
+
+**Parameters:**
+- `vendor_category`: The business category (e.g., "photographers")
+- `vendor_city`: The city location
+- `vendor_state`: The state location
+
+**Example:**
+```javascript
+trackVendorSignup({
+  vendor_category: 'photographer',
+  vendor_city: 'dallas',
+  vendor_state: 'texas'
+});
+```
+
+### 2. **Vendor Contact Click** (`vendor_contact_click`)
+Triggered when a user submits an availability request to contact a vendor.
+
+**Location:** `src/components/vendor/AvailabilityModal.tsx`
+
+**Parameters:**
+- `vendor_name`: The business name
+- `vendor_category`: The business category
+- `vendor_city`: The city location
+- `vendor_state`: The state location
+
+**Example:**
+```javascript
+trackVendorContactClick({
+  vendor_name: 'ABC Photography',
+  vendor_category: 'photographer',
+  vendor_city: 'houston',
+  vendor_state: 'texas'
+});
+```
+
+### 3. **Category Browse** (`category_browse`)
+Triggered when a user visits a category page.
+
+**Location:** `app/category/[category]/page.tsx`
+
+**Parameters:**
+- `category`: The category being viewed
+- `state`: The state (if filtered)
+- `city`: The city (if filtered)
+
+**Example:**
+```javascript
+trackCategoryBrowse({
+  category: 'caterers',
+  state: 'texas',
+  city: 'houston'
+});
+```
+
+### Analytics Utility File
+
+All tracking functions are centralized in `src/utils/analytics.ts`. This file includes:
+
+- Type-safe tracking functions
+- Browser environment checks
+- Global gtag declarations
+- Additional utility functions for tracking:
+  - `trackVendorView()` - Track vendor profile views
+  - `trackSearch()` - Track search queries
+
+## Viewing Analytics Data
+
+### In Google Tag Manager:
+1. Go to your GTM container
+2. Click **Preview** mode
+3. Visit your site and perform actions
+4. View events in the Tag Assistant
+
+### In Google Analytics 4:
+1. Go to your GA4 property
+2. Navigate to **Reports** → **Realtime**
+3. View events as they occur in real-time
+4. Or go to **Reports** → **Engagement** → **Events** for historical data
+
+### Creating Custom Reports:
+You can create custom reports in GA4 using these events:
+- Track conversion rates (vendor contacts / category views)
+- Monitor popular categories and locations
+- Analyze vendor signup patterns
+- Measure user engagement
+
 ## Notes
 
 - GTM is now active on ALL pages of your site via the root layout
 - The existing Google Analytics (`gaId="G-FL048TNQ0D"`) will continue to work
 - You can now manage all tracking pixels and tags through GTM dashboard
 - Consider migrating the existing GA setup to GTM for centralized management
+- **Custom events are automatically sent to Google Analytics via GTM**
+- All tracking functions include safety checks for browser environment
 
 ## Documentation
 

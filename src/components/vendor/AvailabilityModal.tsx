@@ -9,6 +9,7 @@ import { SearchResult } from "@/types/search";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import { trackVendorContactClick } from "@/utils/analytics";
 
 interface AvailabilityModalProps {
   isOpen: boolean;
@@ -65,7 +66,7 @@ export const AvailabilityModal = ({ isOpen, onClose, vendor }: AvailabilityModal
     try {
       // Insert availability request into database
       const { error } = await supabase
-        .from('availability_requests')
+        .from('availability_requests' as any)
         .insert({
           user_id: session.user.id,
           vendor_place_id: vendor.place_id,
@@ -85,6 +86,14 @@ export const AvailabilityModal = ({ isOpen, onClose, vendor }: AvailabilityModal
       if (error) {
         throw error;
       }
+
+      // Track vendor contact click in Google Analytics
+      trackVendorContactClick({
+        vendor_name: vendor.title,
+        vendor_category: vendor.category || 'unknown',
+        vendor_city: vendor.city || 'unknown',
+        vendor_state: vendor.state || 'unknown'
+      });
 
       toast({
         title: "Request sent successfully!",

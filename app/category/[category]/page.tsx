@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { MapPin, TrendingUp, Star } from "lucide-react";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage } from "@/components/ui/breadcrumb";
+import { trackCategoryBrowse } from "@/utils/analytics";
 
 const categoryInfo: { [key: string]: { title: string; description: string; image: string; tips: string[] } } = {
   "wedding-planners": {
@@ -123,7 +124,14 @@ export default function CategoryPage({ params }: CategoryPageProps) {
     };
 
     fetchPopularCities();
-  }, [category]);
+    
+    // Track category browse in Google Analytics
+    if (category) {
+      trackCategoryBrowse({
+        category: displayCategory || category
+      });
+    }
+  }, [category, displayCategory]);
 
   const handleSearch = async (selectedCategory: string, selectedState: string, selectedCity: string, subcategory?: string) => {
     setIsSearching(true);

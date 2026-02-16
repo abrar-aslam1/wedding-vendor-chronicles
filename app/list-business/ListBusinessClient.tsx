@@ -21,6 +21,7 @@ import * as z from "zod";
 import { LocationSelects } from "@/components/search/LocationSelects";
 import { categories } from "@/config/categories";
 import { getSubcategoriesForCategory } from "@/config/subcategories";
+import { trackVendorSignup } from "@/utils/analytics";
 
 const formSchema = z.object({
   businessName: z.string().min(2, "Business name must be at least 2 characters"),
@@ -191,6 +192,13 @@ export default function ListBusinessClient() {
       if (insertError) {
         throw new Error(`Failed to create listing: ${insertError.message}`);
       }
+
+      // Track vendor signup in Google Analytics
+      trackVendorSignup({
+        vendor_category: data.category,
+        vendor_city: data.city,
+        vendor_state: data.state
+      });
 
       toast({
         title: "Success!",
