@@ -44,32 +44,43 @@ const VendorDetailClient = ({ vendorId }: VendorDetailClientProps) => {
   useEffect(() => {
     const fetchVendorData = async () => {
       if (!vendorId) return;
-      
+
       setIsLoadingVendor(true);
       let foundVendorData: SearchResult | null = null;
-      
+
       try {
-        // Try to fetch from vendor_cache first
-        const { data: cachedData, error: cacheError } = await supabase
-          .from('vendor_cache')
-          .select('search_results')
-          .limit(50);
-        
-        if (cachedData && !cacheError) {
-          // Search through all cached results for the vendor
-          for (const cache of cachedData) {
-            const results = cache.search_results as SearchResult[];
-            if (results && Array.isArray(results)) {
-              const matchingVendor = results.find(v => v.place_id === vendorId);
-              if (matchingVendor) {
-                foundVendorData = matchingVendor;
-                break;
+        // 1. Check sessionStorage first (set by VendorCard on click)
+        try {
+          const cached = sessionStorage.getItem(`vendor_${vendorId}`);
+          if (cached) {
+            foundVendorData = JSON.parse(cached) as SearchResult;
+          }
+        } catch (e) {
+          // sessionStorage unavailable
+        }
+
+        // 2. If not in sessionStorage, search vendor_cache table
+        if (!foundVendorData) {
+          const { data: cachedData, error: cacheError } = await supabase
+            .from('vendor_cache')
+            .select('search_results')
+            .limit(200);
+
+          if (cachedData && !cacheError) {
+            for (const cache of cachedData) {
+              const results = cache.search_results as SearchResult[];
+              if (results && Array.isArray(results)) {
+                const matchingVendor = results.find(v => v.place_id === vendorId);
+                if (matchingVendor) {
+                  foundVendorData = matchingVendor;
+                  break;
+                }
               }
             }
           }
         }
-        
-        // If still not found, try vendor_favorites table
+
+        // 3. If still not found, try vendor_favorites table
         if (!foundVendorData) {
           const { data: favoriteData } = await supabase
             .from('vendor_favorites')
@@ -77,12 +88,12 @@ const VendorDetailClient = ({ vendorId }: VendorDetailClientProps) => {
             .eq('vendor_id', vendorId)
             .limit(1)
             .maybeSingle();
-          
+
           if (favoriteData?.vendor_data) {
             foundVendorData = favoriteData.vendor_data as SearchResult;
           }
         }
-        
+
         // Set the vendor state
         if (foundVendorData) {
           setVendor(foundVendorData);
@@ -94,7 +105,7 @@ const VendorDetailClient = ({ vendorId }: VendorDetailClientProps) => {
         setIsLoading(false);
       }
     };
-    
+
     fetchVendorData();
   }, [vendorId]);
 
