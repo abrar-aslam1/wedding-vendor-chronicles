@@ -1,5 +1,4 @@
 import { Suspense } from 'react';
-import { resolveParams } from '@/lib/migration-helpers';
 import VendorDetailClient from './VendorDetailClient';
 
 interface PageProps {
@@ -7,9 +6,8 @@ interface PageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-export default async function VendorDetailPage({ params, searchParams }: PageProps) {
-  const { id } = await resolveParams(params);
-  const resolvedSearchParams = await searchParams;
+export default async function VendorDetailPage({ params }: PageProps) {
+  const { id } = await params;
 
   return (
     <Suspense fallback={<div className="min-h-screen bg-wedding-light flex items-center justify-center">

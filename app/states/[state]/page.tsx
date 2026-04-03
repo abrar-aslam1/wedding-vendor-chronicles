@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import { resolveParams } from '@/lib/migration-helpers';
 import StateDetailClient from './StateDetailClient';
 
 type Props = {
@@ -7,7 +6,7 @@ type Props = {
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { state } = await resolveParams(params);
+  const { state } = await params;
   const stateName = state.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
 
   return {
@@ -22,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function StateDetailPage({ params }: Props) {
-  const { state } = await resolveParams(params);
+  const { state } = await params;
 
   return <StateDetailClient state={state} />;
 }
