@@ -49,38 +49,42 @@ const VendorDetailClient = ({ vendorId }: VendorDetailClientProps) => {
       let foundVendorData: SearchResult | null = null;
 
       try {
-        // 1. Check sessionStorage first (set by VendorCard on click)
-        try {
-          const cached = sessionStorage.getItem(`vendor_${vendorId}`);
-          if (cached) {
-            foundVendorData = JSON.parse(cached) as SearchResult;
-          }
-        } catch (e) {
-          // sessionStorage unavailable
+        // 1. Query vendors_google directly by place_id (indexed, fast)
+        const { data: googleVendor, error: googleError } = await supabase
+          .from('vendors_google')
+          .select('*')
+          .eq('place_id', vendorId)
+          .maybeSingle();
+
+        if (googleVendor && !googleError) {
+          foundVendorData = {
+            title: googleVendor.business_name || 'Unknown Business',
+            description: googleVendor.description || '',
+            rating: googleVendor.rating as any,
+            phone: googleVendor.phone,
+            address: googleVendor.address,
+            url: googleVendor.website_url,
+            place_id: googleVendor.place_id,
+            main_image: googleVendor.images?.[0],
+            images: googleVendor.images || [],
+            snippet: googleVendor.description || '',
+            latitude: googleVendor.latitude ? Number(googleVendor.latitude) : undefined,
+            longitude: googleVendor.longitude ? Number(googleVendor.longitude) : undefined,
+            business_hours: googleVendor.business_hours as any,
+            price_range: googleVendor.price_range,
+            service_area: googleVendor.service_area || [],
+            categories: googleVendor.categories || [],
+            year_established: googleVendor.year_established,
+            email: googleVendor.email,
+            city: googleVendor.city,
+            state: googleVendor.state,
+            postal_code: googleVendor.postal_code,
+            category: googleVendor.category,
+            vendor_source: 'google' as const,
+          } as SearchResult;
         }
 
-        // 2. If not in sessionStorage, search vendor_cache table
-        if (!foundVendorData) {
-          const { data: cachedData, error: cacheError } = await supabase
-            .from('vendor_cache')
-            .select('search_results')
-            .limit(200);
-
-          if (cachedData && !cacheError) {
-            for (const cache of cachedData) {
-              const results = cache.search_results as SearchResult[];
-              if (results && Array.isArray(results)) {
-                const matchingVendor = results.find(v => v.place_id === vendorId);
-                if (matchingVendor) {
-                  foundVendorData = matchingVendor;
-                  break;
-                }
-              }
-            }
-          }
-        }
-
-        // 3. If still not found, try vendor_favorites table
+        // 2. Fallback: check vendor_favorites table
         if (!foundVendorData) {
           const { data: favoriteData } = await supabase
             .from('vendor_favorites')
@@ -94,7 +98,6 @@ const VendorDetailClient = ({ vendorId }: VendorDetailClientProps) => {
           }
         }
 
-        // Set the vendor state
         if (foundVendorData) {
           setVendor(foundVendorData);
         }

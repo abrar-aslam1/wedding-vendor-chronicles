@@ -94,7 +94,49 @@ serve(async (req) => {
     if (cachedResult && cachedResult.search_results) {
       const cachedGoogleResults = Array.isArray(cachedResult.search_results) ? cachedResult.search_results : [];
       console.log(`[${requestId}] Returning ${cachedGoogleResults.length} cached results`);
-      
+
+      // Backfill vendors_google from cache so direct place_id lookups work
+      try {
+        const vendorRows = cachedGoogleResults
+          .filter((v: any) => v.place_id && !v.place_id.startsWith('fallback_'))
+          .map((v: any) => ({
+            place_id: v.place_id,
+            business_name: v.title || 'Unknown',
+            category: keyword,
+            city: v.city || city,
+            state: v.state || state,
+            state_code: v.state || state,
+            address: v.address,
+            phone: v.phone,
+            website_url: v.url,
+            email: v.email,
+            rating: v.rating || null,
+            description: v.description || v.snippet,
+            images: v.images || [],
+            business_hours: v.business_hours || null,
+            price_range: v.price_range,
+            latitude: v.latitude,
+            longitude: v.longitude,
+            reviews_count: v.rating?.count || 0,
+            year_established: v.year_established,
+            service_area: v.service_area || [city, state],
+            categories: v.categories || [keyword],
+            postal_code: v.postal_code,
+            last_updated: new Date().toISOString(),
+          }));
+
+        if (vendorRows.length > 0) {
+          const { error: upsertError } = await supabase
+            .from('vendors_google')
+            .upsert(vendorRows, { onConflict: 'place_id', ignoreDuplicates: true });
+          if (!upsertError) {
+            console.log(`[${requestId}] Backfilled ${vendorRows.length} vendors into vendors_google`);
+          }
+        }
+      } catch (e) {
+        // Non-critical — don't block the response
+      }
+
       return new Response(
         JSON.stringify({
           results: cachedGoogleResults,
@@ -416,6 +458,51 @@ serve(async (req) => {
           console.error(`[${requestId}] Retry cache also failed:`, retryError);
         }
       }
+    }
+
+    // Upsert individual vendors into vendors_google for direct place_id lookups
+    try {
+      const vendorRows = transformedResults
+        .filter((v: any) => v.place_id && !v.place_id.startsWith('fallback_'))
+        .map((v: any) => ({
+          place_id: v.place_id,
+          business_name: v.title || 'Unknown',
+          category: keyword,
+          city: v.city || city,
+          state: v.state || state,
+          state_code: v.state || state,
+          address: v.address,
+          phone: v.phone,
+          website_url: v.url,
+          email: v.email,
+          rating: v.rating || null,
+          description: v.description || v.snippet,
+          images: v.images || [],
+          business_hours: v.business_hours || null,
+          price_range: v.price_range,
+          latitude: v.latitude,
+          longitude: v.longitude,
+          reviews_count: v.rating?.count || 0,
+          year_established: v.year_established,
+          service_area: v.service_area || [city, state],
+          categories: v.categories || [keyword],
+          postal_code: v.postal_code,
+          last_updated: new Date().toISOString(),
+        }));
+
+      if (vendorRows.length > 0) {
+        const { error: upsertError } = await supabase
+          .from('vendors_google')
+          .upsert(vendorRows, { onConflict: 'place_id' });
+
+        if (upsertError) {
+          console.error(`[${requestId}] Error upserting vendors_google:`, upsertError.message);
+        } else {
+          console.log(`[${requestId}] Upserted ${vendorRows.length} vendors into vendors_google`);
+        }
+      }
+    } catch (upsertErr) {
+      console.error(`[${requestId}] vendors_google upsert failed:`, upsertErr.message);
     }
 
     return new Response(

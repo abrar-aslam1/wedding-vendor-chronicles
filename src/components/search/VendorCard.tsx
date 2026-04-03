@@ -86,12 +86,6 @@ export const VendorCard = ({
   };
 
   const handleCardClick = () => {
-    // Store vendor data in sessionStorage so the detail page can load it instantly
-    try {
-      sessionStorage.setItem(`vendor_${vendor.place_id || vendor.title}`, JSON.stringify(vendor));
-    } catch (e) {
-      // sessionStorage may be full or unavailable — detail page will fall back to API
-    }
     router.push(`/vendor/${encodeURIComponent(vendor.place_id || vendor.title)}`);
   };
 
