@@ -20,20 +20,9 @@ const getEnvVar = (fallback: string): string => {
   return fallback;
 };
 
-// Use new publishable key (sb_publishable_...) — replaces deprecated legacy JWT anon key
-// See: https://github.com/orgs/supabase/discussions/42949
-const getPublishableKey = (fallback: string): string => {
-  // Try new publishable key first (preferred)
-  if (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) {
-    return process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-  }
-  if (typeof process !== 'undefined' && process.env?.VITE_SUPABASE_PUBLISHABLE_KEY) {
-    return process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-  }
-  if (typeof import.meta !== 'undefined' && import.meta.env?.VITE_SUPABASE_PUBLISHABLE_KEY) {
-    return import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-  }
-  // Fall back to legacy anon key during transition
+// Use legacy anon key — the new publishable key (sb_publishable_...) does NOT
+// support Supabase Edge Functions (returns 401), so we must use the JWT anon key.
+const getAnonKey = (fallback: string): string => {
   if (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
     return process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   }
@@ -47,9 +36,9 @@ const getPublishableKey = (fallback: string): string => {
 };
 
 const SUPABASE_URL = getEnvVar('https://wpbdveyuuudhmwflrmqw.supabase.co');
-const SUPABASE_PUBLISHABLE_KEY = getPublishableKey('sb_publishable_FFHBhR9e1yxbt-rA_JfGsw_HtyEgdoG');
+const SUPABASE_ANON_KEY = getAnonKey('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndwYmR2ZXl1dXVkaG13ZmxybXF3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc4NDMyNjYsImV4cCI6MjA1MzQxOTI2Nn0.zjyA1hS9Da2tXEuUu7W44tCMGSIp2ZTpK3RpJXQdL4A');
 
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
 
-export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_ANON_KEY);
