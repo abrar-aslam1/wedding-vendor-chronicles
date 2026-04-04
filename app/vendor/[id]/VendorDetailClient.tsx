@@ -251,7 +251,7 @@ const VendorDetailClient = ({ vendorId }: VendorDetailClientProps) => {
         <SEOHead />
         <SchemaMarkup isHomePage={true} />
         <MainNav />
-        <div className="container mx-auto px-4 py-8 mt-16">
+        <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-8 mt-14 sm:mt-16">
           <div className="flex justify-center items-center min-h-[400px]">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-wedding-primary"></div>
           </div>
@@ -266,7 +266,7 @@ const VendorDetailClient = ({ vendorId }: VendorDetailClientProps) => {
         <SEOHead />
         <SchemaMarkup isHomePage={true} />
         <MainNav />
-        <div className="container mx-auto px-4 py-8 mt-16">
+        <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-8 mt-14 sm:mt-16">
           <div className="text-center">
             <h1 className="text-2xl font-semibold mb-4">Vendor Not Found</h1>
             <p className="text-gray-600 mb-6">Sorry, we couldn't find the vendor you're looking for.</p>
@@ -298,7 +298,7 @@ const VendorDetailClient = ({ vendorId }: VendorDetailClientProps) => {
           vendor={vendor}
         />
         <MainNav />
-        <div className="container mx-auto px-4 py-8 mt-16">
+        <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-8 mt-14 sm:mt-16">
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
@@ -326,13 +326,13 @@ const VendorDetailClient = ({ vendorId }: VendorDetailClientProps) => {
             Back to Search Results
           </Button>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-8">
             {/* Main Content */}
-            <div className="lg:col-span-2 space-y-8">
+            <div className="lg:col-span-2 space-y-4 sm:space-y-8">
               {/* Hero Section */}
               <div className="bg-white rounded-lg shadow-lg overflow-hidden">
                 {vendor.main_image && (
-                  <div className="relative h-96 w-full">
+                  <div className="relative h-48 sm:h-72 lg:h-96 w-full">
                     <img
                       src={vendor.main_image}
                       alt={vendor.title}
@@ -341,9 +341,9 @@ const VendorDetailClient = ({ vendorId }: VendorDetailClientProps) => {
                   </div>
                 )}
 
-                <div className="p-6">
+                <div className="p-4 sm:p-6">
                   <div className="flex justify-between items-start mb-4">
-                    <h1 className="text-3xl font-semibold text-wedding-text">
+                    <h1 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-wedding-text">
                       {vendor.title}
                     </h1>
                     <Button
@@ -363,16 +363,16 @@ const VendorDetailClient = ({ vendorId }: VendorDetailClientProps) => {
               </div>
 
               {/* About Section */}
-              <div className="bg-white rounded-lg shadow-lg p-6">
-                <h2 className="text-2xl font-semibold mb-4">About {vendor.title}</h2>
+              <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">
+                <h2 className="text-lg sm:text-2xl font-semibold mb-3 sm:mb-4">About {vendor.title}</h2>
                 <p className="text-gray-600 leading-relaxed">
                   {vendor.description || vendor.snippet || "No description available"}
                 </p>
               </div>
 
               {/* Business Details */}
-              <div className="bg-white rounded-lg shadow-lg p-6">
-                <h2 className="text-2xl font-semibold mb-4">Business Details</h2>
+              <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">
+                <h2 className="text-lg sm:text-2xl font-semibold mb-3 sm:mb-4">Business Details</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="flex items-center space-x-3">
                     <Clock className="h-5 w-5 text-wedding-primary" />
@@ -399,10 +399,10 @@ const VendorDetailClient = ({ vendorId }: VendorDetailClientProps) => {
             </div>
 
             {/* Sidebar */}
-            <div className="space-y-8">
+            <div className="space-y-4 sm:space-y-8">
               {/* Contact Information */}
-              <div className="bg-white rounded-lg shadow-lg p-6">
-                <h2 className="text-xl font-semibold mb-4">Contact Information</h2>
+              <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">
+                <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Contact Information</h2>
                 <VendorContactInfo 
                   phone={vendor.phone}
                   address={vendor.address}
@@ -414,8 +414,8 @@ const VendorDetailClient = ({ vendorId }: VendorDetailClientProps) => {
               </div>
 
               {/* Business Hours */}
-              <div className="bg-white rounded-lg shadow-lg p-6">
-                <h2 className="text-xl font-semibold mb-4">Business Hours</h2>
+              <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">
+                <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Business Hours</h2>
                 {vendor.business_hours ? (
                   <div className="space-y-2 text-sm">
                     {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) => {
@@ -442,9 +442,9 @@ const VendorDetailClient = ({ vendorId }: VendorDetailClientProps) => {
 
           {/* Similar Vendors Section */}
           {suggestedVendors.length > 0 && (
-            <div className="mt-12">
-              <h2 className="text-2xl font-semibold mb-6">Similar Vendors</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="mt-8 sm:mt-12 pb-24 sm:pb-8">
+              <h2 className="text-lg sm:text-2xl font-semibold mb-4 sm:mb-6">Similar Vendors</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 {suggestedVendors.map((suggestedVendor, index) => (
                   <VendorCard
                     key={index}

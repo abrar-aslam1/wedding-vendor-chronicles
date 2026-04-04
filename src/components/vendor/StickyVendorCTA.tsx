@@ -110,7 +110,7 @@ export const StickyVendorCTA = ({
             {/* Primary CTA - Check Availability */}
             <Button
               onClick={handleCheckAvailability}
-              className="bg-wedding-primary hover:bg-wedding-primary/90 text-white px-4 py-2 flex items-center space-x-2"
+              className="bg-wedding-primary hover:bg-wedding-primary/90 text-white px-4 py-3 h-auto flex items-center space-x-2"
             >
               <Calendar className="h-4 w-4" />
               <span className="hidden sm:inline">Check Availability</span>
@@ -124,9 +124,8 @@ export const StickyVendorCTA = ({
           {vendor.url && (
             <Button
               variant="outline"
-              size="sm"
               onClick={handleVisitWebsite}
-              className="flex-1 flex items-center justify-center space-x-1"
+              className="flex-1 flex items-center justify-center space-x-1 py-3 h-auto"
             >
               <Globe className="h-4 w-4" />
               <span>Website</span>
@@ -135,12 +134,11 @@ export const StickyVendorCTA = ({
           {vendor.phone && (
             <Button
               variant="outline"
-              size="sm"
               onClick={() => {
                 trackVendorClick(vendor, 'call');
                 window.location.href = `tel:${vendor.phone}`;
               }}
-              className="flex-1 flex items-center justify-center space-x-1"
+              className="flex-1 flex items-center justify-center space-x-1 py-3 h-auto"
             >
               <Phone className="h-4 w-4" />
               <span>Call</span>
