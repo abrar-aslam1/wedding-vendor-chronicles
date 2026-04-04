@@ -135,108 +135,143 @@ export default function ListBusinessClient() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const createVendorAndSubscription = async (plan: SubscriptionPlan, user: any) => {
+    const data = pendingFormData!;
+
+    // Upload images
+    const imageUrls: string[] = [];
+    const failedUploads: string[] = [];
+
+    for (const file of selectedFiles) {
+      try {
+        const url = await uploadImage(file);
+        imageUrls.push(url);
+      } catch (error) {
+        console.error(`Failed to upload ${file.name}:`, error);
+        failedUploads.push(file.name);
+      }
+    }
+
+    if (failedUploads.length > 0) {
+      toast({
+        title: "Some uploads failed",
+        description: `Failed to upload: ${failedUploads.join(', ')}`,
+        variant: "destructive"
+      });
+    }
+
+    if (imageUrls.length === 0) {
+      throw new Error("No images were uploaded successfully");
+    }
+
+    const contact_info: Record<string, string> = {
+      phone: data.phone,
+      email: data.email,
+      instagram: data.instagram,
+    };
+
+    if (data.website) contact_info.website = data.website;
+    if (data.facebook) contact_info.facebook = data.facebook;
+    if (data.tiktok) contact_info.tiktok = data.tiktok;
+
+    // For paid plans, set tier to 'free' until payment confirms via webhook
+    const isPaidPlan = plan.price_monthly > 0;
+
+    const vendorData: any = {
+      business_name: data.businessName,
+      description: data.description,
+      category: data.category.toLowerCase(),
+      city: data.city,
+      state: data.state,
+      contact_info,
+      images: imageUrls,
+      owner_id: user.id,
+      verification_status: 'verified',
+      subscription_tier: isPaidPlan ? 'free' : plan.name.toLowerCase(),
+    };
+
+    if (data.subcategory) {
+      vendorData.subcategory = data.subcategory;
+    }
+
+    // Insert vendor and get the new ID back
+    const { data: newVendor, error: insertError } = await supabase
+      .from('vendors')
+      .insert(vendorData)
+      .select('id')
+      .single();
+
+    if (insertError || !newVendor) {
+      throw new Error(`Failed to create listing: ${insertError?.message}`);
+    }
+
+    // Create vendor subscription record (pending for paid, active for free)
+    const { error: subError } = await supabase
+      .from('vendor_subscriptions')
+      .insert({
+        vendor_id: newVendor.id,
+        plan_id: plan.id,
+        status: isPaidPlan ? 'inactive' : 'active',
+        user_id: user.id,
+        current_period_start: new Date().toISOString(),
+      });
+
+    if (subError) {
+      console.error('Failed to create subscription record:', subError);
+    }
+
+    // Track vendor signup
+    trackVendorSignup({
+      vendor_category: data.category,
+      vendor_city: data.city,
+      vendor_state: data.state
+    });
+
+    return newVendor.id;
+  };
+
   const handlePlanSelected = async (plan: SubscriptionPlan) => {
     if (!pendingFormData) return;
 
     try {
       setIsSubmitting(true);
-      const data = pendingFormData;
 
       const { data: { user }, error: userError } = await supabase.auth.getUser();
       if (userError || !user) throw new Error("Please sign in to list your business");
 
-      // Upload images
-      const imageUrls: string[] = [];
-      const failedUploads: string[] = [];
+      const vendorId = await createVendorAndSubscription(plan, user);
 
-      for (const file of selectedFiles) {
-        try {
-          const url = await uploadImage(file);
-          imageUrls.push(url);
-        } catch (error) {
-          console.error(`Failed to upload ${file.name}:`, error);
-          failedUploads.push(file.name);
+      if (plan.price_monthly > 0) {
+        // Paid plan — redirect to Stripe Checkout
+        const response = await fetch('/api/stripe/checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            planId: plan.id,
+            vendorId,
+            userId: user.id,
+            userEmail: user.email,
+            planName: plan.name,
+            priceMonthly: plan.price_monthly,
+          }),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.error || 'Failed to start checkout');
         }
-      }
 
-      if (failedUploads.length > 0) {
+        // Redirect to Stripe Checkout
+        window.location.href = result.url;
+      } else {
+        // Free plan — go straight to dashboard
         toast({
-          title: "Some uploads failed",
-          description: `Failed to upload: ${failedUploads.join(', ')}`,
-          variant: "destructive"
+          title: "Success!",
+          description: `Your business is now listed with the ${plan.name} plan. Welcome to your dashboard!`,
         });
+        router.push("/vendor-dashboard");
       }
-
-      if (imageUrls.length === 0) {
-        throw new Error("No images were uploaded successfully");
-      }
-
-      const contact_info: Record<string, string> = {
-        phone: data.phone,
-        email: data.email,
-        instagram: data.instagram,
-      };
-
-      if (data.website) contact_info.website = data.website;
-      if (data.facebook) contact_info.facebook = data.facebook;
-      if (data.tiktok) contact_info.tiktok = data.tiktok;
-
-      const vendorData: any = {
-        business_name: data.businessName,
-        description: data.description,
-        category: data.category.toLowerCase(),
-        city: data.city,
-        state: data.state,
-        contact_info,
-        images: imageUrls,
-        owner_id: user.id,
-        verification_status: 'verified',
-        subscription_tier: plan.name.toLowerCase(),
-      };
-
-      if (data.subcategory) {
-        vendorData.subcategory = data.subcategory;
-      }
-
-      // Insert vendor and get the new ID back
-      const { data: newVendor, error: insertError } = await supabase
-        .from('vendors')
-        .insert(vendorData)
-        .select('id')
-        .single();
-
-      if (insertError || !newVendor) {
-        throw new Error(`Failed to create listing: ${insertError?.message}`);
-      }
-
-      // Create vendor subscription record
-      const { error: subError } = await supabase
-        .from('vendor_subscriptions')
-        .insert({
-          vendor_id: newVendor.id,
-          plan_id: plan.id,
-          status: 'active',
-          user_id: user.id,
-          current_period_start: new Date().toISOString(),
-        });
-
-      if (subError) {
-        console.error('Failed to create subscription record:', subError);
-      }
-
-      // Track vendor signup
-      trackVendorSignup({
-        vendor_category: data.category,
-        vendor_city: data.city,
-        vendor_state: data.state
-      });
-
-      toast({
-        title: "Success!",
-        description: `Your business is now listed with the ${plan.name} plan. Welcome to your dashboard!`,
-      });
-
-      router.push("/vendor-dashboard");
     } catch (error) {
       console.error('Error listing business:', error);
       toast({

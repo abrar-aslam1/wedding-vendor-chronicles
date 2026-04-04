@@ -585,22 +585,56 @@ const VendorDashboard: React.FC<VendorDashboardProps> = ({ vendorId }) => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-6">
-                  <div className="flex items-center justify-between p-4 border rounded-lg">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 border rounded-lg">
                     <div>
                       <h3 className="font-semibold">Current Plan</h3>
                       <p className="text-sm text-gray-600">
                         {subscription?.subscription_plans?.name || 'Free'} Plan
                       </p>
+                      {subscription?.current_period_end && (
+                        <p className="text-xs text-gray-500 mt-1">
+                          {subscription.status === 'active' ? 'Renews' : 'Expires'}: {new Date(subscription.current_period_end).toLocaleDateString()}
+                        </p>
+                      )}
+                      {subscription?.status === 'past_due' && (
+                        <p className="text-xs text-red-600 mt-1 font-medium">
+                          Payment past due — please update your payment method
+                        </p>
+                      )}
                     </div>
-                    <div className="text-right">
+                    <div className="text-left sm:text-right">
                       <div className="font-semibold">
                         ${((subscription?.subscription_plans?.price_monthly || 0) / 100).toFixed(2)}/month
                       </div>
-                      {getSubscriptionTier() !== 'premium' && (
-                        <Button size="sm" className="mt-2">
-                          Upgrade
-                        </Button>
-                      )}
+                      <div className="flex flex-col gap-2 mt-2">
+                        {subscription?.stripe_customer_id && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={async () => {
+                              try {
+                                const res = await fetch('/api/stripe/create-portal', {
+                                  method: 'POST',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({ customerId: subscription.stripe_customer_id }),
+                                });
+                                const data = await res.json();
+                                if (data.url) window.location.href = data.url;
+                              } catch (err) {
+                                toast.error('Failed to open billing portal');
+                              }
+                            }}
+                          >
+                            <CreditCard className="w-4 h-4 mr-2" />
+                            Manage Billing
+                          </Button>
+                        )}
+                        {getSubscriptionTier() !== 'premium' && !subscription?.stripe_customer_id && (
+                          <Button size="sm" onClick={() => window.location.href = '/list-business'}>
+                            Upgrade
+                          </Button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
