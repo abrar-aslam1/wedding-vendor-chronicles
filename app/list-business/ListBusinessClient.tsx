@@ -461,14 +461,14 @@ export default function ListBusinessClient() {
                   Subcategory <span className="text-gray-500 text-xs">(Optional but recommended)</span>
                 </label>
                 <Select
-                  onValueChange={(value) => form.setValue("subcategory", value)}
-                  value={form.getValues("subcategory")}
+                  onValueChange={(value) => form.setValue("subcategory", value === "none" ? "" : value)}
+                  value={form.getValues("subcategory") || "none"}
                 >
                   <SelectTrigger className="w-full h-12 rounded-xl border-wedding-primary/20">
                     <SelectValue placeholder="Select a subcategory to help customers find you" />
                   </SelectTrigger>
                   <SelectContent className="max-h-[300px]">
-                    <SelectItem value="">
+                    <SelectItem value="none">
                       <span className="text-gray-500">No subcategory</span>
                     </SelectItem>
                     {availableSubcategories.map((subcat) => (
