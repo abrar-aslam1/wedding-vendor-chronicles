@@ -22,6 +22,9 @@ import { LocationSelects } from "@/components/search/LocationSelects";
 import { categories } from "@/config/categories";
 import { getSubcategoriesForCategory } from "@/config/subcategories";
 import { trackVendorSignup } from "@/utils/analytics";
+import { SubscriptionPlans } from "@/components/subscription/SubscriptionPlans";
+import { SubscriptionPlan } from "@/integrations/supabase/types";
+import { ArrowLeft } from "lucide-react";
 
 const formSchema = z.object({
   businessName: z.string().min(2, "Business name must be at least 2 characters"),
@@ -53,6 +56,8 @@ export default function ListBusinessClient() {
   const [isSearching, setIsSearching] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [availableSubcategories, setAvailableSubcategories] = useState<Array<{name: string, slug: string, description?: string}>>([]);
+  const [step, setStep] = useState<1 | 2>(1);
+  const [pendingFormData, setPendingFormData] = useState<FormValues | null>(null);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -94,39 +99,56 @@ export default function ListBusinessClient() {
   };
 
   const onSubmit = async (data: FormValues) => {
+    // Step 1: Validate form and move to plan selection
+    if (!data.state || !data.city) {
+      toast({
+        title: "Missing Information",
+        description: "Please select both state and city for your business location.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (selectedFiles.length === 0) {
+      toast({
+        title: "Missing Images",
+        description: "Please upload at least one image of your business.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Check auth before proceeding to step 2
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    if (userError || !user) {
+      toast({
+        title: "Sign In Required",
+        description: "Please sign in to list your business.",
+        variant: "destructive",
+      });
+      router.push(`/auth?tab=vendors&returnUrl=${encodeURIComponent('/list-business')}`);
+      return;
+    }
+
+    setPendingFormData(data);
+    setStep(2);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handlePlanSelected = async (plan: SubscriptionPlan) => {
+    if (!pendingFormData) return;
+
     try {
       setIsSubmitting(true);
-
-      // Validate location fields explicitly
-      if (!data.state || !data.city) {
-        toast({
-          title: "Missing Information",
-          description: "Please select both state and city for your business location.",
-          variant: "destructive",
-        });
-        setIsSubmitting(false);
-        return;
-      }
-
-      if (selectedFiles.length === 0) {
-        toast({
-          title: "Missing Images",
-          description: "Please upload at least one image of your business.",
-          variant: "destructive",
-        });
-        setIsSubmitting(false);
-        return;
-      }
+      const data = pendingFormData;
 
       const { data: { user }, error: userError } = await supabase.auth.getUser();
       if (userError || !user) throw new Error("Please sign in to list your business");
 
-      console.log('Submitting vendor with subcategory:', data.subcategory);
-
-      // Upload images with better error handling
+      // Upload images
       const imageUrls: string[] = [];
       const failedUploads: string[] = [];
-      
+
       for (const file of selectedFiles) {
         try {
           const url = await uploadImage(file);
@@ -136,7 +158,7 @@ export default function ListBusinessClient() {
           failedUploads.push(file.name);
         }
       }
-      
+
       if (failedUploads.length > 0) {
         toast({
           title: "Some uploads failed",
@@ -144,7 +166,7 @@ export default function ListBusinessClient() {
           variant: "destructive"
         });
       }
-      
+
       if (imageUrls.length === 0) {
         throw new Error("No images were uploaded successfully");
       }
@@ -154,18 +176,10 @@ export default function ListBusinessClient() {
         email: data.email,
         instagram: data.instagram,
       };
-      
-      if (data.website) {
-        contact_info.website = data.website;
-      }
-      
-      if (data.facebook) {
-        contact_info.facebook = data.facebook;
-      }
-      
-      if (data.tiktok) {
-        contact_info.tiktok = data.tiktok;
-      }
+
+      if (data.website) contact_info.website = data.website;
+      if (data.facebook) contact_info.facebook = data.facebook;
+      if (data.tiktok) contact_info.tiktok = data.tiktok;
 
       const vendorData: any = {
         business_name: data.businessName,
@@ -176,24 +190,41 @@ export default function ListBusinessClient() {
         contact_info,
         images: imageUrls,
         owner_id: user.id,
-        verification_status: 'pending'
+        verification_status: 'verified',
+        subscription_tier: plan.name.toLowerCase(),
       };
 
-      // Add subcategory if provided
       if (data.subcategory) {
         vendorData.subcategory = data.subcategory;
-        console.log('Adding subcategory to vendor data:', data.subcategory);
       }
 
-      const { error: insertError } = await supabase
+      // Insert vendor and get the new ID back
+      const { data: newVendor, error: insertError } = await supabase
         .from('vendors')
-        .insert(vendorData);
+        .insert(vendorData)
+        .select('id')
+        .single();
 
-      if (insertError) {
-        throw new Error(`Failed to create listing: ${insertError.message}`);
+      if (insertError || !newVendor) {
+        throw new Error(`Failed to create listing: ${insertError?.message}`);
       }
 
-      // Track vendor signup in Google Analytics
+      // Create vendor subscription record
+      const { error: subError } = await supabase
+        .from('vendor_subscriptions')
+        .insert({
+          vendor_id: newVendor.id,
+          plan_id: plan.id,
+          status: 'active',
+          user_id: user.id,
+          current_period_start: new Date().toISOString(),
+        });
+
+      if (subError) {
+        console.error('Failed to create subscription record:', subError);
+      }
+
+      // Track vendor signup
       trackVendorSignup({
         vendor_category: data.category,
         vendor_city: data.city,
@@ -202,16 +233,16 @@ export default function ListBusinessClient() {
 
       toast({
         title: "Success!",
-        description: "Your business has been submitted for review. It will appear in search results once approved.",
+        description: `Your business is now listed with the ${plan.name} plan. Welcome to your dashboard!`,
       });
 
-      router.push("/");
+      router.push("/vendor-dashboard");
     } catch (error) {
       console.error('Error listing business:', error);
       toast({
         title: "Error",
-        description: error instanceof Error 
-          ? error.message 
+        description: error instanceof Error
+          ? error.message
           : "Failed to list business. Please try again.",
         variant: "destructive",
       });
@@ -303,10 +334,69 @@ export default function ListBusinessClient() {
     setSelectedFiles(validFiles);
   };
 
+  if (step === 2) {
+    return (
+      <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 max-w-4xl">
+        <Button
+          variant="ghost"
+          onClick={() => setStep(1)}
+          className="mb-4 sm:mb-6"
+          disabled={isSubmitting}
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back to Business Details
+        </Button>
+
+        {/* Step indicator */}
+        <div className="flex items-center justify-center gap-2 mb-6">
+          <div className="flex items-center gap-1.5">
+            <div className="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center text-sm font-medium">1</div>
+            <span className="text-sm text-gray-500 hidden sm:inline">Details</span>
+          </div>
+          <div className="w-8 sm:w-12 h-0.5 bg-green-500"></div>
+          <div className="flex items-center gap-1.5">
+            <div className="w-8 h-8 rounded-full bg-wedding-primary text-white flex items-center justify-center text-sm font-medium">2</div>
+            <span className="text-sm font-medium text-wedding-primary hidden sm:inline">Plan</span>
+          </div>
+        </div>
+
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold mb-2">Choose Your Plan</h1>
+          <p className="text-sm sm:text-base text-gray-600">
+            Select a subscription plan for <strong>{pendingFormData?.businessName}</strong>
+          </p>
+        </div>
+
+        {isSubmitting ? (
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-wedding-primary mx-auto mb-4"></div>
+            <p className="text-gray-600">Creating your listing...</p>
+          </div>
+        ) : (
+          <SubscriptionPlans onSelectPlan={handlePlanSelected} />
+        )}
+      </div>
+    );
+  }
+
   return (
-    <div className="container mx-auto py-8">
-      <h1 className="text-3xl font-bold mb-8">List Your Business</h1>
-      
+    <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 max-w-2xl">
+      {/* Step indicator */}
+      <div className="flex items-center justify-center gap-2 mb-6">
+        <div className="flex items-center gap-1.5">
+          <div className="w-8 h-8 rounded-full bg-wedding-primary text-white flex items-center justify-center text-sm font-medium">1</div>
+          <span className="text-sm font-medium text-wedding-primary hidden sm:inline">Details</span>
+        </div>
+        <div className="w-8 sm:w-12 h-0.5 bg-gray-300"></div>
+        <div className="flex items-center gap-1.5">
+          <div className="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-sm font-medium">2</div>
+          <span className="text-sm text-gray-400 hidden sm:inline">Plan</span>
+        </div>
+      </div>
+
+      <h1 className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2">List Your Business</h1>
+      <p className="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8">Fill in your business details to get started</p>
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-4">
@@ -519,21 +609,23 @@ export default function ListBusinessClient() {
                 accept="image/jpeg,image/jpg,image/png,image/webp"
                 multiple
                 onChange={handleFileChange}
-                className="file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"
+                className="file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100 text-sm"
               />
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-xs sm:text-sm text-gray-500 mt-1">
                 Upload 1-10 images (JPEG, PNG, WebP). Max 5MB each.
               </p>
             </div>
           </div>
 
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? "Submitting..." : "List Your Business"}
-          </Button>
+          <div className="sticky bottom-0 bg-white pt-4 pb-6 sm:pb-4 sm:relative sm:bg-transparent border-t sm:border-0 -mx-4 px-4 sm:mx-0 sm:px-0">
+            <Button
+              type="submit"
+              className="w-full h-12 sm:h-10 text-base"
+              disabled={isSubmitting}
+            >
+              Continue to Plan Selection
+            </Button>
+          </div>
         </form>
       </Form>
     </div>

@@ -79,7 +79,7 @@ export const SubscriptionPlans: React.FC<SubscriptionPlansProps> = ({
 
   if (loading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
         {[1, 2, 3].map((i) => (
           <Card key={i} className="animate-pulse">
             <CardHeader>
@@ -101,7 +101,7 @@ export const SubscriptionPlans: React.FC<SubscriptionPlansProps> = ({
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
       {plans.map((plan) => {
         const features = plan.features as SubscriptionFeatures;
         const featuresList = getFeaturesList(features);
@@ -109,35 +109,35 @@ export const SubscriptionPlans: React.FC<SubscriptionPlansProps> = ({
         const isPremium = plan.is_featured;
 
         return (
-          <Card 
-            key={plan.id} 
-            className={`relative ${isPremium ? 'border-yellow-500 shadow-lg' : ''} ${
+          <Card
+            key={plan.id}
+            className={`relative ${isPremium ? 'border-2 border-yellow-500 shadow-lg' : 'border'} ${
               isCurrentPlan ? 'ring-2 ring-blue-500' : ''
             }`}
           >
             {isPremium && (
-              <Badge className="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-yellow-500 text-white">
+              <Badge className="absolute -top-2.5 left-1/2 transform -translate-x-1/2 bg-yellow-500 text-white px-3 py-0.5 text-xs sm:text-sm">
                 Most Popular
               </Badge>
             )}
-            
-            <CardHeader className="text-center">
+
+            <CardHeader className="text-center pb-3 sm:pb-4">
               <div className="flex items-center justify-center gap-2 mb-2">
                 {getPlanIcon(plan.name)}
-                <CardTitle className="text-xl">{plan.name}</CardTitle>
+                <CardTitle className="text-lg sm:text-xl">{plan.name}</CardTitle>
               </div>
-              <CardDescription className="text-3xl font-bold text-gray-900">
+              <CardDescription className="text-2xl sm:text-3xl font-bold text-gray-900">
                 {formatPrice(plan.price_monthly)}
               </CardDescription>
               {plan.max_photos && (
-                <p className="text-sm text-gray-600">
+                <p className="text-xs sm:text-sm text-gray-600">
                   Up to {plan.max_photos} photos
                 </p>
               )}
             </CardHeader>
 
-            <CardContent>
-              <ul className="space-y-3 mb-6">
+            <CardContent className="pt-0">
+              <ul className="space-y-2.5 sm:space-y-3 mb-5 sm:mb-6">
                 {featuresList.map((feature, index) => (
                   <li key={index} className="flex items-center gap-2">
                     <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
@@ -147,7 +147,7 @@ export const SubscriptionPlans: React.FC<SubscriptionPlansProps> = ({
               </ul>
 
               <Button
-                className={`w-full ${isPremium ? 'bg-yellow-500 hover:bg-yellow-600' : ''}`}
+                className={`w-full h-11 sm:h-10 text-sm sm:text-base ${isPremium ? 'bg-yellow-500 hover:bg-yellow-600' : ''}`}
                 variant={isCurrentPlan ? 'outline' : 'default'}
                 disabled={isCurrentPlan}
                 onClick={() => onSelectPlan?.(plan)}

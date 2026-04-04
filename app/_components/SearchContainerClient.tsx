@@ -130,13 +130,14 @@ export function SearchContainerClient({
       let query = supabase
         .from('vendors')
         .select('*')
-        .ilike('state', `%${searchState}%`);
-      
+        .ilike('state', `%${searchState}%`)
+        .eq('verification_status', 'verified');
+
       // Apply category filter if specified
       if (searchCategory && searchCategory !== 'wedding vendors') {
         query = query.ilike('category', `%${searchCategory}%`);
       }
-      
+
       const { data: vendors, error } = await query.limit(50);
       
       if (error) {
@@ -313,65 +314,70 @@ export function SearchContainerClient({
 
       // Combine all results
       let combinedResults = [...googleVendors, ...instagramVendors];
-      
-      // If no results from APIs, try database fallback
-      if (combinedResults.length === 0) {
-        console.log('⚠️ No results from APIs, trying database fallback...');
-        try {
-          let dbQuery = supabase
-            .from('vendors')
-            .select('*')
-            .ilike('city', `%${searchCity}%`)
-            .ilike('state', `%${searchState}%`);
-          
-          // Apply category filter
-          if (searchCategory && searchCategory !== 'wedding vendors') {
-            dbQuery = dbQuery.ilike('category', `%${searchCategory}%`);
-          }
-          
-          // Apply subcategory filter if provided
-          if (formattedSubcategory) {
-            dbQuery = dbQuery.ilike('subcategory', `%${formattedSubcategory}%`);
-          }
-          
-          const { data: dbVendors, error: dbError } = await dbQuery.limit(20);
-          
-          if (!dbError && dbVendors && dbVendors.length > 0) {
-            console.log(`✅ Found ${dbVendors.length} vendors in database fallback`);
-            
-            // Transform database vendors to SearchResult format
-            combinedResults = dbVendors.map((vendor: any) => ({
-              title: vendor.business_name || 'Unknown Business',
-              description: vendor.description || '',
-              rating: undefined,
-              phone: vendor.contact_info?.phone,
-              address: `${vendor.city || ''}, ${vendor.state || ''}`,
-              url: vendor.contact_info?.website,
-              place_id: `vendor_${vendor.id}`,
-              main_image: vendor.images?.[0],
-              images: vendor.images || [],
-              snippet: vendor.description || '',
-              latitude: undefined,
-              longitude: undefined,
-              business_hours: undefined,
-              price_range: undefined,
-              payment_methods: undefined,
-              service_area: [vendor.city, vendor.state].filter(Boolean),
-              categories: [vendor.category || 'wedding vendor'],
-              reviews: undefined,
-              year_established: undefined,
-              email: vendor.contact_info?.email,
-              city: vendor.city,
-              state: vendor.state,
-              postal_code: undefined,
-              vendor_source: 'database' as const
-            }));
-          } else {
-            console.log('❌ Database fallback also returned no results');
-          }
-        } catch (dbError) {
-          console.error('❌ Database fallback failed:', dbError);
+
+      // Always query internal vendors (self-registered) and blend them in
+      try {
+        let dbQuery = supabase
+          .from('vendors')
+          .select('*')
+          .ilike('city', `%${searchCity}%`)
+          .ilike('state', `%${searchState}%`)
+          .eq('verification_status', 'verified');
+
+        if (searchCategory && searchCategory !== 'wedding vendors') {
+          dbQuery = dbQuery.ilike('category', `%${searchCategory}%`);
         }
+
+        if (formattedSubcategory) {
+          dbQuery = dbQuery.ilike('subcategory', `%${formattedSubcategory}%`);
+        }
+
+        const { data: dbVendors, error: dbError } = await dbQuery.limit(20);
+
+        if (!dbError && dbVendors && dbVendors.length > 0) {
+          console.log(`✅ Found ${dbVendors.length} registered vendors in database`);
+
+          const dbResults = dbVendors.map((vendor: any) => ({
+            title: vendor.business_name || 'Unknown Business',
+            description: vendor.description || '',
+            rating: undefined,
+            phone: vendor.contact_info?.phone,
+            address: `${vendor.city || ''}, ${vendor.state || ''}`,
+            url: vendor.contact_info?.website,
+            place_id: `vendor_${vendor.id}`,
+            main_image: vendor.images?.[0],
+            images: vendor.images || [],
+            snippet: vendor.description || '',
+            latitude: undefined,
+            longitude: undefined,
+            business_hours: undefined,
+            price_range: undefined,
+            payment_methods: undefined,
+            service_area: [vendor.city, vendor.state].filter(Boolean),
+            categories: [vendor.category || 'wedding vendor'],
+            reviews: undefined,
+            year_established: undefined,
+            email: vendor.contact_info?.email,
+            city: vendor.city,
+            state: vendor.state,
+            postal_code: undefined,
+            vendor_source: 'database' as const
+          }));
+
+          // Deduplicate by business name (case-insensitive)
+          const existingNames = new Set(
+            combinedResults.map((r: any) => r.title?.toLowerCase())
+          );
+          const uniqueDbResults = dbResults.filter(
+            (r: any) => !existingNames.has(r.title?.toLowerCase())
+          );
+
+          combinedResults = [...combinedResults, ...uniqueDbResults];
+        } else {
+          console.log('ℹ️ No registered vendors found in database for this search');
+        }
+      } catch (dbError) {
+        console.error('❌ Database vendor query failed:', dbError);
       }
       
       // Set the actual results
@@ -459,7 +465,7 @@ export function SearchContainerClient({
   
   return (
     <SearchErrorBoundary onRetry={() => window.location.reload()}>
-      <div className="container mx-auto px-4 py-8 mt-16">
+      <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-8 mt-14 sm:mt-16">
         {!isStateWideSearch && <SearchHeader subcategory={subcategory} category={category} city={city} state={state} />}
         
         {(!city || !state || city === 'all-cities') && !isStateWideSearch && (
