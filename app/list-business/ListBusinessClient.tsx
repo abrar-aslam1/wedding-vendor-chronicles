@@ -190,8 +190,9 @@ export default function ListBusinessClient() {
       subscription_tier: isPaidPlan ? 'free' : plan.name.toLowerCase(),
     };
 
-    if (data.subcategory) {
-      vendorData.subcategory = data.subcategory;
+    // Store subcategory in contact_info since vendors table may not have the column
+    if (data.subcategory && data.subcategory !== 'none') {
+      contact_info.subcategory = data.subcategory;
     }
 
     // Insert vendor and get the new ID back
