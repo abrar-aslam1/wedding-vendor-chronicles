@@ -230,19 +230,29 @@ export default function ListBusinessClient() {
     return newVendor.id;
   };
 
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
   const handlePlanSelected = async (plan: SubscriptionPlan) => {
     if (!pendingFormData) return;
 
     try {
       setIsSubmitting(true);
+      setSubmitError(null);
 
       const { data: { user }, error: userError } = await supabase.auth.getUser();
-      if (userError || !user) throw new Error("Please sign in to list your business");
+      if (userError || !user) {
+        // Redirect to auth if not signed in
+        router.push(`/auth?tab=vendors&returnUrl=${encodeURIComponent('/list-business')}`);
+        return;
+      }
 
+      console.log('[ListBusiness] Creating vendor with plan:', plan.name);
       const vendorId = await createVendorAndSubscription(plan, user);
+      console.log('[ListBusiness] Vendor created:', vendorId);
 
       if (plan.price_monthly > 0) {
         // Paid plan — redirect to Stripe Checkout
+        console.log('[ListBusiness] Starting Stripe checkout for vendor:', vendorId);
         const response = await fetch('/api/stripe/checkout', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -257,13 +267,19 @@ export default function ListBusinessClient() {
         });
 
         const result = await response.json();
+        console.log('[ListBusiness] Checkout response:', response.status, result);
 
         if (!response.ok) {
           throw new Error(result.error || 'Failed to start checkout');
         }
 
-        // Redirect to Stripe Checkout
+        if (!result.url) {
+          throw new Error('No checkout URL returned');
+        }
+
+        // Redirect to Stripe Checkout — don't reset isSubmitting since we're navigating away
         window.location.href = result.url;
+        return;
       } else {
         // Free plan — go straight to dashboard
         toast({
@@ -271,17 +287,19 @@ export default function ListBusinessClient() {
           description: `Your business is now listed with the ${plan.name} plan. Welcome to your dashboard!`,
         });
         router.push("/vendor-dashboard");
+        return;
       }
     } catch (error) {
-      console.error('Error listing business:', error);
+      console.error('[ListBusiness] Error:', error);
+      const message = error instanceof Error
+        ? error.message
+        : "Failed to list business. Please try again.";
+      setSubmitError(message);
       toast({
         title: "Error",
-        description: error instanceof Error
-          ? error.message
-          : "Failed to list business. Please try again.",
+        description: message,
         variant: "destructive",
       });
-    } finally {
       setIsSubmitting(false);
     }
   };
@@ -402,10 +420,18 @@ export default function ListBusinessClient() {
           </p>
         </div>
 
+        {submitError && (
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+            <p className="text-sm text-red-700 font-medium">Something went wrong</p>
+            <p className="text-sm text-red-600 mt-1">{submitError}</p>
+          </div>
+        )}
+
         {isSubmitting ? (
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-wedding-primary mx-auto mb-4"></div>
             <p className="text-gray-600">Creating your listing...</p>
+            <p className="text-xs text-gray-400 mt-2">This may take a moment while we upload your images</p>
           </div>
         ) : (
           <SubscriptionPlans onSelectPlan={handlePlanSelected} />
