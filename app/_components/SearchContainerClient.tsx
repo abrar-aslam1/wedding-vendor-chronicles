@@ -176,9 +176,12 @@ export function SearchContainerClient({
         city: vendor.city,
         state: vendor.state,
         postal_code: undefined,
+        vendor_id: vendor.id,
+        tagline: vendor.contact_info?.tagline,
+        is_premium: vendor.subscription_tier === 'premium',
         vendor_source: 'database' as const
       }));
-      
+
       console.log(`✅ Found ${vendorResults.length} vendors in database for ${searchState}`);
       setSearchResults(vendorResults);
       
@@ -361,6 +364,9 @@ export function SearchContainerClient({
             city: vendor.city,
             state: vendor.state,
             postal_code: undefined,
+            vendor_id: vendor.id,
+            tagline: vendor.contact_info?.tagline,
+            is_premium: vendor.subscription_tier === 'premium',
             vendor_source: 'database' as const
           }));
 

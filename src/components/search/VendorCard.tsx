@@ -295,6 +295,13 @@ export const VendorCard = ({
           </div>
         </div>
 
+        {/* Custom Tagline (paid vendors) */}
+        {vendor.tagline && (
+          <p className="text-sm font-medium text-wedding-primary italic mb-3 line-clamp-2">
+            "{vendor.tagline}"
+          </p>
+        )}
+
         {/* Style Tags */}
         <div className="flex flex-wrap gap-2 mb-3">
           {getStyleTags(vendor, subcategory).map((tag, index) => (

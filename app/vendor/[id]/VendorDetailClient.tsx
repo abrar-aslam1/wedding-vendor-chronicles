@@ -84,6 +84,45 @@ const VendorDetailClient = ({ vendorId }: VendorDetailClientProps) => {
           } as SearchResult;
         }
 
+        // 1b. Fallback: check standard vendors table (registered platform vendors)
+        // Platform vendor URLs are formatted as "vendor_<uuid>"
+        if (!foundVendorData) {
+          const platformVendorId = vendorId.startsWith('vendor_')
+            ? vendorId.replace('vendor_', '')
+            : vendorId;
+          const { data: platformVendor } = await supabase
+            .from('vendors')
+            .select('*')
+            .eq('id', platformVendorId)
+            .maybeSingle();
+
+          if (platformVendor) {
+            const ci = (platformVendor.contact_info as Record<string, any>) || {};
+            foundVendorData = {
+              title: platformVendor.business_name || 'Unknown Business',
+              description: platformVendor.description || '',
+              rating: undefined,
+              phone: ci.phone,
+              address: `${platformVendor.city || ''}, ${platformVendor.state || ''}`,
+              url: ci.website,
+              place_id: `vendor_${platformVendor.id}`,
+              main_image: platformVendor.images?.[0],
+              images: platformVendor.images || [],
+              snippet: platformVendor.description || '',
+              service_area: [platformVendor.city, platformVendor.state].filter(Boolean),
+              categories: [platformVendor.category || 'wedding vendor'],
+              email: ci.email,
+              city: platformVendor.city,
+              state: platformVendor.state,
+              category: platformVendor.category,
+              vendor_id: platformVendor.id,
+              tagline: ci.tagline,
+              is_premium: platformVendor.subscription_tier === 'premium',
+              vendor_source: 'database' as const,
+            } as SearchResult;
+          }
+        }
+
         // 2. Fallback: check vendor_favorites table
         if (!foundVendorData) {
           const { data: favoriteData } = await supabase
@@ -361,6 +400,15 @@ const VendorDetailClient = ({ vendorId }: VendorDetailClientProps) => {
                   )}
                 </div>
               </div>
+
+              {/* Custom Tagline (paid vendors) */}
+              {vendor.tagline && (
+                <div className="bg-gradient-to-r from-wedding-primary/10 to-purple-50 border-l-4 border-wedding-primary rounded-lg p-4 sm:p-6">
+                  <p className="text-base sm:text-lg font-medium text-gray-800 italic">
+                    "{vendor.tagline}"
+                  </p>
+                </div>
+              )}
 
               {/* About Section */}
               <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">

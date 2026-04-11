@@ -26,6 +26,9 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { Vendor, VendorSubscription } from '@/integrations/supabase/types';
 import { CulturalProfileManager } from '@/components/vendor/CulturalProfileManager';
+import { VendorProfileEditor } from '@/components/vendor/VendorProfileEditor';
+import { VendorOnboardingChecklist } from '@/components/vendor/VendorOnboardingChecklist';
+import { VendorAnalyticsDashboard } from '@/components/vendor/VendorAnalyticsDashboard';
 
 interface VendorDashboardProps {
   vendorId: string;
@@ -49,6 +52,46 @@ interface RecentActivity {
   created_at: string;
 }
 
+const getActivityDisplay = (eventType: string): { label: string; color: string } => {
+  switch (eventType) {
+    case 'view_profile':
+    case 'profile_view':
+      return { label: 'Profile viewed', color: 'bg-green-500' };
+    case 'call':
+    case 'phone':
+      return { label: 'Phone number revealed', color: 'bg-blue-500' };
+    case 'email':
+      return { label: 'Email clicked', color: 'bg-indigo-500' };
+    case 'visit_site':
+    case 'website':
+      return { label: 'Website visited', color: 'bg-purple-500' };
+    case 'save':
+    case 'favorite':
+      return { label: 'Added to favorites', color: 'bg-pink-500' };
+    case 'check_availability':
+      return { label: 'Availability checked', color: 'bg-orange-500' };
+    case 'search_impression':
+      return { label: 'Appeared in search', color: 'bg-gray-400' };
+    default:
+      return { label: eventType || 'Profile interaction', color: 'bg-gray-400' };
+  }
+};
+
+const getTimeAgo = (dateString: string): string => {
+  const now = new Date();
+  const date = new Date(dateString);
+  const diffMs = now.getTime() - date.getTime();
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHours = Math.floor(diffMs / 3600000);
+  const diffDays = Math.floor(diffMs / 86400000);
+
+  if (diffMins < 1) return 'Just now';
+  if (diffMins < 60) return `${diffMins} min ago`;
+  if (diffHours < 24) return `${diffHours} hour${diffHours === 1 ? '' : 's'} ago`;
+  if (diffDays < 7) return `${diffDays} day${diffDays === 1 ? '' : 's'} ago`;
+  return date.toLocaleDateString();
+};
+
 const VendorDashboard: React.FC<VendorDashboardProps> = ({ vendorId }) => {
   const [vendor, setVendor] = useState<Vendor | null>(null);
   const [metrics, setMetrics] = useState<AnalyticsMetrics>({
@@ -62,6 +105,7 @@ const VendorDashboard: React.FC<VendorDashboardProps> = ({ vendorId }) => {
     search_impressions: 0
   });
   const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([]);
+  const [allEvents, setAllEvents] = useState<RecentActivity[]>([]);
   const [subscription, setSubscription] = useState<VendorSubscription | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
@@ -194,6 +238,7 @@ const VendorDashboard: React.FC<VendorDashboardProps> = ({ vendorId }) => {
 
       setMetrics(aggregatedMetrics);
       setRecentActivity(events?.slice(0, 10) || []);
+      setAllEvents(events || []);
       setLastRefresh(new Date());
     } catch (error) {
       console.error('Error fetching analytics:', error);
@@ -245,8 +290,9 @@ const VendorDashboard: React.FC<VendorDashboardProps> = ({ vendorId }) => {
             return updated;
           });
           
-          // Add to recent activity
+          // Add to recent activity and full events list
           setRecentActivity(prev => [payload.new as RecentActivity, ...prev.slice(0, 9)]);
+          setAllEvents(prev => [payload.new as RecentActivity, ...prev]);
           
           toast.success('New activity detected!', {
             description: `Someone interacted with your profile`
@@ -424,6 +470,15 @@ const VendorDashboard: React.FC<VendorDashboardProps> = ({ vendorId }) => {
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
+            {/* Onboarding Checklist - shown until vendor has activity */}
+            {vendor && recentActivity.length === 0 && (
+              <VendorOnboardingChecklist
+                vendor={vendor}
+                vendorId={vendorId}
+                onNavigate={setActiveTab}
+              />
+            )}
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Recent Activity */}
               <Card>
@@ -432,29 +487,30 @@ const VendorDashboard: React.FC<VendorDashboardProps> = ({ vendorId }) => {
                   <CardDescription>Your latest profile interactions</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium">Profile viewed</p>
-                        <p className="text-xs text-gray-500">2 hours ago</p>
-                      </div>
+                  {recentActivity.length === 0 ? (
+                    <div className="text-center py-6">
+                      <Eye className="w-8 h-8 text-gray-300 mx-auto mb-2" />
+                      <p className="text-sm text-gray-500">No activity yet</p>
+                      <p className="text-xs text-gray-400 mt-1">Interactions will appear here as couples discover your profile</p>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium">Contact form submitted</p>
-                        <p className="text-xs text-gray-500">5 hours ago</p>
-                      </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {recentActivity.map((activity) => {
+                        const eventType = activity.event_type || (activity.event_data as any)?.cta_type;
+                        const { label, color } = getActivityDisplay(eventType);
+                        const timeAgo = getTimeAgo(activity.created_at);
+                        return (
+                          <div key={activity.id} className="flex items-center gap-3">
+                            <div className={`w-2 h-2 ${color} rounded-full`}></div>
+                            <div className="flex-1">
+                              <p className="text-sm font-medium">{label}</p>
+                              <p className="text-xs text-gray-500">{timeAgo}</p>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium">Added to favorites</p>
-                        <p className="text-xs text-gray-500">1 day ago</p>
-                      </div>
-                    </div>
-                  </div>
+                  )}
                 </CardContent>
               </Card>
 
@@ -465,15 +521,15 @@ const VendorDashboard: React.FC<VendorDashboardProps> = ({ vendorId }) => {
                   <CardDescription>Manage your vendor profile</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <Button className="w-full justify-start" variant="outline">
+                  <Button className="w-full justify-start" variant="outline" onClick={() => setActiveTab('profile')}>
                     <FileText className="w-4 h-4 mr-2" />
                     Update Profile Information
                   </Button>
-                  <Button className="w-full justify-start" variant="outline">
+                  <Button className="w-full justify-start" variant="outline" onClick={() => setActiveTab('analytics')}>
                     <BarChart3 className="w-4 h-4 mr-2" />
                     View Detailed Analytics
                   </Button>
-                  <Button className="w-full justify-start" variant="outline">
+                  <Button className="w-full justify-start" variant="outline" onClick={() => setActiveTab('billing')}>
                     <CreditCard className="w-4 h-4 mr-2" />
                     Upgrade Subscription
                   </Button>
@@ -519,58 +575,47 @@ const VendorDashboard: React.FC<VendorDashboardProps> = ({ vendorId }) => {
           </TabsContent>
 
           <TabsContent value="analytics" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Analytics Dashboard</CardTitle>
-                <CardDescription>
-                  Detailed insights into your profile performance
-                  {getSubscriptionTier() === 'free' && (
-                    <span className="block mt-2 text-sm text-amber-600">
-                      Upgrade to Professional for advanced analytics
-                    </span>
-                  )}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {getSubscriptionTier() === 'free' ? (
-                  <div className="text-center py-12">
-                    <TrendingUp className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                      Advanced Analytics Available
-                    </h3>
-                    <p className="text-gray-600 mb-6">
-                      Upgrade to Professional or Premium to access detailed analytics,
-                      including hourly breakdowns, location data, and conversion insights.
-                    </p>
-                    <Button>
-                      <Crown className="w-4 h-4 mr-2" />
-                      Upgrade Now
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="space-y-6">
-                    {/* Professional/Premium analytics would go here */}
-                    <p className="text-center text-gray-500">
-                      Advanced analytics dashboard coming soon...
-                    </p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+            {getSubscriptionTier() === 'free' ? (
+              <Card>
+                <CardContent className="text-center py-12">
+                  <TrendingUp className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    Advanced Analytics Available
+                  </h3>
+                  <p className="text-gray-600 mb-6 max-w-md mx-auto">
+                    Upgrade to Professional or Premium to access detailed analytics,
+                    including daily activity charts, event breakdowns, and conversion insights.
+                  </p>
+                  <Button onClick={() => setActiveTab('billing')}>
+                    <Crown className="w-4 h-4 mr-2" />
+                    Upgrade Now
+                  </Button>
+                </CardContent>
+              </Card>
+            ) : (
+              <VendorAnalyticsDashboard
+                events={allEvents}
+                tier={getSubscriptionTier() as 'professional' | 'premium'}
+              />
+            )}
           </TabsContent>
 
           <TabsContent value="profile" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Profile Management</CardTitle>
-                <CardDescription>Update your business information and photos</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-center text-gray-500 py-8">
-                  Profile management interface coming soon...
-                </p>
-              </CardContent>
-            </Card>
+            {vendor ? (
+              <VendorProfileEditor
+                vendorId={vendorId}
+                vendor={vendor}
+                tier={getSubscriptionTier() as 'free' | 'professional' | 'premium'}
+                onSaved={() => fetchVendorData()}
+                onUpgradeClick={() => setActiveTab('billing')}
+              />
+            ) : (
+              <Card>
+                <CardContent className="py-8">
+                  <p className="text-center text-gray-500">Loading profile...</p>
+                </CardContent>
+              </Card>
+            )}
           </TabsContent>
 
           <TabsContent value="cultural" className="space-y-6">

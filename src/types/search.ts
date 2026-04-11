@@ -56,6 +56,10 @@ export interface SearchResult {
   state?: string;
   postal_code?: string;
   snippet?: string;
+  // Vendor-platform-specific
+  vendor_id?: string;
+  tagline?: string;
+  is_premium?: boolean;
   // Instagram vendor specific fields
   instagram_handle?: string;
   instagram_url?: string;

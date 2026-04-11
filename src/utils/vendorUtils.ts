@@ -194,6 +194,27 @@ export const trackVendorClick = async (
         page_path: path
       });
     }
+
+    // Fire lead notification for contact-type events on registered platform vendors.
+    // The API route checks vendor tier (Premium-only) and notification preferences before sending.
+    const contactEvents = ['call', 'email', 'visit_site', 'check_availability'];
+    if (vendor.vendor_id && contactEvents.includes(ctaType)) {
+      // Fire and forget — don't block the user's click
+      fetch('/api/notify-lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          vendorId: vendor.vendor_id,
+          eventType: ctaType,
+          referrer: path,
+        }),
+        keepalive: true,
+      }).catch((err) => {
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('Lead notification failed:', err);
+        }
+      });
+    }
   } catch (error) {
     // Silently log errors without disrupting user experience
     if (process.env.NODE_ENV === 'development') {
