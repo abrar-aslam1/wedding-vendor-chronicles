@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useVendorAuth } from '@/hooks/useVendorAuth';
 import VendorDashboard from '@/pages_legacy/VendorDashboard';
+import { MainNav } from '@/components/MainNav';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Shield } from 'lucide-react';
 
@@ -108,5 +109,12 @@ export default function VendorDashboardContent() {
     );
   }
 
-  return <VendorDashboard vendorId={vendorId} />;
+  return (
+    <>
+      <MainNav />
+      <div className="pt-16">
+        <VendorDashboard vendorId={vendorId} />
+      </div>
+    </>
+  );
 }

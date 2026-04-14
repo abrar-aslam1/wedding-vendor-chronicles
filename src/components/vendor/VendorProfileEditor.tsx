@@ -183,7 +183,7 @@ export const VendorProfileEditor: React.FC<VendorProfileEditorProps> = ({
       if (isPremium) updatedContactInfo.lead_notifications = leadNotifications ? 'true' : 'false';
 
       // Update vendor record
-      const { error } = await supabase
+      const { data: updatedRow, error } = await supabase
         .from('vendors')
         .update({
           business_name: businessName.trim(),
@@ -194,9 +194,15 @@ export const VendorProfileEditor: React.FC<VendorProfileEditorProps> = ({
           contact_info: updatedContactInfo,
           images: allImages,
         })
-        .eq('id', vendorId);
+        .eq('id', vendorId)
+        .select()
+        .single();
 
       if (error) throw error;
+
+      if (!updatedRow) {
+        throw new Error('Update failed — your account may not be linked to this vendor. Please sign out and sign back in, or contact support.');
+      }
 
       setNewFiles([]);
       setExistingImages(allImages);
