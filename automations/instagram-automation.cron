@@ -26,3 +26,14 @@ NODE_PATH=/usr/local/lib/node_modules
 
 # DISABLED: Monthly Houston wedding photographers backfill
 # 0 3 15 * * cd /Users/abraraslam/Desktop/wedding-vendor-chronicles && CITY="Houston" STATE="TX" CATEGORY="wedding-photographers" LIMIT_PER_ROW=25 MAX_ENRICH=150 npm run play:backfill:city >> logs/automation.log 2>&1
+
+# === Full Discovery Pipeline ===
+
+# Daily Tier 1 discovery (all categories, 4am)
+0 4 * * * cd /Users/abraraslam/Desktop/wedding-vendor-chronicles && npm run pipeline:tier1 >> logs/pipeline.log 2>&1
+
+# Weekly Tier 2 discovery (Sundays at 3am)
+0 3 * * 0 cd /Users/abraraslam/Desktop/wedding-vendor-chronicles && npm run pipeline:tier2 >> logs/pipeline.log 2>&1
+
+# YAML-based full discovery (alternative — uses playbook system)
+# 0 5 * * * cd /Users/abraraslam/Desktop/wedding-vendor-chronicles && TIER=1 MAX_ENRICH=400 npm run play:discovery >> logs/pipeline.log 2>&1

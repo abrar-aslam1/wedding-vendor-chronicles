@@ -81,16 +81,25 @@ serve(async (req) => {
 
     // Query Instagram vendors
     console.log(`[${requestId}] Querying Instagram vendors with subcategory: ${subcategory || 'none'}...`);
-    
+
+    // Match both legacy format ("photographers") and pipeline format ("wedding-photographers")
+    const categoryVariants = [vendorCategory];
+    if (!vendorCategory.startsWith('wedding-')) {
+      categoryVariants.push(`wedding-${vendorCategory}`);
+    } else {
+      categoryVariants.push(vendorCategory.replace('wedding-', ''));
+    }
+
     let query = supabase
       .from('instagram_vendors')
       .select('*')
-      .eq('category', vendorCategory);
+      .in('category', categoryVariants);
 
-    // Apply subcategory filter if provided
+    // Apply subcategory filter if provided — use ilike to be flexible,
+    // and also include vendors with null subcategory so pipeline-ingested vendors appear
     if (subcategory) {
-      query = query.eq('subcategory', subcategory);
-      console.log(`[${requestId}] Applied subcategory filter: ${subcategory}`);
+      query = query.or(`subcategory.ilike.%${subcategory}%,subcategory.is.null`);
+      console.log(`[${requestId}] Applied subcategory filter (inclusive of null): ${subcategory}`);
     }
 
     // Apply location filters

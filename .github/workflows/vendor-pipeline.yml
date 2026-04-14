@@ -1,0 +1,101 @@
+name: Instagram Vendor Discovery Pipeline
+
+on:
+  schedule:
+    # Daily at 4am UTC — tier 1
+    - cron: '0 4 * * *'
+    # Weekly Sundays at 3am UTC — tier 2
+    - cron: '0 3 * * 0'
+  workflow_dispatch:
+    inputs:
+      tier:
+        description: 'City tier to process (1 or 2)'
+        required: false
+        default: '1'
+      category:
+        description: 'Category (photographer, planner, venue, florist, makeup_artist, videographer, or leave blank for all)'
+        required: false
+        default: ''
+      city:
+        description: 'Specific city (leave blank for all cities in tier)'
+        required: false
+        default: ''
+      state:
+        description: 'State abbreviation (required if city is set)'
+        required: false
+        default: ''
+      limit:
+        description: 'Max profiles per discovery source'
+        required: false
+        default: '10'
+
+jobs:
+  discover-vendors:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - run: npm ci --ignore-scripts
+
+      - name: Determine run parameters
+        id: params
+        run: |
+          # For scheduled runs, use the cron schedule to determine tier
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            if [ "${{ github.event.schedule }}" = "0 3 * * 0" ]; then
+              echo "tier=2" >> $GITHUB_OUTPUT
+            else
+              echo "tier=1" >> $GITHUB_OUTPUT
+            fi
+            echo "category=" >> $GITHUB_OUTPUT
+            echo "city=" >> $GITHUB_OUTPUT
+            echo "state=" >> $GITHUB_OUTPUT
+            echo "limit=10" >> $GITHUB_OUTPUT
+          else
+            echo "tier=${{ inputs.tier }}" >> $GITHUB_OUTPUT
+            echo "category=${{ inputs.category }}" >> $GITHUB_OUTPUT
+            echo "city=${{ inputs.city }}" >> $GITHUB_OUTPUT
+            echo "state=${{ inputs.state }}" >> $GITHUB_OUTPUT
+            echo "limit=${{ inputs.limit }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run discovery pipeline
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          APIFY_API_TOKEN: ${{ secrets.APIFY_API_TOKEN }}
+          INGEST_SHARED_KEY: ${{ secrets.INGEST_SHARED_KEY }}
+        run: |
+          ARGS="--tier ${{ steps.params.outputs.tier }} --limit ${{ steps.params.outputs.limit }}"
+
+          if [ -n "${{ steps.params.outputs.category }}" ]; then
+            ARGS="$ARGS --category ${{ steps.params.outputs.category }}"
+          fi
+
+          if [ -n "${{ steps.params.outputs.city }}" ]; then
+            ARGS="$ARGS --city '${{ steps.params.outputs.city }}' --state ${{ steps.params.outputs.state }}"
+          fi
+
+          echo "Running: node scripts/pipeline/run-pipeline.js $ARGS"
+          node scripts/pipeline/run-pipeline.js $ARGS
+
+      - name: Backfill subcategories
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/pipeline/backfill-subcategories.js
+
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pipeline-logs-${{ github.run_id }}
+          path: logs/
+          retention-days: 14

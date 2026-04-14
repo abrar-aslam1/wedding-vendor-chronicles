@@ -1,0 +1,207 @@
+name: "Full Instagram Vendor Discovery Pipeline"
+description: "Discovers, enriches, normalizes, scores, and ingests wedding vendors from Instagram across all categories and target cities."
+
+config:
+  tier: "${env.TIER || '1'}"
+  category: "${env.CATEGORY || 'all'}"
+  city: "${env.CITY || ''}"
+  state: "${env.STATE || ''}"
+  limit_per_hashtag: "${env.LIMIT_PER_HASHTAG || '50'}"
+  limit_per_search: "${env.LIMIT_PER_SEARCH || '30'}"
+  max_enrich: "${env.MAX_ENRICH || '400'}"
+  batch_size: 25
+  ingest_key: "${env.INGEST_SHARED_KEY}"
+  app_url: "${env.APP_URL || 'http://localhost:3000'}"
+
+steps:
+  - name: "Initialize pipeline run"
+    action: log
+    params:
+      message: "Starting Full Discovery Pipeline | Tier: ${config.tier} | Category: ${config.category} | City: ${config.city || 'all'}"
+      level: info
+
+  - name: "Load seed data for tier"
+    action: read_csv
+    params:
+      file: "data/ig_discovery_seed.csv"
+      filter:
+        TIER: "${config.tier}"
+    register: tier_seeds
+
+  - name: "Filter seeds by category if specified"
+    action: transform_data
+    params:
+      source: "vars.tier_seeds"
+      filter:
+        CATEGORY: "${config.category}"
+      skip_if: "${config.category === 'all'}"
+    register: filtered_seeds
+
+  - name: "Log seed data loaded"
+    action: log
+    params:
+      message: "Loaded ${vars.filtered_seeds.length || vars.tier_seeds.length} seed entries for processing"
+      level: info
+
+  - name: "Initialize discovered profiles collection"
+    action: set_collection
+    params:
+      name: discovered_profiles
+      data: []
+
+  - name: "Discover via hashtag search"
+    action: mcp_tool
+    params:
+      server: "github.com/apify/actors-mcp-server"
+      tool: "call-actor"
+      arguments:
+        actor: "apify/instagram-hashtag-scraper"
+        step: "call"
+        input:
+          hashtags: "${item.HASHTAGS}"
+          resultsLimit: "${config.limit_per_hashtag}"
+          resultsType: "posts"
+    loop: "vars.filtered_seeds || vars.tier_seeds"
+    register: hashtag_results
+
+  - name: "Extract usernames from hashtag results"
+    action: transform_data
+    params:
+      source: "vars.hashtag_results"
+      transforms:
+        username: "${ownerUsername.toLowerCase()}"
+        category: "${seed.CATEGORY}"
+        city: "${seed.CITY}"
+        state: "${seed.STATE}"
+        source: "hashtag_discovery"
+    register: hashtag_profiles
+
+  - name: "Discover via profile search"
+    action: mcp_tool
+    params:
+      server: "github.com/apify/actors-mcp-server"
+      tool: "call-actor"
+      arguments:
+        actor: "apify/instagram-profile-scraper"
+        step: "call"
+        input:
+          search: "${item.SEARCH_QUERY}"
+          resultsLimit: "${config.limit_per_search}"
+          searchType: "user"
+    loop: "vars.filtered_seeds || vars.tier_seeds"
+    register: search_results
+
+  - name: "Extract usernames from search results"
+    action: transform_data
+    params:
+      source: "vars.search_results"
+      transforms:
+        username: "${username.toLowerCase()}"
+        category: "${seed.CATEGORY}"
+        city: "${seed.CITY}"
+        state: "${seed.STATE}"
+        source: "location_search"
+    register: search_profiles
+
+  - name: "Merge all discovered profiles"
+    action: set_collection
+    params:
+      name: discovered_profiles
+      data:
+        - "vars.hashtag_profiles"
+        - "vars.search_profiles"
+
+  - name: "Deduplicate by username"
+    action: dedup_collection
+    params:
+      source: "collections.discovered_profiles"
+      key: "username"
+    register: unique_profiles
+
+  - name: "Log discovery results"
+    action: log
+    params:
+      message: "Discovered ${vars.unique_profiles.length} unique Instagram profiles"
+      level: info
+
+  - name: "Limit to max enrichment count"
+    action: transform_data
+    params:
+      source: "vars.unique_profiles"
+      transforms:
+        slice_limit: "${config.max_enrich}"
+    register: profiles_to_enrich
+
+  - name: "Enrich profiles via Apify"
+    action: mcp_tool
+    params:
+      server: "github.com/apify/actors-mcp-server"
+      tool: "call-actor"
+      arguments:
+        actor: "apify/instagram-scraper"
+        step: "call"
+        input:
+          directUrls: "${vars.profiles_to_enrich.map(p => 'https://www.instagram.com/' + p.username + '/')}"
+          resultsType: "details"
+          resultsLimit: "${config.max_enrich}"
+    register: enriched_raw
+
+  - name: "Normalize enriched data"
+    action: transform_data
+    params:
+      source: "vars.enriched_raw"
+      transforms:
+        ig_username: "${username.toLowerCase()}"
+        display_name: "${full_name || username}"
+        bio: "${biography}"
+        website_url: "${external_url}"
+        email: "${business_email || public_email}"
+        phone: "${business_phone_number || contact_phone_number}"
+        category: "${matched_seed.CATEGORY}"
+        city: "${matched_seed.CITY}"
+        state: "${matched_seed.STATE}"
+        country: "US"
+        followers: "${follower_count}"
+        posts_count: "${media_count}"
+        profile_pic_url: "${profile_pic_url_hd || profile_pic_url}"
+        is_business: "${is_business_account || Boolean(business_email || business_phone_number || external_url)}"
+        is_verified: "${is_verified}"
+    register: normalized_vendors
+
+  - name: "Buffer vendors for batch ingest"
+    action: buffer_collection
+    params:
+      buffer_name: "vendor_batch"
+      data: "vars.normalized_vendors"
+      batch_size: "${config.batch_size}"
+    register: buffer_status
+
+  - name: "Flush all batches to ingest API"
+    action: flush_buffer
+    params:
+      buffer_name: "vendor_batch"
+      batch_size: "${config.batch_size}"
+      all: true
+    register: flushed_batches
+
+  - name: "Send batches to ingest endpoint"
+    action: http_post
+    params:
+      url: "${config.app_url}/functions/v1/ingest-instagram"
+      data:
+        vendors: "${batch}"
+      headers:
+        X-Ingest-Key: "${config.ingest_key}"
+      throttle:
+        key: "ingest_api"
+        rps: 2
+        burst: 5
+    loop: "vars.flushed_batches.batches"
+    register: ingest_responses
+
+  - name: "Log final results"
+    action: log
+    params:
+      message: "Pipeline complete. Discovered: ${vars.unique_profiles.length} | Enriched: ${vars.enriched_raw.length} | Ingested: ${vars.flushed_batches.flushed_count} in ${vars.flushed_batches.batches.length} batches"
+      level: info
+    track_result: true

@@ -29,7 +29,17 @@
     "play:qc:daily": "node --expose-gc automations/lib/yaml-runner.js automations/ig/qc-daily-report.yml",
     "monitor:progress": "node scripts/monitor-collection-progress.js",
     "test:memory": "node scripts/test-memory-optimization.cjs",
-    "workflow:optimized": "node --expose-gc --max-old-space-size=2048 automations/lib/yaml-runner.js"
+    "workflow:optimized": "node --expose-gc --max-old-space-size=2048 automations/lib/yaml-runner.js",
+    "pipeline": "node scripts/pipeline/run-pipeline.js",
+    "pipeline:tier1": "node scripts/pipeline/run-pipeline.js --tier 1",
+    "pipeline:tier2": "node scripts/pipeline/run-pipeline.js --tier 2",
+    "pipeline:dry": "node scripts/pipeline/run-pipeline.js --dry-run",
+    "pipeline:city": "node scripts/pipeline/run-pipeline.js --city",
+    "play:discovery": "node --expose-gc automations/lib/yaml-runner.js automations/ig/full-discovery.yml",
+    "pipeline:daily": "bash scripts/pipeline/daily-run.sh",
+    "pipeline:backfill-subcategories": "node scripts/pipeline/backfill-subcategories.js",
+    "pipeline:cron:install": "cp automations/com.weddingvendors.pipeline.plist ~/Library/LaunchAgents/ && launchctl load ~/Library/LaunchAgents/com.weddingvendors.pipeline.plist && echo 'Cron installed — runs daily at 4am'",
+    "pipeline:cron:uninstall": "launchctl unload ~/Library/LaunchAgents/com.weddingvendors.pipeline.plist 2>/dev/null; rm -f ~/Library/LaunchAgents/com.weddingvendors.pipeline.plist && echo 'Cron removed'"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
