@@ -283,11 +283,16 @@ export const getBreadcrumbStructuredData = (params: SEOParams, currentUrl?: stri
   
   if (category) {
     const categorySlug = category.toLowerCase().replace(/\s+/g, '-');
+    const citySlug = city?.toLowerCase().replace(/\s+/g, '-');
+    const stateSlug = state?.toLowerCase().replace(/\s+/g, '-');
+    const categoryUrl = city && state
+      ? `${baseUrl}/top-20/${categorySlug}/${citySlug}/${stateSlug}`
+      : `${baseUrl}/top-20/${categorySlug}`;
     breadcrumbs.push({
       '@type': 'ListItem',
       position: position++,
       name: category.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
-      item: `${baseUrl}/search/${categorySlug}`
+      item: categoryUrl
     });
   }
   

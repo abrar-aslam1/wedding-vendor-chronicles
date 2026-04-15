@@ -43,20 +43,24 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
   // Add category if provided
   if (category) {
     const formattedCategory = formatText(category);
+    // Link to category page with city/state if available
+    const categoryPath = city && state
+      ? `/top-20/${category}/${city}/${state}`
+      : `/top-20/${category}`;
     breadcrumbs.push({
       label: formattedCategory,
-      path: `/search/${category}`,
+      path: categoryPath,
       isLast: !subcategory && !city && !state && !vendorName
     });
   }
 
-  // Add subcategory if provided
-  if (category && subcategory) {
+  // Add subcategory if provided (uses path-based canonical URL)
+  if (category && subcategory && city && state) {
     const formattedSubcategory = formatText(subcategory);
     breadcrumbs.push({
       label: formattedSubcategory,
-      path: `/search/${category}?subcategory=${subcategory}`,
-      isLast: !city && !state && !vendorName
+      path: `/top-20/${category}/${subcategory}/${city}/${state}`,
+      isLast: !vendorName
     });
   }
 

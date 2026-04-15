@@ -122,10 +122,14 @@ export const routes = {
     subcategory?: string;
   }) => {
     const { category, state, city, subcategory } = params;
-    const base = `/search/${encodeURIComponent(category)}/${encodeURIComponent(
-      state
-    )}/${encodeURIComponent(city)}`;
-    return subcategory ? `${base}?subcategory=${encodeURIComponent(subcategory)}` : base;
+    const categorySlug = category.toLowerCase().replace(/\s+/g, '-');
+    const citySlug = city.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+    const stateSlug = state.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+    if (subcategory) {
+      const subcategorySlug = subcategory.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+      return `/top-20/${categorySlug}/${subcategorySlug}/${citySlug}/${stateSlug}`;
+    }
+    return `/top-20/${categorySlug}/${citySlug}/${stateSlug}`;
   },
   vendor: (vendorId: string) => `/vendor/${encodeURIComponent(vendorId)}`,
   state: (state: string) => `/states/${encodeURIComponent(state)}`,

@@ -138,12 +138,12 @@ const generateSitemap = () => {
           });
         }
         
-        // Add subcategory URLs if available for this category
-        // NEW: Using path segments for subcategories instead of query parameters
+        // Add subcategory URLs using the predefined slug from config
         if (subcategories[category.slug]) {
           subcategories[category.slug].forEach(subcategory => {
-            const subcategorySlug = createUrlSlug(subcategory.name);
-            // New path structure: /top-20/[category]/[subcategory]/[city]/[state]
+            // Use the pre-defined slug (subcategory.id) to match what the route expects
+            const subcategorySlug = subcategory.id;
+            // Canonical path structure: /top-20/[category]/[subcategory]/[city]/[state]
             const subcategoryUrl = `/top-20/${category.slug}/${subcategorySlug}/${citySlug}/${stateSlug}`;
             
             // Validate before adding

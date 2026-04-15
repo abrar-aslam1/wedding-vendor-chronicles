@@ -38,9 +38,10 @@ export const SubcategoryModal = ({
   const handleSubcategoryClick = (subcategorySlug: string) => {
     const formattedCity = city.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
     const formattedState = state.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
-    
-    const searchUrl = `/top-20/${category.slug}/${formattedCity}/${formattedState}?subcategory=${subcategorySlug}`;
-    
+
+    // Use path-based subcategory URL (canonical format)
+    const searchUrl = `/top-20/${category.slug}/${subcategorySlug}/${formattedCity}/${formattedState}`;
+
     console.log('Navigating to subcategory:', searchUrl);
     router.push(searchUrl);
     onClose();

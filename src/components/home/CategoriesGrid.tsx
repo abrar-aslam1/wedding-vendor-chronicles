@@ -157,10 +157,11 @@ export const CategoriesGrid = () => {
   };
 
   const handleSubcategoryClick = (subcategoryName: string) => {
+    const subcategorySlug = subcategoryName.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
     if (selectedCategory === 'caterers') {
-      router.push(`/search/caterers?cuisine=${encodeURIComponent(subcategoryName)}`);
+      router.push(`/top-20/caterers/${subcategorySlug}`);
     } else if (selectedCategory === 'carts') {
-      router.push(`/search/carts?subcategory=${encodeURIComponent(subcategoryName)}`);
+      router.push(`/top-20/carts/${subcategorySlug}`);
     }
   };
 

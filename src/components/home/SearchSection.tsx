@@ -30,11 +30,12 @@ export const SearchSection = () => {
     const categorySlug = category.toLowerCase().replace(/\s+/g, '-');
     const stateSlug = state.toLowerCase().replace(/\s+/g, '-');
     const citySlug = city.toLowerCase().replace(/\s+/g, '-');
-    
-    const url = subcategory 
-      ? `/search/${categorySlug}/${stateSlug}/${citySlug}?subcategory=${subcategory}`
-      : `/search/${categorySlug}/${stateSlug}/${citySlug}`;
-    
+
+    // Use path-based subcategory URL (canonical format)
+    const url = subcategory
+      ? `/top-20/${categorySlug}/${subcategory}/${citySlug}/${stateSlug}`
+      : `/top-20/${categorySlug}/${citySlug}/${stateSlug}`;
+
     router.push(url);
   };
   

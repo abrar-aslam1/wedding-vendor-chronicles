@@ -137,16 +137,20 @@ export default function CategoryPage({ params }: CategoryPageProps) {
     setIsSearching(true);
     
     const formattedCategory = displayCategory.toLowerCase().replace(/ /g, '-');
-    const urlPath = subcategory 
-      ? `/search/${formattedCategory}/${selectedState}/${selectedCity}?subcategory=${encodeURIComponent(subcategory)}`
-      : `/search/${formattedCategory}/${selectedState}/${selectedCity}`;
-    
+    const formattedCity = selectedCity.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+    const formattedState = selectedState.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+    const urlPath = subcategory
+      ? `/top-20/${formattedCategory}/${subcategory.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '')}/${formattedCity}/${formattedState}`
+      : `/top-20/${formattedCategory}/${formattedCity}/${formattedState}`;
+
     router.push(urlPath);
   };
 
   const handleCityClick = (city: string, state: string) => {
     const formattedCategory = displayCategory.toLowerCase().replace(/ /g, '-');
-    router.push(`/search/${formattedCategory}/${state}/${city}`);
+    const citySlug = city.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+    const stateSlug = state.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+    router.push(`/top-20/${formattedCategory}/${citySlug}/${stateSlug}`);
   };
 
   if (!categoryData) {

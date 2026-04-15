@@ -110,9 +110,13 @@ export function SearchContainerClient({
       ? selectedSubcategory.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '')
       : undefined;
     
-    const urlPath = formattedSubcategory 
-      ? `/search/${formattedCategory}/${selectedState}/${selectedCity}?subcategory=${formattedSubcategory}`
-      : `/search/${formattedCategory}/${selectedState}/${selectedCity}`;
+    // Use path-based subcategory URL (canonical format)
+    const formattedCity = selectedCity.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+    const formattedState = selectedState.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+
+    const urlPath = formattedSubcategory
+      ? `/top-20/${formattedCategory}/${formattedSubcategory}/${formattedCity}/${formattedState}`
+      : `/top-20/${formattedCategory}/${formattedCity}/${formattedState}`;
     
     console.log('Navigating to URL:', urlPath);
     router.push(urlPath);

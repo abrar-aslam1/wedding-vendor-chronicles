@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import { Metadata } from 'next';
+import { permanentRedirect } from 'next/navigation';
 import { MainNav } from "@/src/components/MainNav";
 import { SearchContainerClient } from "@/app/_components/SearchContainerClient";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage } from "@/src/components/ui/breadcrumb";
@@ -19,16 +20,16 @@ interface SearchPageProps {
 export default async function Top20SearchPage({ params, searchParams }: SearchPageProps) {
   const { category, slug } = await params;
   const { subcategory: querySubcategory } = await searchParams;
-  
-  // Determine if we have 3 or 4 segments
-  // 3 segments: [city, state] - main category page
-  // 4 segments: [subcategory, city, state] - subcategory page
+
+  // Determine if we have 2 or 3 segments
+  // 2 segments: [city, state] - main category page
+  // 3 segments: [subcategory, city, state] - subcategory page
   const hasSubcategory = slug.length === 3;
-  
+
   let subcategory: string | undefined;
   let city: string;
   let state: string;
-  
+
   if (hasSubcategory) {
     // Format: /top-20/[category]/[subcategory]/[city]/[state]
     subcategory = slug[0];
@@ -38,7 +39,11 @@ export default async function Top20SearchPage({ params, searchParams }: SearchPa
     // Format: /top-20/[category]/[city]/[state]
     city = slug[0];
     state = slug[1];
-    subcategory = querySubcategory; // fallback to query param if provided
+  }
+
+  // 308 permanent redirect legacy query-param subcategory URLs to canonical path-based URL
+  if (!hasSubcategory && querySubcategory) {
+    permanentRedirect(`/top-20/${category}/${querySubcategory}/${city}/${state}`);
   }
   
   const cleanCategory = category ? category.replace('top-20/', '').replace(/-/g, ' ') : 'wedding-vendors';
@@ -116,13 +121,13 @@ export default async function Top20SearchPage({ params, searchParams }: SearchPa
 export async function generateMetadata({ params, searchParams }: SearchPageProps): Promise<Metadata> {
   const { category, slug } = await params;
   const { subcategory: querySubcategory } = await searchParams;
-  
+
   const hasSubcategory = slug.length === 3;
-  
+
   let subcategory: string | undefined;
   let city: string;
   let state: string;
-  
+
   if (hasSubcategory) {
     subcategory = slug[0];
     city = slug[1];
@@ -130,7 +135,7 @@ export async function generateMetadata({ params, searchParams }: SearchPageProps
   } else {
     city = slug[0];
     state = slug[1];
-    subcategory = querySubcategory;
+    // Don't use querySubcategory for metadata — the page will redirect
   }
   
   const cleanCategory = category ? category.replace('top-20/', '').replace(/-/g, ' ') : 'wedding vendors';

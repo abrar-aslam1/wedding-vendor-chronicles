@@ -39,23 +39,9 @@ const nextConfig = {
     maxInactiveAge: 25 * 1000,
     pagesBufferLength: 2,
   },
-  // Redirect old routes if needed during migration
-  async redirects() {
-    return [
-      {
-        // Redirect old query-parameter URLs to new path-based URLs
-        source: '/top-20/:category/:city/:state',
-        has: [
-          {
-            type: 'query',
-            key: 'subcategory',
-          },
-        ],
-        destination: '/top-20/:category/:subcategory/:city/:state',
-        permanent: true,
-      },
-    ];
-  },
+  // Redirects are handled in-page (query-param subcategory → path-based subcategory)
+  // next.config redirects cannot capture query param values into path segments,
+  // so the redirect logic lives in the page component itself.
   // Add headers for better SEO and performance
   async headers() {
     return [
